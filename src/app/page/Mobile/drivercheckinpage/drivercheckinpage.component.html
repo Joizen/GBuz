@@ -1,0 +1,155 @@
+<div class="container" style="margin: 10px;">
+    <div class="row no-gutter d-flex justify-content-center">
+        <div class="col-10">
+            <!-- Status -->
+            <div class="row no-gutter justify-content-right">
+                <mat-form-field class="example-full-width" style="text-align: end;">
+                    <mat-icon class="icon-normal" style="margin-right: 5px;">chrome_reader_mode</mat-icon>
+                    <span style="vertical-align: middle; margin: 5px;">00:00</span>
+                    <span style="vertical-align: middle;">รอเช็คอิน</span>
+                </mat-form-field>
+            </div>
+            
+            <!-- driver -->
+            <div class="row no-gutter">
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal" style="margin-right: 5px;">account_circle</mat-icon>
+                        <span class="endpoint">"ชื่อผู้ขับรถ"</span>                       
+                    </mat-form-field>    
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal" style="margin-right: 5px;">commute</mat-icon>
+                        <span class="endpoint">"ทะเบียนรถ"</span>                        
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Route -->
+            <div class="row no-gutter">
+                <mat-form-field class="col-12 example-full-width">
+                    <div class="row no-gutter">
+                        <div class="col-8">
+                            <mat-icon class="icon-normal" style="margin-right: 5px;">compare_arrows</mat-icon>
+                            <span class="endpoint">ชื่อเส้นทาง................................</span>    
+                        </div>
+                        <div class="col-4" style="text-align: end;">
+                            <span class="label-time"> 00:00 - 00:00</span>
+                        </div>
+                        </div>
+                </mat-form-field>
+            </div>
+
+            <!-- Passenger -->
+            <div class="row no-gutter">
+                <mat-form-field class="col-12 example-full-width">
+                    <div class="row no-gutter">
+                        <div class="col-8">
+                            <mat-icon class="icon-normal" style="margin-right: 5px;">account_balance</mat-icon>
+                            <span class="endpoint">บริษัท............... </span>      
+                        </div>
+                        <div class="col-4" style="text-align: end;">
+                            <span class="label-time">(รับ-ส่ง 0 คน)</span>        
+                        </div>
+
+                    </div>
+                </mat-form-field>
+            </div>
+
+            <!-- Check Item -->
+            <div class="row no-gutter">
+               
+                    <div class="col-2"> 
+                        <mat-form-field class="example-full-width">
+                            <mat-icon class="icon-normal">alarm</mat-icon>
+                            <span class="label-time"> 00:00 </span>
+                        </mat-form-field>                      
+                    </div>                    
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-icon class="icon-pass">record_voice_over</mat-icon>
+                            <span class="label-time"> 00:00 (0 %) </span>
+                        </mat-form-field>
+                    </div>                    
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-icon class="icon-nonpass">hot_tub</mat-icon>
+                            <span class="label-time">00:00 (0 °C)</span>
+                        </mat-form-field>
+                    </div>                    
+                    <div class="col-2">
+                        <mat-form-field class="example-full-width">
+                            <mat-icon class="icon-normal">power_settings_new</mat-icon>
+                            <span class="label-time">00:00</span>
+                        </mat-form-field>
+                    </div>                    
+
+                    
+                    <!-- <mat-form-field class="example-full-width">
+
+                    </mat-form-field> -->
+            </div>
+
+            <div class="row no-gutter">
+                <mat-form-field class="example-full-width">
+                </mat-form-field>
+            </div>
+          
+              <!-- btn Check in  -->
+            <div class="row no-gutter justify-content-center">
+                <div class="col-4">
+                    <button mat-raised-button color="accent" (click)="open_Cancelmodule(modalcancelwork)">
+                        <mat-icon style="margin-right: 5px;">delete_forever</mat-icon> ลางาน
+                    </button>        
+                </div>
+                <div class="col-4">
+                    <button mat-raised-button color="primary" (click)="onCheckin_Click()">
+                        <mat-icon style="margin-right: 5px;">check_circle</mat-icon>เริ่มงาน
+                    </button>        
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #modalcancelwork let-modal>
+    <div class="modal-header">
+        <b>ไม่สามารถปฎิบัติงานได้</b>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+
+    </div>
+    <div class="modal-body m-4">
+        
+        <div class="row no-gutters align-items-center mb-4">
+            <span>ไม่สามารถปฎิบัติงานได้ เนื่องจาก</span>
+        </div>
+        <div class="row no-gutters align-items-center mb-3">
+            <div class="col-4 txtright">
+                <b>หัวข้อในการลา : </b>
+            </div>
+            <div class="col-8">
+                <!-- <select class="form-control mt-1" [(ngModel)]="viewData.depid">
+                    <option [value]="i.id" *ngFor="let i of deptData">{{i.rolecode}} | {{i.rolename}}</option>
+                </select> -->
+                <select class="form-control mt-1" >
+                    <option value="0"> ป่วย </option>
+                    <option value="1"> รถเสีย </option>
+                    <option value="-1"> อื่น ๆ </option>
+                </select>
+
+            </div>
+        </div>
+        <div class="row no-gutters align-items-top mb-4">
+            <div class="col-4 txtright" >
+                <b>อธิบายเหตุผล : </b>
+            </div>
+            <div class="col-8 txtright">
+                <textarea class="full-width" (keyup)="autoGrowText($event)"></textarea>
+            </div>
+        </div>        
+    </div>
+    </ng-template>

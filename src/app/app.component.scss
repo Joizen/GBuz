@@ -1,0 +1,47 @@
+mat-sidenav-container {
+    height: 100%;
+}
+
+mat-sidenav,
+mat-sidenav-contemt {
+    padding: 16px;
+}
+
+mat-sidenav {
+    background-color: transparent;
+    width: 400px;
+}
+
+.navbar {
+    justify-content: space-between;
+}
+
+span {
+    padding-right: 1rem;
+}
+
+.navmenu {
+    align-items: center;
+    vertical-align: middle;
+}
+
+.navtxt {
+    font-size: 0.9rem;
+}
+
+.mat-toolbar{background-color: #5b9d9d;}
+
+.clickable-div {
+    display: flex;
+    align-items: center;
+    line-height: 3;
+    cursor: pointer; /* Makes it clear the element is clickable */
+}
+
+.clickable-div:hover {
+    color: wheat; /* Changes text color to red on hover */
+}
+
+.clickable-div:hover mat-icon {
+    color: wheat; /* Changes icon color to red on hover */
+}

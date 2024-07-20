@@ -1,0 +1,254 @@
+<!-- Driver conponence -->
+<div class="container" style="margin: 10px;">
+    <div class="row no-gutter d-flex justify-content-center">
+        <div class="col-12">
+            <mat-accordion class="example-headers-align" multi>
+                <mat-expansion-panel>
+                    <!-- Driver Header (Driver & vehicle)-->
+                    <mat-expansion-panel-header>
+                        <div class="col-5">
+                            <mat-icon class="icon-normal" style="margin-right: 5px;">account_circle</mat-icon>
+                            <span class="endpoint">"ชื่อผู้ขับรถ"</span>
+                        </div>
+                        <div class="col-5">
+                            <mat-icon class="icon-normal" style="margin-right: 5px;">commute</mat-icon>
+                            <span class="endpoint">"ทะเบียนรถ"</span>
+                        </div>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <!-- Driver details  DriverCheck Item -->
+                        <div class="row no-gutter">
+
+                            <div class="col-2">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-normal">alarm</mat-icon>
+                                    <span class="label-time"> 00:00 </span>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-pass">record_voice_over</mat-icon>
+                                    <span class="label-time"> 00:00 (0 %) </span>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-nonpass">hot_tub</mat-icon>
+                                    <span class="label-time">00:00 (0 °C)</span>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-2">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-normal">power_settings_new</mat-icon>
+                                    <span class="label-time">00:00</span>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </ng-template>
+
+
+
+                </mat-expansion-panel>
+            </mat-accordion>
+
+        </div>
+    </div>
+</div>
+
+<!-- Route conponence -->
+<div class="container" style="margin: 10px;">
+    <div class="row no-gutter d-flex justify-content-center">
+        <div class="col-12">
+            <mat-accordion class="example-headers-align" multi>
+                <mat-expansion-panel>
+                    <!-- Route Header Routename & company -->
+                    <mat-expansion-panel-header>
+                        <div class="col-10">
+                            <div class="row no-gutter justify-content-left">
+                                <mat-icon class="icon-normal" >account_circle</mat-icon>
+                                <span class="endpoint">ชื่อบริษัท......................</span>
+                            </div>
+                            <div class="row no-gutter justify-content-left">
+                                <mat-icon class="icon-normal" style="margin-right: 5px;">account_circle</mat-icon>
+                                <span class="endpoint">ชื่อเส้นทาง......................</span>
+                            </div>
+                        </div>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <!-- Route Details Dropoint & Passange -->
+                        <!-- Dropoint & Passange Item -->
+                        <div class="row no-gutter">
+                            <div class="col-9  justify-content-left">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-normal">account_balance</mat-icon>
+                                    <span class="label-time">1. ชื่อจุดรับ-ส่งพนักงาน </span>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-2 justify-content-right">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-pass">supervisor_account</mat-icon>
+                                    <span class="label-time"> 1 ท่าน </span>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row no-gutter">
+                            <div class="col-9 justify-content-left">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-normal">account_balance</mat-icon>
+                                    <span class="label-time">2. ชื่อจุดรับ-ส่งพนักงาน </span>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-2 justify-content-right">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-pass">supervisor_account</mat-icon>
+                                    <span class="label-time"> 3 ท่าน </span>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row no-gutter">
+                            <div class="col-9 justify-content-left">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-normal">account_balance</mat-icon>
+                                    <span class="label-time"> บริษัท..................(ปลายทาง) </span>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-2  justify-content-right">
+                                <mat-form-field class="example-full-width">
+                                    <mat-icon class="icon-pass">supervisor_account</mat-icon>
+                                    <span class="label-time"> 4 ท่าน </span>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </ng-template>
+
+
+
+                </mat-expansion-panel>
+            </mat-accordion>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container" style="margin: 10px;" *ngIf="false">
+
+
+    <div class="row no-gutter d-flex justify-content-center">
+
+        <div class="col-10">
+            <!-- Status -->
+            <div class="row no-gutter justify-content-right">
+                <mat-form-field class="example-full-width" style="text-align: end;">
+                    <mat-icon class="icon-normal" style="margin-right: 5px;">chrome_reader_mode</mat-icon>
+                    <span style="vertical-align: middle; margin: 5px;">00:00</span>
+                    <span style="vertical-align: middle;">รอเช็คอิน</span>
+                </mat-form-field>
+            </div>
+
+            <!-- Test Expan -->
+            <div class="row no-gutter ustify-content-right">
+
+            </div>
+
+            <!-- driver -->
+            <div class="row no-gutter">
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal" style="margin-right: 5px;">account_circle</mat-icon>
+                        <span class="endpoint">"ชื่อผู้ขับรถ"</span>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal" style="margin-right: 5px;">commute</mat-icon>
+                        <span class="endpoint">"ทะเบียนรถ"</span>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Check Item -->
+            <div class="row no-gutter">
+
+                <div class="col-2">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal">alarm</mat-icon>
+                        <span class="label-time"> 00:00 </span>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-pass">record_voice_over</mat-icon>
+                        <span class="label-time"> 00:00 (0 %) </span>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-nonpass">hot_tub</mat-icon>
+                        <span class="label-time">00:00 (0 °C)</span>
+                    </mat-form-field>
+                </div>
+                <div class="col-2">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal">power_settings_new</mat-icon>
+                        <span class="label-time">00:00</span>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Route -->
+            <div class="row no-gutter">
+                <mat-form-field class="col-12 example-full-width">
+                    <div class="row no-gutter">
+                        <div class="col-8">
+                            <mat-icon class="icon-normal" style="margin-right: 5px;">compare_arrows</mat-icon>
+                            <span class="endpoint">ชื่อเส้นทาง................................</span>
+                        </div>
+                        <div class="col-4" style="text-align: end;">
+                            <span class="label-time"> 00:00 - 00:00</span>
+                        </div>
+                    </div>
+                </mat-form-field>
+            </div>
+
+            <!-- Passenger -->
+            <div class="row no-gutter">
+                <mat-form-field class="col-12 example-full-width">
+                    <div class="row no-gutter">
+                        <div class="col-8">
+                            <mat-icon class="icon-normal" style="margin-right: 5px;">account_balance</mat-icon>
+                            <span class="endpoint">บริษัท............... </span>
+                        </div>
+                        <div class="col-4" style="text-align: end;">
+                            <span class="label-time">(รับ-ส่ง 0 คน)</span>
+                        </div>
+
+                    </div>
+                </mat-form-field>
+            </div>
+
+
+
+            <div class="row no-gutter">
+                <mat-form-field class="example-full-width">
+                </mat-form-field>
+            </div>
+
+            <!-- btn Check in  -->
+            <div class="row no-gutter justify-content-center">
+                <div class="col-4">
+                    <button mat-raised-button color="accent">
+                        <mat-icon style="margin-right: 5px;">delete_forever</mat-icon> ลางาน
+                    </button>
+                </div>
+                <div class="col-4">
+                    <button mat-raised-button color="primary">
+                        <mat-icon style="margin-right: 5px;">check_circle</mat-icon>เริ่มงาน
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

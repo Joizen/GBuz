@@ -1,0 +1,100 @@
+.avatar-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+}
+
+.locationname{
+    width: 100%; 
+    // padding-left :10px; 
+    font-size:xx-small;
+    max-width: 220px; 
+    text-align: left;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    overflow: hidden;
+}
+.H1030{ background:linear-gradient(to right,#FF0000,#008000);}
+.H1031{ background:linear-gradient(to right,#FF0000,#DAA520 );}
+.H1033{ background:linear-gradient(to right,#FF0000,#FF0000);}
+.H1041{ background:linear-gradient(to right,#FF0000,#800080);}
+.H1080{ background:linear-gradient(to right,#FF0000,#808080);}
+
+.H2030{ background:linear-gradient(to right,#DAA520,#008000);}
+.H2031{ background:linear-gradient(to right,#DAA520,#DAA520 );}
+.H2033{ background:linear-gradient(to right,#DAA520,#FF0000);}
+.H2041{ background:linear-gradient(to right,#DAA520,#800080);}
+.H2080{ background:linear-gradient(to right,#DAA520,#808080);}
+
+.H3030{ background:linear-gradient(to right,#FF4500,#008000);}
+.H3031{ background:linear-gradient(to right,#FF4500,#DAA520 );}
+.H3033{ background:linear-gradient(to right,#FF4500,#FF0000);}
+.H3041{ background:linear-gradient(to right,#FF4500,#800080);}
+.H3080{ background:linear-gradient(to right,#FF4500,#808080);}
+
+.H4030{ background:linear-gradient(to right,#8FCE00,#008000);}
+.H4031{ background:linear-gradient(to right,#8FCE00,#DAA520 );}
+.H4033{ background:linear-gradient(to right,#8FCE00,#FF0000);}
+.H4041{ background:linear-gradient(to right,#8FCE00,#800080);}
+.H4080{ background:linear-gradient(to right,#8FCE00,#808080);}
+
+.H5030{ background:linear-gradient(to right,#38761D,#008000);}
+.H5031{ background:linear-gradient(to right,#38761D,#DAA520 );}
+.H5033{ background:linear-gradient(to right,#38761D,#FF0000);}
+.H5041{ background:linear-gradient(to right,#38761D,#800080);}
+.H5080{ background:linear-gradient(to right,#38761D,#808080);}
+
+
+.profileimg {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 4px solid lightslategrey;
+}
+.show-total {
+    margin: 5px;
+    width: 100%;
+    text-align:center;
+    font-size: xx-large;
+    color: navy;
+}
+.show-number {
+    margin: 2px;
+    width: 100%;
+    text-align:center;
+    color: white;
+}
+.icon-standard {
+    margin: 3px;
+    font-size: 20px;
+    height: 20px;
+    width: 100%;
+    text-align:center;
+    color: white;
+}
+
+.icon-pass {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    margin-right: 1px;
+    text-align:left;
+    color: green;
+}
+
+.icon-nonpass {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    margin-right: 1px;
+    text-align:left;
+    color: red;
+}
+
+.icon-normal {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    margin-right: 1px;
+    text-align:left;
+    color: gray;
+}

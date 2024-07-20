@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent {
+  constructor(private router: Router) {}
+  menuopen=false;
+  title = 'gbusdriver';
+
+  showMenu(){
+    this.menuopen=true;
+  }
+  openPage(pagename:string){
+    this.router.navigate([pagename]);
+    this.menuopen=false;
+  }
+
+}

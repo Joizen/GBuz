@@ -1,0 +1,46 @@
+.icon-pass {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    margin-right: 1px;
+    text-align:left;
+    color: green;
+}
+
+.icon-nonpass {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    margin-right: 1px;
+    text-align:left;
+    color: red;
+}
+
+.icon-normal {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    margin-right: 1px;
+    text-align:left;
+    color: gray;
+}
+.endpoint{
+    width: 100%; 
+    // padding-left :10px; 
+    font-size:small;
+    max-width: 100px; 
+    text-align: left;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.label-time {
+    font-size: smaller;
+    text-align:left;
+    margin-left: 2px;
+    color: navy;
+}
+.full-width {
+    width: 100%;
+ }

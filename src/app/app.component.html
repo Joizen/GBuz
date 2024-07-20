@@ -1,0 +1,134 @@
+<mat-sidenav-container>
+        <mat-sidenav mode="over" [(opened)]="menuopen" style="background-color:#5b9d9d;">
+        <mat-toolbar color="#5b9d9d">
+            <mat-icon style="color: wheat;">account_circle</mat-icon>
+            <span style="width: 80%; padding:10px ;">user name</span>
+            <mat-icon (click)="menuopen=false" style="display: flex; justify-content: flex-end;">navigate_before</mat-icon>
+        </mat-toolbar>
+
+        <hr style="border: none; border-top: 1px dashed #000000;"/>
+
+        
+        <div class="container">
+            <div *ngIf="true" (click)="openPage('login')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">login </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('register')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">register </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('driverdashboard')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> driverdashboard </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('driver')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">driver </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('driverdata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon><span> driverdata </span></div>
+            <div *ngIf="true" (click)="openPage('vehicle')" style="display: flex; align-items: center;">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">vehicle </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('vehicledata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> vehicledata </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('company')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">company </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('companydata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> companydata </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('route')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">route </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('routedata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> routedata </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('driverregister')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> driverregister </span>
+           </div>
+            <div *ngIf="true" (click)="openPage('drivercheckin')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> drivercheckin </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('driverwork')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> driverwork </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('driverworkreport')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> driverworkreport </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('confirmjob')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> confirmjob </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('lmap')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">lmap </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('planactive')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> planactive </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('planactivedata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> planactivedata </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('planmaster')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> planmaster </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('planmasterdata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> planmasterdata </span>
+            </div>
+            <div *ngIf="true" (click)="openPage('plan')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;">plan </span>
+            </div>
+            <div *ngIf="false" (click)="openPage('plandata')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px;">menu</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> plandata </span>
+            </div>
+        </div>
+    </mat-sidenav>
+
+
+
+    <mat-sidenav-content>
+
+        <mat-toolbar class="navbar" color="primary" *ngIf="true">
+
+            <div>
+                <mat-icon class="navmenu" (click)="showMenu()" style="margin-right: 20px;">menu</mat-icon>
+                <img src="../assets/images/sym_g.png" style="height: 35px;">
+                <span>Driver</span>
+            </div>
+
+            <div>
+                <mat-icon class="navmenu">info icon</mat-icon> 
+                <span class="navtxt"> About</span>
+
+                <mat-icon class="navmenu">description icon</mat-icon> 
+                <span class="navtxt"> Manual</span>
+                
+                <mat-icon class="navmenu">input icon</mat-icon> 
+                <span class="navtxt"> Logout</span>
+            </div>
+
+        </mat-toolbar>
+
+        <router-outlet></router-outlet>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

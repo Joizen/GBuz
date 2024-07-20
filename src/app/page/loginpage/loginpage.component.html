@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+
+<body>
+  <span style="color: #cbccbb; font-size: xx-large;">Gbus Driver</span>
+  <input required="required" type="text" name="text" placeholder="Username">
+  <input *ngIf="!user.showpwd" required="required" type="password" name="pwd" placeholder="Password">
+  <input *ngIf="user.showpwd" required="required" type="text" name="pwd" placeholder="Password">
+  <input type="checkbox" value="remember-me"><small>&nbsp;Show Password</small>
+  <button type="button" class="btn btn-lg btn-success" (click)="onSubmit()">Login</button>
+
+</body>
+

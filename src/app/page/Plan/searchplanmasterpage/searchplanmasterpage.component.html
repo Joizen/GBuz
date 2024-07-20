@@ -1,0 +1,247 @@
+<div class="row no guster" style="width: 100%;">
+
+    <div class="col-2 example-full-width" style="text-align: end; vertical-align: middle; padding: 10px; ">
+      <h2 style="text-align:center; vertical-align: text-bottom;">ข้อมูลต้นแบบรับ-ส่งพนักงาน</h2>
+    </div>
+    <div class="col-6 example-full-width" >
+      <mat-form-field  style=" width: 100%; padding: 10px; " >
+        <!-- <mat-form-field hintLabel="Max 20 characters"> -->
+          <mat-label>Name or number</mat-label>
+        <input matInput #input maxlength="20" (keyup)="applyFilter($event.target)" matInput placeholder="Filter">
+      </mat-form-field>    
+    </div>
+    <div class="col-4">
+      <div class="example-full-width" style="text-align: end; vertical-align: middle; padding: 10px; ">
+        <mat-icon style="vertical-align:middle; margin: 5px;" *ngIf="true">view_module</mat-icon>
+        <mat-icon style="vertical-align:middle; margin: 5px;" *ngIf="true">view_list</mat-icon>
+        <mat-icon style="vertical-align:middle; margin: 5px;" *ngIf="true">print</mat-icon>
+        <mat-icon style="vertical-align:middle; margin: 5px;" *ngIf="true">add</mat-icon>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Table & Summary data -->
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  
+          <!-- company Column -->
+          <ng-container matColumnDef="company">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> บริษัท</th>
+            <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+          </ng-container>
+
+          <!-- shipname Column -->
+          <ng-container matColumnDef="shipname">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> กะ </th>
+            <td mat-cell *matCellDef="let element"> {{element.shipname}} </td>
+          </ng-container>
+
+          <!-- roundname Column -->
+      <ng-container matColumnDef="roundname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> รับ/ส่ง </th>
+        <td mat-cell *matCellDef="let element"> {{element.roundname}} </td>
+      </ng-container>
+    
+      <!-- routename Column -->
+      <ng-container matColumnDef="routename">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> เส้นทาง </th>
+        <td mat-cell *matCellDef="let element"> {{element.routename}} </td>
+      </ng-container>
+       
+      <!-- item Column -->
+      <ng-container matColumnDef="item">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> item </th>
+        <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+      </ng-container>
+       
+      <!-- vname Column -->
+      <ng-container matColumnDef="vname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> vname </th>
+        <td mat-cell *matCellDef="let element"> {{element.vname}} </td>
+      </ng-container>
+       
+      <!-- vlicense Column -->
+      <ng-container matColumnDef="vlicense">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> vlicense </th>
+        <td mat-cell *matCellDef="let element"> {{element.vlicense}} </td>
+      </ng-container>
+       
+      <!-- provincename Column -->
+      <ng-container matColumnDef="provincename">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> provincename </th>
+        <td mat-cell *matCellDef="let element"> {{element.provincename}} </td>
+      </ng-container>
+
+      <!-- driverfullname Column -->
+      <ng-container matColumnDef="driverfullname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> driverfullname </th>
+        <td mat-cell *matCellDef="let element"> {{element.driverfullname}} </td>
+      </ng-container>
+    
+      <!-- phone Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> phone </th>
+        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+      </ng-container>
+    
+      <!-- mobile Column -->
+      <ng-container matColumnDef="mobile">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> mobile </th>
+        <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
+      </ng-container>
+    
+      <!-- drivername Column -->
+      <ng-container matColumnDef="drivername">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> drivername </th>
+        <td mat-cell *matCellDef="let element"> {{element.drivername}} </td>
+      </ng-container>
+    
+      <!-- surname Column -->
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> surname </th>
+        <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
+      </ng-container>
+    
+      <!-- nickname Column -->
+      <ng-container matColumnDef="nickname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> nickname </th>
+        <td mat-cell *matCellDef="let element"> {{element.nickname}} </td>
+      </ng-container>
+    
+      <!-- driverlicense Column -->
+      <ng-container matColumnDef="dlicensname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> dlicensname </th>
+        <td mat-cell *matCellDef="let element"> {{element.dlicensname}} </td>
+      </ng-container>
+    
+      <!-- dlicens Column -->
+      <ng-container matColumnDef="dlicens">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> dlicens </th>
+        <td mat-cell *matCellDef="let element"> {{element.dlicens}} </td>
+      </ng-container>
+    
+      <!-- linename Column -->
+      <ng-container matColumnDef="linename">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> linename </th>
+        <td mat-cell *matCellDef="let element"> {{element.linename}} </td>
+      </ng-container>
+    
+      <!-- lineimage Column -->
+      <ng-container matColumnDef="lineimage">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> lineimage </th>
+        <td mat-cell *matCellDef="let element"> {{element.lineimage}} </td>
+      </ng-container>
+    
+      <!-- vehicleid Column -->
+      <ng-container matColumnDef="vehicleid">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> vehicleid </th>
+        <td mat-cell *matCellDef="let element"> {{element.vehicleid}} </td>
+      </ng-container>
+
+      <!-- province Column -->
+      <ng-container matColumnDef="province">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> province </th>
+        <td mat-cell *matCellDef="let element"> {{element.province}} </td>
+      </ng-container>
+ 
+      <!-- provincecode Column -->
+      <ng-container matColumnDef="provincecode">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> provincecode </th>
+        <td mat-cell *matCellDef="let element"> {{element.provincecode}} </td>
+      </ng-container>   
+      <!-- dlicense Column -->
+      <ng-container matColumnDef="dlicense">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> dlicense </th>
+        <td mat-cell *matCellDef="let element"> {{element.dlicense}} </td>
+      </ng-container>
+
+            <!-- dlicensetype Column -->
+      <ng-container matColumnDef="dlicensetype">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> dlicensetype </th>
+        <td mat-cell *matCellDef="let element"> {{element.dlicensetype}} </td>
+      </ng-container>
+    
+      <!-- vtypename Column -->
+      <ng-container matColumnDef="vtypename">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> vtypename </th>
+        <td mat-cell *matCellDef="let element"> {{element.vtypename}} </td>
+      </ng-container>
+    
+      <!-- planid Column -->
+      <ng-container matColumnDef="planid">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> planid </th>
+        <td mat-cell *matCellDef="let element"> {{element.planid}} </td>
+      </ng-container>
+    
+      <!-- round Column -->
+      <ng-container matColumnDef="round">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> round </th>
+        <td mat-cell *matCellDef="let element"> {{element.round}} </td>
+      </ng-container>
+    
+      <!-- compid Column -->
+      <ng-container matColumnDef="compid">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> compid </th>
+        <td mat-cell *matCellDef="let element"> {{element.compid}} </td>
+      </ng-container>
+    
+      <!-- routeid Column -->
+      <ng-container matColumnDef="routeid">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> routeid </th>
+        <td mat-cell *matCellDef="let element"> {{element.routeid}} </td>
+      </ng-container>
+    
+      <!-- shipid Column -->
+      <ng-container matColumnDef="shipid">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> shipid </th>
+        <td mat-cell *matCellDef="let element"> {{element.shipid}} </td>
+      </ng-container>
+       
+      <!-- driverid Column -->
+      <ng-container matColumnDef="driverid">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> driverid </th>
+        <td mat-cell *matCellDef="let element"> {{element.driverid}} </td>
+      </ng-container>
+    
+      <!-- tagetfistpoint Column -->
+      <!-- <ng-container matColumnDef="tagetfistpoint">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> tagetfistpoint </th>
+        <td mat-cell *matCellDef="let element"> {{element.tagetfistpoint}} </td>
+      </ng-container> -->
+    
+      <!-- tagetendpoint Column -->
+      <!-- <ng-container matColumnDef="tagetendpoint">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> tagetendpoint </th>
+        <td mat-cell *matCellDef="let element"> {{element.tagetendpoint}} </td>
+      </ng-container> -->
+    
+      <!-- endlat Column -->
+      <!-- <ng-container matColumnDef="endlat">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> endlat </th>
+        <td mat-cell *matCellDef="let element"> {{element.endlat}} </td>
+      </ng-container> -->
+    
+      <!-- endlng Column -->
+      <!-- <ng-container matColumnDef="endlng">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> endlng </th>
+        <td mat-cell *matCellDef="let element"> {{element.endlng}} </td>
+      </ng-container> -->
+    
+      <!-- transtatus Column -->
+      <ng-container matColumnDef="transtatus">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> transtatus </th>
+        <td mat-cell *matCellDef="let element"> {{element.transtatus}} </td>
+      </ng-container>
+    
+      
+      
+       
+      <!-- Control Header Row Footer -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row (click)="onSelectedRow(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+    <!--  Control Page แสดงข้อมูลมากกว่า 1 หน้า -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons> </mat-paginator>
+  
+  </div>
