@@ -22,8 +22,6 @@
                 style="display: flex;align-items: center;border-color:#ced4da;">
                 <mat-icon>search</mat-icon>
             </button>
-            <!-- <span class="m-2"><mat-icon>list</mat-icon></span> -->
-            <span class="m-2"><mat-icon (click)="driverDetails()">{{ isDriver? 'list' : 'view_headline' }}</mat-icon></span>
         </div>
     </div>
   </div>
@@ -171,7 +169,7 @@
 
             <div class="row mx-1"><hr style="border: none; border-top: 1px dashed none; margin:5px -1px 5px -1px"/></div>
 
-            <div *ngIf="isDriver" class="card-details">
+            <div *ngIf="driver.showDetails" class="card-details">
 
               <hr style="border: none; border-top: 1px dashed gray; margin:0px -1px 10px -1px"/>
 
