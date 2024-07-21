@@ -1,183 +1,61 @@
-<!-- Company Header -->
 <div class="container">
-    <div class="row no-gutters">
-        <div class="{{show == 0 ? 'col-2' : 'col-12'}}" style="background-color: transparent;">
-            <div class="row no-gutters" *ngFor="let comp of dashboardData">
-                <!-- Company Data -->
-            <div class="col-3">
-                    <div class="container border border-info border-2 rounded" style="width:300px;margin: 5px;">
-                        <div class="row">
-                            <div class="col-2 border border-info border-2 rounded" style="background-color:red; ">
-                                <div class="row no gutters"  >
-                                    <mat-icon class="icon-standard">watch_later</mat-icon>
-                                </div>
-                                <div class="row no gutters " >
-                                    <mat-card-title class="show-number" >{{comp.totalwakeup}}</mat-card-title>
-                                </div>
-                            </div>
-                            <div class="col-2 border border-info border-2 rounded" style="background-color: orangered;">
-                                <div class="row no gutters"  >
-                                    <mat-icon class="icon-standard">record_voice_over</mat-icon>
-                                </div>
-                                <div class="row no gutters " >
-                                    <mat-card-title class="show-number" >{{comp.totalalgohol}}</mat-card-title>
-                                </div>
-                            </div>
-                            <div class="col-2 border border-info border-2 rounded" style="background-color: goldenrod;">
-                                <div class="row no gutters"  >
-                                    <mat-icon class="icon-standard">hot_tub</mat-icon>
-                                </div>
-                                <div class="row no gutters " >
-                                    <mat-card-title class="show-number" >{{comp.totaltemp}}</mat-card-title>
-                                </div>
-                            </div>
-                            <div class="col-2 border border-info border-2 rounded" style="background-color: green;">
-                                <div class="row no gutters"  >
-                                    <mat-icon class="icon-standard">power_settings_new</mat-icon>
-                                </div>
-                                <div class="row no gutters " >
-                                    <mat-card-title class="show-number" >{{comp.totalstart}}</mat-card-title>
-                                </div>
-                            </div>
-                            <div class="col-4 border border-info border-2 rounded" style="background-color: wheat;">
-                                <div class="row no gutters"  >
-                                    <mat-icon class="icon-standard">supervised_user_circle</mat-icon>
-                                </div>
-                                <div class="row no gutters " >
-                                    <mat-card-title class="show-total" >{{comp.listdriver.length}}</mat-card-title>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">                  
-                            <mat-card-title>{{comp.companyname}} </mat-card-title>
-                        </div>
-                        <div class="row">                  
-                             <mat-icon style="width:10px;height:10px;">menu</mat-icon>
-                        </div>
-                    </div>        
-            </div>  
-            
-            <!-- Driver -->
-            <div class="col-9">
-                <div class="row no-gutters" >
-                    <div class="col-4" *ngFor="let driver of comp.listdriver">
-                    <div class="container border border-info border-2 rounded" style="width:300px;margin: 5px;">
-                        <div [ngClass]="driver.header">
-                            <div class="col-3">
-                                <img class="profileimg" 
-                                    src="../../../assets/images/user-ic.png"> 
-                            </div>
-                            <div class="col-9">
-                                <div class="row " style="text-align: left">
-                                    {{driver.drivername}}
-                                </div>    
-                                <div class="row" style="float: right; margin-right: 5px;">
-                                    {{driver.vehiclename}}
-                                </div>    
-                            </div>
-                        </div>
-        
-        
-        
-                    </div>  
-            <!-- <div class="row" > -->
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <div class="row no gutters">
-                            <mat-icon [ngClass]="driver.wakeupicon" >alarm</mat-icon>
-                            <mat-icon [ngClass]="driver.algohalicon" >record_voice_over</mat-icon>
-                            <mat-icon [ngClass]="driver.tempicon" >hot_tub</mat-icon>
-                            <mat-icon [ngClass]="driver.starticon" >power_settings_new</mat-icon>
-                            <span class="locationname" >
-                                {{driver.routename}}
-                            </span>
-                        </div>
-                    </mat-expansion-panel-header>
-                    <!-- Detail Expand -->
-                    <div>
-                        <!-- Company -->
-                        <div class="row">
-                            <mat-card-subtitle>{{comp.companyname}}</mat-card-subtitle>
-                        </div>
-                        <!-- Route -->
-                        <div class="row">
-                            <mat-card-subtitle>{{driver.routename}}</mat-card-subtitle>
-                        </div>
-                        <!-- Wakeup -->
-                        <div class="row">
-                            <div class="col-9">
-                                <mat-icon [ngClass]="driver.wakeupicon">alarm</mat-icon>
-                                <span style="color: gray;">{{driver.wakeuptaget}}</span>
-                            </div>
-                            <div class="col-3" style="text-align: right;">
-                                <span style="color: navy;">{{driver.wakeuptime}}</span>
-                            </div>
-                        </div> 
-                        <!-- Algohol -->
-                        <div class="row">
-                            <div class="col-9">
-                                <mat-icon [ngClass]="driver.algohalicon">record_voice_over</mat-icon>
-                                <span style="color: navy;"> ({{driver.algohallevel}} %) </span>
-                            </div>
-                            <div class="col-3" style="text-align: right;">
-                                <span style="color: navy;"> {{driver.algohaltime}}</span>
-                            </div>
-                        </div> 
-                        <!-- Tempolature -->
-                        <div class="row">
-                            <div class="col-9">
-                                <mat-icon [ngClass]="driver.tempicon">hot_tub</mat-icon>
-                                <span style="color: navy;">({{driver.templevel}} 'C) </span>
-                            </div>
-                            <div class="col-3" style="text-align: right;">
-                                <span style="color: navy;"> {{driver.temptime}} </span>
-                            </div>
-                        </div> 
-                        <!-- Start Engin -->
-                        <div class="row">
-                            <div class="col-9">
-                                <mat-icon [ngClass]="driver.starticon">power_settings_new</mat-icon>
-                                <span style="color: gray;"> {{driver.starttaget}} </span>
-                            </div>
-                            <div class="col-3" style="text-align: right;">
-                                <span style="color: navy;"> {{driver.starttime}} </span>
-                            </div>
-                        </div> 
-                        <!-- On the way -->
-                        <div class="row">
-                            <div class="col-6">
-                                <mat-icon [ngClass]="driver.ontheway">location_on</mat-icon>
-                                <span style="color: navy;"> {{driver.fistpoint}}  </span>
-                                <span style="color: gray;"> | {{driver.tagetfistpoint}}  </span>
-                            </div>
-                            <div class="col-6" style="text-align: right;">
-                                <span style="color: navy;"> {{driver.endpoint}} </span>
-                                <span style="color: gray;"> | {{driver.tagetendpoint}} </span>
-                            </div>
-                        </div> 
-        
-                    </div>
-                </mat-expansion-panel>
-            <!-- </div>         -->
-            <div class="row">
-                <div class="col-9">
-                    <span class="locationname"> {{driver.location}}</span>   
-                </div>
-                <div class="col-3" style="text-align:right;">
-                    <span style="text-align:right; font-size: small; padding-right: 0px;"> {{driver.lastupdate}}</span>
-                </div>
-            </div>
-                </div>
-        </div>
-            </div>
-        
-            <div class="row" style="height: 2px; background-color: gray; margin:10px ;"></div>
-        </div>
-        </div>
-        <div class="{{show == 0 ? 'col-10' : 'col-0'}}" style="background-color: red;">
-b
+  <div class="row mt-4">
+    <div class="col-lg-8 col-sm-12">
+      <!-- <div style="font-size: large; color: black; font-weight: 550" class="mt-sm-2 m-1">Driver is Gone</div> -->
+      <div style="font-size: large; color: black; font-weight: 550" class="mt-sm-2 m-1">Select Your COMPANY</div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+        <div class="input-group mb-3" style="display: flex; align-items: center;">
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon"
+                style="display: flex;align-items: center;border-color:#ced4da;">
+                <mat-icon>search</mat-icon>
+            </button>
+            <span class="m-2"><mat-icon>list</mat-icon></span>
         </div>
     </div>
+
+    <div class="row no-gutters mx-1" style="background-color: white; border-radius: 10px; display: flex; align-items: center;">
+
+      <!-- Back Button Container -->
+      <div class="col-1 d-flex justify-content-start">
+        <button mat-icon-button>
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+      </div>
+    
+      <!-- Company Names Container (Scrollable) -->
+      <div class="col-10 d-flex flex-wrap align-items-center justify-content-center" style="overflow-x: auto;">
+        <div class="col-lg-2 col-sm-4 m-2" *ngFor="let comp of dashboardData.slice(0,4)">
+          <span class="d-flex flex-wrap align-items-center justify-content-center">
+            {{ comp.companyname }}
+          </span>
+        </div>
+      </div>
+    
+      <!-- Next Button Container -->
+      <div class="col-1 d-flex justify-content-end">
+        <button mat-icon-button>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+    
+    </div>
+    
+    
+
+  </div>
+
+
+<div class="row no-gutters m-4" 
+  style="display: flex; align-items: center; background-color:transparent; border-radius: 10px;"
+  *ngFor="let comp of dashboardData">
+  <div *ngFor="let driver of comp.listdriver">
+    <div class="row" style="text-align: left">{{ driver.drivername }}</div>
+  </div>
 </div>
 
 
+
+
+</div>

@@ -9,7 +9,7 @@ mat-sidenav-contemt {
 
 mat-sidenav {
     background-color: transparent;
-    width: 400px;
+    // width: 400px;
 }
 
 .navbar {
@@ -38,10 +38,5 @@ span {
     cursor: pointer; /* Makes it clear the element is clickable */
 }
 
-.clickable-div:hover {
-    color: wheat; /* Changes text color to red on hover */
-}
-
-.clickable-div:hover mat-icon {
-    color: wheat; /* Changes icon color to red on hover */
-}
+.clickable-div:hover { color: wheat; background-color:#425b5b24;}
+.clickable-div:hover mat-icon { color: wheat;}

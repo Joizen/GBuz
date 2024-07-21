@@ -52,6 +52,8 @@
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;"> routedata </span>
             </div>
+
+
             <div *ngIf="true" (click)="openPage('driverregister')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;"> driverregister </span>
@@ -68,6 +70,8 @@
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;"> driverworkreport </span>
             </div>
+
+
             <div *ngIf="true" (click)="openPage('confirmjob')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;"> confirmjob </span>
@@ -76,6 +80,9 @@
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;">lmap </span>
             </div>
+
+            <hr style="border: none; border-top: 1px dashed #000000;"/>
+
             <div *ngIf="true" (click)="openPage('planactive')" style="display: flex; align-items: center; line-height:3" class="clickable-div">
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;"> planactive </span>
@@ -100,6 +107,14 @@
                 <mat-icon style="margin-right: 20px;">menu</mat-icon>
                 <span style="text-transform: uppercase; font-weight: 500;"> plandata </span>
             </div>
+
+            <hr style="border: none; border-top: 1px dashed #000000;"/>
+
+            <div style="display: flex; align-items: center; line-height:3" class="clickable-div">
+                <mat-icon style="margin-right: 20px; color:wheat;">input icon</mat-icon>
+                <span style="text-transform: uppercase; font-weight: 500;"> Sign out </span>
+            </div>
+
         </div>
     </mat-sidenav>
 
@@ -112,18 +127,15 @@
             <div>
                 <mat-icon class="navmenu" (click)="showMenu()" style="margin-right: 20px;">menu</mat-icon>
                 <img src="../assets/images/sym_g.png" style="height: 35px;">
-                <span>Driver</span>
+                <span style="color: white; font-size:medium;">Driver</span>
             </div>
 
             <div>
-                <mat-icon class="navmenu">info icon</mat-icon> 
+                <mat-icon class="navmenu">info icon </mat-icon> 
                 <span class="navtxt"> About</span>
 
-                <mat-icon class="navmenu">description icon</mat-icon> 
+                <mat-icon class="navmenu">description icon </mat-icon> 
                 <span class="navtxt"> Manual</span>
-                
-                <mat-icon class="navmenu">input icon</mat-icon> 
-                <span class="navtxt"> Logout</span>
             </div>
 
         </mat-toolbar>
