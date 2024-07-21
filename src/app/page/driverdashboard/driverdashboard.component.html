@@ -1,9 +1,20 @@
 <div class="container">
+
+  <!-- Search Filler -->
   <div class="row mt-4">
     <div class="col-lg-8 col-sm-12">
-      <!-- <div style="font-size: large; color: black; font-weight: 550" class="mt-sm-2 m-1">Driver is Gone</div> -->
-      <div style="font-size: large; color: black; font-weight: 550" class="mt-sm-2 m-1">Select Your COMPANY</div>
+      <div class="col-lg-12 col-sm-12 p-1" style="font-size: large; color: black; font-weight: 550;">
+        <div class="row align-items-center" style="gap:10px;">
+          <div class="col-auto p-0">
+            <mat-icon style="margin-left:10px; font-size: 24px;">dashboard</mat-icon>
+          </div>
+          <div class="col p-0">
+            <span style="display: inline-block;">Driver Dashboard</span>
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="col-lg-4 col-sm-12">
         <div class="input-group mb-3" style="display: flex; align-items: center;">
             <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon">
@@ -11,51 +22,205 @@
                 style="display: flex;align-items: center;border-color:#ced4da;">
                 <mat-icon>search</mat-icon>
             </button>
-            <span class="m-2"><mat-icon>list</mat-icon></span>
+            <!-- <span class="m-2"><mat-icon>list</mat-icon></span> -->
+            <span class="m-2"><mat-icon (click)="driverDetails()">{{ isDriver? 'list' : 'view_headline' }}</mat-icon></span>
         </div>
     </div>
+  </div>
 
-    <div class="row no-gutters mx-1" style="background-color: white; border-radius: 10px; display: flex; align-items: center;">
-
+  <!-- Company  -->
+  <div class="row">
+    <div class="row no-gutters mx-1">
       <!-- Back Button Container -->
-      <div class="col-1 d-flex justify-content-start">
+      <div class="col-1 d-flex justify-content-start align-items-center">
         <button mat-icon-button>
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
       </div>
-    
       <!-- Company Names Container (Scrollable) -->
       <div class="col-10 d-flex flex-wrap align-items-center justify-content-center" style="overflow-x: auto;">
-        <div class="col-lg-2 col-sm-4 m-2" *ngFor="let comp of dashboardData.slice(0,4)">
-          <span class="d-flex flex-wrap align-items-center justify-content-center">
-            {{ comp.companyname }}
-          </span>
+        
+        <div class="{{isDesktop == 5 ? 'col-2':'col-10'}} m-2" *ngFor="let comp of dashboardData.slice(0,isDesktop)" style="background-color: white; border-radius: 10px;">
+          
+          <div class="row mx-2">
+            <div class="col-8 d-flex justify-content-center align-items-center">
+              <span style="font-weight:500; text-transform:uppercase;">{{ comp.companyname }}</span>
+            </div>
+
+            <div class="col-4">
+              <div class="row justify-content-end">                
+                <div class="col-12 d-flex justify-content-center rounded-circle text-white text-center icircle mt-2" style="background-color:darkgreen;">
+                  {{comp.listdriver.length}}
+                </div>
+                <div class="col-12" style="color:black; margin: -2px -5px 0px 0px; font-size:x-small; width:80%;">
+                  <mat-icon>group</mat-icon>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row mx-1"><hr style="border: none; border-top: 1px dashed gray; margin:0px 1px 2px -1px"/></div>
+
+
+          <div class="row justify-content-center m-1">
+
+            <div class="col-3 d-flex justify-content-center align-items-center" style="background-color: #116bd2; color: white;">
+              <div class="row text-center mt-1">
+                <div class="col-12"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:-8px;">access_time</mat-icon></div>
+                <div class="col-12"><span class="font-weight-bold">{{ comp.totalwakeup }}</span></div>
+              </div>
+            </div>
+
+            <div class="col-3 d-flex justify-content-center align-items-center" style="background-color: #fb0000; color:white">
+              <div class="row text-center">
+                <div class="col-12"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:-8px;">local_bar</mat-icon></div>
+                <div class="col-12"><span class="font-weight-bold">{{ comp.totalalgohol }}</span></div>
+              </div>
+            </div>
+
+            <div class="col-3 d-flex justify-content-center align-items-center" style="background-color:orange;color:white">
+              <div class="row text-center">
+                <div class="col-12"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:-8px;;"><span style="font-size:8px; font-family:Verdana; font-weight:bold;">TEMP</span></mat-icon></div>
+                <div class="col-12"><span class="font-weight-bold">{{ comp.totaltemp }}</span></div>
+              </div>
+            </div>
+
+            <div class="col-3 d-flex justify-content-center align-items-center" style="background-color: #5c8f4e;color:white">
+              <div class="row text-center">
+                <div class="col-12"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:-8px;">directions_car</mat-icon></div>
+                <div class="col-12"><span class="font-weight-bold">{{ comp.totalstart }}</span></div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="row mx-1"><hr style="border: none; border-top: 1px dashed gray; margin:2px -1px 5px -1px"/></div>
+
         </div>
       </div>
-    
       <!-- Next Button Container -->
-      <div class="col-1 d-flex justify-content-end">
+      <div class="col-1 d-flex justify-content-end align-items-center">
         <button mat-icon-button>
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
       </div>
-    
     </div>
-    
-    
-
   </div>
 
+  <!-- Driver Detail -->
+  <div class="row mt-4 d-flex flex-wrap justify-content-start">
+    <div class="col-lg-3 col-sm-12 my-2" *ngFor="let driver of listdriver" style="gap: 20px;">
+      <div class="col-12" style="background-color:white;border-radius:10px;">
 
-<div class="row no-gutters m-4" 
-  style="display: flex; align-items: center; background-color:transparent; border-radius: 10px;"
-  *ngFor="let comp of dashboardData">
-  <div *ngFor="let driver of comp.listdriver">
-    <div class="row" style="text-align: left">{{ driver.drivername }}</div>
+            <!-- Driver Information -->
+            <div class="row px-1 pt-2 d-flex flex-wrap align-items-center" style="margin: 0;">
+              <div class="col-6">
+                <div class="row align-items-center">
+                  <div class="col-2">
+                    <mat-icon class="mr-2" style="font-size: 1.35rem; margin-top:5px;">assignment</mat-icon>
+                  </div>
+                  <div class="col-10" style="font-weight: 500; text-transform: uppercase;">
+                    <span>{{ driver.drivername }}</span>
+                  </div>
+                </div>
+              </div>
+            
+              <div class="col-6">
+                <div class="row align-items-center justify-content-end">
+                  <div class="col-2">
+                    <mat-icon class="mr-2" style="font-size: 1.35rem; margin-top:5px;">directions_car</mat-icon>
+                  </div>
+                  <div class="col-7" style="font-weight: 500; text-transform: uppercase;">
+                    <span >{{ driver.vehiclename }}</span>
+                  </div>
+                  <div class="col-3">
+                    
+                    <mat-icon style="font-size: 1.35rem;margin-top:5px;" (click)="toggleDetails(driver)">more_vert</mat-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mx-1"><hr style="border: none; border-top: 1px dashed gray; margin:2px -1px 10px -1px"/></div>
+
+             <!-- Icons Section -->
+             <div class="row px-1 d-flex flex-wrap align-items-center" style="margin: 0;">
+              <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+                <div class="icon-container" style="background-color: #d9d9d9;">
+                  <mat-icon class="icon-standard" [ngClass]="driver.wakeupicon" >watch_later</mat-icon>
+                </div>
+              </div>
+              <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+                <div class="icon-container" style="background-color: #d9d9d9;">
+                  <mat-icon class="icon-standard" [ngClass]="driver.algohalicon">record_voice_over</mat-icon>
+                </div>
+              </div>
+              <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+                <div class="icon-container" style="background-color: #d9d9d9;">
+                  <mat-icon class="icon-standard" [ngClass]="driver.tempicon" >hot_tub</mat-icon>
+                </div>
+              </div>
+              <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+                <div class="icon-container" style="background-color: #d9d9d9;">
+                  <mat-icon class="icon-standard" [ngClass]="driver.starticon">power_settings_new</mat-icon>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mx-1"><hr style="border: none; border-top: 1px dashed none; margin:5px -1px 5px -1px"/></div>
+
+            <div *ngIf="isDriver" class="card-details">
+
+              <hr style="border: none; border-top: 1px dashed gray; margin:0px -1px 10px -1px"/>
+
+              <div class="card-details-header">
+                <mat-icon>info</mat-icon>
+                <span>Driver Details</span>
+              </div>
+              <div class="card-details-content">
+                <div class="detail-item">
+                  <span class="detail-label">Route Name:</span>
+                  <span class="detail-value" style="display: flex; justify-content: end;">{{ driver.routename }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Wake-up Time:</span>
+                  <span class="detail-value">{{ driver.wakeuptaget }} - {{ driver.wakeuptime }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Alcohol Level:</span>
+                  <span class="detail-value">{{ driver.algohallevel }} - {{ driver.algohaltime }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Temperature Level:</span>
+                  <span class="detail-value">{{ driver.templevel }} - {{ driver.temptime }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Start Target:</span>
+                  <span class="detail-value">{{ driver.starttaget }} - {{ driver.starttime }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">First Point:</span>
+                  <span class="detail-value">{{ driver.fistpoint }} - {{ driver.tagetfistpoint }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">End Point:</span>
+                  <span class="detail-value">{{ driver.endpoint }} - {{ driver.tagetendpoint }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Location:</span>
+                  <span class="detail-value">{{ driver.location }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Last Update:</span>
+                  <span class="detail-value">{{ driver.lastupdate }}</span>
+                </div>
+              </div>
+            </div>
+            
+
+      </div>
+
+    </div>
   </div>
-</div>
-
-
-
-
-</div>

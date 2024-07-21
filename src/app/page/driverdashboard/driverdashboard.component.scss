@@ -73,21 +73,35 @@
 }
 
 .icon-pass {
-    font-size: 15px;
-    height: 15px;
-    width: 15px;
-    margin-right: 1px;
-    text-align:left;
-    color: green;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: white;
+  background-color: #5fbfad;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin: 0;
+  padding: 5;
 }
 
 .icon-nonpass {
-    font-size: 15px;
-    height: 15px;
-    width: 15px;
-    margin-right: 1px;
-    text-align:left;
-    color: red;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: white;
+  background-color: #ff4d4d;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin: 0;
+  padding: 5;
 }
 
 .icon-normal {
@@ -98,3 +112,82 @@
     text-align:left;
     color: gray;
 }
+
+.icircle {
+    width: 26px; 
+    height: 26px;
+    line-height: 26px; 
+    border-radius: 50%; 
+    font-size: small;
+  }
+
+  .icon-container {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    color: white;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .icon-container:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin: 0;
+    padding: 0;
+  }
+  
+  .icon-label {
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .card-details {
+    padding: 0px 16px 6px 16px;
+    margin-top: 0px;
+    font-size: 12px;
+    color: #333;
+  }
+  
+  .card-details-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  
+  .card-details-header mat-icon {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+  
+  .card-details-header span {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .detail-item {
+    display: flex;
+    justify-content: space-between; /* Aligns items to each end */
+    align-items: center; /* Centers items vertically */
+  }
+  
+  .detail-label {
+    font-weight: 500;
+    margin-right: 8px;
+  }
+  
+  .detail-value {
+    color: #666;
+    margin-left: auto;
+    margin: 2px 8px;
+  }
+  
