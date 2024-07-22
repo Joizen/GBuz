@@ -1,42 +1,36 @@
-mat-sidenav-container {
-    height: 100%;
-}
+  mat-sidenav-container {
+      height: 100%;
+  }
 
-mat-sidenav,
-mat-sidenav-contemt {
-    padding: 16px;
-}
+  mat-sidenav-content {
+      height: 100%;
+  }
 
-mat-sidenav {
-    background-color: transparent;
-    // width: 400px;
-}
+  .clickable-div {
+      display: flex;
+      align-items: center;
+      line-height: 3;
+      cursor: pointer;
+      padding: 10px;
+      transition: background-color 0.3s;
+  }
 
-.navbar {
-    justify-content: space-between;
-}
+  .clickable-div:hover {
+      background-color: #1565c0;
+  }
 
-span {
-    padding-right: 1rem;
-}
+  .menu-item {
+      text-transform: uppercase;
+      font-weight: 500;
+      color: #ffffff;
+  }
 
-.navmenu {
-    align-items: center;
-    vertical-align: middle;
-}
+  .navmenu {
+      cursor: pointer;
+  }
 
-.navtxt {
-    font-size: 0.9rem;
-}
-
-.mat-toolbar{background-color: #5b9d9d;}
-
-.clickable-div {
-    display: flex;
-    align-items: center;
-    line-height: 3;
-    cursor: pointer; /* Makes it clear the element is clickable */
-}
-
-.clickable-div:hover { color: wheat; background-color:#425b5b24;}
-.clickable-div:hover mat-icon { color: wheat;}
+  .navtxt {
+      color: white;
+      font-size: medium;
+      margin-left: 5px;
+  }
