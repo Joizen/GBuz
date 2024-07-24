@@ -2914,7 +2914,6 @@ export class DriverdashboardComponent implements OnInit{
 
     this.onResize(window); 
     this.listdriver = this.dashboardData[0].listdriver;
-
   }
   
   onResize(event: any) {

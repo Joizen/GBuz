@@ -24,8 +24,11 @@
             <span class="menu-item">driver </span>
         </div>
         <div *ngIf="false" (click)="openPage('driverdata')"  class="clickable-div">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon><span> driverdata </span></div>
-        <div *ngIf="true" (click)="openPage('vehicle')" style="display: flex; align-items: center;">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item">driverdata </span>
+        </div>
+
+        <div *ngIf="true" (click)="openPage('vehicle')" class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">vehicle </span>
         </div>
@@ -96,6 +99,13 @@
         <div *ngIf="false" (click)="openPage('plandata')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> plandata </span>
+        </div>
+
+        <hr style="border: none; border-top: 1px dashed white;margin:0;"/>
+
+        <div class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">input</mat-icon>
+            <span class="menu-item"> LOGOUT </span>
         </div>
     </div>
     </mat-sidenav>

@@ -6,6 +6,8 @@ import { SearchplanpageComponent } from './searchplanpage.component';
 import { MaterialModule } from '../../../material/material.module';
 
 
+
+
 @NgModule({
   declarations: [
     SearchplanpageComponent
@@ -16,7 +18,9 @@ import { MaterialModule } from '../../../material/material.module';
     MaterialModule
   ]
 })
-export class SearchplanpageModule { }
+export class SearchplanpageModule { 
+
+}
 export interface  PlanModel { 
   roundname: string;  
   routename: string;  
@@ -70,4 +74,8 @@ export interface  PlanModel {
   endlng: number;
   transtatus: number;
   modified: string;  
+
+
 }
+
+
