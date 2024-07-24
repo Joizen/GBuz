@@ -16,18 +16,30 @@
     </div>
 
     <div class="col-lg-4 col-sm-12">
-        <div class="input-group mb-3" style="display: flex; align-items: center;">
+      <div class="row">
+        <div class="col-9">
+          <div class="input-group">
             <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon">
             <button class="btn btn-outline-secondary" type="button" id="button-addon"
                 style="display: flex;align-items: center;border-color:#ced4da;">
                 <mat-icon>search</mat-icon>
             </button>
+          </div>
         </div>
+        <div class="col-auto d-flex align-items-center">
+          <mat-icon *ngIf="!show" style="margin-left:10px; font-size: 24px;">view_module</mat-icon>
+          <mat-icon *ngIf="show" style="margin-left:10px; font-size: 24px;">view_quilt</mat-icon>
+        </div>
+      </div>
+
+        
+
+        
     </div>
   </div>
 
-  <!-- Company  -->
-  <div class="row">
+  <!-- Driver Detail -->
+  <div *ngIf="show" class="row">
     <div class="row no-gutters mx-1">
       <!-- Back Button Container -->
       <div class="col-1 d-flex justify-content-start align-items-center">
@@ -97,9 +109,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Driver Detail -->
-  <div class="row mt-4 d-flex flex-wrap justify-content-start">
+  <div *ngIf="show" class="row mt-4 d-flex flex-wrap justify-content-start">
     <div class="col-lg-3 col-sm-12 my-2" *ngFor="let driver of listdriver" style="gap: 20px;">
       <div class="col-12" style="background-color:white;border-radius:10px;">
 
@@ -213,3 +223,11 @@
 
     </div>
   </div>
+
+  <!-- Driver Dashboard All-->
+  <div *ngIf="!show" class="row m-2">
+  a
+  
+  
+  </div>
+
