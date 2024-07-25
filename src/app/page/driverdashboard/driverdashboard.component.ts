@@ -403,7 +403,6 @@ export class DriverdashboardComponent implements OnInit{
           endpoint:"00:00",
         },
       ]
-
     },
     {
       companyid:"2",
@@ -2883,9 +2882,9 @@ export class DriverdashboardComponent implements OnInit{
 
     }
   ]
-  public show = 0;
+  public show = 1;
   
-  public isDesktop = 5;
+  public isDesktop = 6;
   public listdriver :any;
 
   @HostListener('window:resize', ['$event'])
@@ -2919,7 +2918,8 @@ export class DriverdashboardComponent implements OnInit{
   onResize(event: any) {
     // console.log('Window resized!', event.screen.width);
     if (event.screen.width <= 1024) { this.isDesktop = 1; } 
-    else { this.isDesktop = 5;}
+    else { this.isDesktop = 6;}
+    console.log('Window resized!', this.isDesktop);
   }
 
   toggleDetails(driver: any) {
