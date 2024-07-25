@@ -1,4 +1,5 @@
 import { Component, OnInit ,HostListener} from '@angular/core';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 @Component({
   selector: 'app-driverdashboard',
@@ -2882,8 +2883,7 @@ export class DriverdashboardComponent implements OnInit{
 
     }
   ]
-  public show = 1;
-  
+  public show = 0;
   public isDesktop = 6;
   public listdriver :any;
 
@@ -2919,11 +2919,15 @@ export class DriverdashboardComponent implements OnInit{
     // console.log('Window resized!', event.screen.width);
     if (event.screen.width <= 1024) { this.isDesktop = 1; } 
     else { this.isDesktop = 6;}
-    console.log('Window resized!', this.isDesktop);
   }
 
   toggleDetails(driver: any) {
     driver.showDetails = !driver.showDetails;
   }
+
+  showdashboard() {
+     this.show == 0 ? this.show=1:this.show=0;
+     console.log('showdashboard!', this.isDesktop);
+    }
 
 }

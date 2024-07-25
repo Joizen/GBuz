@@ -1,5 +1,4 @@
 <div class="container">
-
   <!-- Search Filler -->
   <div class="row mt-4">
     <div class="col-lg-8 col-sm-12">
@@ -26,22 +25,18 @@
             </button>
           </div>
         </div>
-        <div class="col-auto d-flex align-items-center">
-          <mat-icon *ngIf="!show" style="margin-left:10px; font-size: 24px;">view_module</mat-icon>
-          <mat-icon *ngIf="show" style="margin-left:10px; font-size: 24px;">view_quilt</mat-icon>
+        <div class="col-auto d-flex align-items-center" (click)="showdashboard()">
+          <mat-icon class="{{show ? 'viewcolumn':'viewall'}}" >view_week</mat-icon>
+          <mat-icon class="{{show ? 'viewall':'viewcolumn'}}">view_module</mat-icon>
         </div>
       </div>
-
-        
-
         
     </div>
   </div>
-  
 </div>
 
 <!-- Driver Detail -->
-  <div *ngIf="show" class="row d-flex justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1">
+<div *ngIf="show" class="row d-flex justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1">
     <div class="row d-flex justify-content-center align-items-center  no-gutters">
       <!-- Back Button Container -->
       <div class="col-1 d-flex justify-content-start align-items-center no-gutters">
@@ -49,7 +44,6 @@
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
       </div>
-
       <!-- Company Names Container (Scrollable) -->
       <div class="col-10 d-flex flex-wrap align-items-center justify-content-center no-gutters" style="overflow-x: auto;">
         <div class="{{isDesktop == 6 ? 'col-2':'col-11'}} ishadow no-gutters" *ngFor="let comp of dashboardData.slice(0,isDesktop)">
@@ -102,7 +96,6 @@
           </div>
         </div>
       </div>
-
       <!-- Next Button Container -->
       <div class="col-1 d-flex justify-content-end align-items-center no-gutters">
         <button mat-icon-button class="no-gutters">
@@ -110,8 +103,8 @@
         </button>
       </div>
     </div>
-  </div>
-  <div *ngIf="show" class="row mt-5 mx-2 d-flex flex-wrap justify-content-start">
+</div>
+<div *ngIf="show" class="row mt-5 mx-2 d-flex flex-wrap justify-content-start">
     <div class="col-lg-3 col-sm-12 my-2" *ngFor="let driver of listdriver" style="gap: 20px;">
       <div class="col-12 ishadow">
 
@@ -224,22 +217,37 @@
       </div>
 
     </div>
-  </div>
+</div>
 
 
 <!-- Driver Dashboard All-->
-<div *ngIf="!show" class="mx-1 row">
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
+<div *ngIf="!show" class="mx-2 mt-4 row no-gutters d-flex justify-content-center zeroxy" >
+  <!-- <div *ngFor="let comp of dashboardData" class="col-1" style="background-color: #5c8f4e;">a</div> -->
+  <!-- <div class="{{isDesktop>5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div> -->
+ <div class="row no-gutters zeroxy d-flex justify-content-center">
+
+    <div class="col-12 row no-gutters d-flex justify-content-center" style="border: none; border-bottom: 1px dashed #becdeb;">
+      <div class="col-lg-2 col-sm-12 justify-content-start">company A</div>
+      <div class="col-lg-10 col-sm-12 justify-content-start align-content-center">
+      </div>
+    </div>
   
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
-  <div class="{{isDesktop === 5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div>
+    <div class="col-12 row no-gutters d-flex justify-content-center">
+      <div class="col-lg-12 col-sm-12 row zeroxy">
+        <div class="col-lg-4 col-sm-12" >a</div>
+        <div class="col-lg-4 col-sm-12" >2</div>
+        <div class="col-lg-4 col-sm-12" >2</div>
+       </div>
+    </div>
+ </div>
+
 </div>
+
+
+<!-- 
+SAMPLE
+<div class="row">
+  <div class="col-lg-4 col-sm-12" style="background-color: rebeccapurple; color: white">a</div>
+  <div class="col-lg-4 col-sm-12" style="background-color: rebeccapurple; color: white">2</div>
+  <div class="col-lg-4 col-sm-12" style="background-color: rebeccapurple; color: white">2</div>
+ </div> -->

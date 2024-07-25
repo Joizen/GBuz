@@ -13,6 +13,9 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+.zeroxy{ margin:0; padding:0;}
+
 .H1030{ background:linear-gradient(to right,#FF0000,#008000);}
 .H1031{ background:linear-gradient(to right,#FF0000,#DAA520 );}
 .H1033{ background:linear-gradient(to right,#FF0000,#FF0000);}
@@ -197,3 +200,5 @@
     margin: 2px 8px;
   }
   
+  .viewall{ margin-left:10px; font-size: 24px; color:#606060;}
+  .viewcolumn{ margin-left:10px; font-size: 24px; color:#a1a1a1;}
