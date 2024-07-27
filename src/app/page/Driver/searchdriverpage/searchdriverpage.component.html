@@ -94,7 +94,7 @@
       <!-- Control Header Row Footer -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row (click)="onSelectedRow(row)" *matRowDef="let row; columns: displayedColumnsData;"></tr>
-  </table>
+    </table>
   
     <!--  Control Page แสดงข้อมูลมากกว่า 1 หน้า -->
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons> </mat-paginator>

@@ -1,23 +1,29 @@
-import { Component, OnInit,ViewChild} from '@angular/core';
-import { MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {DriverModel} from './searchdriverpage.module';
+import { Component, ViewChild , OnInit , ChangeDetectionStrategy , inject} from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { DriverPageComponent } from '../driver-page/driver-page.component';
+import { MatDialog } from '@angular/material/dialog';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'app-searchdriverpage',
-  templateUrl: './searchdriverpage.component.html',
-  styleUrls: ['./searchdriverpage.component.scss']
+  selector: 'app-searchdriver-page',
+  templateUrl: './searchdriver-page.component.html',
+  styleUrls: ['./searchdriver-page.component.scss'],
+  // standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class SearchdriverpageComponent implements OnInit{
+export class SearchdriverPageComponent implements OnInit {
   constructor() {}
   public mainData : DriverModel[] = []; 
-  public displayedColumns: string[] =[];
-  public displayedColumnsData: string[] =[]  ;
-  public  dataSource = new MatTableDataSource(this.mainData); 
+  public displayedColumns : string [] = [];
+  public displayedColumnsData : string [] = [];
+  public dataSource = new MatTableDataSource(this.mainData); 
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
     
@@ -25,8 +31,13 @@ export class SearchdriverpageComponent implements OnInit{
   ngAfterViewInit() {
     this.setData();    
   }
-  onSelectedRow(row:any){
-    console.log(row);
+  async setData(){
+    this.displayedColumns = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
+    this.displayedColumnsData = [...this.displayedColumns,'action'];
+    this.mainData = await  this.getData();
+    this.dataSource = new MatTableDataSource(this.mainData); 
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   applyFilter(event:any){
@@ -34,13 +45,8 @@ export class SearchdriverpageComponent implements OnInit{
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
   }
 
-  async setData(){
-    this.displayedColumns = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
-    this.displayedColumnsData = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
-    this.mainData = await  this.getData();
-    this.dataSource = new MatTableDataSource(this.mainData); 
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  onSelectedRow(row:any){
+    console.log(row);
 
   }
 
@@ -141,4 +147,26 @@ export class SearchdriverpageComponent implements OnInit{
     ]
   }
 
+  openDialog(row : any) {
+    const dialogRef = this.dialog.open(DriverPageComponent , {data:row});
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
+
+export interface  DriverModel { 
+  id: number;
+  driverfullname: string; 
+  drivername: string;  
+  surname: string;  
+  nickname: string; 
+  license: string; 
+  licensetype: string;  
+  phone: string; 
+  mobile: string;  
+  linename: string; 
+  lineimage: string;  
+}
+
