@@ -224,30 +224,28 @@
 <div *ngIf="!show" class="mx-2 mt-4 row no-gutters d-flex justify-content-center zeroxy" >
   <!-- <div *ngFor="let comp of dashboardData" class="col-1" style="background-color: #5c8f4e;">a</div> -->
   <!-- <div class="{{isDesktop>5 ? 'col-1':'col-4'}}" style="background-color: #5c8f4e;">a</div> -->
- <div class="row no-gutters zeroxy d-flex justify-content-center">
+ <div class="row no-gutters zeroxy d-flex justify-content-center"  *ngFor="let comp of dashboardData">
 
     <div class="col-12 row no-gutters d-flex justify-content-center" style="border: none; border-bottom: 1px dashed #becdeb;">
-      <div class="col-lg-2 col-sm-12 justify-content-start">company A</div>
+      <div class="col-lg-2 col-sm-12 justify-content-start">{{comp.companyname}}</div>
       <div class="col-lg-10 col-sm-12 justify-content-start align-content-center">
+        {{comp.listdriver.length}}
+        {{ comp.totalwakeup }}
+        {{ comp.totalalgohol }}
+        {{ comp.totaltemp }}
+        {{ comp.totalstart }}
       </div>
     </div>
   
-    <div class="col-12 row no-gutters d-flex justify-content-center">
-      <div class="col-lg-12 col-sm-12 row zeroxy">
-        <div class="col-lg-4 col-sm-12" >a</div>
-        <div class="col-lg-4 col-sm-12" >2</div>
-        <div class="col-lg-4 col-sm-12" >2</div>
+    <div class="col-12 my-2 row no-gutters d-flex justify-content-center" style="background-color: greenyellow;">
+      <div class="row zeroxy" *ngFor="let driver of comp.listdriver" style="background-color: navajowhite;">
+
+        <div class="col-1">x</div>
+        <!-- <div class="col-lg-2 col-sm-2" style="font-size:x-small;">{{driver.drivername}}</div> -->
+
        </div>
     </div>
+
  </div>
 
 </div>
-
-
-<!-- 
-SAMPLE
-<div class="row">
-  <div class="col-lg-4 col-sm-12" style="background-color: rebeccapurple; color: white">a</div>
-  <div class="col-lg-4 col-sm-12" style="background-color: rebeccapurple; color: white">2</div>
-  <div class="col-lg-4 col-sm-12" style="background-color: rebeccapurple; color: white">2</div>
- </div> -->
