@@ -76,8 +76,10 @@
 }
 
 .icon-pass {
-  width: 30px;
-  height: 30px;
+  // width: 30px;
+  // height: 30px;
+  padding: 5;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,7 +90,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   margin: 0;
-  padding: 5;
 }
 
 .ishadow{ 
@@ -98,8 +99,10 @@
 }
 
 .icon-nonpass {
-  width: 30px;
-  height: 30px;
+  // width: 30px;
+  // height: 30px;
+  padding: 5;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -110,16 +113,23 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   margin: 0;
-  padding: 5;
 }
 
 .icon-normal {
-    font-size: 15px;
-    height: 15px;
-    width: 15px;
-    margin-right: 1px;
-    text-align:left;
-    color: gray;
+    // height: 15px;
+    // width: 15px;
+    padding: 5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: #808080;
+  background-color: #999999;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin: 0;
 }
 
 .icircle {
@@ -131,8 +141,8 @@
   }
 
   .icon-container {
-    width: 30px;
-    height: 30px;
+    // width: 30px;
+    // height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
