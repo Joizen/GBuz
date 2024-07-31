@@ -1,23 +1,31 @@
-import { Component, OnInit,ViewChild} from '@angular/core';
-import { MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {DriverModel} from './searchdriverpage.module';
+import { Component, ViewChild , OnInit , ChangeDetectionStrategy , inject} from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { DriverPageComponent } from '../driver-page/driver-page.component';
+import { MatDialog } from '@angular/material/dialog';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-searchdriverpage',
   templateUrl: './searchdriverpage.component.html',
-  styleUrls: ['./searchdriverpage.component.scss']
+  styleUrls: ['./searchdriverpage.component.scss'],
+  // standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class SearchdriverpageComponent implements OnInit{
+export class SearchdriverPageComponent implements OnInit {
   constructor() {}
   public mainData : DriverModel[] = []; 
-  public displayedColumns: string[] =[];
-  public displayedColumnsData: string[] =[]  ;
-  public  dataSource = new MatTableDataSource(this.mainData); 
+  public displayedColumns : string [] = [];
+  public displayedColumnsData : string [] = [];
+  public dataSource = new MatTableDataSource(this.mainData); 
+  public listdata = [];
+  public viewtype = false;
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
     
@@ -25,8 +33,14 @@ export class SearchdriverpageComponent implements OnInit{
   ngAfterViewInit() {
     this.setData();    
   }
-  onSelectedRow(row:any){
-    console.log(row);
+  async setData(){
+    this.displayedColumns = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
+    this.displayedColumnsData = [...this.displayedColumns,'action'];
+    this.mainData = await this.getData();
+    this.dataSource = new MatTableDataSource(this.mainData); 
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    // this.listdata = await this.getData();
   }
 
   applyFilter(event:any){
@@ -34,19 +48,15 @@ export class SearchdriverpageComponent implements OnInit{
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
   }
 
-  async setData(){
-    this.displayedColumns = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
-    this.displayedColumnsData = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
-    this.mainData = await  this.getData();
-    this.dataSource = new MatTableDataSource(this.mainData); 
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  onSelectedRow(row:any){
+    console.log(row);
 
   }
 
   async getData(){
     return [
-        {id: 1, driverfullname: "กรวิชญ์ ขำนอก", drivername: "กรวิชญ์", surname: "ขำนอก", nickname: "", license: "", licensetype: "", phone: "097-1076196", mobile: "0971076196", lineid: "", linename: "", lineimage: ""}, 
+        {id: 1, driverfullname: "ปฐมพร โรจน์ฤทธิไกร", drivername: "ปฐมพร", surname: "โรจน์ฤทธิไกร", nickname: "กาย", license: "2 กฒ 7938", licensetype: "รถเก๋ง", phone: "097-1076196", mobile: "0971076196", lineid: "0953699553", linename: "GPS KRY (PRG)", lineimage: ""}, 
+        // {id: 1, driverfullname: "กรวิชญ์ ขำนอก", drivername: "กรวิชญ์", surname: "ขำนอก", nickname: "", license: "", licensetype: "", phone: "097-1076196", mobile: "0971076196", lineid: "", linename: "", lineimage: ""}, 
         {id: 2, driverfullname: "กฤษตฤณ กิตติพงศ์วิวัฒน์", drivername: "กฤษตฤณ", surname: "กิตติพงศ์วิวัฒน์", nickname: "", license: "", licensetype: "", phone: "099-3563222", mobile: "0993563222", lineid: "", linename: "", lineimage: ""}, 
         {id: 3, driverfullname: "กลิ่นวิเศษ 080-572-1993", drivername: "ปราการ", surname: "กลิ่นวิเศษ", nickname: "", license: "", licensetype: "", phone: "080-572-1993", mobile: "0805721993", lineid: "", linename: "", lineimage: ""}, 
         {id: 4, driverfullname: "กองคำสุก 062-210-5690", drivername: "สิทธิศักดิ์", surname: "กองคำสุก", nickname: "", license: "", licensetype: "", phone: "062-210-5690", mobile: "0622105690", lineid: "", linename: "", lineimage: ""}, 
@@ -141,4 +151,36 @@ export class SearchdriverpageComponent implements OnInit{
     ]
   }
 
+  openDialog(row : any) {
+    const dialogRef = this.dialog.open(DriverPageComponent , {data:row});
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  viewDriver(type : any){
+    
+    if(type == "viewlist"){
+      this.viewtype = true;
+    }
+    else{
+      this.viewtype = false;
+    }
+  }
 }
+
+export interface  DriverModel { 
+  id: number;
+  driverfullname: string; 
+  drivername: string;  
+  surname: string;  
+  nickname: string; 
+  license: string; 
+  licensetype: string;  
+  phone: string; 
+  mobile: string;  
+  linename: string; 
+  lineimage: string;  
+}
+
