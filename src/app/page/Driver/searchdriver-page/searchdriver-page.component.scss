@@ -12,3 +12,15 @@
     justify-content: space-between;
     flex-wrap: wrap;
   }
+.centered-button {
+    display: flex;
+    justify-content: center; /* จัดไอคอนให้อยู่กึ่งกลางแนวนอน */
+    align-items: center; /* จัดไอคอนให้อยู่กึ่งกลางแนวตั้ง */
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }

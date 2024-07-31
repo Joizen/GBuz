@@ -19,6 +19,8 @@ export class SearchdriverPageComponent implements OnInit {
   public displayedColumns : string [] = [];
   public displayedColumnsData : string [] = [];
   public dataSource = new MatTableDataSource(this.mainData); 
+  public listdata = [];
+  public viewtype = false;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -34,10 +36,11 @@ export class SearchdriverPageComponent implements OnInit {
   async setData(){
     this.displayedColumns = ['id','driverfullname','drivername','surname','nickname','license','licensetype','phone','mobile','linename','lineimage'];
     this.displayedColumnsData = [...this.displayedColumns,'action'];
-    this.mainData = await  this.getData();
+    this.mainData = await this.getData();
     this.dataSource = new MatTableDataSource(this.mainData); 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    // this.listdata = await this.getData();
   }
 
   applyFilter(event:any){
@@ -52,7 +55,8 @@ export class SearchdriverPageComponent implements OnInit {
 
   async getData(){
     return [
-        {id: 1, driverfullname: "กรวิชญ์ ขำนอก", drivername: "กรวิชญ์", surname: "ขำนอก", nickname: "", license: "", licensetype: "", phone: "097-1076196", mobile: "0971076196", lineid: "", linename: "", lineimage: ""}, 
+        {id: 1, driverfullname: "ปฐมพร โรจน์ฤทธิไกร", drivername: "ปฐมพร", surname: "โรจน์ฤทธิไกร", nickname: "กาย", license: "2 กฒ 7938", licensetype: "รถเก๋ง", phone: "097-1076196", mobile: "0971076196", lineid: "0953699553", linename: "GPS KRY (PRG)", lineimage: ""}, 
+        // {id: 1, driverfullname: "กรวิชญ์ ขำนอก", drivername: "กรวิชญ์", surname: "ขำนอก", nickname: "", license: "", licensetype: "", phone: "097-1076196", mobile: "0971076196", lineid: "", linename: "", lineimage: ""}, 
         {id: 2, driverfullname: "กฤษตฤณ กิตติพงศ์วิวัฒน์", drivername: "กฤษตฤณ", surname: "กิตติพงศ์วิวัฒน์", nickname: "", license: "", licensetype: "", phone: "099-3563222", mobile: "0993563222", lineid: "", linename: "", lineimage: ""}, 
         {id: 3, driverfullname: "กลิ่นวิเศษ 080-572-1993", drivername: "ปราการ", surname: "กลิ่นวิเศษ", nickname: "", license: "", licensetype: "", phone: "080-572-1993", mobile: "0805721993", lineid: "", linename: "", lineimage: ""}, 
         {id: 4, driverfullname: "กองคำสุก 062-210-5690", drivername: "สิทธิศักดิ์", surname: "กองคำสุก", nickname: "", license: "", licensetype: "", phone: "062-210-5690", mobile: "0622105690", lineid: "", linename: "", lineimage: ""}, 
@@ -153,6 +157,16 @@ export class SearchdriverPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  viewDriver(type : any){
+    
+    if(type == "viewlist"){
+      this.viewtype = true;
+    }
+    else{
+      this.viewtype = false;
+    }
   }
 }
 
