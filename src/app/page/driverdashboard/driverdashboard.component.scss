@@ -14,6 +14,13 @@
     overflow: hidden;
 }
 
+.profileimg {
+  width: auto;
+  height: 35px;
+  border-radius: 50%;
+  // border: 4px solid lightslategrey;
+}
+
 .zeroxy{ margin:0; padding:0;}
 
 .H1030{ background:linear-gradient(to right,#FF0000,#008000);}
@@ -46,13 +53,6 @@
 .H5041{ background:linear-gradient(to right,#38761D,#800080);}
 .H5080{ background:linear-gradient(to right,#38761D,#808080);}
 
-
-.profileimg {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    border: 4px solid lightslategrey;
-}
 .show-total {
     margin: 5px;
     width: 100%;

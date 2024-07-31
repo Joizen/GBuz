@@ -36,18 +36,26 @@
 </div>
 
 <!-- Driver Detail -->
-<div *ngIf="show" class="row d-flex justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1">
+<div *ngIf="show" class="row d-flex flex-row justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1">
     <div class="row d-flex justify-content-center align-items-center  no-gutters">
       <!-- Back Button Container -->
-      <div class="col-1 d-flex justify-content-start align-items-center no-gutters">
+      <!-- <div class="col-1 d-flex justify-content-start align-items-center no-gutters">
         <button mat-icon-button class="no-gutters">
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
-      </div>
+      </div> -->
+
       <!-- Company Names Container (Scrollable) -->
-      <div class="col-10 d-flex flex-wrap align-items-center justify-content-center no-gutters" style="overflow-x: auto;">
-        <div class="{{isDesktop == 6 ? 'col-2':'col-11'}} ishadow no-gutters" *ngFor="let comp of dashboardData.slice(0,isDesktop)">
-          <div class="row mx-1 no-gutters">
+
+
+      <div class="col-12 d-flex flex-wrap align-items-center justify-content-center no-gutters" style="overflow-x: auto;">
+        <!-- <div class="{{isDesktop == 6 ? 'col-1':'col-11'}} ishadow no-gutters" *ngFor="let comp of dashboardData.slice(0,isDesktop)"> -->
+        <div class="col-12 row" *ngFor="let comp of dashboardData.slice(0,isDesktop)" [matMenuTriggerFor]="menu">
+        
+          <!-- company data -->
+          <div class="col-12">
+
+          <div class="row mx-1 no-gutters" (click) = "comp.showDetails=!comp.showDetails">
             <div class="col-5 d-flex justify-content-center align-items-center no-gutters">
               <span style="font-weight:500; font-size:smaller; text-transform:uppercase;">{{ comp.companyname }}</span>
             </div>
@@ -94,18 +102,149 @@
             </div>
 
           </div>
+          </div>
+
+           <!-- driver data in company-->
+          <div class="col-12">
+           
+          <div *ngIf="comp.showDetails" class="row d-flex justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1" >
+            <div class="row d-flex justify-content-center align-items-center  no-gutters" >
+              <!-- <div class="col-1"></div> -->
+              
+              <div class="col-12 d-flex flex-wrap align-items-center justify-content-center no-gutters" style="overflow-x: auto;">
+                <div class="{{isDesktop == 6 ? 'col-1':'col-11'}} ishadow no-gutters m-2" *ngFor="let driver of listdriver">
+                  <div class="row zeroxy no-gutters H1031">
+
+                    <!-- user image -->
+                    <div class="col-2">
+                      <img class="profileimg " src="../../../assets/images/user-ic.png">
+                    </div>
+
+                    <!-- user detail -->
+                    <div class="col-10" >
+                            <!-- DRIVER -->
+                            <div class="row zeroxy no-gutters">
+                              <div class="col-12 d-flex justify-content-start align-items-center no-gutters">
+                                <span style="font-weight:500; font-size:x-small; text-transform:uppercase;">{{ driver.drivername }}</span>
+                              </div>
+                            </div>
+                      
+                            <!-- VEHICLE -->
+                            <div class="row zeroxy no-gutters" >
+                              <div class="col-12 no-gutters">
+                                <div class="row align-items-center justify-content-start">
+                                    <div class="col-12">
+                                      <span >{{ driver.vehiclename }}</span>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                    </div>
+
+                  </div>
+
+
+
+                  <!-- STATAUS ICON -->
+                  <div class="row mx-1 no-gutters"><hr style="border: none; border-top: 1px dashed gray; margin:0px 0px 2px 0px"/></div>
+                  <div class="row justify-content-center m-1 no-gutters">
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center mt-1 no-gutters">
+                        <div class="col-12"><mat-icon  [ngClass]="driver.wakeupicon"  style="height: 30px;width: 30px;">access_time</mat-icon></div>
+
+                      </div>
+                    </div>
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center no-gutters">
+                        <div class="col-12"><mat-icon  [ngClass]="driver.algohalicon"  style="height: 30px;width: 30px;">local_bar</mat-icon></div>
+                      </div>
+                    </div>
+                    
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center no-gutters">
+                        <div class="col-12"><mat-icon  [ngClass]="driver.tempicon"  style="height: 30px;width: 30px;">
+                          <span style="font-size:8px; font-family:Verdana; font-weight:bold;">TEMP</span>
+                        </mat-icon></div>
+                      </div>
+                    </div>
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center no-gutters">
+                        <div class="col-12"><mat-icon  [ngClass]="driver.starticon"  style="height: 30px;width: 30px;">directions_car</mat-icon></div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="col-1"></div> -->
+            </div>
+          </div>
         </div>
+
+        </div>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item>Item 2</button>
+        </mat-menu>
       </div>
       <!-- Next Button Container -->
-      <div class="col-1 d-flex justify-content-end align-items-center no-gutters">
+      <!-- <div class="col-1 d-flex justify-content-end align-items-center no-gutters">
         <button mat-icon-button class="no-gutters">
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
-      </div>
+      </div> -->
     </div>
+
 </div>
-<div *ngIf="show" class="row mt-5 mx-2 d-flex flex-wrap justify-content-start">
-    <div class="col-lg-3 col-sm-12 my-2" *ngFor="let driver of listdriver" style="gap: 20px;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div *ngIf="false" class="row mt-5 mx-5 d-flex flex-wrap justify-content-start">
+    <div class="col-lg-3 col-sm-12 my-2" *ngFor="let driver of listdriver" style="gap: 10px;">
       <div class="col-12 ishadow">
 
             <!-- Driver Information -->
@@ -215,7 +354,6 @@
             
 
       </div>
-
     </div>
 </div>
 
@@ -224,46 +362,48 @@
 <div *ngIf="!show" class="mx-2 mt-4 row no-gutters d-flex justify-content-center zeroxy" >
  <div class="row no-gutters d-flex justify-content-center" >
       
-      <!-- <div *ngFor="let comp of dashboardData" class="mx-2 zeroxy icircle d-flex justify-content-center align-items-center ishadow" style="width: 40px; height:40px; background-color: #e1e7f5; border:1px;z-index: 3;">
-        <div class="zeroxy icircle d-flex justify-content-center align-items-center" style="background-color:white ;width: 37px; height: 37px;z-index:9;">
-          <img [src]="'../../../assets/images/logocomp/' + comp.companyname + '.jpg'" style="width:80%;">
-        </div>
-      </div> -->
-<!-- 
-      <div class="zeroxy no-gutters col-lg-1 row">
-        <div class="zeroxy no-gutters col-lg-12 row">
-          <div class="zeroxy row no-gutters">
-            <div class="zeroxy no-gutters col-lg-6 row H1031">a</div>
-            <div class="zeroxy no-gutters col-lg-6 row H1041">b</div>
-          </div>
-        </div>
-        <div class="zeroxy no-gutters col-lg-12 row">
-          <div class="zeroxy row no-gutters">
-            <div class="zeroxy no-gutters col-lg-6 row H1033">c</div>
-            <div class="zeroxy no-gutters col-lg-6 row H1080">d</div>
-          </div>
-        </div>
-      </div> -->
-      <div *ngFor="let comp of dashboardData" class="mx-2 zeroxy no-gutters col-lg-1 row">
-        <div class="mx-2 col-lg-auto zeroxy icircle d-flex justify-content-center align-items-center ishadow" style="width: 40px; height:40px; background-color: #e1e7f5; border:1px;z-index: 3;">
+      <div *ngFor="let comp of dashboardData" class="m-2 zeroxy no-gutters col-lg-1 col-sm-3 row d-flex align-items-center justify-content-start" >
+       
+        <!-- <div class="mx-2 col-lg-auto zeroxy icircle d-flex justify-content-center align-items-center ishadow" style="width: 40px; height:40px; background-color: #e1e7f5; border:1px;z-index: 3;">
           <div class="zeroxy icircle d-flex justify-content-center align-items-center" style="background-color:white ;width: 37px; height: 37px;z-index:9;">
             <img [src]="'../../../assets/images/logocomp/' + comp.companyname + '.jpg'" style="width:80%;">
           </div>
-        </div>
-        <div class="zeroxy no-gutters col-lg-7 row ishadow" style="margin-left:0px;">
+        </div> -->
+
+        <div class="row ishadow col-lg-12 col-sm-1" style="padding-bottom:15px;">
           
+          <!-- column 1 -->
           <div class="col-lg-6 d-flex align-items-center justify-content-center" style="z-index:999;margin:0px 0px 0px 0px;">
-            <div class="col-12 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: darkgreen;color:white;">{{comp.listdriver.length}}</div>
+          
+            <div class="col-6 no-gutters zeroxy icircle d-flex justify-content-center" style="position:static;z-index: 0;">
+                <div class="zeroxy icircle d-flex justify-content-center align-items-center" style="width: 42px; height: 42px; z-index:9;">
+                  <img [src]="'../../../assets/images/logocomp/' + comp.companyname + '.jpg'" style="width:100%;">
+                </div>
+            </div>
+            
+            <div class="col-6 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: darkgreen;color:white; position: static; z-index: 1;">
+              {{comp.listdriver.length}}
+            </div>
+
           </div>
 
+          <!-- column 2 -->
           <div class="col-lg-6 d-flex align-items-center justify-content-center" style="z-index:999;margin:0px 0px 0px 0px;">
-           {{comp.totalwakeup}},
+           <!-- {{comp.totalwakeup}},
            {{comp.totalalgohol}},
            {{comp.totaltemp}},
-           {{comp.totalstart}}
+           {{comp.totalstart}} -->
+            <div class="row">
+              <!-- column 2 -->
+          <div class="col-lg-6 d-flex align-items-center justify-content-center" style="z-index:999;margin:0px 0px 0px 0px;">
+           </div>
+ 
+            </div>
+
           </div>
 
         </div>
+
       </div>
 
 
