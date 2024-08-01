@@ -23,6 +23,7 @@
 
 .zeroxy{ margin:0; padding:0;}
 
+.H1010{ background:linear-gradient(to right,#00aeed,#b1dddb);}
 .H1030{ background:linear-gradient(to right,#FF0000,#008000);}
 .H1031{ background:linear-gradient(to right,#FF0000,#DAA520 );}
 .H1033{ background:linear-gradient(to right,#FF0000,#FF0000);}
@@ -93,9 +94,14 @@
 }
 
 .ishadow{ 
-  box-shadow: 0px 2px 5px -1px #00000066;
+  box-shadow: 0px 2px 7px -3px #00000066;
   background-color:white;
   border-radius:10px;
+}
+
+.iframhaft{ 
+  background-color:white;
+  border-radius:10px 10px 0 0;
 }
 
 .icon-nonpass {
