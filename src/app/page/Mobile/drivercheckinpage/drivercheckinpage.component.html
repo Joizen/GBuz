@@ -1,6 +1,7 @@
 <!-- https://getbootstrap.com/docs/5.0/utilities/text/ -->
 <!-- background -->
-<div class="col-lg-12 col-12" style = "background-color: #2c56cb; color:#2c56cb; height:20vh; position:absolute;z-index:0;"></div>
+<div class="col-lg-12 col-12"
+    style="background-color: #2c56cb; color:#2c56cb; height:20vh; position:absolute;z-index:0;"></div>
 
 <!-- forground -->
 <div class="col-lg-12" style="position:absolute; z-index:1;">
@@ -11,7 +12,7 @@
             <div class="col-auto icon-normal align-items-center">
                 <mat-icon style="color:white;font-size:large;">alarm</mat-icon>
             </div>
-            <span class="col-auto fw-bolder mx-1" >06:00</span>
+            <span class="col-auto fw-bolder mx-1">06:00</span>
         </div>
         <div class="col-lg-6 col-6 d-flex justify-content-end ms-3">
             <span class="fw-lighter">รอเช็คอิน</span>
@@ -20,7 +21,7 @@
 
     <!-- driver detail-->
     <div class="row ishadow mx-3 py-3 mt-3">
-        
+
         <!-- driver vehicle -->
         <div class="col-lg-12 col-12 m-0 p-0 row no-gutters">
             <div class="col-lg-9 col-9 d-flex justify-content-start align-items-center">
@@ -30,7 +31,8 @@
                 </div>
             </div>
             <div class="col-lg-3 col-3 no-gutters d-flex justify-content-end align-items-start">
-                <mat-icon class="icon-normal" style="width:40px;height:40px;font-size:xx-large;color:#b4b6bc;">directions_bus</mat-icon>
+                <mat-icon class="icon-normal"
+                    style="width:40px;height:40px;font-size:xx-large;color:#b4b6bc;">directions_bus</mat-icon>
             </div>
         </div>
 
@@ -39,12 +41,14 @@
             <div class="col-lg-6 col-6 d-flex justify-content-start align-items-center">
                 <div class="d-flex flex-column">
                     <span class="fw-bold fs-6 mb-1">เส้นทาง</span>
-                    <span class="fw-bold fs-6 fw-lighter text-truncate" style="max-width: 200px;">ชื่อเส้นทาง เดินรถ.........................................................................</span>
+                    <span class="fw-bold fs-6 fw-lighter text-truncate" style="max-width: 200px;">ชื่อเส้นทาง
+                        เดินรถ.........................................................................</span>
                 </div>
             </div>
             <div class="col-lg-6 col-6 no-gutters d-flex justify-content-end align-items-center">
                 <span class="fw-bold fs-2">07:00</span>
-                <mat-icon class="icon-normal" style="width:34px;height:34px;font-size:xx-large;color:#b4b6bc;">compare_arrows</mat-icon>
+                <mat-icon class="icon-normal"
+                    style="width:34px;height:34px;font-size:xx-large;color:#b4b6bc;">compare_arrows</mat-icon>
                 <span class="fw-bold fs-2">11:00</span>
             </div>
         </div>
@@ -59,83 +63,64 @@
                 </div>
             </div>
             <div class="col-lg-3 col-3 no-gutters d-flex justify-content-end align-items-end">
-                <mat-icon class="icon-normal" style="width:40px;height:30px;font-size:xx-large;color:#2a48a4;">local_shipping</mat-icon>
+                <mat-icon class="icon-normal"
+                    style="width:40px;height:30px;font-size:xx-large;color:#2a48a4;">local_shipping</mat-icon>
             </div>
         </div>
 
     </div>
 
-
-
-
     <div class="row no-gutter d-flex justify-content-center">
         <div class="col-10">
 
-            <!-- Passenger -->
+            <!-- Check Item -->
             <div class="row no-gutter">
-                <mat-form-field class="col-12 example-full-width">
-                    <div class="row no-gutter">
-                        <div class="col-8">
-                            <span class="endpoint">บริษัท............... </span>      
-                        </div>
-                        <div class="col-4" style="text-align: end;">
-                            <span class="label-time">(รับ-ส่ง 0 คน)</span>        
-                        </div>
-
-                    </div>
-                </mat-form-field>
+                <div class="col-6">
+                    <mat-form-field class="example-full-width d-flex align-content-center">
+                        <mat-icon class="fs-4">alarm</mat-icon>
+                         <span> 00:00 </span>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-pass">record_voice_over</mat-icon>
+                        <span class="label-time"> 00:00 (0 %) </span>
+                    </mat-form-field>
+                </div>
             </div>
 
             <!-- Check Item -->
             <div class="row no-gutter">
-               
-                    <div class="col-2"> 
-                        <mat-form-field class="example-full-width">
-                            <mat-icon class="icon-normal">alarm</mat-icon>
-                            <span class="label-time"> 00:00 </span>
-                        </mat-form-field>                      
-                    </div>                    
-                    <div class="col-3">
-                        <mat-form-field class="example-full-width">
-                            <mat-icon class="icon-pass">record_voice_over</mat-icon>
-                            <span class="label-time"> 00:00 (0 %) </span>
-                        </mat-form-field>
-                    </div>                    
-                    <div class="col-3">
-                        <mat-form-field class="example-full-width">
-                            <mat-icon class="icon-nonpass">hot_tub</mat-icon>
-                            <span class="label-time">00:00 (0 °C)</span>
-                        </mat-form-field>
-                    </div>                    
-                    <div class="col-2">
-                        <mat-form-field class="example-full-width">
-                            <mat-icon class="icon-normal">power_settings_new</mat-icon>
-                            <span class="label-time">00:00</span>
-                        </mat-form-field>
-                    </div>                    
-
-                    
-                    <!-- <mat-form-field class="example-full-width">
-
-                    </mat-form-field> -->
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-nonpass">hot_tub</mat-icon>
+                        <span class="label-time">00:00 (0 °C)</span>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="example-full-width">
+                        <mat-icon class="icon-normal">power_settings_new</mat-icon>
+                        <span class="label-time">00:00</span>
+                    </mat-form-field>
+                </div>
             </div>
 
             <div class="row no-gutter">
                 <mat-form-field class="example-full-width">
                 </mat-form-field>
             </div>
-          
-              <!-- btn Check in  -->
+
+            <!-- btn Check in  -->
             <div class="row no-gutter justify-content-center">
                 <div class="col-4">
                     <button mat-raised-button color="accent" (click)="open_Cancelmodule(modalcancelwork)">
                         <mat-icon style="margin-right: 5px;">delete_forever</mat-icon> ลางาน
-                    </button>        
+                    </button>
                 </div>
                 <div class="col-4">
                     <button mat-raised-button color="primary" (click)="onCheckin_Click()">
                         <mat-icon style="margin-right: 5px;">check_circle</mat-icon>เริ่มงาน
-                    </button>        
+                    </button>
                 </div>
             </div>
 
@@ -153,7 +138,7 @@
 
     </div>
     <div class="modal-body m-4">
-        
+
         <div class="row no-gutters align-items-center mb-4">
             <span>ไม่สามารถปฎิบัติงานได้ เนื่องจาก</span>
         </div>
@@ -165,7 +150,7 @@
                 <!-- <select class="form-control mt-1" [(ngModel)]="viewData.depid">
                     <option [value]="i.id" *ngFor="let i of deptData">{{i.rolecode}} | {{i.rolename}}</option>
                 </select> -->
-                <select class="form-control mt-1" >
+                <select class="form-control mt-1">
                     <option value="0"> ป่วย </option>
                     <option value="1"> รถเสีย </option>
                     <option value="-1"> อื่น ๆ </option>
@@ -174,12 +159,12 @@
             </div>
         </div>
         <div class="row no-gutters align-items-top mb-4">
-            <div class="col-4 txtright" >
+            <div class="col-4 txtright">
                 <b>อธิบายเหตุผล : </b>
             </div>
             <div class="col-8 txtright">
                 <textarea class="full-width" (keyup)="autoGrowText($event)"></textarea>
             </div>
-        </div>        
+        </div>
     </div>
 </ng-template>
