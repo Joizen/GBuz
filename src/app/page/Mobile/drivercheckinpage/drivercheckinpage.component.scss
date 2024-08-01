@@ -24,23 +24,9 @@
     text-align:left;
     color: gray;
 }
-.endpoint{
-    width: 100%; 
-    // padding-left :10px; 
-    font-size:small;
-    max-width: 100px; 
-    text-align: left;
-    text-overflow: ellipsis; 
-    white-space: nowrap;
-    overflow: hidden;
-}
 
-.label-time {
-    font-size: smaller;
-    text-align:left;
-    margin-left: 2px;
-    color: navy;
-}
-.full-width {
-    width: 100%;
- }
+.ishadow{ 
+    box-shadow: 0px 2px 5px -1px #00000066;
+    background-color:white;
+    border-radius:10px;
+  }

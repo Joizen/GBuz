@@ -10,8 +10,8 @@
       </mat-form-field>    
     </div>
     <div class="col-4">
-      <div class="flex-container" style="text-align: end; vertical-align: middle; padding: 10px;">
-        <div>
+      <div class="row flex-container" style="text-align: end; vertical-align: middle; padding: 10px;">
+        <div class="col-4">
           <button class="btn btn-success" style="margin-right: 10px;" (click)="viewDriver('viewmodule')" *ngIf="viewtype">
             <mat-icon *ngIf="true">view_module</mat-icon>
           </button>
@@ -20,7 +20,7 @@
           </button>
         </div>
         
-        <div>
+        <div class="col-4">
           <button class="btn btn-success" style="margin-right: 10px;" (click)="viewDriver('viewlist')" *ngIf="!viewtype">
             <mat-icon *ngIf="true">view_list</mat-icon>
           </button>
@@ -29,9 +29,11 @@
           </button>
         </div>
         
-        <button class="btn btn-warning" style="margin-right: 10px;">
-          <mat-icon *ngIf="true">add</mat-icon>
-        </button>
+        <div class="col-4">
+          <button class="btn btn-warning" style="margin-right: 10px;">
+            <mat-icon *ngIf="true">add</mat-icon>
+          </button>
+        </div>
       </div>
       
       
