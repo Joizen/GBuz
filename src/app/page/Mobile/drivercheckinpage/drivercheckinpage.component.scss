@@ -1,23 +1,28 @@
 .icon-pass {
-    font-size: 15px;
-    height: 15px;
-    width: 15px;
-    margin-right: 1px;
-    text-align:left;
-    color: green;
+    color: white;
+    background-color: green;
+    border-radius:10px;
+    box-shadow: 0px 2px 5px -1px #00000066;
 }
 
 .icon-nonpass {
-    font-size: 15px;
-    height: 15px;
-    width: 15px;
-    margin-right: 1px;
-    text-align:left;
-    color: red;
+    color: white;
+    background-color: red;
+    border-radius:10px;
+    box-shadow: 0px 2px 5px -1px #00000066;
+}
+
+.icon-nomal {
+    color: slategray;
+    background-color: white;
+    border-radius:10px;
+    box-shadow: 0px 2px 5px -1px #00000066;
 }
 
 .ishadow{ 
     box-shadow: 0px 2px 5px -1px #00000066;
     background-color:white;
     border-radius:10px;
-  }
+}
+
+.zeroxy{ margin:0; padding:0; }

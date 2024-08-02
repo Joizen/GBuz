@@ -1,11 +1,11 @@
 <mat-sidenav-container>
+
     <mat-sidenav mode="over" [(opened)]="menuopen" style="background-color: #1e88e5;">
       <mat-toolbar style="background-color: #1976d2;">
         <mat-icon style="color: #b3e5fc;">account_circle</mat-icon>
         <span style="width: 80%; padding: 10px; color: white;">User Name</span>
         <mat-icon (click)="menuopen=false" style="color: white; display: flex; justify-content: flex-end;">navigate_before</mat-icon>
       </mat-toolbar>
-  
       <div class="container">
         <div *ngIf="true" (click)="openPage('login')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
@@ -113,11 +113,11 @@
         </div>
     </div>
     </mat-sidenav>
-  
+
     <mat-sidenav-content>
-      <mat-toolbar class="navbar" style="background-color: #1976d2;">
+      <mat-toolbar class="navbar" style="background-color:#1976d2;" >
         <div class="d-flex flex-wrap align-items-center">
-          <mat-icon class="navmenu" (click)="showMenu()" style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+          <mat-icon class="navmenu" (click)="showMenu()" style="color: #b3e5fc;">menu</mat-icon>
           <img src="../assets/images/sym_g.png" style="height: 35px;">
           <span style="color: #8fbeed; font-size: medium;">Driver</span>
         </div>
@@ -130,8 +130,7 @@
           <span class="navtxt">Manual</span>
         </div>
       </mat-toolbar>
-  
       <router-outlet></router-outlet>
     </mat-sidenav-content>
-  </mat-sidenav-container>
-  
+
+</mat-sidenav-container>
