@@ -2,30 +2,32 @@ import { Component, ViewChild , OnInit , ChangeDetectionStrategy , inject} from 
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { DriverPageComponent } from '../driver-page/driver-page.component';
-import { MatDialog } from '@angular/material/dialog';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-searchdriverpage',
   templateUrl: './searchdriverpage.component.html',
-  styleUrls: ['./searchdriverpage.component.scss'],
-  // standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./searchdriverpage.component.scss']
 })
-export class SearchdriverPageComponent implements OnInit {
-  constructor() {}
+
+export class SearchdriverpageComponent implements OnInit {
+
+  constructor(private modalService: NgbModal) { }
   public mainData : DriverModel[] = []; 
   public displayedColumns : string [] = [];
   public displayedColumnsData : string [] = [];
   public dataSource = new MatTableDataSource(this.mainData); 
   public listdata = [];
   public viewtype = false;
+  public activedata: any;
+
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  readonly dialog = inject(MatDialog);
+
+
 
   ngOnInit(): void {
     
@@ -55,7 +57,7 @@ export class SearchdriverPageComponent implements OnInit {
 
   async getData(){
     return [
-        {id: 1, driverfullname: "ปฐมพร โรจน์ฤทธิไกร", drivername: "ปฐมพร", surname: "โรจน์ฤทธิไกร", nickname: "กาย", license: "2 กฒ 7938", licensetype: "รถเก๋ง", phone: "097-1076196", mobile: "0971076196", lineid: "0953699553", linename: "GPS KRY (PRG)", lineimage: ""}, 
+        {id: 1, driverfullname: "ปฐมพร โรจน์ฤทธิไกร", drivername: "ปฐมพร", surname: "โรจน์ฤทธิไกร", nickname: "กาย", license: "2 กฒ 7938", licensetype: "รถเก๋ง", phone: "097-1076196", mobile: "0971076196", lineid: "0953699553", linename: "GPS KRY (PRG)", lineimage: "https://profile.line-scdn.net/0hecq25aJKOkxcSyj67atEMywbOSZ_OmNeJ3h3LmgYZXVjfCgacXghLm1LMywyeXgYdionImEbNn5QWE0qQh3GeFt7Z31gf3wYciV9qA"}, 
         // {id: 1, driverfullname: "กรวิชญ์ ขำนอก", drivername: "กรวิชญ์", surname: "ขำนอก", nickname: "", license: "", licensetype: "", phone: "097-1076196", mobile: "0971076196", lineid: "", linename: "", lineimage: ""}, 
         {id: 2, driverfullname: "กฤษตฤณ กิตติพงศ์วิวัฒน์", drivername: "กฤษตฤณ", surname: "กิตติพงศ์วิวัฒน์", nickname: "", license: "", licensetype: "", phone: "099-3563222", mobile: "0993563222", lineid: "", linename: "", lineimage: ""}, 
         {id: 3, driverfullname: "กลิ่นวิเศษ 080-572-1993", drivername: "ปราการ", surname: "กลิ่นวิเศษ", nickname: "", license: "", licensetype: "", phone: "080-572-1993", mobile: "0805721993", lineid: "", linename: "", lineimage: ""}, 
@@ -152,11 +154,7 @@ export class SearchdriverPageComponent implements OnInit {
   }
 
   openDialog(row : any) {
-    const dialogRef = this.dialog.open(DriverPageComponent , {data:row});
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   viewDriver(type : any){
@@ -168,6 +166,24 @@ export class SearchdriverPageComponent implements OnInit {
       this.viewtype = false;
     }
   }
+
+
+  newDriver(modal:any)
+  {
+    // this.activedata = new 
+    this.modalService.open(modal, { fullscreen: true, scrollable: true });
+  }
+
+showDriver(data:any, modal:any)
+{
+  this.activedata = data;
+  this.modalService.open(modal, { fullscreen: true, scrollable: true });
+}
+
+talkbackdata(event: any) {
+
+}
+
 }
 
 export interface  DriverModel { 

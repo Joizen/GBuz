@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { SearchdriverPageComponent } from './page/Driver/searchdriver-page/searchdriver-page.component';
-import { DriverPageComponent } from './page/Driver/driver-page/driver-page.component';
+import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,14 +14,12 @@ import { MatButtonModule} from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchdriverPageComponent,
-    DriverPageComponent
-
   ],
   imports: [
     BrowserModule,
@@ -37,7 +33,9 @@ import { MatTableModule } from '@angular/material/table';
     MatDialogModule,
     MatCardModule,
     MatTableModule, 
-    MatIconModule
+    MatIconModule,
+    NgbModule,
+    QRCodeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

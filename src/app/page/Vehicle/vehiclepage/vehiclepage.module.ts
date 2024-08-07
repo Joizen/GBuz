@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { VehiclepageRoutingModule } from './vehiclepage-routing.module';
 import { VehiclepageComponent } from './vehiclepage.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
@@ -11,7 +12,7 @@ import { VehiclepageComponent } from './vehiclepage.component';
   ],
   imports: [
     CommonModule,
-    VehiclepageRoutingModule
+    VehiclepageRoutingModule,QRCodeModule
   ]
 })
 export class VehiclepageModule { }

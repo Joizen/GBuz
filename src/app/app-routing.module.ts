@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearchdriverPageComponent} from './page/Driver/searchdriver-page/searchdriver-page.component';
-import { DriverPageComponent} from './page/Driver/driver-page/driver-page.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
   { path: 'login', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
   { path: 'register', loadChildren: () => import('./page/registerpage/registerpage.module').then(m => m.RegisterpageModule) },
   { path: 'driverdashboard', loadChildren: () => import('./page/driverdashboard/driverdashboard.module').then(m => m.DriverdashboardModule) },
-  { path: 'driver', loadChildren: () => import('./page/Driver/searchdriverpage/searchdriverpage.module').then(m => m.SearchdriverpageModule) },
-  { path: 'driverdata', loadChildren: () => import('./page/Driver/driverpage/driverpage.module').then(m => m.DriverpageModule) },
+  
   { path: 'vehicle', loadChildren: () => import('./page/Vehicle/searchvehiclepage/searchvehiclepage.module').then(m => m.SearchvehiclepageModule) },
   { path: 'vehicledata', loadChildren: () => import('./page/Vehicle/vehiclepage/vehiclepage.module').then(m => m.VehiclepageModule) },
   { path: 'company', loadChildren: () => import('./page/Company/searchcompanypage/searchcompanypage.module').then(m => m.SearchcompanypageModule) },
@@ -28,9 +25,9 @@ const routes: Routes = [
   { path: 'planmasterdata', loadChildren: () => import('./page/Plan/planmasterpage/planmasterpage.module').then(m => m.PlanmasterpageModule) },
   { path: 'plan', loadChildren: () => import('./page/Plan/searchplanpage/searchplanpage.module').then(m => m.SearchplanpageModule) },
   { path: 'plandata', loadChildren: () => import('./page/Plan/plandatapage/plandatapage.module').then(m => m.PlandatapageModule) },
+  { path: 'driver', loadChildren: () => import('./page/Driver/searchdriverpage/searchdriverpage.module').then(m => m.SearchdriverpageModule) },
+  { path: 'driverdata', loadChildren: () => import('./page/Driver/driverpage/driverpage.module').then(m => m.DriverpageModule) },
 
-  { path: 'searchdriverPage' , component : SearchdriverPageComponent},
-  { path: 'driverPage' , component : DriverPageComponent},
   
 
 ];

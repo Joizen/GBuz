@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DriverpageRoutingModule } from './driverpage-routing.module';
+import { QRCodeModule } from 'angularx-qrcode';
 import { DriverpageComponent } from './driverpage.component';
+import { MaterialModule } from 'src/app/material/material.module';
 
 
 @NgModule({
@@ -11,7 +13,12 @@ import { DriverpageComponent } from './driverpage.component';
   ],
   imports: [
     CommonModule,
-    DriverpageRoutingModule
+    DriverpageRoutingModule,
+    QRCodeModule,
+    MaterialModule
+  ],
+  exports:[
+    DriverpageComponent
   ]
 })
 export class DriverpageModule { }
