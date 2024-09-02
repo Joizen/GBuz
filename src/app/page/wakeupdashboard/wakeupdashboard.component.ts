@@ -27,7 +27,8 @@ export class WakeupdashboardComponent implements OnInit {
 
   async ngOnInit() {
     this.show.Spinner = false;
-    this.getdashboarddata();
+    this.activedashboad = await this.getdashboarddata();
+    console.log("this.activedashboad : ", this.activedashboad);
 
     this.mqttClient = await this.connectMqtt();
     this.subscribeMqtt(this.mqttClient, "gbdupdate");
@@ -39,12 +40,13 @@ export class WakeupdashboardComponent implements OnInit {
   ShowDriverlistClick(company: CompanyDashboard) {
     company.showdetail = !company.showdetail;
     company.showicon = company.showdetail ? "keyboard_arrow_down" : "keyboard_arrow_up";
-    this.activecomp = company;
+     this.activecomp = company;
   }
   async getdashboarddata() {
     var wsname = "getdata";
     var params = { tbname: "driverdashboard", uid: '135' };
     var jsondata = await this.va.WsData(wsname, params, "");
+    var result: CompanyDashboard[] = [];
     console.log("getdashboarddata", jsondata);
     if (jsondata.code == "000") {
       this.listdashboad = [];
@@ -77,7 +79,7 @@ export class WakeupdashboardComponent implements OnInit {
 
       // console.log("listdo",listdo);
 
-      this.activedashboad = [];
+      // this.activedashboad = [];
       const lc = this.listdashboad.reduce((acc: any, item: any) => {
         // ตรวจสอบว่ามีหมวดหมู่นี้ใน accumulator หรือไม่
         if (!acc[item.cid]) {
@@ -89,7 +91,8 @@ export class WakeupdashboardComponent implements OnInit {
           comp.wakeuplist = wakeup;
           var unwakeup = listact.filter(x => x.cid == item.cid && x.statusid == 5 && x.transtatus == 0);
           comp.unwakeuplist = unwakeup;
-          this.activedashboad.push(comp);
+          // this.activedashboad.push(comp);
+          result.push(comp);
           acc[item.cid] = []; // ถ้ายังไม่มี ให้สร้างอาร์เรย์ว่างสำหรับหมวดหมู่นั้น
 
         }
@@ -97,13 +100,20 @@ export class WakeupdashboardComponent implements OnInit {
       }, {} as { [key: string]: any[] });
 
       await this.getimagedata()
-      this.activedashboad.forEach((item: any) => {
+      // this.activedashboad.forEach((item: any) => {
+      //   item.totaldo = item.wakeuplist.length + item.unwakeuplist.length;
+      //   item.totalwake = item.wakeuplist.length;
+      // });
+      // console.log("this.activedashboad", this.activedashboad);
+      
+       result.forEach((item: any) => {
         item.totaldo = item.wakeuplist.length + item.unwakeuplist.length;
         item.totalwake = item.wakeuplist.length;
       });
-      console.log("this.activedashboad", this.activedashboad);
-
+      console.log("result", result);
+      
     }
+    return result;
   }
   async getimagedata() {
     var listcom = "";
@@ -182,7 +192,16 @@ export class WakeupdashboardComponent implements OnInit {
         //   this.activecomp.totalwake = this.activecomp.wakeuplist.length;
         // }
         this.show.Driverwork = false;
-        await this.getdashboarddata();
+        var newdata = await this.getdashboarddata();
+        this.activedashboad = newdata;
+        // this.activedashboad.forEach(item => {
+        //   var comp = newdata.find(x=>x.cid==item.cid);
+        //   if(comp){
+        //     comp.showdetail = item.showdetail;
+        //     item = comp;
+        //   }
+        // });
+        console.log("updatestatus this.activedashboad : ",this.activedashboad);
         var showcomp = this.activedashboad.find(x=>x.cid==this.activecomp.cid);
         if(showcomp){
           showcomp.showdetail = true;
