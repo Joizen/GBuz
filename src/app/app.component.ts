@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
   constructor(private router: Router) {}
   menuopen=false;
-  title = 'gbusdriver';
+  title = 'Gbus Driver Dashboard';
 
   showMenu(){
     this.menuopen=true;
