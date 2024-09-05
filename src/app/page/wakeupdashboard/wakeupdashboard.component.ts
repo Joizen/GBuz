@@ -3,7 +3,7 @@ import { variable } from '../../variable';
 import { Dashboarddata, DoDashboard, DriverActivity, CompanyDashboard, ProfileModel } from '../../models/datamodule.module'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import mqtt, { MqttClient } from 'mqtt';
-import { elementAt } from 'rxjs';
+
 
 @Component({
   selector: 'app-wakeupdashboard',
@@ -14,7 +14,7 @@ export class WakeupdashboardComponent implements OnInit {
 
   constructor(private http: HttpClient, public va: variable) { }
 
-  public wsUrl: string = "http://localhost:9080/";
+  // public wsUrl: string = "http://localhost:9080/";
 
   show = { Spinner: true, Profile: false, Driverwork: false };
   UserProfile = new ProfileModel();
@@ -47,7 +47,7 @@ export class WakeupdashboardComponent implements OnInit {
     var params = { tbname: "driverdashboard", uid: '135' };
     var jsondata = await this.va.WsData(wsname, params, "");
     var result: CompanyDashboard[] = [];
-    console.log("getdashboarddata", jsondata);
+    // console.log("getdashboarddata", jsondata);
     if (jsondata.code == "000") {
       this.listdashboad = [];
       var listact: DriverActivity[] = [];
@@ -91,7 +91,7 @@ export class WakeupdashboardComponent implements OnInit {
           comp.wakeuplist = wakeup;
           var unwakeup = listact.filter(x => x.cid == item.cid && x.statusid == 5 && x.transtatus == 0);
           comp.unwakeuplist = unwakeup;
-          // this.activedashboad.push(comp);
+           this.activedashboad.push(comp);
           result.push(comp);
           acc[item.cid] = []; // ถ้ายังไม่มี ให้สร้างอาร์เรย์ว่างสำหรับหมวดหมู่นั้น
 
@@ -124,6 +124,7 @@ export class WakeupdashboardComponent implements OnInit {
     var params = { tbname: "companylogo", listcid: listcom };
     var header = "";
     var jsondata = await this.va.WsData(wsname, params, header);
+    console.log("json img",jsondata);
     if (jsondata.code == "000") {
       if (jsondata.data.length > 0) {
         jsondata.data.forEach((item: any) => {
@@ -201,7 +202,7 @@ export class WakeupdashboardComponent implements OnInit {
         //     item = comp;
         //   }
         // });
-        console.log("updatestatus this.activedashboad : ",this.activedashboad);
+        // console.log("updatestatus this.activedashboad : ",this.activedashboad);
         var showcomp = this.activedashboad.find(x=>x.cid==this.activecomp.cid);
         if(showcomp){
           showcomp.showdetail = true;
@@ -274,7 +275,19 @@ export class WakeupdashboardComponent implements OnInit {
       var mqttdriver = this.listdashboad.find(x => x.docode == data.docode && x.driverid == data.driverid && x.dstatus == data.statusid);
       console.log("mqttdriver: ", mqttdriver);
       if (mqttdriver) {
-        this.updatedriverevent(mqttdriver, data);
+
+        var newdata = await this.getdashboarddata();
+        this.activedashboad = newdata;
+        this.activedashboad = newdata;
+        var showcomp = this.activedashboad.find(x=>x.cid==this.activecomp.cid);
+        if(showcomp){
+          showcomp.showdetail = true;
+        }
+
+
+        // this.updatedriverevent(mqttdriver, data);
+
+        
         // mqttdriver.actvalue = data.value;
         // var comp = this.activedashboad.find(x => x.cid == data.compid)
         // console.log("comp 1: ", comp);

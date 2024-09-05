@@ -61,9 +61,11 @@
 }
 
 .driverimg {
-    width: auto;
+    width: 5vh;
     height: 5vh;
     border-radius: 50%;
     vertical-align: middle;
     border: 1px solid #cee1f0;
+    object-fit:contain;
+
 }

@@ -10,7 +10,7 @@ import { PagekeyModel } from '../app/models/datamodule.module';
 export class variable {
   constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
-  //public wsUrl: string = "https://drivergbus.gpsasiagps.com/"; 
+  // public wsUrl: string = "https://drivergbus.gpsasiagps.com/"; 
   public wsUrl: string = "http://localhost:9080/";
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
