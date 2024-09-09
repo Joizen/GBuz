@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { CompanypageRoutingModule } from './companypage-routing.module';
 import { CompanypageComponent } from './companypage.component';
+import { MaterialModule } from '../../../material/material.module';
 
 
 @NgModule({
@@ -11,7 +12,11 @@ import { CompanypageComponent } from './companypage.component';
   ],
   imports: [
     CommonModule,
-    CompanypageRoutingModule
+    CompanypageRoutingModule,
+    MaterialModule
+  ],
+  exports:[
+    CompanypageComponent
   ]
 })
 export class CompanypageModule { }

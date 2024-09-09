@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
-import { Dashboarddata,DoDashboard, DriverActivity, CompanyDashboard, ProfileModel,
-         DoCompany,DoData,DoActivity,Vehicledata} from '../../../models/datamodule.module';
+import { Dashboarddata,ProfileModel,DoCompany,DoData,DoActivity,Vehicledata} from '../../../models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as L from 'leaflet';
@@ -65,7 +64,7 @@ export class MaindashboardpageComponent implements OnInit {
    //----------------- Dash board Data ---------------------------------------
    async getactivedo() {
     // //---------test------------
-    var wsname = 'getdata';
+    var wsname = '_getdata';
     var params = { tbname: 'driverdashboard', uid: 135 };
     var jsondata = await this.va.WsData(wsname, params, '');
     this.show.Spinner = false;
@@ -272,7 +271,7 @@ export class MaindashboardpageComponent implements OnInit {
 
   async getimagedata(listcom:string) {
     if (this.listcompimage.length == 0){
-      var wsname = 'getdata';
+      var wsname = '_getdata';
       var params = { tbname: 'companylogo', listcid: listcom };
       var header = '';
       var jsondata = await this.va.WsData(wsname, params, header);
