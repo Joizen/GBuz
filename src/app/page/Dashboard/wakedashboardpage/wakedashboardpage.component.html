@@ -1,18 +1,21 @@
 <!-- spinner -->
 <div class="container-spiner" *ngIf="show.Spinner">
-    <div class="row"> Please Watting... </div>
+    <div class="row">
+        Please Watting...
+    </div>
     <mat-spinner></mat-spinner>
 </div>
 
-<div class="position-absolute d-flex justify-content-center align-items-center"
-    style="margin-top:6%; height: 75vh; width: 90%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+<div class="position-relative" style="height: 100%; width:100%;">
     <!-- Background -->
     <div class="img-background" style="width: 100%;height: auto;">
         <img src="../../../assets/images/registerlogo.png" class="img-fluid" style="width: 100%;height: auto;">
     </div>
+    <!-- <button (click)="sendmqtt()"></button> -->
 
     <!-- Body -->
     <div style="position: absolute;top: 0;left: 0;z-index: 1;">
+
         <!-- Company List-->
         <div *ngFor="let comp of activedashboad">
             <!-- Company Name-->
@@ -73,13 +76,17 @@
                 </div>
                 <div class="col-10 justify-content-center">
                     <div class="row">
-                        <div class="col-2" *ngFor="let driver of comp.wakeuplist">
-                            <div class="d-flex justify-content-center">
-                                <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage" class="driverimg"
-                                    (click)="showdiverwork(driver)">
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                {{driver.driverid}}
+                        <div class="col-auto" *ngFor="let driver of comp.wakeuplist">
+                            <div class="row">
+                                <div class="col-2">
+                                    <div class="d-flex justify-content-center">
+                                        <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                            class="driverimg" (click)="showdiverwork(driver)">
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        {{driver.driverid}}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -186,19 +193,13 @@
                         <span>{{event.statustime | date:'HH:mm'}}</span>
                         <span *ngIf="event.statusid==10">({{event.statuslevel}})</span>
                     </div>
-                    <div class="col-auto fw-bold">
-                        <mat-icon *ngIf="event.transtatus==0" class="me-1 col-auto fs-5" style="width:40px;color:green;"
-                            (click)="updatestatus(activedriver,event,1)">send</mat-icon>
-                        <mat-icon *ngIf="event.transtatus==1" class="me-1 col-auto fs-5" style="width:40px;color:red"
-                            (click)="updatestatus(activedriver,event,0)">undo</mat-icon>
-                    </div>
                 </div>
             </div>
 
 
             <!-- close button -->
             <div style="margin: 20px;">
-                <button (click)="show.Driverwork=false">Close</button>
+                <button (click)="show.Driverwork=false">OK</button>
             </div>
         </div>
     </div>

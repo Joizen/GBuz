@@ -5,8 +5,8 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
   { path: 'login', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
   { path: 'register', loadChildren: () => import('./page/registerpage/registerpage.module').then(m => m.RegisterpageModule) },
-  { path: 'driverdashboard', loadChildren: () => import('./page/driverdashboard/driverdashboard.module').then(m => m.DriverdashboardModule) },
-  { path: 'wakeupdashboard', loadChildren: () => import('./page/wakeupdashboard/wakeupdashboard.module').then(m => m.WakeupdashboardModule) },
+  { path: 'driverdashboard_old', loadChildren: () => import('./page/driverdashboard/driverdashboard.module').then(m => m.DriverdashboardModule) },
+  { path: 'wakeupdashboard_old', loadChildren: () => import('./page/wakeupdashboard/wakeupdashboard.module').then(m => m.WakeupdashboardModule) },
   
   { path: 'vehicle', loadChildren: () => import('./page/Vehicle/searchvehiclepage/searchvehiclepage.module').then(m => m.SearchvehiclepageModule) },
   { path: 'vehicledata', loadChildren: () => import('./page/Vehicle/vehiclepage/vehiclepage.module').then(m => m.VehiclepageModule) },
@@ -29,9 +29,9 @@ const routes: Routes = [
   { path: 'driver', loadChildren: () => import('./page/Driver/searchdriverpage/searchdriverpage.module').then(m => m.SearchdriverpageModule) },
   { path: 'driverdata', loadChildren: () => import('./page/Driver/driverpage/driverpage.module').then(m => m.DriverpageModule) },
   { path: 'pathname', loadChildren: () => import('./page/wakeupdashboard/wakeupdashboard.module').then(m => m.WakeupdashboardModule) },
-
-  
-
+  { path: 'maindashboard', loadChildren: () => import('./page/Dashboard/maindashboardpage/maindashboardpage.module').then(m => m.MaindashboardpageModule) },
+  { path: 'wakedashboard', loadChildren: () => import('./page/Dashboard/wakedashboardpage/wakedashboardpage.module').then(m => m.WakedashboardpageModule) },
+  { path: 'driverdetail', loadChildren: () => import('./page/Dashboard/driverdetailpage/driverdetailpage.module').then(m => m.DriverdetailpageModule) },
 ];
 
 @NgModule({

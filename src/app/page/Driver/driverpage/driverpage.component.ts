@@ -18,7 +18,6 @@ export class DriverpageComponent {
     console.log("viewdata : ",this.viewData);
     this.Qrdata = JSON.stringify({empname:this.viewData.drivername,surname:this.viewData.surname,phone:this.viewData.phone});
     console.log("Qrdata : ",this.Qrdata);
-
   }
 
 

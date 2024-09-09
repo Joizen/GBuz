@@ -7,11 +7,11 @@
         <mat-icon (click)="menuopen=false" style="color: white; display: flex; justify-content: flex-end;">navigate_before</mat-icon>
       </mat-toolbar>
       <div class="container">
-        <div *ngIf="true" (click)="openPage('login')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('login')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">login </span>
         </div>
-        <div *ngIf="true" (click)="openPage('register')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('register')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">register </span>
         </div>
@@ -19,7 +19,11 @@
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> driverdashboard </span>
         </div>
-        <div *ngIf="true" (click)="openPage('wakeupdashboard')"  class="clickable-div">
+        <div *ngIf="true" (click)="openPage('maindashboard')"  class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item"> Dashboard </span>
+        </div>
+        <div *ngIf="false" (click)="openPage('wakeupdashboard')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> WakeUp dashboard </span>
         </div>
@@ -62,15 +66,15 @@
        </div> -->
 
        <!-- LINE OA / drivergbus.gpsasiagps.com -->
-        <div *ngIf="true" (click)="openPage('drivercheckin')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('drivercheckin')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> drivercheckin </span>
         </div>
-        <div *ngIf="true" (click)="openPage('driverwork')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('driverwork')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> driverwork </span>
         </div>
-        <div *ngIf="true" (click)="openPage('driverworkreport')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('driverworkreport')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> driverworkreport </span>
         </div>
@@ -78,13 +82,13 @@
 
         <div *ngIf="true" (click)="openPage('confirmjob')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item"> confirmjob </span>
+            <span class="menu-item"> daily job </span>
         </div>
-        <div *ngIf="true" (click)="openPage('lmap')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('lmap')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">lmap </span>
         </div>
-        <div *ngIf="true" (click)="openPage('planactive')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('planactive')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> planactive </span>
         </div>
@@ -94,7 +98,7 @@
         </div>
         <div *ngIf="true" (click)="openPage('planmaster')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item"> planmaster </span>
+            <span class="menu-item"> Master plan </span>
         </div>
         <div *ngIf="false" (click)="openPage('planmasterdata')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>

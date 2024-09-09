@@ -9,18 +9,22 @@ import { PagekeyModel } from '../app/models/datamodule.module';
 @Injectable({ providedIn: 'root' })
 export class variable {
   constructor(private http: HttpClient, private datePipe: DatePipe) { }
-
   // public wsUrl: string = "https://drivergbus.gpsasiagps.com/"; 
   public wsUrl: string = "http://localhost:9080/";
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
-  public iconuser = this.imagepath + "user-ic.png";
-  public iconlogo = this.imagepath + "logo.png";
-  public iconnologo = this.imagepath + "nologo.png";
+  // public iconuser = this.imagepath + "user-ic.png";
+  // public iconpoi = this.imagepath + "poi.png";
+  // public iconlogo = this.imagepath + "logo.png";
+  // public iconnologo = this.imagepath + "nologo.png";
+  // public iconthispoint = this.imagepath + "nologo.png";
   public liffId = "2005033993-ARK31Ewk";
   public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
 
   public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
+
+  public icon = this.Seticon();
+
 
   // =========== Encryption=========================
   public setPagekey(pagedata: any) {
@@ -31,7 +35,6 @@ export class variable {
     }
     catch (ex) { console.log("setPagekey ex", ex); }
   }
-
   public getPagekey() {
     try {
       var keyname: string = this.ProgramID + "pagekey"
@@ -116,7 +119,44 @@ export class variable {
     return null;
   }
 
+  Seticon(){
+    return{
+      user:this.imagepath + "user-ic.png",
+      poi: this.imagepath + "poi.png",
+      logo : this.imagepath + "logo.png",
+      nologo : this.imagepath + "nologo.png",
+      thispoint : this.imagepath + "thispoint.png",
+    }
+  }
+  public getactiveicon(id:number){
+    if(id==5){return "check_circle";}
+    else if(id==10){return "record_voice_over";}
+    else if(id==15){return "hot_tub";}
+    else if(id==20){return "power_settings_new";}
+    else if(id==25){return "local_shipping";}
+    else if(id==30){return "flag";}
+    else {return "report";}
+  }
 
+ // =========== driver & Vehicle status =========================
+  public getstatuscolor(id:number){
+    if(id==5){return "#efbbfc";} //ชมพู
+    else if(id==10){return "#f6f8c4";} //เหลือง
+    else if(id==15){return "#f6f8c4";} //เหลือง
+    else if(id==20){return "#bbfcfb";} //ฟ้า
+    else if(id==25){return "#cef8ba";} //เขียว
+    else if(id==30){return "#e5e1e2";} //เทา
+    else{return "#FFFFFF";} //สีขาว
+  }
+  public getstatusname(id:number){
+    if(id==5){return "Wakeup";} //ชมพู
+    else if(id==10){return "Alcohol";} //เหลือง
+    else if(id==15){return "Temperature";} //เหลือง
+    else if(id==20){return "Engine start";} //ฟ้า
+    else if(id==25){return "On the way";} //เขียว
+    else if(id==30){return "Finish";} //เทา
+    else{return "Not available ";} //สีขาว
+  }
   // =========== APIs & Webservice =========================
 
   async getWsnoUserData(wsname: string, params: any, header: any): Promise<any> {
@@ -250,7 +290,7 @@ export class variable {
     return null;
   }
   // =========== Date Time =========================
-  DateToString(format: string, date = new Date()) {
+  public DateToString(format: string, date = new Date()) {
     var result = this.datePipe.transform(date, format);
     if (result != null) {
       return result;

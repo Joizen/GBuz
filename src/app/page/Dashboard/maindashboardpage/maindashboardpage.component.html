@@ -1,0 +1,530 @@
+<!-- spinner -->
+<div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+        Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%;">
+    <!-- Background -->
+    <!-- <div class="img-background" style="width: 100%;height: auto;">
+        <img src="../../../assets/images/registerlogo.png" class="img-fluid" style="width: 100%;height: auto;">
+    </div> -->
+    <!-- <button (click)="sendmqtt()"></button> -->
+
+    <!-- Body -->
+    <div style="position: absolute;top: 0;left: 0;z-index: 1;">
+        <div class="row" style="width:100vw;">
+            <div id="userList" class="col-6" style="height: 100vh; width: 50vw;">
+                <!-- User Profile-->
+                <div class="container" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px;">
+                    <div class="col" style="flex: 0 0 auto;">
+                        <img class="driverimg" [src]="va.icon.user"/>
+                    </div>
+                    <div class="col" style="flex: 0 0 auto; text-align: right;">
+                        <div class="row">
+                            <div class="col" style="display: flex; align-items: center;"
+                                [style.background-color]="showtype==0?'#FFE5B4':'#FFFFFF'"
+                                mat-raised-button matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="showtype=0" >
+                                <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
+                            </div>
+                            <div class="col" style="display: flex; align-items: center;"
+                                [style.background-color]="showtype==1?'#FFE5B4':'#FFFFFF'"
+                                mat-raised-button matTooltip="แสดงตามกลุ่มสถานะ" (click)="showtype=1">
+                                <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
+                            </div>
+                            <div class="col" style="display: flex; align-items: center;"
+                                [style.background-color]="showtype==2?'#FFE5B4':'#FFFFFF'"
+                                mat-raised-button matTooltip="แสดงรายพนักงานขับรถ" (click)="showtype=2">
+                                <mat-icon style="width: 100%; color: blue;">list</mat-icon>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+                <div style="height: 80%; width: 100%; overflow-y:scroll; overflow-x: hidden;">
+                <!-- Company List-->
+                <div *ngFor="let comp of listdashboadcom">
+                    <!-- Company Icon -->
+                    <div class="row no-gutter" style="display: flex; width:100%; margin: 5px;">
+                        <!-- Company Logo-->
+                        <div class="col-3" style="display: flex; align-items: center; background-color: lightblue;"
+                            mat-raised-button matTooltip={{comp.company}}
+                            (click)="comp.showdetail = !comp.showdetail" >
+                            <img [src]="comp.complogo==''? va.icon.nologo : comp.complogo" class="companyimg">
+                        </div>
+                        <!-- Company Data-->
+                        <div class="col-9 justify-content-center align-items-center"
+                            style="background-color: lightblue;">
+                            <!-- Company Event-->
+                            <div class="row no-gutter">
+                                <div class="col-2 justify-content-center" mat-raised-button matTooltip="รถทั้งหมด">
+                                    <div class="row">
+                                        <mat-icon style="width: 100%; color: blue;">local_shipping</mat-icon>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{comp.totaldo}}</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-2 justify-content-center" matTooltipClass="tooltipnewline"
+                                    mat-raised-button matTooltip='พร้อมเริ่มงาน'>
+                                    <div class="row">
+                                        <mat-icon style="width: 100%; color: blue;">check_circle</mat-icon>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{comp.totalwake}}</span>
+                                        <!-- <span>{{comp.totaldo-comp.totalwake}} | {{comp.totalwake}}</span> -->
+                                    </div>
+                                </div>
+                                <div class="col-2 justify-content-center" matTooltipClass="tooltipnewline"
+                                    mat-raised-button matTooltip="ตรวจแอลกอฮอลแล้ว">
+                                    <div class="row">
+                                        <mat-icon style="width: 100%; color: blue;">record_voice_over</mat-icon>
+                                    </div>
+                                    <div class="row">
+                                        <!-- <span>{{comp.totaldo-comp.totalalc}} | {{comp.totalalc}}</span> -->
+                                        <span>{{comp.totalalc}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-2 justify-content-center" matTooltipClass="tooltipnewline"
+                                    mat-raised-button matTooltip="วัดอุณภูมิแล้ว" *ngIf="false">
+                                    <div class="row">
+                                        <mat-icon style="width: 100%; color: blue;">
+                                            hot_tub
+                                        </mat-icon>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{comp.totaltemp}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-2 justify-content-center" matTooltipClass="tooltipnewline"
+                                    mat-raised-button matTooltip="สตาร์ทรถแล้ว">
+                                    <div class="row">
+                                        <mat-icon style="width: 100%; color: blue;">
+                                            power_settings_new
+                                        </mat-icon>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{comp.totalstart}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-2 justify-content-center" matTooltipClass="tooltipnewline"
+                                    mat-raised-button
+                                    matTooltip="เข้าเส้นทางแล้ว">
+                                    <div class="row">
+                                        <mat-icon style="width: 100%; color: blue;">
+                                            local_shipping
+                                        </mat-icon>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{comp.totalotw}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Company Details (Driver List)  -->
+                    <div class="row no-gutter " style="display: flex; width:100%; margin: 5px;" *ngIf="comp.showdetail">
+                       
+                        <!--============== Show by Driver icon=========== --->
+                        <div class="col-12 justify-content-center" *ngIf="showtype==0">
+                            <div class="row">
+                                <div class="col-auto" *ngFor="let driver of comp.dolist">
+                                    <div class="row" [style.background-color]="driver.statuscorlor"
+                                    (dblclick)="showdiverwork(driver,comp,driverdetailmodal)" (click)="showdriverposition(driver)">
+                                        <div class="col-6 " 
+                                            mat-raised-button  
+                                            matTooltip={{driver.routename}}&nbsp;&nbsp;{{driver.fullname}}&nbsp;&nbsp;{{driver.vlicent}}>
+                                            <div class="justify-content-center">
+                                                <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                    class="driverimg">
+                                            </div>
+                                            <div class="d-flex justify-content-center " style="font-size: xx-small;width:5vh; max-height:2vh; overflow: hidden;">
+                                                {{driver.vname}}
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div *ngFor="let act of driver.listactivity"
+                                                style="display: flex; gap: 1px; flex-direction: column; align-items: end;">
+                                                <div class="row" *ngIf="!((act.statusid==15)||(act.statusid==30))" 
+                                                    [style.background-color]="(act.transtatus==0)?'gray':'green'"
+                                                    style="background-color: gray; border-radius: 50%;width:1vh;height:1vh;margin-bottom: 2px;"
+                                                    mat-raised-button matTooltip={{act.statusname}}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       <!--============== Show by Activity Group=========== -->
+                        <div *ngIf="showtype==1">
+                            <!--Show Unwakeup Group -->
+                            <div class="col-12 justify-content-center">
+                                <div class="row">
+                                        <div class="col-2">
+                                            <!-- Activity icon -->
+                                            <div class="col-auto" (click)="(comp.showgroup[0]=!comp.showgroup[0])"
+                                                matTooltipClass="tooltipnewline" mat-raised-button matTooltip='ไม่พร้อมเริ่มงาน'>
+                                                <div class="row no-gutter justify-content-center">
+                                                    <mat-icon style="vertical-align: middle; width:100%; color: red;">
+                                                        watch_later
+                                                    </mat-icon>
+                                                </div>
+                                                <div class="row no-gutter justify-content-center">
+                                                    <span style="vertical-align: middle; width:100%;">
+                                                    ไม่พร้อมเริ่มงาน: {{comp.totaldo-comp.totalwake}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Driver icon -->
+                                        <div class="col-auto" *ngFor="let driver of comp.unwakelist" >
+                                            <div class="row" *ngIf="comp.showgroup[0]"
+                                            (dblclick)="showdiverwork(driver,comp,driverdetailmodal)"(click)="showdriverposition(driver)">
+                                                <div class="col-6 " mat-raised-button
+                                                    matTooltip={{driver.routename}}&nbsp;&nbsp;{{driver.fullname}}&nbsp;&nbsp;{{driver.vlicent}}>
+                                                    <div class="justify-content-center">
+                                                        <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                            class="driverimg">
+                                                    </div>
+                                                    <div class="d-flex justify-content-center " style="font-size: xx-small;width:5vh; max-height:2vh; overflow: hidden;">
+                                                        {{driver.vname}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div *ngFor="let act of driver.listactivity"
+                                                        style="display: flex; gap: 1px; flex-direction: column; align-items: end;">
+                                                        <div class="row" *ngIf="!((act.statusid==15)||(act.statusid==30))" 
+                                                            [style.background-color]="(act.transtatus==0)?'gray':'green'"
+                                                            style="background-color: gray; border-radius: 50%;width:1vh;height:1vh;margin-bottom:2px ;"
+                                                            mat-raised-button matTooltip={{act.statusname}}></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto" *ngIf="!comp.showgroup[0]">
+                                            <p style="color: red;"> ========== ไม่แสดงข้อมูล ======== </p>
+                                        </div>
+                                </div>
+                            </div>
+                            <div style="width:100%;height:2px; background-color: lightskyblue; margin: 5px"></div>
+
+                            <!--Show Wakeup Group -->
+                            <div class="col-12 justify-content-center">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <!-- Activity icon -->
+                                        <div class="col-auto" (click)="(comp.showgroup[1]=!comp.showgroup[1])"
+                                            matTooltipClass="tooltipnewline" mat-raised-button matTooltip='พร้อมเริ่มงาน'>
+                                            <div class="row no-gutter justify-content-center">
+                                                <mat-icon style="vertical-align: middle; width:100%; color: blue;">
+                                                    check_circle
+                                                </mat-icon>
+                                            </div>
+                                            <div class="row no-gutter justify-content-center">
+                                                <span style="vertical-align: middle; width:100%;">
+                                                พร้อมเริ่มงาน: {{comp.totalwake}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Driver icon -->
+                                    <div class="col-auto" *ngFor="let driver of comp.wakelist">
+                                        <div class="row" *ngIf="comp.showgroup[1]"
+                                            (dblclick)="showdiverwork(driver,comp,driverdetailmodal)"(click)="showdriverposition(driver)">
+                                            <div class="col-6 " mat-raised-button
+                                                matTooltip={{driver.routename}}&nbsp;&nbsp;{{driver.fullname}}&nbsp;&nbsp;{{driver.vlicent}}>
+                                                <div class="justify-content-center">
+                                                    <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                        class="driverimg">
+                                                </div>
+                                                <div class="d-flex justify-content-center " style="font-size: xx-small;width:5vh; max-height:2vh; overflow: hidden;">
+                                                    {{driver.vname}}
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div *ngFor="let act of driver.listactivity"
+                                                    style="display: flex; gap: 1px; flex-direction: column; align-items: end;">
+                                                    <div class="row" *ngIf="!((act.statusid==15)||(act.statusid==30))" 
+                                                        [style.background-color]="(act.transtatus==0)?'gray':'green'"
+                                                        style="background-color: gray; border-radius: 50%;width:1vh;height:1vh;margin-bottom:2px ;"
+                                                        mat-raised-button matTooltip={{act.statusname}}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto" *ngIf="!comp.showgroup[1]">
+                                        <p style="color: red;"> ========== ไม่แสดงข้อมูล ======== </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="width:100%;height:2px; background-color: lightskyblue; margin: 5px"></div>
+
+                            <!--Show Alcohol Group -->
+                            <div class="col-12 justify-content-center">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <!-- Activity icon -->
+                                        <div class="col-auto" (click)="(comp.showgroup[2]=!comp.showgroup[2])"
+                                            matTooltipClass="tooltipnewline"
+                                            mat-raised-button matTooltip='ตรวจแอลกอฮอลแล้ว'>
+                                            <div class="row no-gutter justify-content-center">
+                                                <mat-icon style="vertical-align: middle; width:100%; color: blue;">
+                                                    record_voice_over
+                                                </mat-icon>
+                                            </div>
+                                            <div class="row no-gutter justify-content-center">
+                                                <span style="vertical-align: middle; width:100%;">
+                                                    แอลกอฮอลเทส: {{comp.totalalc}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Driver icon -->
+                                    <div class="col-auto" *ngFor="let driver of comp.alclist">
+                                        <div class="row" *ngIf="comp.showgroup[2]"
+                                            (dblclick)="showdiverwork(driver,comp,driverdetailmodal)"(click)="showdriverposition(driver)">
+                                            <div class="col-6 " mat-raised-button
+                                                matTooltip={{driver.routename}}&nbsp;&nbsp;{{driver.fullname}}&nbsp;&nbsp;{{driver.vlicent}}>
+                                                <div class="justify-content-center">
+                                                    <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                        class="driverimg">
+                                                </div>
+                                                <div class="d-flex justify-content-center " style="font-size: xx-small;width:5vh; max-height:2vh; overflow: hidden;">
+                                                    {{driver.vname}}
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div *ngFor="let act of driver.listactivity"
+                                                    style="display: flex; gap: 1px; flex-direction: column; align-items: end;">
+                                                    <div class="row" *ngIf="!((act.statusid==15)||(act.statusid==30))" 
+                                                        [style.background-color]="(act.transtatus==0)?'gray':'green'"
+                                                        style="background-color: gray; border-radius: 50%;width:1vh;height:1vh;margin-bottom:2px ;"
+                                                        mat-raised-button matTooltip={{act.statusname}}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto" *ngIf="!comp.showgroup[2]">
+                                        <p style="color: red;"> ========== ไม่แสดงข้อมูล ======== </p>
+                                    </div>
+        
+                                </div>
+                            </div>
+                            <div style="width:100%;height:2px; background-color: lightskyblue; margin: 5px"></div>
+
+                            <!--Show Start engine Group -->
+                            <div class="col-12 justify-content-center">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <!-- Activity icon -->
+                                        <div class="col-auto" (click)="(comp.showgroup[3]=!comp.showgroup[3])"
+                                            matTooltipClass="tooltipnewline"
+                                            mat-raised-button matTooltip='สตาร์ทรถแล้ว'>
+                                            <div class="row no-gutter justify-content-center">
+                                                <mat-icon style="vertical-align: middle; width:100%; color: blue;">
+                                                    power_settings_new
+                                                </mat-icon>
+                                            </div>
+                                            <div class="row no-gutter justify-content-center">
+                                                <span style="vertical-align: middle; width:100%;">
+                                                สตาร์ทรถแล้ว : {{comp.totalstart}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Driver icon -->
+                                    <div class="col-auto" *ngFor="let driver of comp.startlist">
+                                        <div class="row" *ngIf="comp.showgroup[3]"
+                                            (dblclick)="showdiverwork(driver,comp,driverdetailmodal)"(click)="showdriverposition(driver)">
+                                            <div class="col-6 " mat-raised-button
+                                                matTooltip={{driver.routename}}&nbsp;&nbsp;{{driver.fullname}}&nbsp;&nbsp;{{driver.vlicent}}>
+                                                <div class="justify-content-center">
+                                                    <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                        class="driverimg">
+                                                </div>
+                                                <div class="d-flex justify-content-center " style="font-size: xx-small;width:5vh; max-height:2vh; overflow: hidden;">
+                                                    {{driver.vname}}
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div *ngFor="let act of driver.listactivity"
+                                                    style="display: flex; gap: 1px; flex-direction: column; align-items: end;">
+                                                    <div class="row" *ngIf="!((act.statusid==15)||(act.statusid==30))" 
+                                                        [style.background-color]="(act.transtatus==0)?'gray':'green'"
+                                                        style="background-color: gray; border-radius: 50%;width:1vh;height:1vh;margin-bottom:2px ;"
+                                                        mat-raised-button matTooltip={{act.statusname}}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto" *ngIf="!comp.showgroup[3]">
+                                        <p style="color: red;"> ========== ไม่แสดงข้อมูล ======== </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%;height:2px; background-color: lightskyblue; margin: 5px"></div>
+
+                            <!--Show On the way Group -->
+                            <div class="col-12 justify-content-center">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <!-- Activity icon -->
+                                        <div class="col-auto"  (click)="(comp.showgroup[4]=!comp.showgroup[4])"
+                                            matTooltipClass="tooltipnewline"
+                                            mat-raised-button matTooltip='เข้าเส้นทางแล้ว'>
+                                            <div class="row no-gutter justify-content-center">
+                                                <mat-icon style="vertical-align: middle; width:100%; color: blue;">
+                                                    local_shipping
+                                                </mat-icon>
+                                            </div>
+                                            <div class="row no-gutter justify-content-center">
+                                                <span style="vertical-align: middle; width:100%;">
+                                                    เข้าเส้นทาง: {{comp.totalotw}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Driver icon -->
+                                    <div class="col-auto" *ngFor="let driver of comp.otwlist">
+                                        <div class="row" *ngIf="comp.showgroup[4]"
+                                        (dblclick)="showdiverwork(driver,comp,driverdetailmodal)"(click)="showdriverposition(driver)">
+                                            <div class="col-6 " mat-raised-button
+                                                matTooltip={{driver.routename}}&nbsp;&nbsp;{{driver.fullname}}&nbsp;&nbsp;{{driver.vlicent}}>
+                                                <div class="justify-content-center">
+                                                    <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                        class="driverimg">
+                                                </div>
+                                                <div class="d-flex justify-content-center " style="font-size: xx-small;width:5vh; max-height:2vh; overflow: hidden;">
+                                                    {{driver.vname}}
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div *ngFor="let act of driver.listactivity"
+                                                    style="display: flex; gap: 1px; flex-direction: column; align-items: end;">
+                                                    <div class="row" *ngIf="!((act.statusid==15)||(act.statusid==30))" 
+                                                        [style.background-color]="(act.transtatus==0)?'gray':'green'"
+                                                        style="background-color: gray; border-radius: 50%;width:1vh;height:1vh;margin-bottom:2px ;"
+                                                        mat-raised-button matTooltip={{act.statusname}}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-auto" *ngIf="!comp.showgroup[4]">
+                                        <p style="color: red;"> ========== ไม่แสดงข้อมูล ======== </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="width:100%;height:2px; background-color: lightskyblue; margin: 5px"></div>
+
+                        </div>
+
+                       <!--============== Show by Driver One Line=========== -->
+                       <div class="col-12 justify-content-center" *ngIf="showtype==2">
+                            <div *ngFor="let driver of comp.dolist">
+                                <div class="row" [style.background-color]="driver.statuscorlor">
+                                    <!-- driver.icon -->
+                                    <div class="col-5" style="flex: 0 0 auto;" >
+                                        <div class="justify-content-center">
+                                            <div class="row">
+                                                <div class="col" style="display: flex; align-items: center; gap:5px;"
+                                                    (dblclick)="showdiverwork(driver,comp,driverdetailmodal)"(click)="showdriverposition(driver)">
+                                                    <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
+                                                    class="driverimg">
+                                                    <span>
+                                                        {{driver.vname}} : {{driver.doname}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-7" style="display: flexbox; align-content : center; text-align: left; ">
+                                        <!-- <div class="col-8" style="flex: 0 0 auto; text-align: right;"> -->
+                                        <div class="row">
+                                            <!-- <div class="col" style="display: flex; align-items: center; gap:5px;">
+                                                <mat-icon style="width: 100%; color: blue;">check_circle</mat-icon>
+                                                <span>{{driver.wakeupshowtime}}</span>
+                                            </div> -->
+                                            <div class="col" style="display: flex; align-items: center; gap:5px; text-align: left;">
+                                                <mat-icon style="width:auto; color: blue;">check_circle</mat-icon>
+                                                <span style="display: flex; align-items: center; gap:5px;">{{driver.wakeupshowtime}}</span>
+                                            </div>
+                                            <div class="col" style="display: flex; align-items: center; gap:5px;">
+                                                <mat-icon style="width:auto; color: blue;">record_voice_over</mat-icon>
+                                                <span style="display: flex; align-items: center; gap:5px;">{{driver.alcshowtime}}</span>
+                                            </div>
+                                            <div class="col" style="display: flex; align-items: center; gap:5px;">
+                                                <mat-icon style="width:auto; color: blue;">power_settings_new</mat-icon>
+                                                <span style="display: flex; align-items: center; gap:5px;">{{driver.startshowtime}}</span>
+                                            </div>
+                                            <div class="col" style="display: flex; align-items: center; gap:5px;">
+                                                <mat-icon style="width:auto; color: blue;">local_shipping</mat-icon>
+                                                <span style="display: flex; align-items: center; gap:5px;">{{driver.otwshowtime}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="width:100%;height:2px; background-color: whitesmoke; margin: 5px" ></div>
+                            </div>
+                    </div>
+
+                        <!-- ================= company line ==================== -->
+                        <div style="width:100%;height:2px; background-color: lightgrey; margin: 5px" ></div>
+                    </div>
+                </div>
+
+                </div>
+                <!-- Footer -->
+                <div class="container" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin-top: 15px;">
+                    <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+                       <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(0)"></div>
+                       <span>ยังไม่พร้อม</span>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+                        <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(5)"></div>
+                        <span>พร้อมเริ่มงาน</span>
+                     </div>
+                     <div class="col" style="display: flex; align-items: center; gap:5px; text-align: left;">
+                        <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(10)"></div>
+                        <span>ตรวจแอลกอฮอลแล้ว</span>
+                     </div>
+                     <!-- <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+                        <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(15)"></div>
+                         <span>วัดอุณหภูมิแล้ว</span>
+                     </div> -->
+                     <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+                        <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(20)"></div>
+                        <span>สตาร์ทรถแล้ว</span>
+                     </div>
+                     <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+                        <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(25)"></div>
+                        <span>เข้าเส้นทางแล้ว</span>
+                     </div>
+                     <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+                        <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(30)"></div>
+                        <span>ส่งพนักงานหมดแล้ว</span>
+                     </div>
+                  </div>
+
+            </div>
+
+            <div id="mapPage" class="col-6">
+                <div id="map" style="height: 90vh; width: 50vw;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #driverdetailmodal let-modal>
+    <app-driverdetailpage  [modal]="modal" [activedriver]="activedriver" (talk)="driverdetailtalkback($event)" ></app-driverdetailpage>
+    <!-- <app-driverdetailpage  [modal]="modal" ></app-driverdetailpage> -->
+</ng-template>

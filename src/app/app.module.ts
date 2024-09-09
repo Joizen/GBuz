@@ -19,6 +19,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import {variable} from './variable'
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
