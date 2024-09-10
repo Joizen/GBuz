@@ -1,43 +1,26 @@
 <div class="modal-header">
-  <!-- <b>Department {{viewData.deptname}}</b> -->
+  <b>{{viewData.driverfullname}}</b>
   <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
 </div>
 
 
 
 <mat-card class="example-card" appearance="outlined">
-  <mat-card-header>
-
-    <div class="col-3">
-      <img  class="driverimg" [src]="viewData.lineimage==''?'assets/images/user-ic.png':viewData.lineimage">
+  <div class="row no-gutters">
+    <div class="col-2 m-2">
+      <img class="driverimg" [src]="viewData.lineimage==''?va.icon.user:viewData.lineimage">
     </div>
     <div class="col-6">
-      <mat-card-title>{{viewData.driverfullname}}</mat-card-title>
-      <mat-card-subtitle>{{viewData.linename}}</mat-card-subtitle>
+      <div class="row m-2"><mat-icon style="width: auto;">person</mat-icon> {{viewData.drivername}} </div>
+      <div class="row m-2"><mat-icon style="width: auto;">calendar_view_day</mat-icon> {{viewData.surname}} </div>
+      <div class="row m-2"><mat-icon style="width: auto;">assignment_ind</mat-icon> {{viewData.license}} </div>
+      <div class="row m-2"><mat-icon style="width: auto;">phone</mat-icon> {{viewData.phone}} </div>
+      <div class="row m-2"><mat-icon style="width: auto;">sentiment_very_satisfied</mat-icon> {{viewData.linename}} </div>
+      <!-- <div class="row"> {{viewData.vname}} </div> -->
     </div>
-    <div class="col-3">
+    <div class="col-2">
       <qrcode [qrdata]="Qrdata" [allowEmptyString]="true" [width]="100"></qrcode>
     </div>
+  </div>
 
-   
-  </mat-card-header>
-
-  <mat-card-content>
-    <p>
-      {{viewData.driverfullname}} 
-      {{viewData.drivername}} 
-      {{viewData.surname}} 
-      {{viewData.nickname}} 
-      {{viewData.license}} 
-      {{viewData.licensetype}} 
-      {{viewData.phone}} 
-      {{viewData.mobile}} 
-      {{viewData.linename}} 
-      <!-- {{viewData.lineimage}}  -->
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
-  </mat-card-actions>
 </mat-card>

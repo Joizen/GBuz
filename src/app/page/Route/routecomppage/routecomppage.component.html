@@ -1,0 +1,81 @@
+<!-- spinner -->
+<div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+        Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%; overflow-x:hidden">
+
+    <div>
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; width:100hw; margin: 5px;">
+            <div class="col" style="flex: 0 0 auto;">
+
+            </div>
+            <div class="col" style="flex: 0 0 auto; text-align: right;">
+                <div class="row">
+                    <div class="col" style="display: flex; align-items: center;"
+                        [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="show.viewtype=0">
+                        <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"
+                        [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงตามกลุ่มสถานะ" (click)="show.viewtype=1">
+                        <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"
+                        [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงรายพนักงานขับรถ" (click)="show.viewtype=2">
+                        <mat-icon style="width: 100%; color: blue;">list</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="show.viewtype==0" >
+        <div class="row" style="width:100vw;">
+            <!-- Left Column -->
+            <div class="col-3" style="height: 70vh; width:40hw; overflow: scroll;">
+                <div *ngFor="let item of maindata">
+                    <div class="row" (click)="Showroute(item)">
+                        <div class="container" 
+                            style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
+                            <div class="col ms-2" style="display:flexbox; text-align: start;">
+                                <!-- setitem 1-->
+                                {{item.routename}}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            
+
+            <!-- Righ Column -->
+            <div  id="map-container" class="col-9" style="height: 70vh; width:60hw; background-color: lightyellow;">
+
+                <div class="data-box-container">
+                        <div class="data-box m-2" *ngFor="let box of activedata.dpinroute">
+                            <div (click)="ShowCurrentPosition(box.lat,box.lng)">
+                                <h3>{{box.pointname}}</h3>
+                            </div>
+                        </div>
+                </div>
+
+                <div id="droppointmap" style="height: 100%; width:100%;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #compdetailmodal let-modal>
+    <app-routepage [modal]="modal" [activedata]="activedata" (talk)="companytalkback($event)"></app-routepage>
+</ng-template>

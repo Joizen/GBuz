@@ -28,6 +28,13 @@ const routes: Routes = [
   { path: 'maindashboard', loadChildren: () => import('./page/Dashboard/maindashboardpage/maindashboardpage.module').then(m => m.MaindashboardpageModule) },
   { path: 'wakedashboard', loadChildren: () => import('./page/Dashboard/wakedashboardpage/wakedashboardpage.module').then(m => m.WakedashboardpageModule) },
   { path: 'driverdetail', loadChildren: () => import('./page/Dashboard/driverdetailpage/driverdetailpage.module').then(m => m.DriverdetailpageModule) },
+  { path: 'employee', loadChildren: () => import('./page/Employee/searchemployeepage/searchemployeepage.module').then(m => m.SearchemployeepageModule) },
+  { path: 'employeedata', loadChildren: () => import('./page/Employee/employeepage/employeepage.module').then(m => m.EmployeepageModule) },
+  { path: 'employeecomp', loadChildren: () => import('./page/Employee/employeecomppage/employeecomppage.module').then(m => m.EmployeecomppageModule) },
+  { path: 'vehiclecomp', loadChildren: () => import('./page/Vehicle/vehiclecomppage/vehiclecomppage.module').then(m => m.VehiclecomppageModule) },
+  { path: 'routecomp', loadChildren: () => import('./page/Route/routecomppage/routecomppage.module').then(m => m.RoutecomppageModule) },
+  { path: 'droppointcomp', loadChildren: () => import('./page/Droppoint/droppointcomppage/droppointcomppage.module').then(m => m.DroppointcomppageModule) },
+  { path: 'droppointdata', loadChildren: () => import('./page/Droppoint/droppointpage/droppointpage.module').then(m => m.DroppointpageModule) },
 ];
 
 @NgModule({

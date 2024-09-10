@@ -1,53 +1,105 @@
 <!-- spinner -->
 <div class="container-spiner" *ngIf="show.Spinner">
-    <div class="row">
-        Please Watting...
+  <div class="row">
+    Please Watting...
+  </div>
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="position-relative" style="height: 100vh; width:100hw;">
+  <!-- company & close button -->
+  <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center; 
+                  width:100%; background-color: lightblue; margin: 0;">
+    <div class="col" style="flex: 0 0 auto;">
+      <img class="company-logo me-4" [src]="activecompany.complogo==''? va.icon.nologo : activecompany.complogo">
+      <span>{{activecompany.companyname}} </span>
     </div>
-    <mat-spinner></mat-spinner>
-  </div>
 
-  <div class="position-relative" style="height: 100%; width:100%;">
-    <div  class="card-container">
-        <div class="company-card" >
-          <mat-card >
-            <mat-card-header >
-              <div mat-card-avatar>
-                <img [src]="activecompany.complogo" class="company-logo">
-              </div>
-              <mat-card-title>{{ activecompany.companyname }}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="row" >
-                <p><mat-icon  mat-raised-button matTooltip="ผู้ติดต่อ" > 
-                  contacts
-                </mat-icon> : {{ activecompany.contract }}</p>
-              </div>
-              <div class="row">
-                <p><mat-icon  mat-raised-button matTooltip="เบอรฺโทร">
-                  phone
-                </mat-icon> : {{ activecompany.phone }}</p>            
-              </div>
-              <div class="row">
-                <div class="col" style="display: flex; align-items: center;">
-                  <p><mat-icon  mat-raised-button matTooltip="จำนวนพนักงาน">
-                    person
-                  </mat-icon> : {{ activecompany.totalemp }}</p>   
-                </div>
-                <div class="col" style="display: flex; align-items: center;">
-                  <p><mat-icon mat-raised-button matTooltip="จำนวนเส้นทาง">
-                    rv_hookup
-                  </mat-icon> : {{ activecompany.totalroute }}</p>            
-                  </div>
-                <div class="col" style="display: flex; align-items: center;">
-                  <p><mat-icon mat-raised-button matTooltip="จำนวนรถ">
-                    directions_bus
-                  </mat-icon> : {{ activecompany.totalvehicle }}</p>            
-                  </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-          </div>
+    <div class="col" style="flex: 0 0 auto; text-align: right;">
+      <div class="row">
+        <div class="col" style="display: flex; align-items: center;">
+          <mat-icon style="width: auto; color: red;" (click)="modal.close()">cancel</mat-icon>
+        </div>
       </div>
-    
+    </div>
   </div>
 
+  <!-- Body -->
+  <div class="px-3 py-0"
+    style="display: flex; justify-content: space-between; align-items: center;width:100%; margin: 10px;">
+    <div class="col" style="flex: 0 0 auto;">
+      <div class="row">
+        <div class="col-auto" style="display: flex; align-items: center;">
+          <mat-icon mat-raised-button matTooltip="ผู้ติดต่อ">contacts</mat-icon>
+        </div>
+        <div class="col-auto" style="display: flex; align-items: center;">
+          <span>: {{ activecompany.contract }}</span>
+        </div>
+        <div class="col-auto" style="display: flex; align-items: center;">
+          <mat-icon mat-raised-button matTooltip="เบอรฺโทร"> phone</mat-icon>
+        </div>
+        <div class="col-auto" style="display: flex; align-items: center;">
+          <span>: {{ activecompany.phone }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col" style="flex: 0 0 auto;">
+
+    </div>
+
+    <div class="col" style="flex: 0 0 auto; text-align: right;">
+      <div class="row">
+        <div class="col">
+
+          <mat-icon mat-raised-button matTooltip="จำนวนพนักงาน">
+            person
+          </mat-icon> : {{ activecompany.totalemp }}
+
+          <mat-icon mat-raised-button matTooltip="จำนวนเส้นทาง">
+            rv_hookup
+          </mat-icon> : {{ activecompany.totalroute }}
+
+          <mat-icon mat-raised-button matTooltip="จำนวนรถ">
+            directions_bus
+          </mat-icon> : {{ activecompany.totalvehicle }}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TAB -->
+  <div class="px-3 py-0">
+    <mat-tab-group >
+      <!-- employee -->
+      <mat-tab label="Employee">
+        <app-employeecomppage [activecompany]="activecompany"></app-employeecomppage>
+      </mat-tab>
+
+      <!-- route -->
+      <mat-tab label="Route">
+        <app-routecomppage [activecompany]="activecompany"></app-routecomppage>
+      </mat-tab>
+
+      <!-- vehicle -->
+      <mat-tab label="Vehicle">
+        <app-vehiclecomppage [activecompany]="activecompany"></app-vehiclecomppage>
+      </mat-tab>
+
+      <!-- dropoint -->
+      <mat-tab label="Drop Point" >
+        <app-droppointcomppage [activecompany]="activecompany"></app-droppointcomppage>
+      </mat-tab>
+
+    </mat-tab-group>
+
+
+  </div>
+
+
+
+
+</div>

@@ -13,6 +13,9 @@ import { QRCodeModule } from 'angularx-qrcode';
   imports: [
     CommonModule,
     VehiclepageRoutingModule,QRCodeModule
+  ],
+  exports:[
+    VehiclepageComponent
   ]
 })
 export class VehiclepageModule { }

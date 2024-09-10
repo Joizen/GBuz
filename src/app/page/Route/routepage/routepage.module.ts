@@ -12,6 +12,9 @@ import { RoutepageComponent } from './routepage.component';
   imports: [
     CommonModule,
     RoutepageRoutingModule
+  ],
+  exports:[
+    RoutepageComponent
   ]
 })
 export class RoutepageModule { }

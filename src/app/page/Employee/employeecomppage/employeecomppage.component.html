@@ -1,0 +1,128 @@
+<!-- spinner -->
+<div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+        Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%;">
+
+    <div>
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; width:100hw; margin: 5px;">
+            <div class="col" style="flex: 0 0 auto;">
+
+            </div>
+            <div class="col" style="flex: 0 0 auto; text-align: right;">
+                <div class="row">
+                    <div class="col" style="display: flex; align-items: center;"
+                        [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="show.viewtype=0">
+                        <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"
+                        [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงตามกลุ่มสถานะ" (click)="show.viewtype=1">
+                        <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"
+                        [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงรายพนักงานขับรถ" (click)="show.viewtype=2">
+                        <mat-icon style="width: 100%; color: blue;">list</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height:70vh; width:100%; margin: 5px;">
+            <div *ngFor="let item of maindata">
+                <div class="row">
+                    <div class="container"
+                        style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
+                        <div class="col-auto" style="flex: 0 0 auto; text-align: start;">
+                            <img class="profileimg" [src]="item.lineimg==''?va.icon.user:item.lineimg"/>
+                        </div>
+                        <div class="col-1" style="flex: 0 0 auto; text-align: start;">
+                            {{item.empname}}
+                        </div>
+                        <div class="col-1 ms-4" style="display:flexbox; text-align: start;">
+                            {{item.department}}
+                        </div>
+                        <div class="col-1" style="flex: 0 0 auto; text-align: start;">
+                            {{item.dpname}}
+                        </div>
+                        <div class="col-1" style="flex: 0 0 auto;">
+                            {{item.officename}}
+                        </div>
+                        <div class="col-1" style="flex: 0 0 auto;">
+                            {{item.otname}}
+                        </div>
+                        <div class="col-1" style="flex: 0 0 auto;">
+                            {{item.phone}}
+                        </div>
+                        <div class="col-1" style="flex: 0 0 auto;">
+                            {{item.rolename}}
+                        </div>
+
+                        <div *ngIf="0" class="col" style="flex: 0 0 auto; text-align: right;">
+                            <div class="row">
+                                <div class="col" style="display: flex; align-items: center;"
+                                    [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                                    matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="show.viewtype=0">
+                                    <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
+                                </div>
+                                <div class="col" style="display: flex; align-items: center;"
+                                    [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                                    matTooltip="แสดงตามกลุ่มสถานะ" (click)="show.viewtype=1">
+                                    <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
+                                </div>
+                                <div class="col" style="display: flex; align-items: center;"
+                                    [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                                    matTooltip="แสดงรายพนักงานขับรถ" (click)="show.viewtype=2">
+                                    <mat-icon style="width: 100%; color: blue;">list</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="show.viewtype==1">
+        <div class="row" style="width:100vw;">
+            <!-- Left Column -->
+            <div class="col-4" style="height: 70vh; width:40hw; overflow: scroll;">
+                <div *ngFor="let item of maindata">
+                    <div class="row">
+                        <div class="container"
+                            style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
+                            <div class="col ms-2" style="display:flexbox; text-align: start;">
+                                <!-- setitem 1-->
+                            </div>
+    
+                            <div class="col" style="display:flexbox; text-align: start;">
+                                <!-- setitem 2-->
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </div>
+    
+            <!-- Righ Column -->
+            <div class="col-8" style="height: 70vh; width:60hw;">
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #compdetailmodal let-modal>
+    <app-employeepage [modal]="modal" [activedata]="activedata" (talk)="companytalkback($event)"></app-employeepage>
+</ng-template>

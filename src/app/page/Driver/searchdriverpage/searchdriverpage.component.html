@@ -1,45 +1,109 @@
-<p>searchdriverpage works!</p>
-<div class="container">
-    <div class="row no guster" style="width: 100%;">
-      <div class="col-2 example-full-width" style="text-align: end; vertical-align: middle; padding: 10px; ">
-        <h2 style="text-align:center; vertical-align: text-bottom;">ข้อมูลพนักงานขับรถ</h2>
+<!-- spinner -->
+<div class="container-spiner" *ngIf="show.Spinner">
+  <div class="row">
+    Please Watting...
+  </div>
+  <mat-spinner></mat-spinner>
+</div>
+
+
+<div class="position-relative" style="height: 100%; width:100%; overflow-x:hidden">
+  <!-- Header -->
+  <div>
+    <div class="container"
+      style="display: flex; justify-content: space-between; align-items: center; width:100hw; margin: 5px;">
+      <div class="col" style="flex: 0 0 auto;">
+
       </div>
-      <div class="col-6 example-full-width" >
-        <mat-form-field  style=" width: 100%; padding: 10px; " >
-            <mat-label>Name or number</mat-label>
-          <input matInput #input maxlength="20" (keyup)="applyFilter($event.target)" matInput placeholder="Filter">
-        </mat-form-field>    
-      </div>
-      <div class="col-4">
-        <div class="row flex-container" style="text-align: end; vertical-align: middle; padding: 10px;">
-          <div class="col-4">
-            <button class="btn btn-success" style="margin-right: 10px;" (click)="viewDriver('viewmodule')" *ngIf="viewtype">
-              <mat-icon *ngIf="true">view_module</mat-icon>
-            </button>
-            <button class="btn btn-secondary" style="margin-right: 10px;" *ngIf="!viewtype">
-              <mat-icon *ngIf="true">view_module</mat-icon>
-            </button>
+      <div class="col" style="flex: 0 0 auto; text-align: right;">
+        <div class="row">
+          <div class="col" style="display: flex; align-items: center;"
+            [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
+            matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="show.viewtype=0">
+            <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
           </div>
-          
-          <div class="col-4">
-            <button class="btn btn-success" style="margin-right: 10px;" (click)="viewDriver('viewlist')" *ngIf="!viewtype">
-              <mat-icon *ngIf="true">view_list</mat-icon>
-            </button>
-            <button class="btn btn-secondary" style="margin-right: 10px;" *ngIf="viewtype">
-              <mat-icon *ngIf="true">view_list</mat-icon>
-            </button>
+          <div class="col" style="display: flex; align-items: center;"
+            [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
+            matTooltip="แสดงตามกลุ่มสถานะ" (click)="show.viewtype=1">
+            <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
           </div>
-          
-          <div class="col-4">
-            <button class="btn btn-warning" style="margin-right: 10px;">
-              <mat-icon *ngIf="true" (click)="newDriver(modalDriver)">add</mat-icon>
-            </button>
+          <div class="col" style="display: flex; align-items: center;"
+            [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
+            matTooltip="แสดงรายพนักงานขับรถ" (click)="show.viewtype=2">
+            <mat-icon style="width: 100%; color: blue;">list</mat-icon>
           </div>
         </div>
-        
-        
-        <div class="flex-container" style="text-align: end; vertical-align: middle; padding: 10px; ">
-          <!-- <button mat-icon-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div *ngIf="show.viewtype==0">
+    <div class="card-container">
+      <div class="card-item" *ngFor="let driver of listdriver" >
+        <mat-card (click)="showDriverDetail(driver,modalDriverDetail)">
+          <mat-card-header>
+            <div mat-card-avatar style="background-size:cover;" 
+            [style.background-image]="driver.driverimg === '' ? 'url(' + va.icon.user + ')' : 'url(' + driver.driverimg + ')'"></div>
+            <mat-card-title>{{ driver.fullname }}</mat-card-title>
+            <mat-card-subtitle>{{ driver.linename }}</mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div><mat-icon>phone</mat-icon> {{ driver.phone }}</div>
+            <div><mat-icon>local_shipping</mat-icon> {{ driver.vname }} {{ driver.vlicent }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="container" *ngIf="show.viewtype==1">
+  <div class="row no guster" style="width: 100%;">
+    <div class="col-2 example-full-width" style="text-align: end; vertical-align: middle; padding: 10px; ">
+      <h2 style="text-align:center; vertical-align: text-bottom;">ข้อมูลพนักงานขับรถ</h2>
+    </div>
+    <div class="col-6 example-full-width">
+      <mat-form-field style=" width: 100%; padding: 10px; ">
+        <mat-label>Name or number</mat-label>
+        <input matInput #input maxlength="20" (keyup)="applyFilter($event.target)" matInput placeholder="Filter">
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <div class="row flex-container" style="text-align: end; vertical-align: middle; padding: 10px;">
+        <div class="col-4">
+          <button class="btn btn-success" style="margin-right: 10px;" (click)="viewDriver('viewmodule')"
+            *ngIf="viewtype">
+            <mat-icon *ngIf="true">view_module</mat-icon>
+          </button>
+          <button class="btn btn-secondary" style="margin-right: 10px;" *ngIf="!viewtype">
+            <mat-icon *ngIf="true">view_module</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-4">
+          <button class="btn btn-success" style="margin-right: 10px;" (click)="viewDriver('viewlist')"
+            *ngIf="!viewtype">
+            <mat-icon *ngIf="true">view_list</mat-icon>
+          </button>
+          <button class="btn btn-secondary" style="margin-right: 10px;" *ngIf="viewtype">
+            <mat-icon *ngIf="true">view_list</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-4">
+          <button class="btn btn-warning" style="margin-right: 10px;">
+            <mat-icon *ngIf="true" (click)="newDriver(modalDriver)">add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+
+      <div class="flex-container" style="text-align: end; vertical-align: middle; padding: 10px; ">
+        <!-- <button mat-icon-button>
             <mat-icon *ngIf="true">view_module</mat-icon>
           </button>
           <mat-icon style="vertical-align:middle; margin: 5px;" *ngIf="true">view_list</mat-icon>
@@ -47,128 +111,130 @@
           <button class="btn btn-warning">
             <mat-icon *ngIf="true">add</mat-icon>
           </button> -->
-        </div>
-      </div>
-    </div>
-    
-    <div class="mat-elevation-z8" style="padding: 10px; box-shadow: none;" *ngIf="viewtype">
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: none;">
-      
-          <!-- Driver id Column -->
-         <ng-container matColumnDef="id">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> No. </th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-          </ng-container>
-        
-          <!-- driverfullname  Column -->
-          <ng-container matColumnDef="driverfullname">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อ-สกุล พนักงาน </th>
-            <td mat-cell *matCellDef="let element"> {{element.driverfullname}} </td>
-          </ng-container>
-        
-          <!-- drivername   Column -->
-          <ng-container matColumnDef="drivername">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อพนักงาน </th>
-            <td mat-cell *matCellDef="let element"> {{element.drivername}} </td>
-          </ng-container>
-    
-          <!-- surname   Column -->
-          <ng-container matColumnDef="surname">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> นามสกุล </th>
-            <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
-          </ng-container>
-        
-          <!-- nickname  Column -->
-          <ng-container matColumnDef="nickname">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อเล่น </th>
-            <td mat-cell *matCellDef="let element"> {{element.nickname}} </td>
-          </ng-container>
-    
-          <!-- license  Column -->
-          <ng-container matColumnDef="license">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ใบขับขี่ </th>
-            <td mat-cell *matCellDef="let element"> {{element.license}} </td>
-          </ng-container>
-          
-          <!-- licensetype   Column -->
-          <ng-container matColumnDef="licensetype">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ประเภท </th>
-            <td mat-cell *matCellDef="let element"> {{element.licensetype}} </td>
-          </ng-container>
-          
-          <!-- phone  Column -->
-          <ng-container matColumnDef="phone">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> เบอร์โทรหลัก </th>
-            <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-          </ng-container>
-          
-          <!-- mobile   Column -->
-          <ng-container matColumnDef="mobile">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> เบอร์โทรรอง </th>
-            <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
-          </ng-container>
-          
-          <!-- linename  Column -->
-          <ng-container matColumnDef="linename">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อใน Line </th>
-            <td mat-cell *matCellDef="let element"> {{element.linename}} </td>
-          </ng-container>
-          
-          <!-- lineimage   Column -->
-          <ng-container matColumnDef="lineimage">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> รูปใน Line </th>
-            <td mat-cell *matCellDef="let element"> {{element.lineimage}} </td>
-          </ng-container>
-          
-          <ng-container matColumnDef="action">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>  </th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-button (click)="showDriver(element,modalDriver)">
-                  <mat-icon>more_horiz</mat-icon>
-                </button>
-            </td>
-          </ng-container>
-           
-          <!-- Control Header Row Footer -->
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsData" style="background-color: #f2f2f2; "></tr>
-          <tr mat-row (click)="onSelectedRow(row)" *matRowDef="let row; columns: displayedColumnsData;"></tr>
-          
-      </table>
-      <!--  Control Page แสดงข้อมูลมากกว่า 1 หน้า -->
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons> </mat-paginator>
-    </div>
-  
-    <div class="mat-elevation-z8" style="padding: 10px; box-shadow: none;" *ngIf="!viewtype">
-      <div style="width: 100%;" >
-        <div class="row">
-          <mat-card class="col-3" appearance="outlined" *ngFor="let driver of mainData;">
-            <mat-card-header>
-              <div mat-card-avatar>
-                {{driver.lineimage}}
-                <img style="width: 100%;" src="./../../../../assets/images/user-ic.png" alt="Hero Avatar">
-              </div>
-              <mat-card-title>{{driver.driverfullname}}</mat-card-title>
-              <mat-card-subtitle>{{driver.phone}}</mat-card-subtitle>
-            </mat-card-header>
-            <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-            <mat-card-content>
-              <p>ทะเบียนรถ : {{driver.license}}</p>
-            </mat-card-content>
-            <mat-card-actions>
-              <div class="row" style="width: 100%;">
-                <button class="col-4 btn btn-primary" mat-button (click)="openDialog(driver)">เพิ่มเติม</button>
-                <button class="col-4 btn btn-warning" mat-button  (click)="showDriver(driver, modalDriver)">แก้ไข</button>
-                <button class="col-4 btn btn-danger" mat-button>ยกเลิก</button>
-              </div>
-            </mat-card-actions>
-        </mat-card>
-        </div>
       </div>
     </div>
   </div>
-  
-  <ng-template #modalDriver let-modal>
-    <app-driverpage [viewData]="activedata" [modal]="modal" (repage)="talkbackdata($event)" ></app-driverpage>
-  </ng-template>
-  
-  
+
+  <div class="mat-elevation-z8" style="padding: 10px; box-shadow: none;" *ngIf="viewtype">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: none;">
+
+      <!-- Driver id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- driverfullname  Column -->
+      <ng-container matColumnDef="driverfullname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อ-สกุล พนักงาน </th>
+        <td mat-cell *matCellDef="let element"> {{element.driverfullname}} </td>
+      </ng-container>
+
+      <!-- drivername   Column -->
+      <ng-container matColumnDef="drivername">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อพนักงาน </th>
+        <td mat-cell *matCellDef="let element"> {{element.drivername}} </td>
+      </ng-container>
+
+      <!-- surname   Column -->
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> นามสกุล </th>
+        <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
+      </ng-container>
+
+      <!-- nickname  Column -->
+      <ng-container matColumnDef="nickname">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อเล่น </th>
+        <td mat-cell *matCellDef="let element"> {{element.nickname}} </td>
+      </ng-container>
+
+      <!-- license  Column -->
+      <ng-container matColumnDef="license">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ใบขับขี่ </th>
+        <td mat-cell *matCellDef="let element"> {{element.license}} </td>
+      </ng-container>
+
+      <!-- licensetype   Column -->
+      <ng-container matColumnDef="licensetype">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ประเภท </th>
+        <td mat-cell *matCellDef="let element"> {{element.licensetype}} </td>
+      </ng-container>
+
+      <!-- phone  Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> เบอร์โทรหลัก </th>
+        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+      </ng-container>
+
+      <!-- mobile   Column -->
+      <ng-container matColumnDef="mobile">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> เบอร์โทรรอง </th>
+        <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
+      </ng-container>
+
+      <!-- linename  Column -->
+      <ng-container matColumnDef="linename">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> ชื่อใน Line </th>
+        <td mat-cell *matCellDef="let element"> {{element.linename}} </td>
+      </ng-container>
+
+      <!-- lineimage   Column -->
+      <ng-container matColumnDef="lineimage">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="center-header"> รูปใน Line </th>
+        <td mat-cell *matCellDef="let element"> {{element.lineimage}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button (click)="showDriver(element,modalDriver)">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Control Header Row Footer -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsData" style="background-color: #f2f2f2; "></tr>
+      <tr mat-row (click)="onSelectedRow(row)" *matRowDef="let row; columns: displayedColumnsData;"></tr>
+
+    </table>
+    <!--  Control Page แสดงข้อมูลมากกว่า 1 หน้า -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons> </mat-paginator>
+  </div>
+
+  <div class="mat-elevation-z8" style="padding: 10px; box-shadow: none;" *ngIf="!viewtype">
+    <div style="width: 100%;">
+      <div class="row">
+        <mat-card class="col-3" appearance="outlined" *ngFor="let driver of mainData;">
+          <mat-card-header>
+            <div mat-card-avatar>
+              {{driver.lineimage}}
+              <img style="width: 100%;" src="./../../../../assets/images/user-ic.png" alt="Hero Avatar">
+            </div>
+            <mat-card-title>{{driver.driverfullname}}</mat-card-title>
+            <mat-card-subtitle>{{driver.phone}}</mat-card-subtitle>
+          </mat-card-header>
+          <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+          <mat-card-content>
+            <p>ทะเบียนรถ : {{driver.license}}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <div class="row" style="width: 100%;">
+              <button class="col-4 btn btn-primary" mat-button (click)="openDialog(driver)">เพิ่มเติม</button>
+              <button class="col-4 btn btn-warning" mat-button (click)="showDriver(driver, modalDriver)">แก้ไข</button>
+              <button class="col-4 btn btn-danger" mat-button>ยกเลิก</button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalDriver let-modal>
+  <app-driverpage [viewData]="activedata" [modal]="modal" (repage)="talkbackdata($event)"></app-driverpage>
+</ng-template>
+
+<ng-template #modalDriverDetail let-modal>
+  <app-driverpage [driverData]="activedriver" [modal]="modal" (repage)="talkbackdata($event)"></app-driverpage>
+</ng-template>
