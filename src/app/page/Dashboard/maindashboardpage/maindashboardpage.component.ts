@@ -65,7 +65,7 @@ export class MaindashboardpageComponent implements OnInit {
    //----------------- Dash board Data ---------------------------------------
    async getactivedo() {
     // //---------test------------
-    var wsname = 'getdata';
+    var wsname = '_getdata';
     var params = { tbname: 'driverdashboard', uid: 135 };
     var jsondata = await this.va.WsData(wsname, params, '');
     this.show.Spinner = false;
@@ -74,7 +74,7 @@ export class MaindashboardpageComponent implements OnInit {
     // var params = { tbname: "driverdashboard" };
     // var jsondata = await this.va.getWsData(wsname, params);
 
-    console.log('getdashboarddata', jsondata);
+    console.log('getdashboarddata : ', jsondata);
     if (jsondata.code == '000') {
       this.listdostatus = await this.getlistdostatus(jsondata.data);
       console.log('getdashboarddata this.listdostatus :', this.listdostatus);
@@ -272,7 +272,7 @@ export class MaindashboardpageComponent implements OnInit {
 
   async getimagedata(listcom:string) {
     if (this.listcompimage.length == 0){
-      var wsname = 'getdata';
+      var wsname = '_getdata';
       var params = { tbname: 'companylogo', listcid: listcom };
       var header = '';
       var jsondata = await this.va.WsData(wsname, params, header);

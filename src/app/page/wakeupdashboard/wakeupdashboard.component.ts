@@ -43,7 +43,7 @@ export class WakeupdashboardComponent implements OnInit {
      this.activecomp = company;
   }
   async getdashboarddata() {
-    var wsname = "getdata";
+    var wsname = "_getdata";
     var params = { tbname: "driverdashboard", uid: '135' };
     var jsondata = await this.va.WsData(wsname, params, "");
     var result: CompanyDashboard[] = [];
@@ -120,7 +120,7 @@ export class WakeupdashboardComponent implements OnInit {
     for (var i = 0; i < this.activedashboad.length; i++) {
       listcom += ((listcom == "" ? "'" : ",'") + this.activedashboad[i].cid + "'");
     }
-    var wsname = "getdata";
+    var wsname = "_getdata";
     var params = { tbname: "companylogo", listcid: listcom };
     var header = "";
     var jsondata = await this.va.WsData(wsname, params, header);

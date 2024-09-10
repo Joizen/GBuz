@@ -9,8 +9,10 @@ import { PagekeyModel } from '../app/models/datamodule.module';
 @Injectable({ providedIn: 'root' })
 export class variable {
   constructor(private http: HttpClient, private datePipe: DatePipe) { }
-  // public wsUrl: string = "https://drivergbus.gpsasiagps.com/"; 
-  public wsUrl: string = "http://localhost:9080/";
+  
+  public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
+  // public wsUrl: string = "http://localhost:9080/";
+
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
   // public iconuser = this.imagepath + "user-ic.png";
@@ -21,8 +23,9 @@ export class variable {
   public liffId = "2005033993-ARK31Ewk";
   public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
 
-  public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
-
+  public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
+  // public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
+ 
   public icon = this.Seticon();
 
 

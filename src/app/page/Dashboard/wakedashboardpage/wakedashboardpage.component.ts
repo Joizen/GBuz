@@ -38,8 +38,8 @@ export class WakedashboardpageComponent implements OnInit {
   }
 
   async getdashboarddata() {
-    // //---------test------------
-    var wsname = "getdata";
+    //---------test------------
+    var wsname = "_getdata";
     var params = { tbname: "driverdashboard", uid: 135 };
     var jsondata = await this.va.WsData(wsname, params,"");
     this.show.Spinner = false;
@@ -116,7 +116,7 @@ export class WakedashboardpageComponent implements OnInit {
     for (var i = 0; i < this.activedashboad.length; i++) {
       listcom += ((listcom == "" ? "'" : ",'") + this.activedashboad[i].cid + "'");
     }
-    var wsname = "getdata";
+    var wsname = "_getdata";
     var params = { tbname: "companylogo", listcid: listcom };
     var header = "";
     var jsondata = await this.va.WsData(wsname, params, header);
