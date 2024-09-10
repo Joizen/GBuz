@@ -1,0 +1,27 @@
+#map-container {
+  position: relative;
+}
+
+.data-box-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;  /* จัดกล่องข้อมูลให้มีระยะห่าง */
+  background-color:transparent;
+  padding: 10px;
+  z-index: 1000;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* รูปแบบกล่องข้อมูล */
+.data-box {
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  width: 20hw;
+  text-align: center;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}

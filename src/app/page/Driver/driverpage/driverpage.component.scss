@@ -1,15 +1,13 @@
 .example-card {
-    max-width: 400px;
-  }
-  
-  .example-header-image {
-    // background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-    background-size: cover;
-  }
-  
+  max-width: 100%;
+}
 
-  .driverimg{
-    width: auto;
-    height: 100px;
-    border-radius: 50%;
-  }
+.example-header-image {
+  background-size: cover;
+}
+
+
+.driverimg {
+  width: 100%;
+  height: auto;
+}

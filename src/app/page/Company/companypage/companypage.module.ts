@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { CompanypageRoutingModule } from './companypage-routing.module';
 import { CompanypageComponent } from './companypage.component';
 import { MaterialModule } from '../../../material/material.module';
+import { EmployeecomppageModule } from "../../Employee/employeecomppage/employeecomppage.module";
+import { RoutecomppageModule } from "../../Route/routecomppage/routecomppage.module";
+import { VehiclecomppageModule } from "../../Vehicle/vehiclecomppage/vehiclecomppage.module";
+import { DroppointcomppageModule } from "../../Droppoint/droppointcomppage/droppointcomppage.module";
 
 
 @NgModule({
@@ -13,8 +17,12 @@ import { MaterialModule } from '../../../material/material.module';
   imports: [
     CommonModule,
     CompanypageRoutingModule,
-    MaterialModule
-  ],
+    MaterialModule,
+    EmployeecomppageModule,
+    RoutecomppageModule,
+    VehiclecomppageModule,
+    DroppointcomppageModule
+],
   exports:[
     CompanypageComponent
   ]

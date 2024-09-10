@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
-import { Dashboarddata,ProfileModel,DoCompany,DoData,DoActivity,Vehicledata} from '../../../models/datamodule.module';
+import { Dashboarddata,ProfileModel,DoCompany,DoData,DoActivity,VehicleDashboard} from '../../../models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as L from 'leaflet';
@@ -45,7 +45,7 @@ export class MaindashboardpageComponent implements OnInit {
    public listdashboadcom: DoCompany[] = [];
    public listdashboaddo: DoData[]=[];
    public listcompimage: any=[];
-   public listdashboadvehicle: Vehicledata[]=[];
+   public listdashboadvehicle: VehicleDashboard[]=[];
 
 
    public showtype=2;
@@ -73,7 +73,7 @@ export class MaindashboardpageComponent implements OnInit {
     // var params = { tbname: "driverdashboard" };
     // var jsondata = await this.va.getWsData(wsname, params);
 
-    console.log('getdashboarddata', jsondata);
+    console.log('getdashboarddata : ', jsondata);
     if (jsondata.code == '000') {
       this.listdostatus = await this.getlistdostatus(jsondata.data);
       console.log('getdashboarddata this.listdostatus :', this.listdostatus);
@@ -290,7 +290,7 @@ export class MaindashboardpageComponent implements OnInit {
   }
   
   async getvehicledata(listvehicle:string) {
-    var result:Vehicledata[] = []
+    var result:VehicleDashboard[] = []
     try{
       var wsname = 'getrealtimedata';
       var params = { tbname: 'vehiclerealtime', listserial: listvehicle };
@@ -300,7 +300,7 @@ export class MaindashboardpageComponent implements OnInit {
         console.log("getvehicledata jsondata : ",jsondata.data);
         if (jsondata.data.length > 0) {          
           jsondata.data.forEach((item: any) => {
-            var v:Vehicledata = new Vehicledata();
+            var v:VehicleDashboard = new VehicleDashboard();
             v.setdata(item);
             result.push(item);
             var vdo = this.listdashboaddo.filter(x=>x.serialbox==v.serialbox);
@@ -326,7 +326,7 @@ export class MaindashboardpageComponent implements OnInit {
 
   setVehiclePointindo(vehicle:any){
     try{
-      var v:Vehicledata = new Vehicledata();
+      var v:VehicleDashboard = new VehicleDashboard();
       v.setdata(vehicle);
       for(var i;i=this.listdashboadcom.length;i++){
         var comp =this.listdashboadcom[i];

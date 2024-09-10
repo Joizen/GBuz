@@ -24,3 +24,22 @@
     justify-content: center;
     text-align: center;
   }
+
+  .company-logo {
+    width: 50px; /* Set the width of the logo */
+    height: 50px; /* Set the height of the logo */
+    object-fit: contain; /* Ensure the logo fits nicely */
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap; /* ให้ไอเท็มเกินไปแสดงในบรรทัดใหม่ */
+    justify-content: space-between; /* จัดระยะห่างระหว่างการ์ด */
+  }
+  
+  .card-item {
+    flex: 1 1 calc(20% - 10px); /* ให้การ์ดมีความกว้าง 20% ของแถว */
+    margin: 5px; /* เว้นระยะห่างระหว่างการ์ด */
+    min-width: 200px; /* กำหนดความกว้างขั้นต่ำ */
+  }
+  

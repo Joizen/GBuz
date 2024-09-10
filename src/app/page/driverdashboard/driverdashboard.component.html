@@ -1,0 +1,543 @@
+<div class="container">
+  <!-- Search Filler -->
+  <div class="row mt-4">
+    <div class="col-lg-8 col-sm-12">
+      <div class="col-lg-12 col-sm-12 p-1" style="font-size: large; color: black; font-weight: 550;">
+        <div class="row align-items-center" style="gap:10px;">
+          <div class="col-auto p-0">
+            <mat-icon style="margin-left:10px; font-size: 24px;">dashboard</mat-icon>
+          </div>
+          <div class="col p-0">
+            <span style="display: inline-block;">Driver Dashboard</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12">
+      <div class="row">
+        <div class="col-9">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+              aria-describedby="button-addon">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon"
+              style="display: flex;align-items: center;border-color:#ced4da;">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="col-auto d-flex align-items-center" (click)="showdashboard()">
+          <mat-icon class="{{show ? 'viewcolumn':'viewall'}}">view_week</mat-icon>
+          <mat-icon class="{{show ? 'viewall':'viewcolumn'}}">view_module</mat-icon>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Driver Company Avatar -->
+<div *ngIf="1" class="row no-gutters zeroxy mt-3 d-flex flex-row justify-content-start align-items-center">
+
+  <div class="row zeroxy m-1 no-gutters d-flex justify-content-center" *ngFor="let comp of dashboardData">
+    <div class="col-12 col-lg-4 no-gutters d-flex justify-content-end">
+      <div class="col-0 col-lg-auto"></div>
+      <div class="col-12 col-lg-6 no-gutters zeroxy d-flex justify-content-center align-items-center ishadow">
+       
+        <div class="col-3 col-lg-3 no-gutters zeroxy d-flex justify-content-center align-items-center ps-1" matBadge=" {{comp.listdriver.length}}" matBadgePosition="before">
+          <img [src]="'../../../assets/images/logocomp/' + comp.companyname + '.jpg'" style=" max-width:60px;">
+        </div>
+  
+        <div class="col-7 col-lg-7 no-gutters zeroxy row d-flex justify-content-end align-items-center">
+          <div class="col-3 col-lg-3 no-gutters d-flex justify-content-end align-items-center no-gutters zeroxy"
+                style="background-color: #116bd2; color: white;width:20%; height:45px;">
+                <div class="row text-center mt-1 no-gutters">
+                  <div class="col-12"><mat-icon
+                      style="font-size:small;padding-top:4px;margin-bottom:-8px;">access_time</mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totalwakeup }}</span></div>
+                </div>
+          </div>
+          <div class="col-3 col-lg-3 no-gutters d-flex justify-content-end align-items-center no-gutters zeroxy"
+                style="background-color: #fb0000; color:white;width:20%; height:45px;">
+                <div class="row text-center no-gutters">
+                  <div class="col-12"><mat-icon
+                      style="font-size:small;padding-top:4px;margin-bottom:-8px;">local_bar</mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totalalgohol }}</span></div>
+                </div>
+          </div>
+          <div class="col-3 col-lg-3 no-gutters d-flex justify-content-end align-items-center no-gutters zeroxy"
+                style="background-color:orange;color:white;width:20%; height:45px;">
+                <div class="row text-center no-gutters">
+                  <div class="col-12"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:-8px;;"><span
+                        style="font-size:8px; font-family:Verdana; font-weight:bold;">TEMP</span></mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totaltemp }}</span></div>
+                </div>
+          </div>
+          <div class="col-3 col-lg-3 no-gutters d-flex justify-content-end align-items-center no-gutters zeroxy"
+                style="background-color: #5c8f4e;color:white;width:20%; height:45px;">
+                <div class="row text-center no-gutters">
+                  <div class="col-12"><mat-icon
+                      style="font-size:small;padding-top:4px;margin-bottom:-8px;">directions_car</mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totalstart }}</span></div>
+                </div>
+          </div>
+        </div>
+  
+      </div>
+      <div class="col-0 col-lg-auto"></div>
+    </div>
+
+    <div class="col-12 col-lg-6 m-2" style="padding:0 25px 0 25px;">
+      <div class="row mb-1">
+        <div class="col-6 ishadow">
+         <div class="row p-1">
+            <div class="col-auto d-flex align-items-center justify-content-center">
+              <mat-icon>local_bar</mat-icon>
+            </div>
+            <div class="col-8">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+            </div>
+         </div>
+        </div>
+        <div class="col-6 ishadow">
+          <div class="row p-1">
+            <div class="col-auto d-flex align-items-center justify-content-center">
+              <mat-icon>record_voice_over</mat-icon>
+            </div>
+            <div class="col-8">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+            </div>
+         </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 ishadow">
+          <div class="row p-1">
+            <div class="col-auto d-flex align-items-center justify-content-center">
+              <mat-icon>alarm_on</mat-icon>
+            </div>
+            <div class="col-8">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+            </div>
+         </div>
+        </div>
+        <div class="col-6 ishadow">
+          <div class="row p-1">
+            <div class="col-auto d-flex align-items-center justify-content-center">
+              <mat-icon>directions_car</mat-icon>
+            </div>
+            <div class="col-8">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+              <img class="ishadow" [src]="comp.listdriver[0].lineimage" style=" max-width:30px; margin-left: -10px; border-radius:50%;">
+            </div>
+         </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3 col-lg-2"></div>
+  </div>
+  
+
+</div>
+
+<!-- Driver Detail -->
+<div *ngIf="0" class="row d-flex flex-row justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1">
+  <div class="row d-flex justify-content-center align-items-center  no-gutters">
+    <div class="col-11 d-flex flex-wrap align-items-center justify-content-center no-gutters" style="overflow-x: auto;">
+      <div class="col-12 row d-flex justify-content-center align-items-center no-gutters"
+        *ngFor="let comp of dashboardData.slice(0,isDesktop)">
+
+        <!-- company data -->
+        <div class="col-11 my-1  justify-content-center ">
+          <div class="row" (click)="comp.showDetails=!comp.showDetails">
+
+            <div class="col-2">
+              <span matBadge=" {{comp.listdriver.length}}">{{ comp.companyname }}</span>
+            </div>
+
+            <div class="col-10 ishadow row">
+              <div class="col-1 d-flex justify-content-center align-items-center no-gutters"
+                style="background-color: #116bd2; color: white;">
+                <div class="row text-center mt-1 no-gutters">
+                  <div class="col-12"><mat-icon
+                      style="font-size:small;padding-top:4px;margin-bottom:-8px;">access_time</mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totalwakeup }}</span></div>
+                </div>
+              </div>
+              <div class="col-1 d-flex justify-content-center align-items-center no-gutters"
+                style="background-color: #fb0000; color:white">
+                <div class="row text-center no-gutters">
+                  <div class="col-12"><mat-icon
+                      style="font-size:small;padding-top:4px;margin-bottom:-8px;">local_bar</mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totalalgohol }}</span></div>
+                </div>
+              </div>
+              <div class="col-1 d-flex justify-content-center align-items-center no-gutters"
+                style="background-color:orange;color:white">
+                <div class="row text-center no-gutters">
+                  <div class="col-12"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:-8px;;"><span
+                        style="font-size:8px; font-family:Verdana; font-weight:bold;">TEMP</span></mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totaltemp }}</span></div>
+                </div>
+              </div>
+              <div class="col-1 d-flex justify-content-center align-items-center no-gutters"
+                style="background-color: #5c8f4e;color:white">
+                <div class="row text-center no-gutters">
+                  <div class="col-12"><mat-icon
+                      style="font-size:small;padding-top:4px;margin-bottom:-8px;">directions_car</mat-icon></div>
+                  <div class="col-12"><span class="font-weight-bold">{{ comp.totalstart }}</span></div>
+                </div>
+              </div>
+
+              <div class="col-8">a</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- driver data in company-->
+        <div class="col-12">
+          <div *ngIf="comp.showDetails"
+            class="row d-flex justify-content-start align-items-center no-gutters mx-2 mt-5 mb-1">
+            <div class="row d-flex justify-content-center align-items-center  no-gutters">
+              <div class="col-12 d-flex flex-wrap align-items-center justify-content-center no-gutters"
+                style="overflow-x: auto;">
+                <div class="{{isDesktop == 6 ? 'col-1':'col-11'}} ishadow no-gutters m-2 "
+                  *ngFor="let driver of listdriver">
+
+                  <div class="row zeroxy no-gutters iframhaft H1010">
+
+                    <!-- user image -->
+                    <div class="col-2">
+                      <img class="profileimg " src="../../../assets/images/user-ic.png">
+                    </div>
+
+                    <!-- user detail -->
+                    <div class="col-10">
+                      <!-- DRIVER -->
+                      <div class="row zeroxy no-gutters">
+                        <div class="col-12 d-flex justify-content-start align-items-center no-gutters">
+                          <span style="font-weight:500; font-size:x-small; text-transform:uppercase;">{{
+                            driver.drivername }}</span>
+                        </div>
+                      </div>
+
+                      <!-- VEHICLE -->
+                      <div class="row zeroxy no-gutters">
+                        <div class="col-12 no-gutters">
+                          <div class="row align-items-center justify-content-start">
+                            <div class="col-12">
+                              <span>{{ driver.vehiclename }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- STATAUS ICON -->
+                  <div class="row mx-1 no-gutters">
+                    <hr style="border: none; border-top: 1px dashed gray; margin:0px 0px 2px 0px" />
+                  </div>
+                  <div class="row justify-content-center m-1 no-gutters">
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center mt-1 no-gutters">
+                        <div class="col-12"><mat-icon [ngClass]="driver.wakeupicon"
+                            style="height: 30px;width: 30px;">access_time</mat-icon></div>
+
+                      </div>
+                    </div>
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center no-gutters">
+                        <div class="col-12"><mat-icon [ngClass]="driver.algohalicon"
+                            style="height: 30px;width: 30px;">local_bar</mat-icon></div>
+                      </div>
+                    </div>
+
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center no-gutters">
+                        <div class="col-12"><mat-icon [ngClass]="driver.tempicon" style="height: 30px;width: 30px;">
+                            <span style="font-size:8px; font-family:Verdana; font-weight:bold;">TEMP</span>
+                          </mat-icon></div>
+                      </div>
+                    </div>
+
+                    <div class="col-3 d-flex justify-content-center align-items-center no-gutters">
+                      <div class="row text-center no-gutters">
+                        <div class="col-12"><mat-icon [ngClass]="driver.starticon"
+                            style="height: 30px;width: 30px;">directions_car</mat-icon></div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Driver Dashboard All-->
+<div *ngIf="false" class="row mt-5 mx-5 d-flex flex-wrap justify-content-start">
+  <div class="col-lg-3 col-sm-12 my-2" *ngFor="let driver of listdriver" style="gap: 10px;">
+    <div class="col-12 ishadow">
+
+      <!-- Driver Information -->
+      <div class="row px-1 pt-2 d-flex flex-wrap align-items-center" style="margin: 0;">
+        <div class="col-6">
+          <div class="row align-items-center">
+            <div class="col-2">
+              <mat-icon class="mr-2" style="font-size: 1.35rem; margin-top:5px;">assignment</mat-icon>
+            </div>
+            <div class="col-10" style="font-weight: 500; text-transform: uppercase;">
+              <span>{{ driver.drivername }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="row align-items-center justify-content-end">
+            <div class="col-2">
+              <mat-icon class="mr-2" style="font-size: 1.35rem; margin-top:5px;">directions_car</mat-icon>
+            </div>
+            <div class="col-7" style="font-weight: 500; text-transform: uppercase;">
+              <span>{{ driver.vehiclename }}</span>
+            </div>
+            <div class="col-3">
+
+              <mat-icon style="font-size: 1.35rem;margin-top:5px;" (click)="toggleDetails(driver)">more_vert</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mx-1">
+        <hr style="border: none; border-top: 1px dashed gray; margin:2px -1px 10px -1px" />
+      </div>
+
+      <!-- Icons Section -->
+      <div class="row px-1 d-flex flex-wrap align-items-center" style="margin: 0;">
+        <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+          <div class="icon-container" style="background-color: #d9d9d9;">
+            <mat-icon class="icon-standard" [ngClass]="driver.wakeupicon"
+              style="height: 30px;width: 30px;">watch_later</mat-icon>
+          </div>
+        </div>
+        <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+          <div class="icon-container" style="background-color: #d9d9d9;">
+            <mat-icon class="icon-standard" [ngClass]="driver.algohalicon"
+              style="height: 30px;width: 30px;">record_voice_over</mat-icon>
+          </div>
+        </div>
+        <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+          <div class="icon-container" style="background-color: #d9d9d9;">
+            <mat-icon class="icon-standard" [ngClass]="driver.tempicon"
+              style="height: 30px;width: 30px;">hot_tub</mat-icon>
+          </div>
+        </div>
+        <div class="col-3 d-flex flex-wrap align-items-center justify-content-center">
+          <div class="icon-container" style="background-color: #d9d9d9;">
+            <mat-icon class="icon-standard" [ngClass]="driver.starticon"
+              style="height: 30px;width: 30px;">power_settings_new</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mx-1">
+        <hr style="border: none; border-top: 1px dashed none; margin:5px -1px 5px -1px" />
+      </div>
+
+      <div *ngIf="driver.showDetails" class="card-details">
+
+        <hr style="border: none; border-top: 1px dashed gray; margin:0px -1px 10px -1px" />
+
+        <div class="card-details-header">
+          <mat-icon>info</mat-icon>
+          <span>Driver Details</span>
+        </div>
+        <div class="card-details-content">
+          <div class="detail-item">
+            <span class="detail-label">Route Name:</span>
+            <span class="detail-value" style="display: flex; justify-content: end;">{{ driver.routename }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Wake-up Time:</span>
+            <span class="detail-value">{{ driver.wakeuptaget }} - {{ driver.wakeuptime }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Alcohol Level:</span>
+            <span class="detail-value">{{ driver.algohallevel }} - {{ driver.algohaltime }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Temperature Level:</span>
+            <span class="detail-value">{{ driver.templevel }} - {{ driver.temptime }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Start Target:</span>
+            <span class="detail-value">{{ driver.starttaget }} - {{ driver.starttime }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">First Point:</span>
+            <span class="detail-value">{{ driver.fistpoint }} - {{ driver.tagetfistpoint }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">End Point:</span>
+            <span class="detail-value">{{ driver.endpoint }} - {{ driver.tagetendpoint }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Location:</span>
+            <span class="detail-value">{{ driver.location }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Last Update:</span>
+            <span class="detail-value">{{ driver.lastupdate }}</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Driver Dashboard All-->
+<div *ngIf="!show" class="mx-2 mt-4 row no-gutters d-flex justify-content-center zeroxy">
+  <div class="row no-gutters d-flex justify-content-center">
+
+    <div *ngFor="let comp of dashboardData"
+      class="m-2 zeroxy no-gutters col-lg-1 col-sm-3 row d-flex align-items-center justify-content-start">
+
+      <!-- <div class="mx-2 col-lg-auto zeroxy icircle d-flex justify-content-center align-items-center ishadow" style="width: 40px; height:40px; background-color: #e1e7f5; border:1px;z-index: 3;">
+          <div class="zeroxy icircle d-flex justify-content-center align-items-center" style="background-color:white ;width: 37px; height: 37px;z-index:9;">
+            <img [src]="'../../../assets/images/logocomp/' + comp.companyname + '.jpg'" style="width:80%;">
+          </div>
+        </div> -->
+
+      <div class="row ishadow col-lg-12 col-sm-1" style="padding-bottom:15px;">
+
+        <!-- column 1 -->
+        <div class="col-lg-6 d-flex align-items-center justify-content-center"
+          style="z-index:999;margin:0px 0px 0px 0px;">
+
+          <div class="col-6 no-gutters zeroxy icircle d-flex justify-content-center"
+            style="position:static;z-index: 0;">
+            <div class="zeroxy icircle d-flex justify-content-center align-items-center"
+              style="width: 42px; height: 42px; z-index:9;">
+              <img [src]="'../../../assets/images/logocomp/' + comp.companyname + '.jpg'" style="width:100%;">
+            </div>
+          </div>
+
+          <div class="col-6 no-gutters zeroxy icircle d-flex justify-content-center"
+            style="background-color: darkgreen;color:white; position: static; z-index: 1;">
+            {{comp.listdriver.length}}
+          </div>
+
+        </div>
+
+        <!-- column 2 -->
+        <div class="col-lg-6 d-flex align-items-center justify-content-center"
+          style="z-index:999;margin:0px 0px 0px 0px;">
+          <!-- {{comp.totalwakeup}},
+           {{comp.totalalgohol}},
+           {{comp.totaltemp}},
+           {{comp.totalstart}} -->
+          <div class="row">
+            <!-- column 2 -->
+            <div class="col-lg-6 d-flex align-items-center justify-content-center"
+              style="z-index:999;margin:0px 0px 0px 0px;">
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- <div class="col-12 row no-gutters d-flex justify-content-center" style="border: none; border-bottom: 1px dashed #becdeb;">
+      <div class="col-lg-10 col-sm-12 d-flex justify-content-start align-items-center">{{comp.companyname}}</div>
+      <div class="col-lg-2 col-sm-12">
+        <div class="d-flex no-gutters zeroxy justify-content-end mx-4">
+
+          <div class="row no-gutters zeroxy">
+            <div class="col-12 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: darkgreen;color:white;">{{comp.listdriver.length}}</div>
+            <div class="col-12 no-gutters zeroxy d-flex justify-content-center"><mat-icon style="font-size:medium;">group</mat-icon></div>
+          </div>
+          <div class="row no-gutters zeroxy">
+            <div class="col-12 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: #116bd2;color:white;">{{comp.totalwakeup}}</div>
+            <div class="col-12 no-gutters zeroxy d-flex justify-content-center"><mat-icon style="font-size:medium;">access_time</mat-icon></div>
+          </div>
+          <div class="row no-gutters zeroxy">
+            <div class="col-12 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: #fb0000;color:white;">{{comp.totalalgohol}}</div>
+            <div class="col-12 no-gutters zeroxy d-flex justify-content-center"><mat-icon style="font-size:medium;">local_bar</mat-icon></div>
+          </div>
+          <div class="row no-gutters zeroxy">
+            <div class="col-12 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: orange;color:white;">{{comp.totaltemp}}</div>
+            <div class="col-12 no-gutters zeroxy d-flex justify-content-center"><mat-icon style="font-size:small;padding-top:4px;margin-bottom:10px;;"><span style="font-size:7px; font-family:Verdana; font-weight:bold;">TEMP</span></mat-icon></div>
+          </div>
+          <div class="row no-gutters zeroxy">
+            <div class="col-12 no-gutters zeroxy icircle d-flex justify-content-center" style="background-color: #5c8f4e;color:white;">{{comp.totalstart}}</div>
+            <div class="col-12 no-gutters zeroxy d-flex justify-content-center"><mat-icon style="font-size:medium;">directions_car</mat-icon></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-12 my-2 row no-gutters d-flex justify-content-start zeroxy">
+      <div class="col-lg-1 zeroxy m-1" *ngFor="let driver of comp.listdriver">
+        <div class="col-12 d-flex flex-wrap align-items-center justify-content-center zeroxy">
+            <div class="col-6 zeroxy" [ngClass]="driver.wakeupicon" style="border-radius: 5px 0 0 0;box-shadow:none;">
+              <mat-icon>watch_later</mat-icon>
+            </div>
+        <div class="col-6 zeroxy"[ngClass]="driver.algohalicon" style="border-radius: 0 5px 0 0;box-shadow:none;">
+              <mat-icon>record_voice_over</mat-icon>
+            </div>
+        </div>
+        <div class="col-12 d-flex flex-wrap align-items-center justify-content-center zeroxy">
+          <div class="col-6 zeroxy"[ngClass]="driver.tempicon" style="border-radius: 0 0 0 5px;box-shadow:none;">
+            <mat-icon>hot_tub</mat-icon>
+          </div>
+          <div class="col-6 zeroxy"[ngClass]="driver.starticon" style="border-radius: 0 0 5px 0;box-shadow:none;">
+            <mat-icon>power_settings_new</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</div>
