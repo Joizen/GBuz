@@ -1,0 +1,34 @@
+.container-spiner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: white;
+    opacity: 50%;
+    flex-direction: column;
+    z-index: 9999;
+    position:static;
+  }
+  
+  .company-logo {
+    width: 50px; /* Set the width of the logo */
+    height: 50px; /* Set the height of the logo */
+    object-fit: contain; /* Ensure the logo fits nicely */
+  }
+
+  .card-container {
+    display: flex; /* Flexbox layout for cards in a row */
+    justify-content: space-between; /* Space cards evenly */
+    gap: 16px; /* Optional: adds space between the cards */
+  }
+  
+  .company-card {
+    flex: 1; /* Ensure cards have equal width */
+    margin: 8px; /* Add margin around each card */
+    max-width: 30%; /* Limit card width to fit 3 cards in one row */
+  }
+  
+
+  
+  
+  

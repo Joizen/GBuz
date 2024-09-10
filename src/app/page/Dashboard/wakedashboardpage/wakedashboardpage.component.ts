@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
-import { Dashboarddata, DoDashboard, DriverActivity, CompanyDashboard, ProfileModel} from '../../../models/datamodule.module'
 import mqtt, { MqttClient } from 'mqtt';
 
 @Component({
@@ -12,23 +11,10 @@ import mqtt, { MqttClient } from 'mqtt';
 })
 export class WakedashboardpageComponent implements OnInit {
   constructor(public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar) { }
-
-  show = { Refreshpage: false, Spinner: true, Profile: false, Driverwork: false };
-  UserProfile = new ProfileModel();
-  ShowDriverlist = "keyboard_arrow_down";
-  public activedashboad: CompanyDashboard[] = [];
-  public listdashboad: Dashboarddata[] = [];
-  public activedriver: Dashboarddata = new Dashboarddata();
-
-  public mqttClient: any;
-
   async ngOnInit() {
-    // this.initLineToken();
-    this.getdashboarddata();
-    this.mqttClient = await this.connectMqtt();
-    this.subscribeMqtt(this.mqttClient, "gbdupdate");
-    this.subscribeMqtt(this.mqttClient, "gbvupdate");
+
   }
+<<<<<<< HEAD
 
 
   //----------------- Dash board Data ---------------------------------------
@@ -255,4 +241,6 @@ export class WakedashboardpageComponent implements OnInit {
       { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });
   }
 
+=======
+>>>>>>> dbd09c0e6db5da2c028685eef8fcf7e51bf9f3da
 }

@@ -15,17 +15,18 @@ export class variable {
 
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
-  // public iconuser = this.imagepath + "user-ic.png";
-  // public iconpoi = this.imagepath + "poi.png";
-  // public iconlogo = this.imagepath + "logo.png";
-  // public iconnologo = this.imagepath + "nologo.png";
-  // public iconthispoint = this.imagepath + "nologo.png";
   public liffId = "2005033993-ARK31Ewk";
   public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
 
+<<<<<<< HEAD
   public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
   // public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
  
+=======
+  public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
+  // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: ""}
+
+>>>>>>> dbd09c0e6db5da2c028685eef8fcf7e51bf9f3da
   public icon = this.Seticon();
 
 

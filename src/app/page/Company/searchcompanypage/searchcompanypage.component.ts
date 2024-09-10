@@ -1,8 +1,13 @@
 import { Component, OnInit,ViewChild} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { variable } from '../../../variable';
+import {Companydata} from '../../../models/datamodule.module'
+
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {CompanyModel} from './searchcompanypage.module';
 
 @Component({
   selector: 'app-searchcompanypage',
@@ -10,12 +15,20 @@ import {CompanyModel} from './searchcompanypage.module';
   styleUrls: ['./searchcompanypage.component.scss']
 })
 export class SearchcompanypageComponent implements OnInit{
-  constructor() {}
-  public mainData : CompanyModel[] = []; 
+  constructor(
+    private modalService: NgbModal,
+    public va: variable,
+    private dialog: MatDialog,
+    private snacbar: MatSnackBar
+  ) {}
+
+  show = {Spinner: true,viewtype:0};
+  public companydata : Companydata[] = []; 
   public displayedColumns: string[] =[];
   public displayedColumnsData: string[] =[]  ;
-  // public  dataSource = new MatTableDataSource(this.mainData); 
-  public  dataSource = new MatTableDataSource(this.mainData); 
+  public activecompany : Companydata = new Companydata(); 
+  // public  dataSource = new MatTableDataSource(this.companydata); 
+  public  dataSource = new MatTableDataSource(this.companydata); 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -36,29 +49,49 @@ export class SearchcompanypageComponent implements OnInit{
 
   getSumdata(columnname:string){
     if(columnname=="totalroute"){
-      return this.mainData.reduce((accum:any, curr:any) => accum + curr.totalroute, 0);
+      return this.companydata.reduce((accum:any, curr:any) => accum + curr.totalroute, 0);
     } else if(columnname=="totalemployee"){
-      return this.mainData.reduce((accum:any, curr:any) => accum + curr.totalemployee, 0);
+      return this.companydata.reduce((accum:any, curr:any) => accum + curr.totalemployee, 0);
     }
   }
 
   async setData(){
     this.displayedColumns = ['id', 'company', 'totalroute', 'totalemployee'];
-    this.displayedColumnsData = ['id', 'company', 'totalroute', 'totalemployee'];
-    this.mainData = await this.getData();
-    this.dataSource = new MatTableDataSource(this.mainData); 
+    this.displayedColumnsData = ['id', 'company', 'totalroute', 'totalemp'];
+    this.companydata = await this.getData();
+    this.dataSource = new MatTableDataSource(this.companydata); 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-
   }
 
   async getData(){
-    return [
-      {id: 1, company: "Adient (โรงใหญ่)", totalroute: 0, totalemployee:0},
-      {id: 2, company: "STI", totalroute: 0, totalemployee:0},
-      {id: 3, company: "คอลัมน์", totalroute: 0, totalemployee:0},
-      {id: 4, company: "เจเทค,", totalroute: 0, totalemployee:0},
-    ];
+    var result:Companydata[] =[]; 
+    var wsname = '_getdata';
+    var params = { tbname: 'company', uid: 1 };
+    var jsondata = await this.va.WsData(wsname, params, '');
+    console.log("getData jsondata : ",jsondata);
+    if(jsondata.code=="000"){
+      jsondata.data.forEach((data:any) => {
+        var temp = new Companydata();
+        temp.setdata(data);
+        result.push(temp);
+      });
+    }else{
+
+    }
+    this.show.Spinner = false;
+    return result;
+    
+  }
+
+  opencompanydata(comp:Companydata, modal:any){
+    console.log("opencompanydata comp : ",comp);
+    this.activecompany = comp;
+    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+
+  }
+  companytalkback(event:any){
+
   }
 
 }

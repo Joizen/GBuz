@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SearchcompanypageRoutingModule } from './searchcompanypage-routing.module';
 import { SearchcompanypageComponent } from './searchcompanypage.component';
 import { MaterialModule } from '../../../material/material.module';
+import { CompanypageModule } from "../companypage/companypage.module";
 
 @NgModule({
   declarations: [
@@ -13,13 +14,9 @@ import { MaterialModule } from '../../../material/material.module';
     CommonModule,
     SearchcompanypageRoutingModule,
     MaterialModule,
-  ]
+    CompanypageModule
+]
 })
 export class SearchcompanypageModule { }
-export interface  CompanyModel { 
-  id: number;
-  company: string;
-  totalroute: number;
-  totalemployee: number;
-}
+
 

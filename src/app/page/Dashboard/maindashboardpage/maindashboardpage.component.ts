@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
-import { Dashboarddata,DoDashboard, DriverActivity, CompanyDashboard, ProfileModel,
-         DoCompany,DoData,DoActivity,Vehicledata} from '../../../models/datamodule.module';
+import { Dashboarddata,ProfileModel,DoCompany,DoData,DoActivity,Vehicledata} from '../../../models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as L from 'leaflet';

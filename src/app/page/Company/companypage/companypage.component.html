@@ -1,1 +1,53 @@
+<!-- spinner -->
+<div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+        Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div class="position-relative" style="height: 100%; width:100%;">
+    <div  class="card-container">
+        <div class="company-card" >
+          <mat-card >
+            <mat-card-header >
+              <div mat-card-avatar>
+                <img [src]="activecompany.complogo" class="company-logo">
+              </div>
+              <mat-card-title>{{ activecompany.companyname }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="row" >
+                <p><mat-icon  mat-raised-button matTooltip="ผู้ติดต่อ" > 
+                  contacts
+                </mat-icon> : {{ activecompany.contract }}</p>
+              </div>
+              <div class="row">
+                <p><mat-icon  mat-raised-button matTooltip="เบอรฺโทร">
+                  phone
+                </mat-icon> : {{ activecompany.phone }}</p>            
+              </div>
+              <div class="row">
+                <div class="col" style="display: flex; align-items: center;">
+                  <p><mat-icon  mat-raised-button matTooltip="จำนวนพนักงาน">
+                    person
+                  </mat-icon> : {{ activecompany.totalemp }}</p>   
+                </div>
+                <div class="col" style="display: flex; align-items: center;">
+                  <p><mat-icon mat-raised-button matTooltip="จำนวนเส้นทาง">
+                    rv_hookup
+                  </mat-icon> : {{ activecompany.totalroute }}</p>            
+                  </div>
+                <div class="col" style="display: flex; align-items: center;">
+                  <p><mat-icon mat-raised-button matTooltip="จำนวนรถ">
+                    directions_bus
+                  </mat-icon> : {{ activecompany.totalvehicle }}</p>            
+                  </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+          </div>
+      </div>
+    
+  </div>
 

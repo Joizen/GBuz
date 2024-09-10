@@ -153,6 +153,8 @@ export class SearchdriverpageComponent implements OnInit {
     ]
   }
 
+  
+
   openDialog(row : any) {
 
   }
