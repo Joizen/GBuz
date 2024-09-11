@@ -18,8 +18,8 @@ export class variable {
   public liffId = "2005033993-ARK31Ewk";
   public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
 
-  public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
-  // public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
+  // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
+  public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
  
 
   public icon = this.Seticon();
@@ -156,6 +156,24 @@ export class variable {
     else if(id==25){return "On the way";} //เขียว
     else if(id==30){return "Finish";} //เทา
     else{return "Not available ";} //สีขาว
+  }
+  public getvcolor(id:number){
+    if(id==30){return "#03af15";} //เขียว
+    else if(id==31){return "#fab704";} //เหลือง
+    else if(id==33){return "#fa0404";} //แดง
+    else if(id==41){return "#6803bd";} //ม่วง
+    else if(id==80){return "#949494";} //เทา
+    else if(id==60||id==61||id==62){return "#1830fa";} //เทาอ่อน
+    else{return "#d6d4d4";} //949494
+  }
+  public getvstatusname(id:number){
+    if(id==30){return "กำลังเดินทาง";} //เขียว
+    else if(id==31){return "หยุดรถ (ไม่ดับเครื่อง)";} //เหลือง
+    else if(id==33){return "จอดรถ (ดับเครื่อง)";} //แดง
+    else if(id==41){return "ความเร็วเกินกำหนด";} //ม่วง
+    else if(id==80){return "ไม่พบ GPS";} //เทา
+    else if(id==60||id==61||id==62){return "ไฟไม่เข้ากล่อง";} //เทาอ่อน
+    else{return "ไม่ทราบสถานะ";} //949494
   }
   // =========== APIs & Webservice =========================
 

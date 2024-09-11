@@ -208,6 +208,7 @@ export class DoData {
   vlat: number = 0.0;
   vlng: number = 0.0;
   vstatus: number = 0.0;
+  vstatuscorlor: string = "#d6d4d4"
   vstatusname: string = "";
   vlocation: string = "";
   vlocationcode: string = "";
@@ -239,6 +240,7 @@ export class DoData {
   otwshowtime: string = ""
   finishshowtime: string = ""
   statuscorlor: string = "#fdfefe"
+  
   laststatus: number = 0;
   nextwarn: string = "";
   nextwarntime: string = "2000-01-01 00:00:00";

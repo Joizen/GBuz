@@ -314,11 +314,14 @@ export class MaindashboardpageComponent implements OnInit {
                 mydo.vspeed =v.speed;
                 mydo.vheader =v.header;
                 mydo.vio =v.io;
+                mydo.vstatuscorlor = this.va.getvcolor(v.gpsstatus);
+                mydo.vstatusname = this.va.getvstatusname(v.gpsstatus);
               });
             }
           });
         }
       }
+      console.log(this.listdashboaddo);
   
     }catch(ex){console.log("getvehicledata error : ",ex)}
     return result;
@@ -719,7 +722,7 @@ export class MaindashboardpageComponent implements OnInit {
     this.listdashboaddo.forEach(vehicle => {
       if(vehicle.vlat!=0&&vehicle.vlng!=0){
         var details = vehicle.doname
-        var marker = this.plotMarker(vehicle.vlat,vehicle.vlng,vehicle.fullname,details,vehicle.lineimage);
+        var marker = this.plotMarker(vehicle.vlat,vehicle.vlng,vehicle.fullname,details,vehicle.lineimage,vehicle.vstatuscorlor);
         if(marker!=null){
           var id:number = vehicle.vid;
           this.vmarkers.push({id, marker});
@@ -731,12 +734,14 @@ export class MaindashboardpageComponent implements OnInit {
     this.vmarkers
    }
 
-   private plotMarker(lat:any,lng:any,header:string,description:string,image:any){
-    if(this.map){      
+   private plotMarker(lat:any,lng:any,header:string,description:string,image:any,vstatus:string){
+    if(this.map){     
+      // var vstatus ="#fa0404"; 
       const customIcon = L.divIcon({
         html:`<div style="position: relative; width:${this.mapIconSize}px; height:${(this.mapIconSize*2)}px; display: flex;">'+
-                <img src="${this.va.icon.poi}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;" />'+
-                <img src="${image}" style="position: absolute; top: 5%; left: 10%; width: 80%; height: 40%;  border-radius: 50%; z-index: 2; opacity: 1.0;" />' +
+                <img src="${this.va.icon.poi}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;" />
+                <img src="${image}" style="position: absolute; top: 5%; left: 10%; width: 80%; height: 40%;  border-radius: 50%; z-index: 2; opacity: 1.0;" />
+                <div style="position: absolute; bottom: 0%; left: 35%; width: 30%; height: 30%;  border-radius: 50%; z-index: 2; opacity: 1.0; background-color:${vstatus}"  />
               </div>`,
         className: '', // Remove default styling
         iconSize: [this.mapIconSize, this.mapIconSize*2], // Adjust size for side-by-side images
@@ -773,6 +778,7 @@ export class MaindashboardpageComponent implements OnInit {
             html:`<div style="position: relative; width:${newSize}px; height:${(newSize*2)}px; display: flex;">
                     <img src="${this.va.icon.poi}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;" />
                     <img src="${image}" style="position: absolute; top: 5%; left: 10%; width: 80%; height: 40%;  border-radius: 50%; z-index: 2; opacity: 1.0;" />
+                    <div style="position: absolute; bottom: 0%; left: 35%; width: 30%; height: 30%;  border-radius: 50%; z-index: 2; opacity: 1.0; background-color:${vstatus}"  />
                   </div>`,
             className: '', // Remove default styling
             iconSize: [newSize, newSize*2], // Adjust size for side-by-side images
