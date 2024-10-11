@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { QRCodeModule } from 'angularx-qrcode';
 import {variable} from './variable'
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -32,6 +33,7 @@ import {variable} from './variable'
     GoogleMapsModule,
     FormsModule,
     MatFormFieldModule,
+    MatSelectModule,
     MatButtonModule,
     MatDialogModule,
     MatCardModule,

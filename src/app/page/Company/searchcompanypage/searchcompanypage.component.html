@@ -11,41 +11,51 @@
   <div *ngIf="show.viewtype==0">
     <div class="card-container">
       <div class="company-card" *ngFor="let comp of companydata">
-        <mat-card (click)="opencompanydata(comp,compdetailmodal)">
-          <mat-card-header>
+        <mat-card (dblclick)="opencompanydata(comp,compdetailmodal)">
+          <mat-card-header class="custom-header">
             <div mat-card-avatar>
               <img [src]="comp.complogo" class="company-logo">
             </div>
-            <mat-card-title>{{ comp.companyname }}</mat-card-title>
+            <mat-card-title class="truncate-title">{{ comp.companyname }}</mat-card-title>
           </mat-card-header>
+
           <mat-card-content>
-            <div class="row">
-              <p><mat-icon mat-raised-button matTooltip="ผู้ติดต่อ">
-                  contacts
-                </mat-icon> : {{ comp.contract }}</p>
+            <div class="custom-header" matTooltip="ผู้ติดต่อ" >
+              <mat-icon> contacts</mat-icon>
+              <span> {{ comp.contract }}</span>
             </div>
-            <div class="row">
-              <p><mat-icon mat-raised-button matTooltip="เบอรฺโทร">
-                  phone
-                </mat-icon> : {{ comp.phone }}</p>
+
+            <div class="custom-header"  matTooltip="หมายเลขโทรศัพท์">
+              <mat-icon> phone</mat-icon>
+              <span>{{ comp.phone }}</span>
             </div>
+
             <div class="row">
-              <div class="col" style="display: flex; align-items: center;">
-                <p><mat-icon mat-raised-button matTooltip="จำนวนพนักงาน">
-                    person
-                  </mat-icon> : {{ comp.totalemp }}</p>
+              <div class="col" style="display: flex; align-items: center; gap:10px"
+                    matTooltip="จำนวนพนักงาน">
+                  <mat-icon> person </mat-icon>
+                  <span>{{ comp.totalemp }}</span>
               </div>
-              <div class="col" style="display: flex; align-items: center;">
-                <p><mat-icon mat-raised-button matTooltip="จำนวนเส้นทาง">
-                    rv_hookup
-                  </mat-icon> : {{ comp.totalroute }}</p>
+
+              <div class="col" style="display: flex; align-items: center; gap:10px"
+                  matTooltip="จำนวนเส้นทาง รับ-ส่งพนักงาน">
+                  <mat-icon> rv_hookup </mat-icon> 
+                  <span>{{ comp.totalroute }}</span>
               </div>
-              <div class="col" style="display: flex; align-items: center;">
-                <p><mat-icon mat-raised-button matTooltip="จำนวนรถ">
-                    directions_bus
-                  </mat-icon> : {{ comp.totalvehicle }}</p>
+
+              <div class="col" style="display: flex; align-items: center; gap:10px"
+                   matTooltip="จำนวนรถที่มีงานรับ-ส่งพนักงาน">
+                  <mat-icon> directions_bus </mat-icon>
+                  <span>{{ comp.totalvehicle }}</span>
+              </div>
+
+              <div class="col" style="display: flex; align-items: center; gap:10px"
+                  matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
+                <mat-icon> location_on </mat-icon>
+                <span>{{ comp.totaldrop }}</span>
               </div>
             </div>
+
           </mat-card-content>
         </mat-card>
       </div>

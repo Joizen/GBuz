@@ -26,6 +26,7 @@ export class EmployeecomppageComponent implements OnInit {
   
 
   async ngOnInit() {
+    console.log("Employeecomppage ngOnInit activecompany",this.activecompany)
     this.maindata = await this.getData();
   }
 
@@ -33,10 +34,10 @@ export class EmployeecomppageComponent implements OnInit {
 
   async getData() {
     var result: Employeedata[] = [];
-    var wsname = '_getdata';
+    var wsname = 'getdata';
     var params = { tbname: 'empcomp', compid: this.activecompany.id};
-    var jsondata = await this.va.WsData(wsname, params, '');
-    console.log("getData jsondata : ", jsondata);
+    var jsondata = await this.va.getwsdata(wsname, params);
+    // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new Employeedata();

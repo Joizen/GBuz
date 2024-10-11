@@ -5,6 +5,8 @@ import { VehiclecomppageRoutingModule } from './vehiclecomppage-routing.module';
 import { VehiclecomppageComponent } from './vehiclecomppage.component';
 import { MaterialModule } from 'src/app/material/material.module';
 import { VehiclepageModule } from "../vehiclepage/vehiclepage.module";
+import { PlandatapageModule } from '../../Plan/plandatapage/plandatapage.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import { VehiclepageModule } from "../vehiclepage/vehiclepage.module";
     CommonModule,
     VehiclecomppageRoutingModule,
     MaterialModule,
-    VehiclepageModule
+    VehiclepageModule,
+    PlandatapageModule,
+    FormsModule
 ],
   exports:[
     VehiclecomppageComponent

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 const routes: Routes = [
   { path: '', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
   { path: 'login', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
@@ -35,6 +34,9 @@ const routes: Routes = [
   { path: 'routecomp', loadChildren: () => import('./page/Route/routecomppage/routecomppage.module').then(m => m.RoutecomppageModule) },
   { path: 'droppointcomp', loadChildren: () => import('./page/Droppoint/droppointcomppage/droppointcomppage.module').then(m => m.DroppointcomppageModule) },
   { path: 'droppointdata', loadChildren: () => import('./page/Droppoint/droppointpage/droppointpage.module').then(m => m.DroppointpageModule) },
+  { path: 'routevehicle', loadChildren: () => import('./page/Route/routevehiclepage/routevehiclepage.module').then(m => m.RoutevehiclepageModule) },
+  { path: 'usercom', loadChildren: () => import('./page/User/usercompage/usercompage.module').then(m => m.UsercompageModule) },
+  { path: 'selectvehicleplan', loadChildren: () => import('./page/Plan/selectvehicleplanpage/selectvehicleplanpage.module').then(m => m.SelectvehicleplanpageModule) },
 ];
 
 @NgModule({

@@ -1,0 +1,25 @@
+.container-spiner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: white;
+    opacity: 50%;
+    flex-direction: column;
+    z-index: 9999;
+    position:static;
+}
+
+.company-logo {
+    width: 50px; /* Set the width of the logo */
+    height: 50px; /* Set the height of the logo */
+    object-fit: contain; /* Ensure the logo fits nicely */
+}
+
+
+.icon-inrow {
+    display: flex;
+    align-items: center; /* Centers the content vertically */
+    gap: 10px;
+    padding: 10px;
+}

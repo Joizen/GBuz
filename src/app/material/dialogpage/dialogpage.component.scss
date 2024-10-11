@@ -1,0 +1,7 @@
+::ng-deep .cdk-overlay-container {
+  z-index: 1100 !important; /* Set this higher than NgbModal's z-index (1050) */
+}
+
+.custom-backdrop {
+  z-index: 1090 !important; /* Ensure the backdrop of MatDialog is also above NgbModal backdrop */
+}

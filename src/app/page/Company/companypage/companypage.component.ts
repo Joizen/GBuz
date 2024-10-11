@@ -24,5 +24,6 @@ export class CompanypageComponent implements OnInit {
   show = {Spinner: true};
   ngOnInit(): void {
     this.show.Spinner=false;
+    console.log("Companypage ngOnInit activecompany",this.activecompany)
   }
 }

@@ -40,10 +40,10 @@ export class SearchdriverpageComponent implements OnInit {
 
   async getDriver() {
     var result: Driverdata[] = [];
-    var wsname = '_getdata';
-    var params = { tbname: 'driver', uid: 1 };
-    var jsondata = await this.va.WsData(wsname, params, '');
-    console.log("getData jsondata : ", jsondata);
+    var wsname = 'getdata';
+    var params = { tbname: 'driver'};
+    var jsondata = await this.va.getwsdata(wsname, params);
+    // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new Driverdata();

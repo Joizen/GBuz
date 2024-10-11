@@ -1,13 +1,19 @@
-<mat-sidenav-container>
+<mat-sidenav-container >
 
     <mat-sidenav mode="over" [(opened)]="menuopen" style="background-color: #1e88e5;">
-      <mat-toolbar style="background-color: #1976d2;">
-        <mat-icon style="color: #b3e5fc;">account_circle</mat-icon>
-        <span style="width: 80%; padding: 10px; color: white;">User Name</span>
+      <mat-toolbar style="background-color: #1976d2;" >
+        <img class="userimg" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <div class="empname" style="margin-left: 10px; font-size: medium ;">{{UserProfile?UserProfile.empname:''}} </div>
+            <div style="margin-left: 10px; font-size: small;"> {{UserProfile?UserProfile.rolename:''}} </div>
+        </div>   
+<!--         
+        <span style="width: 80%; padding: 10px; color: white;"> {{UserProfile?UserProfile.empname:''}}</span> -->
         <mat-icon (click)="menuopen=false" style="color: white; display: flex; justify-content: flex-end;">navigate_before</mat-icon>
       </mat-toolbar>
+
       <div class="container">
-        <div *ngIf="false" (click)="openPage('login')"  class="clickable-div">
+        <div *ngIf="false" (click)="openPage('login')"  class="clickable-div" >
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">login </span>
         </div>
@@ -36,7 +42,7 @@
             <span class="menu-item">driverdata </span>
         </div>
 
-        <div *ngIf="false" (click)="openPage('vehicle')" class="clickable-div">
+        <div *ngIf="true" (click)="openPage('vehicle')" class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">vehicle </span>
         </div>
@@ -115,27 +121,37 @@
 
         <hr style="border: none; border-top: 1px dashed white;margin:0;"/>
 
-        <div class="clickable-div">
+        <div class="clickable-div" (click)="openPage('login')">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">input</mat-icon>
             <span class="menu-item"> LOGOUT </span>
         </div>
     </div>
     </mat-sidenav>
 
-    <mat-sidenav-content>
-      <mat-toolbar class="navbar" style="background-color:#1976d2;" >
+    <mat-sidenav-content  >
+      <mat-toolbar class="navbar" style="background-color:#1976d2;" *ngIf="showmenu">
         <div class="d-flex flex-wrap align-items-center">
-          <mat-icon class="navmenu" (click)="showMenu()" style="color: #b3e5fc;">menu</mat-icon>
+          <mat-icon class="navmenu" (click)="menuopen=true" style="color: #b3e5fc;">menu</mat-icon>
           <img src="../assets/images/sym_g.png" style="height: 35px;">
           <span style="color: #8fbeed; font-size: medium;">Driver</span>
+          
         </div>
   
         <div class="d-flex flex-wrap align-items-center">
+            
+            <span class="m-2" *ngIf="resetcounter!=60" style="color: #8fbeed; font-size: medium;">{{resetcounter}}</span>
+            <mat-icon *ngIf="timeLeft<=0" class="navmenu" style="color: #b3e5fc;">refresh</mat-icon>
+            <span class="m-2" style="color: #8fbeed; font-size: medium;">{{colck | date: 'dd-MM-yyyy HH:mm:ss'}}</span>
+
           <mat-icon class="navmenu" style="color: #b3e5fc;">info</mat-icon>
           <span class="navtxt">About</span>
   
           <mat-icon class="navmenu" style="color: #b3e5fc;">description</mat-icon>
           <span class="navtxt">Manual</span>
+
+          <img class="userimg ml-5" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
+
+
         </div>
       </mat-toolbar>
       <router-outlet></router-outlet>

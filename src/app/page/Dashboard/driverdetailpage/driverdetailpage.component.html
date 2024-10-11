@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="modal-body">
+    <div class="modal-body" >
         <div>
             <!-- company & close button -->
             <div class="container" style="display: flex; justify-content: space-between; align-items: center; 
@@ -26,7 +26,7 @@
             </div>
 
             <!-- User image -->
-            <div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom:20px ; 
+            <div class="row" style="display: flex; justify-content: space-between; align-items: center;  margin: 20px; 
                         width:100%;" >
                 <div class="col" style="flex: 0 0 auto;gap: 5px;" (click)="setcurrentposition()">
                     <img [src]="activedriver.lineimage==''? va.icon.user : activedriver.lineimage" class="profileimg">
@@ -35,7 +35,7 @@
             </div>
 
              <!-- Body -->
-            <div class="row" style="display: flex; height: 100%;">
+            <div class="row" style="display: flex; height: 100%; margin: 20px;">
                 <!-- Route Data -->
                 <div class="col" style="flex: 1; width:100%; height:100%;">
                     <!-- Route Data -->
@@ -88,12 +88,14 @@
         
                     <!-- event log -->
                     <br><br>
-                    <div class="row px-3" style="height:2px; background-color: lightgray;"></div>
-                    
                     <div class="row px-3">
-                        <h4> Activity Log</h4>
+                        <div class="container" style="display: flex; justify-content: center; align-items: center; 
+                        width:100%; padding: 10px;background-color: lightblue;">
+                         <h4 style="font-weight:bold;"> Activity Log</h4>
+                        </div>
+                        
                     </div>
-                    <div class="row px-3" style="height:2px; background-color: lightgray;"></div>
+
                     <br>
                     <div *ngFor="let event of activedriver.listactivity">
                         <div class="row px-3"  [style.color]="event.transtatus==0?'#f5071d':'#036d0e'">
@@ -118,13 +120,19 @@
                     </div>
                     <br><br>
                     <div class="container" style="display: flex; justify-content: space-between; align-items: center; 
-                    width:100%; margin: 20px;">
+                                width:100%; margin: 20px;">
                         <div class="col" style="flex: 0 0 auto;">
                             <mat-icon style="width: auto; color: red;" *ngIf = "(activedriver.laststatus!=0)"
                                 (click)="Changestatus(activedriver.laststatus,0)">
                                 {{va.getactiveicon(activedriver.laststatus)}}
                             </mat-icon>
 
+                        </div>
+                        <div class="col" >
+                            <mat-form-field appearance="fill">
+                                <textarea matInput placeholder="Message for line of Driver" cdkTextareaAutosize></textarea>
+                              </mat-form-field>
+                            <button> sens to line</button>
                         </div>
                         <div class="col" style="flex: 0 0 auto; text-align: right;">
                             <div class="row">

@@ -9,28 +9,33 @@
 
 
 <body style=" z-index: 0; position:static;">
-  <!-- <span style="color: #cbccbb; font-size: xx-large;">Gbus Driver</span>
-  <input required="required" type="text" name="text" placeholder="Username">
-  <input *ngIf="!user.showpwd" required="required" type="password" name="pwd" placeholder="Password">
-  <input *ngIf="user.showpwd" required="required" type="text" name="pwd" placeholder="Password">
-  <input type="checkbox" value="remember-me"><small>&nbsp;Show Password</small>
-  <button type="button" class="btn btn-lg btn-success" (click)="onSubmit()">Login</button> -->
 
-<!-- 
-<div class="row d-flex align-content-center justify-content-center" style="z-index: 1; background-color: greenyellow; position:absolute;">
-  <div class="col-12" style="background-color: orange;">
-    <Span class="row d-flex align-content-center justify-content-center">HELLO</Span>
-  </div>
-</div> -->
-
-<div class="row row d-flex align-content-center justify-content-center" style="height: 100vh;position:static;">
-
-  <div class="col-1 H1031">
-    <Span class="row d-flex align-content-center justify-content-center">Please Wait ............ </Span>
+  <div class="container">
+    <div class="frame">
+      <form>
+        <mat-form-field class="full-width">
+          <mat-label>Login</mat-label>
+          <input name="userLogin" [(ngModel)]="login.user" matInput placeholder="Enter Login" >
+        </mat-form-field>
+        <p>Login Value: {{ login.pwd }}</p> 
+  
+        <mat-form-field class="full-width">
+          <mat-label>Password</mat-label>
+          <input  name="userpassword" [(ngModel)]="login.pwd" matInput placeholder="Enter password" 
+                  [type]="passwordVisible ? 'text' : 'password'" >
+          <button mat-icon-button matSuffix type="button" (click)="passwordVisible = !passwordVisible">
+            <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+  
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" (click)="onLoginClkick()">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
   
-</div>
-
-
 </body>
 

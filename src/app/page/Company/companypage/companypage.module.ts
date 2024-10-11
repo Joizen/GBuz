@@ -8,6 +8,7 @@ import { EmployeecomppageModule } from "../../Employee/employeecomppage/employee
 import { RoutecomppageModule } from "../../Route/routecomppage/routecomppage.module";
 import { VehiclecomppageModule } from "../../Vehicle/vehiclecomppage/vehiclecomppage.module";
 import { DroppointcomppageModule } from "../../Droppoint/droppointcomppage/droppointcomppage.module";
+import { UsercompageModule } from '../../User/usercompage/usercompage.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { DroppointcomppageModule } from "../../Droppoint/droppointcomppage/dropp
     EmployeecomppageModule,
     RoutecomppageModule,
     VehiclecomppageModule,
-    DroppointcomppageModule
+    DroppointcomppageModule,
+    UsercompageModule
 ],
   exports:[
     CompanypageComponent

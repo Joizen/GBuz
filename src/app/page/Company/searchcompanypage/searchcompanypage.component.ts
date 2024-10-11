@@ -8,6 +8,7 @@ import { Companydata } from '../../../models/datamodule.module'
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-searchcompanypage',
@@ -16,6 +17,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class SearchcompanypageComponent implements OnInit {
   constructor(
+    private router: Router,
     private modalService: NgbModal,
     public va: variable,
     private dialog: MatDialog,
@@ -33,8 +35,17 @@ export class SearchcompanypageComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
-
+    this.checktoken();
   }
+  checktoken(){
+    var token = this.va.gettoken();
+    console.log("token : ",token);
+    if(!token || token==""){
+      this.router.navigate(["login"]);
+    }
+ 
+   }
+
   ngAfterViewInit() {
     this.setData();
   }
@@ -66,10 +77,10 @@ export class SearchcompanypageComponent implements OnInit {
 
   async getData() {
     var result: Companydata[] = [];
-    var wsname = '_getdata';
-    var params = { tbname: 'company', uid: 1 };
-    var jsondata = await this.va.WsData(wsname, params, '');
-    console.log("getData jsondata : ", jsondata);
+    var wsname = 'getdata';
+    var params = { tbname: 'company' };
+    var jsondata = await this.va.getwsdata(wsname, params);
+    // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new Companydata();
@@ -89,7 +100,6 @@ export class SearchcompanypageComponent implements OnInit {
     this.activecompany = comp;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     this.modalService.open(modal, { fullscreen: true });
-
   }
   companytalkback(event: any) {
 

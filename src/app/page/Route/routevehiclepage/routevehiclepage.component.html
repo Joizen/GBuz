@@ -1,0 +1,115 @@
+<!-- spinner -->
+<div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+      Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
+    <!-- Route data & close button -->
+    <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center; 
+                    width:100%; background-color: lightblue; margin: 0;">
+      <div class="col" style="flex: 0 0 auto;">
+        <img class="company-logo me-4" [src]="company.complogo==''? va.icon.nologo : company.complogo">
+        <span style="font-size: large;">{{activeroute.routename}} </span>
+        <span class="m-2" style="font-size: large;"> ({{activeroute.routetypename}}) </span>
+      </div>
+      
+      <div class="col" style="flex: 0 0 auto; text-align: right; margin: 20px;">
+        <div class="row">
+          <div class="col" style="display: flex; align-items: center;">
+            <mat-icon style="width: auto; color: red;" (click)="modal.close()">cancel</mat-icon>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+
+    <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center; 
+                  width:100%; background-color: lightblue; margin: 0;">
+        <div class="col" style="flex: 0 0 auto; text-align: right;">
+          <div class="row">
+            <div class="icon-inrow">
+
+              <div class="icon-inrow" matTooltip="จำนวนพนักงาน (คน)">
+                <mat-icon> person </mat-icon>
+                <span>{{ activeroute.empinroute.length | number:'1.0-0'}} คน</span>
+              </div>
+
+              <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
+                <mat-icon>location_on</mat-icon>
+                <span>{{ activeroute.listdp.length}} จุด</span> 
+              </div>
+
+              <div class="icon-inrow" matTooltip="ระยะทาง (กม.)">
+                <mat-icon> timeline </mat-icon>
+                <span>{{ activeroute.distance | number:'1.2-2' }} กม.</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="ระยะเวลา (นาที)">
+                <mat-icon>update</mat-icon>
+                <span>{{ activeroute.period | number:'1.0-0'}} นาที</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="เริ่มแจ้งพร้อมเริ่มงาน">
+                <mat-icon>check_circle</mat-icon>
+                <span>{{ activeroute.wakeupwarntime | date:'HH:mm'  }}</span>  
+                <span>({{ activeroute.wakeupwarn }} นาที)</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="เตือนเมื่อไม่แจ้งพร้อมเริ่มงาน">
+                <mat-icon>cancel</mat-icon>
+                <span>{{ activeroute.wakeuptime | date:'HH:mm'  }}</span>  
+                <span>({{ activeroute.wakeup }} นาที)</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="เตือนเมื่อไม่สตาร์ทรถ">
+                <mat-icon>power_settings_new</mat-icon>
+                <span>{{ activeroute.startwarntime | date:'HH:mm'  }}</span>  
+                <span>({{ activeroute.startwarn }} นาที)</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="เวลาที่ควรถึงจุดแรก">
+                <mat-icon>departure_board</mat-icon>
+                <span>{{ activeroute.starttime | date:'HH:mm'  }}</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="เวลาที่ควรถึงปลายทาง">
+                <mat-icon>flag</mat-icon>
+                <span>{{ activeroute.endtime | date:'HH:mm'  }}</span>  
+              </div>
+
+              <div class="icon-inrow" matTooltip="จำนวนรถ">
+                <mat-icon> directions_bus </mat-icon>
+                <span>{{ activeroute.vinroute.length | number:'1.0-0'}} คัน</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="row" style="height: 60vh; width:100vw;">
+
+      <!-- Left Column -->
+      <div class="col-6" style="height: 60vh; width:50hw;">
+        
+      </div>
+
+      <!-- Righ Column -->
+      <div  class="col-6" id="map-container" style="height: 60vh; width:50hw; background-color: lightyellow;">
+
+        <div class="data-box-container" >
+                <div class="data-box m-2" *ngFor="let box of activeroute.dpinroute">
+                    <div (click)="ShowCurrentPosition(box.lat,box.lng)">
+                        <h3>{{box.pointname}}</h3>
+                    </div>
+                </div>
+        </div>
+
+        <div class="row no-guster" id="dpinroutetmap" style="height: 100%; width:100%;"></div>
+      </div>
+
+    </div>
+</div>

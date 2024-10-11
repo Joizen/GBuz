@@ -4,6 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import liff from '@line/liff';
 import { PagekeyModel } from '../app/models/datamodule.module';
+import mqtt, { MqttClient } from 'mqtt';
+import {ProfileModel} from './models/datamodule.module'
+
 
 
 @Injectable({ providedIn: 'root' })
@@ -20,65 +23,58 @@ export class variable {
 
   // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
   public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
- 
-
-  public icon = this.Seticon();
+  public showmenu = false;
+  public icon = this.seticon();
 
 
   // =========== Encryption=========================
-  public setPagekey(pagedata: any) {
+  public setpagekey(pagedata: any) {
     try {
       var keyname: string = this.ProgramID + "pagekey"
       var value: string = JSON.stringify(pagedata);
       localStorage.setItem(keyname, value);
     }
-    catch (ex) { console.log("setPagekey ex", ex); }
+    catch (ex) { console.log("setpagekey ex", ex); }
   }
-  public getPagekey() {
+
+  public getpagekey() {
     try {
       var keyname: string = this.ProgramID + "pagekey"
       var value = localStorage.getItem(keyname);
-      console.log("getPagekey pagekey", value);
+      // console.log("getpagekey pagekey", value);
       if (value) {
         var result = JSON.parse(value);
-        console.log("getPagekey result", result);
+        // console.log("getpagekey result", result);
         // return new PagekeyModel(result.cid,result.apistime);  
       }
       return new PagekeyModel("", "");
     }
     catch (ex) {
-      console.log("getPagekey ex", ex);
+      console.log("getpagekey ex", ex);
       return new PagekeyModel("", "");
     }
   }
 
-  public removePagekey() {
+  public removepagekey() {
     var keyname: string = this.ProgramID + "pagekey"
     localStorage.removeItem(keyname);
   }
 
   public async getpageid() {
     try {
-      this.removePagekey();
-      // var pagekey = this.getPagekey();
-      // console.log("getpageid Pagekey :",pagekey);
-      // if(!pagekey||pagekey.cid==""){
-      var result = await this.getWsnoUserData("getpageid", {}, this.ProgramID);
+      this.removepagekey();
+      var result = await this.getwsnouserdata("getpageid", {}, this.ProgramID);
       console.log("getpageid result :", result);
       if (result != undefined) {
-        this.setPagekey({ cid: result.cid, apistime: result.apistime });
+        this.setpagekey({ cid: result.cid, apistime: result.apistime });
         console.log("getpageid result 2 :", result);
         return "Get Paget ID Success";
-        // console.log("getpageid Pagekey :",this.getPagekey());
+        // console.log("getpageid Pagekey :",this.getpagekey());
       } else {
         console.log("Start Register error getpageid : undefined");
         return "Get Paget ID Error : getpageid was undefined";
         // alert("Start Register error");
       }
-      // }
-      // else{
-
-      // }
     } catch (ex) {
       console.log("getpageid error : ", ex);
       return "Get Paget ID Error : " + ex;
@@ -86,13 +82,60 @@ export class variable {
     }
   }
 
-  public setToken(token: string) { localStorage.setItem("token", token); }
+  public async getprofile() {
+    var result : ProfileModel| undefined;
+    try {
+      var keyname: string = this.ProgramID + "Profile"
+      var value = localStorage.getItem(keyname);
+      console.log("getprofile profile : ", value);
+      if (value) {
+        var strvalue  = JSON.parse(value);
+        result = new ProfileModel();
+        result.setData(strvalue);
+        return result;
+      }
+    }
+    catch (ex) {
+      console.log("getpagekey ex", ex);
+    }
+    return result;
+  }
+  
+  public async setprofile(profile:any) {
+    try {
+      var keyname: string = this.ProgramID + "Profile"
+      var value = JSON.stringify(profile);
+      localStorage.setItem(keyname,value);
+      return true;
+    }
+    catch (ex) {
+      console.log("getpagekey ex", ex);
+    }
+    return false;
+  }
 
-  public getToken() {
+  public async getprofiledata() {
+    try {
+      var wsname= "getdata"
+      var result = await this.getwsdata(wsname, {tbname:"adminprofile",isone:true}, );
+      console.log("getprofiledata result : ", result);
+      if (result.code=="000" && result.data!= null) {
+        this.setprofile(result.data);
+        return true;
+      } 
+    } catch (ex) {
+      console.log("getprofiledata error : ", ex);
+    }
+    return false;
+  }
+
+
+  public settoken(token: string) { localStorage.setItem("token", token); }
+
+  public gettoken() {
     var item = localStorage.getItem("token");
     return (item) ? item : "";
   }
-
   encrypjson(data: any, key: string) {
     try {
       var str = JSON.stringify(data);
@@ -118,25 +161,6 @@ export class variable {
     return null;
   }
 
-  Seticon(){
-    return{
-      user:this.imagepath + "user-ic.png",
-      poi: this.imagepath + "poi.png",
-      dpoi: this.imagepath + "dp.png",
-      logo : this.imagepath + "logo.png",
-      nologo : this.imagepath + "nologo.png",
-      thispoint : this.imagepath + "thispoint.png",
-    }
-  }
-  public getactiveicon(id:number){
-    if(id==5){return "check_circle";}
-    else if(id==10){return "record_voice_over";}
-    else if(id==15){return "hot_tub";}
-    else if(id==20){return "power_settings_new";}
-    else if(id==25){return "local_shipping";}
-    else if(id==30){return "flag";}
-    else {return "report";}
-  }
 
  // =========== driver & Vehicle status =========================
   public getstatuscolor(id:number){
@@ -175,81 +199,90 @@ export class variable {
     else if(id==60||id==61||id==62){return "ไฟไม่เข้ากล่อง";} //เทาอ่อน
     else{return "ไม่ทราบสถานะ";} //949494
   }
+  public seticon(){
+    return{
+      user:this.imagepath + "user-ic.png",
+      poi: this.imagepath + "poi.png",
+      dpoi: this.imagepath + "dp.png",
+      logo : this.imagepath + "logo.png",
+      nologo : this.imagepath + "nologo.png",
+      thispoint : this.imagepath + "thispoint.png",
+    }
+  }
+  public getactiveicon(id:number){
+    if(id==5){return "check_circle";}
+    else if(id==10){return "record_voice_over";}
+    else if(id==15){return "hot_tub";}
+    else if(id==20){return "power_settings_new";}
+    else if(id==25){return "local_shipping";}
+    else if(id==30){return "flag";}
+    else {return "report";}
+  }
+  public getdaycolor(date:Date){
+    const days = ['#ff6161','#faeca0', '#ffb5fd', '#b1f0bd', '#ffd28a', '#90e5fc', '#cda7db'];
+    return days[date.getDay()];
+  }
+  public getdayname(date:Date){
+    var days = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์"]
+    return days[date.getDay()];
+  }
+  public getselecttime(period:number,startdate = new Date(2000,1,1)){
+    var result: any =[];
+    var cdate = new Date(startdate);
+    cdate.setHours(0, 0, 0, 0);
+    var totaldata = Math.floor(1440/period);
+    var tdate=new Date(cdate);
+    for(var i =0; i< totaldata;i++){
+      var time = this.datePipe.transform(tdate, 'HH:mm') || '00:00';
+      result.push({id:i,selecttime:tdate,displaytime:time}) ;
+      tdate.setMinutes(tdate.getMinutes()+period);
+    }
+    return result;
+  }
+
+
   // =========== APIs & Webservice =========================
 
-  async getWsnoUserData(wsname: string, params: any, header: any): Promise<any> {
+  async getwsnouserdata(wsname: string, params: any, header: any): Promise<any> {
     var response;
     try {
       wsname = this.wsUrl + wsname;
-      var pagekey = this.getPagekey();
-      // console.log("getWsnoUserData pagekey ", pagekey);
+      var pagekey = this.getpagekey();
       var tokenitem = header;
       if (pagekey) { tokenitem = this.encrypjson(header, pagekey.cid); }
-      // console.log("getWsnoUserData tokenitem ", tokenitem);
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ` + tokenitem
       });
 
-      // console.log("getWsnoUserData params ", params);
       var encripdata = params;
       if (pagekey) { encripdata = this.encrypjson(params, pagekey.cid); }
-      // console.log("getWsnoUserData encripdata ", encripdata);
       var apistime = "2000-01-01 00:00:00";
       if (pagekey) { apistime = pagekey.apistime; }
       var payload = { param: encripdata, apistime: apistime }
-
-      // console.log("getWsData headers ", headers);
-      console.log("getWsnoUserData wsname : ", wsname);
-      console.log("getWsnoUserData payload : ", payload);
-      console.log("getWsnoUserData headers : ", headers);
+      // console.log("getwsnouserdata wsname : ", wsname);
+      // console.log("getwsnouserdata payload : ", payload);
+      // console.log("getwsnouserdata headers : ", headers);
       response = await this.http.post<any>(wsname, payload, { headers }).toPromise();
-      // console.log("getWsData "+wsname+" response ", response);
+      // console.log("getwsnouserdata "+wsname+" response ", response);
     } catch (ex) {
       response = { code: "-1", msg: ex };
     }
     return response;
   }
 
-  async getWsData(wsname: string, params: any): Promise<any> {
+  async getwsdata(wsname: string, params: any): Promise<any> {
     var response;
     try {
       wsname = this.wsUrl + wsname;
-      var tokenitem = localStorage.getItem("token");
+      var tokenitem = localStorage.getItem("token"); 
       if (tokenitem) {
-        console.log("getWsData tokenitem ", tokenitem);
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ` + tokenitem
         });
-        // console.log("getWsData params ", params);
-        var pagekey = this.getPagekey();
-        var encripdata = this.encrypjson(params, pagekey.cid);
-        var payload = { param: encripdata, apistime: pagekey.apistime }
-
-        console.log("getWsnoUserData wsname : ", wsname);
-        console.log("getWsnoUserData payload : ", payload);
-        console.log("getWsnoUserData headers : ", headers);
-        response = await this.http.post<any>(wsname, payload, { headers }).toPromise();
-        console.log("getWsData " + wsname + " response ", response);
-        if (response.code == "000") {
-          var decripdata = this.decrypjson(response.encrypdata, pagekey.cid);
-          // console.log("getWsData decripdata.apistime ", decripdata.apistime);
-          // console.log("getWsData ecripdata.cid ", decripdata.cid);
-          // var cid =decripdata.cid;
-          // var apistime =decripdata.apistime;
-          // this.setPagekey ({cid:cid,apistime:apistime});
-          console.log("getWsData new pagekey ", this.getPagekey());
-
-
-          // delete decripdata.cid;
-          // delete decripdata.apistime;
-          response.data = decripdata;
-        }
-        else {
-          // this.removePagekey();
-          this.getpageid();
-        }
+        response = await this.http.post<any>(wsname, params, { headers }).toPromise();
+        return(response);
       }
       else {
         response = { code: "-3", message: "no user token", data: null };
@@ -261,7 +294,7 @@ export class variable {
     return response;
   }
 
-  async WsData(wsname: string, params: any, header: string): Promise<any> {
+  async wsdata(wsname: string, params: any, header: string): Promise<any> {
     var response;
     try {
       wsname = this.wsUrl + wsname;
@@ -270,30 +303,21 @@ export class variable {
         'Authorization': `Bearer ` + header
       });
       var payload = params;
+      if(!payload.uid){payload.uid=1;}
       console.log("payload", payload);
 
       response = await this.http.post<any>(wsname, payload, { headers }).toPromise();
-      console.log("WsData " + wsname + " response ", response);
+      console.log("wsdata " + wsname + " response ", response);
       return response;
     } catch (ex) {
       response = { code: "-1", msg: ex };
-    }
-    return response;
-  }
-
-  async getWebservice(url: string, param: any) {
-    var response;
-    try {
-      response = await this.http.post<any>(this.wsUrl + url, param).toPromise();
-    } catch (ex) {
-      console.log("ws err", ex);
-      response = { code: "-3", msg: ex };
+      console.log("wsdata error " , ex);
     }
     return response;
   }
 
   // =========== Line Profile =========================
-  async getLineProfile() {
+  async getlineprofile() {
     try {
       await liff.init({ liffId: this.liffId });
       if (!liff.isLoggedIn()) {
@@ -307,6 +331,25 @@ export class variable {
     }
     return null;
   }
+
+    // =========== MQTT =========================
+ //--------------------- MQTT  Lissening------------------------
+
+  public async sendmqtt(topic: string, message: any) {
+   var mqttclient:MqttClient|undefined;
+   try {
+       mqttclient = await mqtt.connect(this.mqttconfig.url, {
+       clientId: 'client_' + Math.floor(Math.random() * 10000),
+       username: this.mqttconfig.username,
+       password: this.mqttconfig.password,
+       });
+       mqttclient.publish(topic, message);
+     return true;
+   } catch (ex) {
+     console.log('sendMessage error : ', ex);
+   }
+   return false;
+ }
   // =========== Date Time =========================
   public DateToString(format: string, date = new Date()) {
     var result = this.datePipe.transform(date, format);
@@ -319,6 +362,12 @@ export class variable {
       else { return date.toLocaleDateString(); }
 
     }
+  }
+
+  public getperiodinminutes(startDate: Date, endDate: Date): number {
+    const oneMinute = 60 * 1000; // Milliseconds in one minute
+    const diffInTime = endDate.getTime() - startDate.getTime(); // Difference in milliseconds
+    return Math.floor(diffInTime / oneMinute); // Convert to minutes
   }
 
 

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 // import { variable } from '../variable';
 import * as va from '../variable';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule],
+  providers: [DatePipe],
 })
 
 
@@ -23,38 +24,55 @@ export class PagekeyModel {
 
 export class ProfileModel {
   constructor() { }
-  id: number = 0;
-  fullname: string = "";
-  empname: string = "";
-  surname: string = "";
-  phone: string = "";
-  mobile: string = "";
-  rolename: string = "";
-  licent: string = "";
-  expired: string = "2099-01-01";
-  linename: string = "";
-  lineimage: string = "";
-  vid: number = 0;
-  vname: string = "";
-  vlicent: string = "";
+  empcode : string = "";
+  empname : string = "";
+  linename : string = "";
+  userimage : string = "";
+  phone : string = "";
+  companyname : string = "";
+  rolename : string = "";
+  remark : string = "";
+  transtatus : number = 0;
   setData(jsondata: any) {
-    console.log('setData jsondata : ', jsondata);
-    this.id = jsondata.id;
-    this.fullname = jsondata.fullname;
-    this.empname = jsondata.empname;
-    this.surname = jsondata.surname;
-    this.phone = jsondata.phone;
-    this.mobile = jsondata.mobile;
-    this.rolename = jsondata.rolename;
-    this.licent = jsondata.license;
-    this.expired = jsondata.expired;
-    this.linename = jsondata.linename;
-    this.lineimage = jsondata.lineimage;
-    this.vid = jsondata.vid;
-    this.vname = jsondata.vname;
-    this.vlicent = jsondata.vlicense;
+    // console.log('setData jsondata : ', jsondata);
+    this.empcode = jsondata.empcode; 
+    this.empname = jsondata.empname; 
+    this.linename = jsondata.linename; 
+    this.userimage = jsondata.userimage; 
+    this.phone = jsondata.phone; 
+    this.companyname = jsondata.companyname; 
+    this.rolename = jsondata.rolename; 
+    this.remark = jsondata.remark; 
+    this.transtatus = jsondata.transtatus; 
   }
 }
+export class UserModel {
+  constructor() { }
+  id:number=0;
+  empcode : string = "";
+  empname : string = "";
+  linename : string = "";
+  userimage : string = "";
+  phone : string = "";
+  department: string = "";
+  companyname : string = "";
+  rolename : string = "";
+  transtatus : number = 0;
+  setdata(jsondata: any) {
+    // console.log('setData jsondata : ', jsondata);
+    this.id = jsondata.id;
+    this.empcode = jsondata.empcode; 
+    this.empname = jsondata.empname; 
+    this.linename = jsondata.linename; 
+    this.userimage = jsondata.userimage; 
+    this.phone = jsondata.phone; 
+    this.companyname = jsondata.companyname; 
+    this.department = jsondata.department; 
+    this.rolename = jsondata.rolename; 
+    this.transtatus = jsondata.transtatus; 
+  }
+}
+
 
 // ============= Main Dashboar  ==================
 
@@ -363,6 +381,7 @@ export class Companydata {
   totalroute: number = 0;
   totalvehicle: number = 0;
   totalemp: number = 0;
+  totaldrop: number = 0;
 
   setdata(jsondata: any) {
     this.id = jsondata.id;
@@ -373,6 +392,8 @@ export class Companydata {
     this.totalroute = jsondata.totalroute;
     this.totalvehicle = jsondata.totalvehicle;
     this.totalemp = jsondata.totalemp;
+    this.totaldrop = jsondata.totaldrop;
+    
   }
 }
 
@@ -412,17 +433,35 @@ export class Employeedata {
 }
 
 export class Routedata {
-  constructor() { }
   id: number = 0;
   routecode: string = "";
   ownerid: number = 0;
   routename: string = "";
-  routetype: string = "";
-  period: number = 0;
+  routetype:  number = 0; //0=รับมาทำงาน 1 =ส่งกลับบ้าน
+  routetypename: string = "รับพนักงาน";
+  distance:number = 0;
+  period: number = 120;
+  starttime:Date = new Date("2000-01-01 00:00:00"); // เวลาที่ควรเข้าเส้นทางกี่นาที (เปิดแจ้งพร้อม)
+  wakeupwarn:number = 60; // เริ่มเตือนแจ้งเริ่มงานก่อนเวลาเข้าเส้นทางกี่นาที (เปิดแจ้งพร้อม,0=ไม่เตือน)
+  wakeupwarntime:Date = new Date("2000-01-01 00:00:00");  
+  wakeup:number = 30; // เริ่มเตือนสุดท้ายเมื่อยังไม่แจ้งเริ่มงานก่อนเวลาเข้าเส้นทางกี่นาที (เตือนแจ้งพร้อม,0=ไม่เตือน)
+  wakeuptime:Date = new Date("2000-01-01 00:00:00");  
+  startwarn:number = 20; // เวลาที่ควรสาร์ทเครื่องยนต์เพิ่มเริ่มเดินทางกี่นาที (0=ไม่เตือน)
+  startwarntime:Date = new Date("2000-01-01 00:00:00");  
+  endtime:Date = new Date("2000-01-01 00:00:00"); // เวลาที่ควรถึงปลายทาง
+  dpinroute: DPinroutedata[] = [];
+  vinroute: VehicleRoutedata[] = [];
+  empinroute: Employeedata[]=[];
+  transtatus: number = 0;
   listdp: string = "";
   listperiod: string = "";
-  transtatus: number = 0;
-  dpinroute: DPinroutedata[] = [];
+  constructor() { 
+    // this.wakeupwarntime.setMinutes(this.starttime.getMinutes() - this.wakeupwarn);
+    // this.wakeuptime.setMinutes(this.starttime.getMinutes() - this.wakeup);
+    // this.startwarntime.setMinutes(this.starttime.getMinutes() - this.startwarn);
+    // this.endtime.setMinutes(this.starttime.getMinutes() + this.period);
+  }
+
   setdata(jsondata: any) {
     this.id = jsondata.id;
     this.routecode = jsondata.routecode;
@@ -433,8 +472,119 @@ export class Routedata {
     this.listdp = jsondata.listdp;
     this.listperiod = jsondata.listperiod;
     this.transtatus = jsondata.transtatus;
+    this.routetypename = jsondata.routetypename;
+    this.distance = jsondata.distance;
+    this.wakeupwarn = jsondata.wakeupwarn;
+    this.wakeup = jsondata.wakeup;
+    this.startwarn = jsondata.startwarn;
+    this.starttime = new Date(jsondata.starttime);
+    this.wakeupwarntime=new Date(this.starttime) ;
+    this.wakeuptime=new Date(this.starttime) ;
+    this.startwarntime=new Date(this.starttime) ;
+    this.endtime=new Date(this.starttime) ;
+    this.wakeupwarntime.setMinutes(this.wakeupwarntime.getMinutes() - this.wakeupwarn);
+    this.wakeuptime.setMinutes(this.wakeuptime.getMinutes() - this.wakeup);
+    this.startwarntime.setMinutes(this.startwarntime.getMinutes() - this.startwarn);
+    this.endtime.setMinutes(this.endtime.getMinutes() + this.period);
+    // console.log("setdata this",this);
   }
 }
+export class Routeplandata {
+  plancode:string="";
+  plantype: number = 0; // 0 = masterplan save in route, 2 = weekplan save in routeday, 3 normal plan save in plan  
+  routeid: number = 0;
+  vid:number=0; // รถใช้สำหรับ plantype 2,3
+  vname:string ="";
+  vlince:string ="";
+  routeday:number=0; // รถใช้สำหรับ plantype 1,2
+  plandate:Date= new Date(2000,1,1,0,0,0,0); // รถใช้สำหรับ plantype 1,2,3 ()
+  routecode: string = "";
+  ownerid: number = 0;
+  routename: string = "";
+  routetype:  number = 0; //0=รับมาทำงาน 1 =ส่งกลับบ้าน
+  routetypename: string = "รับพนักงาน";
+  distance:number = 0;
+  period: number = 120;
+  starttime:Date = new Date("2000-01-01 00:00:00"); // เวลาที่ควรเข้าเส้นทางกี่นาที (เปิดแจ้งพร้อม)
+  wakeupwarn:number = 60; // เริ่มเตือนแจ้งเริ่มงานก่อนเวลาเข้าเส้นทางกี่นาที (เปิดแจ้งพร้อม,0=ไม่เตือน)
+  wakeupwarntime:Date = new Date("2000-01-01 00:00:00");  
+  wakeup:number = 30; // เริ่มเตือนสุดท้ายเมื่อยังไม่แจ้งเริ่มงานก่อนเวลาเข้าเส้นทางกี่นาที (เตือนแจ้งพร้อม,0=ไม่เตือน)
+  wakeuptime:Date = new Date("2000-01-01 00:00:00");  
+  startwarn:number = 20; // เวลาที่ควรสาร์ทเครื่องยนต์เพิ่มเริ่มเดินทางกี่นาที (0=ไม่เตือน)
+  startwarntime:Date = new Date("2000-01-01 00:00:00");  
+  endtime:Date = new Date("2000-01-01 00:00:00"); // เวลาที่ควรถึงปลายทาง
+  shiftid :number = 0;
+  ot : number = 0;
+  issend : number = 0;
+  transtatus: number = 0;
+  constructor() {}
+
+  setdata(jsondata: any) {
+    this.vid = jsondata.vid;
+    this.vname = jsondata.vname;
+    this.vlince = jsondata.vlince;
+    this.routeid = jsondata.routeid;
+    this.routeday = jsondata.routeday;
+    this.routecode = jsondata.routecode;
+    this.plantype = jsondata.plantype;
+    this.plancode = jsondata.plancode;
+    this.ownerid = jsondata.ownerid;
+    this.routename = jsondata.routename;
+    this.routetype = jsondata.routetype;
+    this.period = jsondata.period;
+    this.transtatus = jsondata.transtatus;
+    this.routetypename = jsondata.routetypename;
+    this.distance = jsondata.distance;
+    this.wakeupwarn = jsondata.wakeupwarn;
+    this.wakeup = jsondata.wakeup;
+    this.startwarn = jsondata.startwarn;
+    // this.plandate = parse(jsondata.plandate, 'yyyy-MM-dd HH:mm:ss', new Date());    
+    this.plandate = new Date(jsondata.plandate);   
+    this.starttime = new Date(this.plandate);
+    var st = new Date(jsondata.starttime)
+    this.starttime.setHours(st.getHours(),st.getMinutes(),0,0);
+    this.wakeupwarntime = new Date(this.starttime)
+    this.wakeuptime=  new Date(this.starttime);
+    this.startwarntime=  new Date(this.starttime);
+    this.endtime=  new Date(this.starttime);
+
+    this.wakeupwarntime.setMinutes(this.wakeupwarntime.getMinutes() - this.wakeupwarn);
+    this.wakeuptime.setMinutes(this.wakeuptime.getMinutes() - this.wakeup);
+    this.startwarntime.setMinutes(this.startwarntime.getMinutes() - this.startwarn);
+    this.endtime.setMinutes(this.endtime.getMinutes() + this.period);
+
+  }
+  setdatabyroute(data: Routedata) {
+    this.routeid = data.id;
+    this.routecode = data.routecode;
+    this.ownerid = data.ownerid;
+    this.routename = data.routename;
+    this.routetype = data.routetype;
+    this.period = data.period;
+    this.transtatus = data.transtatus;
+    this.routetypename = data.routetypename;
+    this.distance = data.distance;
+    this.wakeupwarn = data.wakeupwarn;
+    this.wakeup = data.wakeup;
+    this.startwarn = data.startwarn;
+    this.starttime = new Date(this.plandate);
+    var st = new Date(data.starttime)
+    this.starttime.setHours(st.getHours(),st.getMinutes(),0,0);
+    this.wakeupwarntime = new Date(this.starttime)
+    this.wakeuptime=  new Date(this.starttime);
+    this.startwarntime=  new Date(this.starttime);
+    this.endtime=  new Date(this.starttime);
+
+    this.wakeupwarntime.setMinutes(this.wakeupwarntime.getMinutes() - this.wakeupwarn);
+    this.wakeuptime.setMinutes(this.wakeuptime.getMinutes() - this.wakeup);
+    this.startwarntime.setMinutes(this.startwarntime.getMinutes() - this.startwarn);
+    this.endtime.setMinutes(this.endtime.getMinutes() + this.period);
+
+  }
+
+
+}
+
 
 export class Droppointdata {
   constructor() { }
@@ -468,13 +618,14 @@ export class Droppointdata {
 
 export class Vehicledata {
   constructor() { }
-  driverlineimg: string = "";
   vid: number = 0;
   vname: string = "";
   vlicent: string = "";
   typename: string = "";
   qrcode: string = "";
   fullname: string = "";
+  driverimage: string = "";
+  driverid: number = 0;
   dlicense: string = "";
   phone: string = "";
   mobile: string = "";
@@ -491,6 +642,8 @@ export class Vehicledata {
     this.phone = jsondata.phone;
     this.mobile = jsondata.mobile;
     this.remark = jsondata.remark;
+    this.driverid= jsondata.driverid;
+    this.driverimage= jsondata.driverimage;
   }
 }
 
@@ -498,8 +651,13 @@ export class VehicleRoutedata {
   constructor() { }
   vid: number = 0;
   item: number = 0;
+  vname: string = "";
+  vlicent: string = "";
+  routeid: number = 0;
   routename: string = "";
   routecode: string = "";
+  period: number = 0;
+  distance: number = 0;
   starttime: string = "";
   endtime: string = "";
   wakeuptime: string = "";
@@ -510,7 +668,10 @@ export class VehicleRoutedata {
   issendname: string = "";
   setdata(jsondata: any) {
     this.vid = jsondata.vid;
+    this.vname = jsondata.vname;
+    this.vlicent = jsondata.vlicent;
     this.item = jsondata.item;
+    this.routeid = jsondata.routeid;    
     this.routename = jsondata.routename;
     this.routecode = jsondata.routecode;
     this.starttime = jsondata.starttime;
@@ -521,6 +682,8 @@ export class VehicleRoutedata {
     this.shiftname = jsondata.shiftname;
     this.otname = jsondata.otname;
     this.issendname = jsondata.issendname;
+    this.period = jsondata.period;
+    this.distance = jsondata.distance;
   }
 }
 
@@ -530,6 +693,7 @@ export class DPinroutedata {
   item: string = "";
   dpid: number = 0;
   pointname: string = "";
+  pointtime: Date = new Date('2000-01-01 00:00:00');
   lat: number = 0;
   lng: number = 0;
   period: number = 0;
@@ -583,14 +747,122 @@ export class Driverdata {
   }
 }
 
+export class Calendarplan {
+  id : number = 0;
+  cdate : Date = new Date;
+  iddate : string = "";  
+  textdate : string = "วันอาทิตย์";
+  listdata : Calendardata[] = [];
+  listplan : Routeplandata[] = [];
+  listvplan : Vehicleplan[] = [];
+  colorday : string = "";
+  isselect: boolean= false;
+  ismaseter: boolean= false;
 
+  constructor(period : number, id : number, cdate: Date, textdate:string, colorday:string) {
+    this.id = id;
+    this.cdate = new Date(cdate);
+    this.cdate.setHours(0, 0, 0, 0);
+    this.textdate = textdate;
+    var totaldata = Math.floor(1440/period);
+    var tdate=new Date(this.cdate);
+    this.colorday = colorday;
+    // console.log("start tdate ",tdate);
+    for(var i =0; i< totaldata;i++){
+      // console.log(i+ "tdate ",tdate);
+      var temp = new Calendardata(i,tdate,period);
+      this.listdata.push(temp);
+      tdate.setMinutes(tdate.getMinutes()+period) ;
+    }
+  }
+  
+}
 
+export class Calendardata {
+  id : number = 0;
+  sdate : Date = new Date;
+  edate : Date = new Date;
+  period : number = 0;
+  showdate : string = "01-01-2024";
+  starttime : string = "00:00";
+  endtime : string = "00:00";
+  plancode : string = "";
+  routeid : number = 0;
 
+  constructor(id:number,sdate:Date,period:number) { 
+    var datePipe: DatePipe = new DatePipe('en-US');
+    this.id = id;
+    this.sdate = new Date(sdate);
+    this.edate =  new Date(sdate);
+    this.edate.setMinutes(this.edate .getMinutes()+period) ;
+    this.showdate = datePipe.transform(this.sdate, 'dd-MM-yy') || '01-01-00';    
+    this.starttime = datePipe.transform(this.sdate, 'HH:mm') || '00:00';
+    this.endtime = datePipe.transform(this.edate, 'HH:mm') || '00:00';
+  }
+}
 
+export class Calendarslot {
+  startid : number = 0;
+  endid : number = 0;
+  sdate : Date = new Date;
+  edate : Date = new Date;
+  period : number = 0;
+  dayname : string = "";
+  showdate : string = "01-01-2024";
+  starttime : string = "00:00";
+  endtime : string = "00:00";
+  plancode : string = "";
+  plantype : number = 0;
+  constructor() {  }
 
+  setdata(jsondata:any){
+    this.plancode = jsondata.plancode;
+    this.startid = jsondata.id;
+    this.showdate = jsondata.showdate;
+    this.sdate = jsondata.sdate;
+    this.endid = jsondata.id;
+    this.edate = jsondata.edate;
+    this.starttime = jsondata.starttime;
+    this.endtime = jsondata.endtime;
+  }
+}
 
+export class Vehicleplan {
+  vid : number = 0;
+  vname : string ="";
+  vlince : string ="";
+  listdata : Calendardata[] = [];
+  isselect: boolean= false;
+  ismaseter: boolean= false;
+  routeday: number=0;
 
+  constructor(vid:number,vname:string,vlince:string, period:number,cdate: Date) { 
+    this.vid = vid;
+    this.vname = vname;
+    this.vlince =  vlince;
+    this.listdata = [];
+    var totaldata = Math.floor(1440/period);
+    var tdate=new Date(cdate);
 
+    for(var i =0; i< totaldata;i++){
+      // console.log(i+ "tdate ",tdate);
+      var temp = new Calendardata(i,tdate,period);
+      this.listdata.push(temp);
+      tdate.setMinutes(tdate.getMinutes()+period) ;
+    }
+  }
+
+}
+
+export class Selecteddata {
+  id:number = -1;
+  descp: string = "ไม่ระบุ";
+  constructor() { }
+  setdata(jsondata: any) {
+    this.id = jsondata.id,
+    this.descp = jsondata.descp
+  }
+}
 
 
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { RoutepageRoutingModule } from './routepage-routing.module';
 import { RoutepageComponent } from './routepage.component';
+import { MaterialModule } from 'src/app/material/material.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { RoutepageComponent } from './routepage.component';
   ],
   imports: [
     CommonModule,
-    RoutepageRoutingModule
+    RoutepageRoutingModule,
+    MaterialModule,
   ],
   exports:[
     RoutepageComponent

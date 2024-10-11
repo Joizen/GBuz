@@ -44,11 +44,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
+import { DialogpageComponent } from './dialogpage/dialogpage.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DialogpageComponent
+  ],
   imports: [
     CommonModule,
     MatAutocompleteModule,

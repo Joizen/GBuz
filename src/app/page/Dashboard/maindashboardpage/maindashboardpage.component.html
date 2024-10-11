@@ -18,24 +18,30 @@
         <div class="row" style="width:100vw;">
             <div id="userList" class="col-6" style="height: 100vh; width: 50vw;">
                 <!-- User Profile-->
-                <div class="container" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px;">
+                <div class="container" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px; padding:5px ; background-color: aquamarine;">
                     <div class="col" style="flex: 0 0 auto;">
-                        <img class="driverimg" [src]="va.icon.user"/>
+                        <img class="driverimg" [src]="UserProfile.userimage!=''?UserProfile.userimage:va.icon.user"/>
                     </div>
-                    <div class="col" style="flex: 0 0 auto; text-align: right;">
-                        <div class="row">
+                    <div class="col" style="display: flex; text-align: left;">
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <div style="margin-left: 10px; font-size: large;"> {{UserProfile.empname}} </div>
+                            <div style="margin-left: 10px;"> {{UserProfile.rolename}} </div>
+                        </div>                    
+                    </div>
+                    <div class="col" style="flex: 0 0 auto; text-align: right; margin-right:20px ;background-color: aquamarine;">
+                        <div class="row" >
                             <div class="col" style="display: flex; align-items: center;"
-                                [style.background-color]="showtype==0?'#FFE5B4':'#FFFFFF'"
+                                [style.background-color]="showtype==0?'#FFE5B4':'#00FFFFFF'"
                                 mat-raised-button matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="showtype=0" >
                                 <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
                             </div>
                             <div class="col" style="display: flex; align-items: center;"
-                                [style.background-color]="showtype==1?'#FFE5B4':'#FFFFFF'"
+                                [style.background-color]="showtype==1?'#FFE5B4':'#00FFFFFF'"
                                 mat-raised-button matTooltip="แสดงตามกลุ่มสถานะ" (click)="showtype=1">
                                 <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
                             </div>
                             <div class="col" style="display: flex; align-items: center;"
-                                [style.background-color]="showtype==2?'#FFE5B4':'#FFFFFF'"
+                                [style.background-color]="showtype==2?'#FFE5B4':'#00FFFFFF'"
                                 mat-raised-button matTooltip="แสดงรายพนักงานขับรถ" (click)="showtype=2">
                                 <mat-icon style="width: 100%; color: blue;">list</mat-icon>
                             </div>

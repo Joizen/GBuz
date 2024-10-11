@@ -1,0 +1,12 @@
+<h2 mat-dialog-title> {{data.Header}}  </h2>
+<mat-dialog-content> {{data.Message}} </mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close mat-dialog-close="false"  
+    *ngIf="data.Showcancel">
+        {{data.Cancel}}
+    </button>
+    <button mat-button mat-dialog-close mat-dialog-close="true" 
+    *ngIf="data.Showok">
+        {{data.Ok}}
+    </button>
+</mat-dialog-actions>

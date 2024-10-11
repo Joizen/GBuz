@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
+import { Router } from '@angular/router';
 import { Dashboarddata,ProfileModel,DoCompany,DoData,DoActivity,VehicleDashboard} from '../../../models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -18,10 +19,11 @@ import { elementAt } from 'rxjs';
 export class MaindashboardpageComponent implements OnInit {
   
    constructor(
-     private modalService: NgbModal,
-     public va: variable,
-     private dialog: MatDialog,
-     private snacbar: MatSnackBar
+    private router: Router,
+    private modalService: NgbModal,
+    public va: variable,
+    private dialog: MatDialog,
+    private snacbar: MatSnackBar
    ) {}
  
    show = {
@@ -30,7 +32,7 @@ export class MaindashboardpageComponent implements OnInit {
      Profile: false,
      Driverwork: false,
    };
-   UserProfile = new ProfileModel();
+   public UserProfile:ProfileModel =new ProfileModel();
   //  public activedashboad: CompanyDashboard[] = [];
   //  public listdashboad: Dashboarddata[] = [];
    public activedriver: DoData = new DoData();
@@ -53,32 +55,45 @@ export class MaindashboardpageComponent implements OnInit {
    async ngOnInit() {
      // this.initLineToken();
     //  this.getdashboarddata();
-
+     var profile =await this.va.getprofile();
+     if(profile){this.UserProfile = profile;}      
+     this.checktoken();
      this.initMap();
      this.mqttClient = await this.connectMqtt();
      this.subscribeMqtt(this.mqttClient, 'gbdupdate');
      this.subscribeMqtt(this.mqttClient, 'gbvupdate');
      await this.getactivedo();
    }
+   
+   checktoken(){
+
+    var token = this.va.gettoken();
+    console.log("token : ",token);
+    if(!token || token==""){
+      this.router.navigate(["login"]);
+    }
  
+   }
+
    //----------------- Dash board Data ---------------------------------------
    async getactivedo() {
+
     // //---------test------------
-    var wsname = '_getdata';
-    var params = { tbname: 'driverdashboard', uid: 135 };
-    var jsondata = await this.va.WsData(wsname, params, '');
+    var wsname = 'getdata';
+    var params = { tbname: 'driverdashboard'};
+    var jsondata = await this.va.getwsdata(wsname, params);
     this.show.Spinner = false;
 
     // var wsname = "getdata";
     // var params = { tbname: "driverdashboard" };
     // var jsondata = await this.va.getWsData(wsname, params);
 
-    console.log('getdashboarddata : ', jsondata);
+    // console.log('getdashboarddata : ', jsondata);
     if (jsondata.code == '000') {
       this.listdostatus = await this.getlistdostatus(jsondata.data);
-      console.log('getdashboarddata this.listdostatus :', this.listdostatus);
+      // console.log('getdashboarddata this.listdostatus :', this.listdostatus);
       var result = await this.setcompanydata();
-      console.log('getdashboarddata result :', result);
+      // console.log('getdashboarddata result :', result);
       this.listdashboadcom = result.listcom;
       await this.getimagedata(result.listcomid);
       this.listdashboadvehicle = await this.getvehicledata(result.listvehicle);
@@ -161,8 +176,8 @@ export class MaindashboardpageComponent implements OnInit {
         return acc;
       }, {} as { [key: string]: any[] });
        
-      console.log("listdo :", this.listdashboaddo);
-      console.log("listcom :", listcom);
+      // console.log("listdo :", this.listdashboaddo);
+      // console.log("listcom :", listcom);
 
       // คำนวนค่าข้อมูลลงใน Company
       listcom.forEach((comp: any) => {
@@ -271,10 +286,10 @@ export class MaindashboardpageComponent implements OnInit {
 
   async getimagedata(listcom:string) {
     if (this.listcompimage.length == 0){
-      var wsname = '_getdata';
+      var wsname = 'getdata';
       var params = { tbname: 'companylogo', listcid: listcom };
       var header = '';
-      var jsondata = await this.va.WsData(wsname, params, header);
+      var jsondata = await this.va.getwsdata(wsname, params);
       if (jsondata.code == '000') {
        this.listcompimage = jsondata.data;       
       }
@@ -295,9 +310,9 @@ export class MaindashboardpageComponent implements OnInit {
       var wsname = 'getrealtimedata';
       var params = { tbname: 'vehiclerealtime', listserial: listvehicle };
       var header = '';
-      var jsondata = await this.va.WsData(wsname, params, header);
+      var jsondata = await this.va.getwsdata(wsname, params);
       if (jsondata.code == '000') {
-        console.log("getvehicledata jsondata : ",jsondata.data);
+        // console.log("getvehicledata jsondata : ",jsondata.data);
         if (jsondata.data.length > 0) {          
           jsondata.data.forEach((item: any) => {
             var v:VehicleDashboard = new VehicleDashboard();
@@ -321,7 +336,7 @@ export class MaindashboardpageComponent implements OnInit {
           });
         }
       }
-      console.log(this.listdashboaddo);
+      // console.log(this.listdashboaddo);
   
     }catch(ex){console.log("getvehicledata error : ",ex)}
     return result;
@@ -365,8 +380,8 @@ export class MaindashboardpageComponent implements OnInit {
     var dodata = event.do;
     var transtatus = event.transtatus;
 
-    console.log("driverdetailtalkback : dodata ",dodata);
-    console.log("driverdetailtalkback : transtatus ",transtatus);
+    // console.log("driverdetailtalkback : dodata ",dodata);
+    // console.log("driverdetailtalkback : transtatus ",transtatus);
     if(transtatus==1){
       // this.ChangeStatus(dodata.cid,dodata.docode,dodata.nextstatus,transtatus);
     }else{
@@ -443,7 +458,7 @@ export class MaindashboardpageComponent implements OnInit {
   }
 
   ChangeStatus(cid:number,docode:string, updatestatus:number,transtatus:number){
-    console.log("ChangeStatus :"+cid +","+docode+","+ updatestatus+","+transtatus)
+    // console.log("ChangeStatus :"+cid +","+docode+","+ updatestatus+","+transtatus)
           // var doc = this.listdashboaddo.find(x=>x.docode==docode);
           var com = this.listdashboadcom.find(x=>x.cid==cid);
           if(com){
@@ -527,7 +542,7 @@ export class MaindashboardpageComponent implements OnInit {
                 if(transtatus==1){
                   doc.startshowtime = this.va.DateToString("HH:mm",new Date) ;
                   var index = com.alclist.findIndex(x=>x.docode==docode)
-                  console.log("20 index : ",index);
+                  // console.log("20 index : ",index);
                   if(index){
                     com.startlist.push(doc);
                     com.alclist.splice(index,1);
@@ -547,7 +562,7 @@ export class MaindashboardpageComponent implements OnInit {
                 if(transtatus==1){
                   doc.otwshowtime = this.va.DateToString("HH:mm",new Date) ;
                   var index = com.startlist.findIndex(x=>x.docode==docode)
-                  console.log("25 index : ",index);
+                  // console.log("25 index : ",index);
   
                   if(index){
                     com.otwlist.push(doc);
@@ -583,7 +598,7 @@ export class MaindashboardpageComponent implements OnInit {
                   }
                 }
               }
-              console.log("doc.laststatus : ",doc.laststatus);
+              // console.log("doc.laststatus : ",doc.laststatus);
               com.dolist.sort((a:any, b:any) => {
                 if (a.wakeup === b.wakeup) {
                   // Check alc
@@ -622,12 +637,10 @@ export class MaindashboardpageComponent implements OnInit {
 
   showdriverposition(driver: any){
     try{
-      console.log("showdriverposition :"+ driver.vlat, driver.vlng);
+      // console.log("showdriverposition :"+ driver.vlat, driver.vlng);
       if(driver.vlat!=0&&driver.vlng!=0){
-        console.log("showdriverposition driver :", driver);
+        // console.log("showdriverposition driver :", driver);
         if(this.map){
-          this.map.panTo([driver.vlat,driver.vlng]);
-          this.map.setZoom(15);
           this.ShowCurrentPosition(driver.vlat, driver.vlng)
         }
       }  
@@ -819,6 +832,8 @@ export class MaindashboardpageComponent implements OnInit {
             }
           }, 3000); // 3000 milliseconds = 3 seconds
         }  
+        this.map.setZoom(15);
+        this.map.panTo([lat,lng]);
       }
     }catch(ex){console.log("ShowCurrentPosition error : ",ex)}
 

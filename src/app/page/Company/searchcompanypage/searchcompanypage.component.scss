@@ -10,12 +10,6 @@
     position:static;
   }
   
-  .company-logo {
-    width: 50px; /* Set the width of the logo */
-    height: 50px; /* Set the height of the logo */
-    object-fit: contain; /* Ensure the logo fits nicely */
-  }
-
   .card-container {
     display: flex; /* Flexbox layout for cards in a row */
     justify-content: space-between; /* Space cards evenly */
@@ -27,7 +21,39 @@
     margin: 8px; /* Add margin around each card */
     max-width: 30%; /* Limit card width to fit 3 cards in one row */
   }
+
+  .custom-header {
+    display: flex;
+    align-items: center; /* Centers the content vertically */
+    gap: 10px;
+    padding: 10px;
+  }
   
+  mat-card-title {
+    display: flex;
+    align-items: center; /* Ensures the title is centered if it's on multiple lines */
+  }
+
+  .company-logo {
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    object-fit: contain;
+  }
+  
+  .wrap-title {
+    display: block; /* Ensures the title takes up available width */
+    white-space: normal; /* Allows wrapping */
+    word-wrap: break-word; /* Wraps long words to fit in the container */
+    line-height: 1.2; /* Adjusts line height for better readability */
+  }
+
+  .truncate-title {
+    display: block;
+    white-space: nowrap; /* Prevents wrapping */
+    overflow: hidden; /* Hides the overflow */
+    text-overflow: ellipsis; /* Adds the ellipsis (...) */
+    max-width: 100% /* Set a maximum width for truncating */
+  }
 
   
   

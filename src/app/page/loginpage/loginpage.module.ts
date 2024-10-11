@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { LoginpageRoutingModule } from './loginpage-routing.module';
 import { LoginpageComponent } from './loginpage.component';
 import { MaterialModule } from '../../material/material.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,8 @@ import { MaterialModule } from '../../material/material.module';
   imports: [
     CommonModule,
     LoginpageRoutingModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule,
   ]
 })
 export class LoginpageModule { }

@@ -51,19 +51,26 @@
 
     <div class="col" style="flex: 0 0 auto; text-align: right;">
       <div class="row">
-        <div class="col">
+        <div class="icon-inrow">
+          <div class="icon-inrow" matTooltip="จำนวนพนักงาน">
+            <mat-icon >person </mat-icon>
+            <span>{{ activecompany.totalemp }}</span> 
+          </div>
 
-          <mat-icon mat-raised-button matTooltip="จำนวนพนักงาน">
-            person
-          </mat-icon> : {{ activecompany.totalemp }}
+          <div class="icon-inrow" matTooltip="จำนวนเส้นทาง">
+            <mat-icon> rv_hookup </mat-icon>
+            <span>{{ activecompany.totalroute }}</span>
+          </div>
 
-          <mat-icon mat-raised-button matTooltip="จำนวนเส้นทาง">
-            rv_hookup
-          </mat-icon> : {{ activecompany.totalroute }}
+          <div class="icon-inrow" matTooltip="จำนวนรถ">
+            <mat-icon> directions_bus </mat-icon>
+            <span>{{ activecompany.totalvehicle }}</span>  
+          </div>
 
-          <mat-icon mat-raised-button matTooltip="จำนวนรถ">
-            directions_bus
-          </mat-icon> : {{ activecompany.totalvehicle }}
+          <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ activecompany.totaldrop }}</span>  
+          </div>
 
         </div>
       </div>
@@ -73,20 +80,31 @@
 
   <!-- TAB -->
   <div class="px-3 py-0">
-    <mat-tab-group >
+    <mat-tab-group  >
       <!-- employee -->
-      <mat-tab label="Employee">
+      <!-- <mat-tab label="Employee" style="background-color: lightyellow;" >
         <app-employeecomppage [activecompany]="activecompany"></app-employeecomppage>
-      </mat-tab>
+      </mat-tab> -->
+
 
       <!-- route -->
       <mat-tab label="Route">
         <app-routecomppage [activecompany]="activecompany"></app-routecomppage>
       </mat-tab>
 
+            
       <!-- vehicle -->
       <mat-tab label="Vehicle">
         <app-vehiclecomppage [activecompany]="activecompany"></app-vehiclecomppage>
+      </mat-tab>
+
+
+
+      
+
+       <!-- User -->
+       <mat-tab label="User" >
+        <app-usercompage [activecompany]="activecompany"></app-usercompage>
       </mat-tab>
 
       <!-- dropoint -->

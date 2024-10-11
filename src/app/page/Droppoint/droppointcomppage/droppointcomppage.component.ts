@@ -39,14 +39,12 @@ export class DroppointcomppageComponent implements OnInit, AfterViewInit {
     this.initMap();
     // this.startTimer();
   }
-
-
   async getData() {
     var result: Droppointdata[] = [];
-    var wsname = '_getdata';
+    var wsname = 'getdata';
     var params = { tbname: 'droppointcomp', compid: this.activecompany.id };
-    var jsondata = await this.va.WsData(wsname, params, '');
-    console.log("getData jsondata : ", jsondata);
+    var jsondata = await this.va.getwsdata(wsname, params);
+    // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new Droppointdata();

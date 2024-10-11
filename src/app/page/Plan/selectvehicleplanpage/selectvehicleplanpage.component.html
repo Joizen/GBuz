@@ -1,0 +1,120 @@
+<div class="header">
+    <!-- Header data & close button -->
+    <div class="row px-3 py-0"
+        style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+
+        <div class="col-1" style="display: flex; justify-content: center; align-items: center; padding:5px ;">
+            <img class="profileimg me-4">
+        </div>
+
+        <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+            <div>
+                <div class="icon-inrow">
+                    <span> เลือกข้อมูลรถ </span>
+                    <span style="color: royalblue;"> {{activevihicle.vname}}  </span>
+                    <span *ngIf="activevihicle.vid!=0" style="color: royalblue;"> ({{activevihicle.vlicent}}) </span>
+                </div>
+                <div class="icon-inrow">
+                    <span> สำหรับวางแผนงาน เส้นทาง :</span>
+                    <span style="color: royalblue;"> {{route?.routename}}</span>
+                    <span> วัน : </span>
+                    <span style="color: royalblue;"> {{workslot?.textdate}} </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
+            <div class="row">
+                <div class="icon-inrow">
+                    <div class="icon-inrow" *ngIf="show.step==1" (click)="show.step=0">
+                        <mat-icon style="width: auto; color: green;">chevron_left</mat-icon>
+                        <span>Back</span>
+                    </div>
+                    <div class="icon-inrow" *ngIf="(show.step==0) && (activevihicle.vid!=0)" (click)="showvehicleslot()">
+                        <span>Next</span>
+                        <mat-icon style="width: auto; color: green;">chevron_right</mat-icon>
+                    </div>
+
+                    <div class="icon-inrow" (click)="modal.close()">
+                        <span>ปิด</span>
+                        <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Body & spinner -->
+<div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
+    <!-- spinner -->
+    <div class="container-spiner" *ngIf="show.Spinner">
+        <div class="row">
+            Please Watting...
+        </div>
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <!-- Body -->
+    <div style="width:100%; height:50vh; padding: 20px;" *ngIf="show.step==0">
+        <div class="icon-inrow" matTooltip="ค้นหาข้อมูลรถ / พนักงานขับรถ" >
+            <span>ค้นหาข้อมูลรถ</span>
+            <input type="text" [(ngModel)]="keyword" (keydown.enter)="searchvehicle()">
+            <mat-icon (click)="searchvehicle()">search</mat-icon>
+        </div>
+
+        <div *ngFor="let item of listvehicle">
+            <div class="row" (click)="showvehicledetail(item)" [style.background-color]="selectedvid==item.vid?'#FFE5B4':'#00FFFFFF'" >
+                <div class="container"
+                    style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
+                    <div class="col" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+                        <!-- setitem 1-->
+                        <img class="profileimg" [src]="item.driverimage==''?va.icon.user:item.driverimage" />
+                    </div>
+
+                    <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
+                        <!-- setitem 2-->
+                        {{item.vname}}
+                    </div>
+
+                    <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
+                        <!-- setitem 3-->
+                        {{item.vlicent}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="width:100%; height:50vh; padding: 20px;" *ngIf="show.step==1">
+
+        <div *ngFor="let slot of listslot">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;padding: 10px;"
+                [style.background-color]="slot.plancode==''?'#c2fbbe':'#cccccc'">
+                <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
+                    <mat-icon>departure_board</mat-icon>
+                    <span>{{slot.starttime}}</span>
+    
+                    <mat-icon>flag</mat-icon>
+                    <span>{{slot.endtime}}</span>
+    
+                    <mat-icon>linear_scale</mat-icon>
+                    <span>{{slot.dayname}}</span>
+                </div>
+    
+                <div style="display: flex; text-align:right;" (click)="showcreateplan(slot)" *ngIf="slot.plancode==''">
+                    <span>สร้างแผนงาน</span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+
+</div>

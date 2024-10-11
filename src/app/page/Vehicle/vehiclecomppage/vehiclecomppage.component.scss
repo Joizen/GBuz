@@ -1,5 +1,17 @@
+.container-spiner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background-color: white;
+  opacity: 50%;
+  flex-direction: column;
+  z-index: 9999;
+  position:static;
+}
 .profileimg {
     border-radius: 50%;
-    height: 5vh; /* กำหนดความสูงของรูปภาพไม่เกิน 10% ของความสูงหน้าจอ */
-    width: auto; /* ปรับขนาดความกว้างอัตโนมัติเพื่อรักษาสัดส่วน */
-  }
+    height: 5vh; 
+    width: 5vh; 
+}
+
