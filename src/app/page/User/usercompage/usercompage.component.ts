@@ -16,8 +16,8 @@ export class UsercompageComponent implements OnInit {
   ) { }
   @Input() activecompany: Companydata = new Companydata();
   public maindata:  UserModel[] = [];
+  public activeuser:  UserModel = new UserModel();
   show = { Spinner: true };
-
   async ngOnInit()  {
     this.maindata = await this.getData();
   }
@@ -27,7 +27,7 @@ export class UsercompageComponent implements OnInit {
     var wsname = 'getdata';
     var params = { tbname: 'usercustomer', compid: this.activecompany.id };
     var jsondata = await this.va.getwsdata(wsname, params);
-    console.log("getData jsondata : ", jsondata);
+    // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new UserModel();
@@ -42,6 +42,18 @@ export class UsercompageComponent implements OnInit {
 
   }
 
+  Showuser(user:any,modal:any){
+    this.activeuser = user;
+    this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+  }
+
+  addnewuser(modal:any){
+    this.activeuser = new UserModel();
+    this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+  }
+  async refreshuserlist(){
+    this.maindata = await this.getData();
+  }
 
 
   

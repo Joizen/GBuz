@@ -1,14 +1,4 @@
-.container-spiner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full viewport height */
-    background-color: white;
-    opacity: 50%;
-    flex-direction: column;
-    z-index: 9999;
-    position:static;
-  }
+
   
   .card-container {
     display: flex; /* Flexbox layout for cards in a row */

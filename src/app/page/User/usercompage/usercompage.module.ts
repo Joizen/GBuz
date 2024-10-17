@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { UsercompageRoutingModule } from './usercompage-routing.module';
 import { UsercompageComponent } from './usercompage.component';
 import { MaterialModule } from 'src/app/material/material.module';
+import { UserdatapageModule } from "../userdatapage/userdatapage.module";
+import { AddusercomppageModule } from "../addusercomppage/addusercomppage.module";
 
 
 @NgModule({
@@ -13,8 +15,10 @@ import { MaterialModule } from 'src/app/material/material.module';
   imports: [
     CommonModule,
     MaterialModule,
-    UsercompageRoutingModule
-  ],
+    UsercompageRoutingModule,
+    UserdatapageModule,
+    AddusercomppageModule
+],
   exports:[
     UsercompageComponent
   ]

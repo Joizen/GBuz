@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-// import { variable } from '../variable';
+import { CommonModule } from '@angular/common';
 import * as va from '../variable';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule],
-  providers: [DatePipe],
 })
 
 
@@ -21,7 +19,6 @@ export class PagekeyModel {
     this.apistime = apistime;
   }
 }
-
 export class ProfileModel {
   constructor() { }
   empcode : string = "";
@@ -58,6 +55,7 @@ export class UserModel {
   companyname : string = "";
   rolename : string = "";
   transtatus : number = 0;
+  isselect:boolean=false;
   setdata(jsondata: any) {
     // console.log('setData jsondata : ', jsondata);
     this.id = jsondata.id;
@@ -396,7 +394,6 @@ export class Companydata {
     
   }
 }
-
 export class Employeedata {
   constructor() { }
   lineimg: string = "";
@@ -431,7 +428,6 @@ export class Employeedata {
     this.remark = jsondata.remark;
   }
 }
-
 export class Routedata {
   id: number = 0;
   routecode: string = "";
@@ -514,7 +510,9 @@ export class Routeplandata {
   startwarntime:Date = new Date("2000-01-01 00:00:00");  
   endtime:Date = new Date("2000-01-01 00:00:00"); // เวลาที่ควรถึงปลายทาง
   shiftid :number = 0;
+  shiftname :string = "กะเช้า";
   ot : number = 0;
+  otname :string = "ปกติ";
   issend : number = 0;
   transtatus: number = 0;
   constructor() {}
@@ -584,8 +582,6 @@ export class Routeplandata {
 
 
 }
-
-
 export class Droppointdata {
   constructor() { }
   id: number = 0;
@@ -615,7 +611,6 @@ export class Droppointdata {
     this.transtatus = jsondata.transtatus;
   }
 }
-
 export class Vehicledata {
   constructor() { }
   vid: number = 0;
@@ -646,7 +641,6 @@ export class Vehicledata {
     this.driverimage= jsondata.driverimage;
   }
 }
-
 export class VehicleRoutedata {
   constructor() { }
   vid: number = 0;
@@ -686,7 +680,32 @@ export class VehicleRoutedata {
     this.distance = jsondata.distance;
   }
 }
+export class Vehicleplan {
+  vid : number = 0;
+  vname : string ="";
+  vlince : string ="";
+  listdata : Calendardata[] = [];
+  isselect: boolean= false;
+  ismaseter: boolean= false;
+  routeday: number=0;
 
+  constructor(vid:number,vname:string,vlince:string, period:number,cdate: Date) { 
+    this.vid = vid;
+    this.vname = vname;
+    this.vlince =  vlince;
+    this.listdata = [];
+    var totaldata = Math.floor(1440/period);
+    var tdate=new Date(cdate);
+
+    for(var i =0; i< totaldata;i++){
+      // console.log(i+ "tdate ",tdate);
+      var temp = new Calendardata(i,tdate,period);
+      this.listdata.push(temp);
+      tdate.setMinutes(tdate.getMinutes()+period) ;
+    }
+  }
+
+}
 export class DPinroutedata {
   constructor() { }
   routeid: number = 0;
@@ -715,7 +734,6 @@ export class DPinroutedata {
     this.transtatus = jsondata.transtatus;
   }
 }
-
 export class Driverdata {
   constructor() { }
   drivercode: string = "";
@@ -746,7 +764,27 @@ export class Driverdata {
     this.driverimg = jsondata.driverimg;
   }
 }
-
+export class Comshiftdata {
+  id : number =0;
+  shift : string ="";
+  sendtime : Date =new Date("2000-01-01 00:00:00");
+  receivetime : Date =new Date("2000-01-01 00:00:00");
+  ottime : Date =new Date("2000-01-01 00:00:00");
+  showsendtime : string = "00:00";
+  showreceivetime : string = "00:00";
+  showottime : string = "00:00";
+  constructor(){}
+  setdata(jsondata: any) {
+    this.id = jsondata.id;
+    this.shift = jsondata.shift;
+    this.sendtime = new Date(jsondata.sendtime);
+    this.receivetime = new Date(jsondata.receivetime);
+    this.ottime = new Date(jsondata.ottime);
+    this.showsendtime = va.DateToString(this.sendtime,"HH:mm");
+    this.showreceivetime =  va.DateToString(this.receivetime,"HH:mm", );
+    this.showottime =  va.DateToString(this.ottime,"HH:mm");
+  };
+}
 export class Calendarplan {
   id : number = 0;
   cdate : Date = new Date;
@@ -759,14 +797,14 @@ export class Calendarplan {
   isselect: boolean= false;
   ismaseter: boolean= false;
 
-  constructor(period : number, id : number, cdate: Date, textdate:string, colorday:string) {
+  constructor(period : number,id : number, cdate: Date) {
     this.id = id;
     this.cdate = new Date(cdate);
     this.cdate.setHours(0, 0, 0, 0);
-    this.textdate = textdate;
+    this.textdate = va.getdayname(cdate);;
     var totaldata = Math.floor(1440/period);
     var tdate=new Date(this.cdate);
-    this.colorday = colorday;
+    this.colorday = va.getdaycolor(cdate);
     // console.log("start tdate ",tdate);
     for(var i =0; i< totaldata;i++){
       // console.log(i+ "tdate ",tdate);
@@ -777,7 +815,6 @@ export class Calendarplan {
   }
   
 }
-
 export class Calendardata {
   id : number = 0;
   sdate : Date = new Date;
@@ -790,17 +827,15 @@ export class Calendardata {
   routeid : number = 0;
 
   constructor(id:number,sdate:Date,period:number) { 
-    var datePipe: DatePipe = new DatePipe('en-US');
     this.id = id;
     this.sdate = new Date(sdate);
     this.edate =  new Date(sdate);
     this.edate.setMinutes(this.edate .getMinutes()+period) ;
-    this.showdate = datePipe.transform(this.sdate, 'dd-MM-yy') || '01-01-00';    
-    this.starttime = datePipe.transform(this.sdate, 'HH:mm') || '00:00';
-    this.endtime = datePipe.transform(this.edate, 'HH:mm') || '00:00';
+    this.showdate = va.DateToString(this.sdate,'dd-MM-yy');
+    this.starttime = va.DateToString(this.sdate,'HH:mm'); 
+    this.endtime = va.DateToString(this.edate,'HH:mm');
   }
 }
-
 export class Calendarslot {
   startid : number = 0;
   endid : number = 0;
@@ -826,33 +861,41 @@ export class Calendarslot {
     this.endtime = jsondata.endtime;
   }
 }
-
-export class Vehicleplan {
-  vid : number = 0;
-  vname : string ="";
-  vlince : string ="";
-  listdata : Calendardata[] = [];
-  isselect: boolean= false;
-  ismaseter: boolean= false;
-  routeday: number=0;
-
-  constructor(vid:number,vname:string,vlince:string, period:number,cdate: Date) { 
-    this.vid = vid;
-    this.vname = vname;
-    this.vlince =  vlince;
-    this.listdata = [];
+export class Calendardayplan{
+  plankey: string= "20000101";
+  plandate: Date = new Date("2000-01-01 00:00:00");
+  today:Date =new Date();
+  colorday : string = "";
+  listtime : Calendardata[] = [];
+  public activeroute: Routedayplan[] =[];
+  public listrouteplan: Routedayplan[] =[];
+  
+  constructor(period:number){ 
     var totaldata = Math.floor(1440/period);
-    var tdate=new Date(cdate);
-
+    this.today.setHours(0, 0, 0, 0);
     for(var i =0; i< totaldata;i++){
-      // console.log(i+ "tdate ",tdate);
-      var temp = new Calendardata(i,tdate,period);
-      this.listdata.push(temp);
-      tdate.setMinutes(tdate.getMinutes()+period) ;
+      var temp = new Calendardata(i,this.plandate,period);
+      this.listtime.push(temp);
+      this.plandate.setMinutes(this.plandate.getMinutes()+period) ;
     }
-  }
 
+  }
+  public setactivedate(activedate:Date){
+    this.plankey = va.DateToString(activedate,'yyyyMMdd');  
+    this.plandate  = new Date(activedate.getFullYear(),activedate.getMonth(),activedate.getDate(),0,0,0,0);
+    this.colorday = va.getdaycolor(activedate);
+
+  }
 }
+export class Routedayplan{
+  public plankey: string= "20000101";
+  public plandate: Date = new Date("2000-01-01 00:00:00");
+  public route: Routedata =new Routedata();
+  listplan : Routeplandata[] = [];
+  listvplan : Vehicleplan[] = [];
+  constructor(){}
+}
+
 
 export class Selecteddata {
   id:number = -1;
@@ -863,9 +906,6 @@ export class Selecteddata {
     this.descp = jsondata.descp
   }
 }
-
-
-
 export class data {
   constructor() { }
   setdata(jsondata: any) {
@@ -873,8 +913,6 @@ export class data {
   }
 }
 
-
-// ============= for wake up ==================
 
 
 

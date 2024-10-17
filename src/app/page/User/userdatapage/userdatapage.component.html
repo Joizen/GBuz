@@ -1,0 +1,99 @@
+<div class="header" style="background-color: lightskyblue; padding: 2px; margin: 0px;">
+    <!-- Header data & close button -->
+    <div class="row" 
+         style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 10px; ">
+      
+      <div class="col-2" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
+        <img class="profileimg" [src]="activeuser.userimage==''?va.icon.user:activeuser.userimage"/>
+      </div>
+  
+      <div class="col-7" style="display: flex; justify-content: start; align-items: center;">
+        <span style="font-size: large;">  {{ activeuser.empname }} </span>
+      </div>
+  
+      <div class="col-3" style="display: flex;  justify-content:end; align-items:end ;">
+        <div class="row">
+          <div class="icon-inrow">
+            <div class="icon-inrow" *ngIf="false">
+              <span>ลบ</span>
+              <mat-icon style="width: auto; color: red;">cancel</mat-icon>
+            </div>
+            <div class="icon-inrow" *ngIf="false">
+              <span>บันทึก</span>
+              <mat-icon style="width: auto; color: green;">send</mat-icon>
+            </div>
+            <div class="icon-inrow" (click)="modal.close()">
+              <span>ปิด</span>
+              <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
+   <!-- spinner -->
+   <div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+      Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+  </div>
+
+    <!-- Body -->
+    <div style="width:100%; height: 2100%;">
+      <!-- User data -->
+      <div style="width:100%; padding: 20px;">
+        <div class="icon-inrow" matTooltip="สิทธิ์การใช้งาน และ หมายเลขโทรศัพท์">
+          <mat-icon> admin_panel_settings </mat-icon>
+          <span>:  {{ activeuser.rolename }} : {{activeuser.phone}} </span>
+        </div>
+        <div class="icon-inrow" matTooltip="แผนก และ บริษัทที่สังกัด">
+          <mat-icon> home </mat-icon>
+          <span>{{activeuser.companyname}} ({{activeuser.department}})</span>
+        </div>
+        <div class="icon-inrow" matTooltip="Line name">
+          <mat-icon> account_circle </mat-icon>
+          <span>: {{activeuser.linename}}</span>
+        </div>
+      </div>
+
+      <!-- List of Customer -->
+      <div style="width:100%; padding: 20px;">
+        <hr/>
+        <div class="row px-3 py-0" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+          <div class="col-8" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+            <span>  ข้อมูล บริษัทที่สามารถใช้งานได้  </span>     
+          </div>
+          <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
+            <div class="icon-inrow" style="cursor: pointer;">
+              <mat-icon style="width: auto; color: green; ">domain_add</mat-icon>
+            </div>
+           </div> 
+         </div>
+         <hr/>
+        <div *ngFor="let comp of listcustomer">
+          <div class="icon-inrow">
+            <div class="col-2">
+              <img [src]="comp.complogo" class="company-logo">
+            </div>
+            <div class="col-4">
+              <mat-icon> contacts</mat-icon>
+              <span> {{ comp.contract }}</span>
+            </div>
+            <div class="col-4">
+              <mat-icon> phone</mat-icon>
+              <span>{{ comp.phone }}</span>
+            </div>
+            <div class="col-2" style="cursor: pointer;" *ngIf="activecompany.id==comp.id" (click)="deleteuser()" >
+              <mat-icon color="warn" > delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+</div>

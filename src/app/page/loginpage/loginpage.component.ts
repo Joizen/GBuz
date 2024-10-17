@@ -88,8 +88,6 @@ export class LoginpageComponent implements OnInit {
       return Promise.reject(ex); // If there's an error, reject the promise
     }
   }
-
-
   showSanckbar(message: string, duration = 5) {
     this.snacbar.open(message, 'Close',
       { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });

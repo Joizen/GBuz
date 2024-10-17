@@ -39,5 +39,40 @@ body {
     background: #0957a5;
 }
 
+.container-spiner {
+    position: absolute; 
+    top: 0;    
+    left: 0; 
+    right: 0;
+    bottom: 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: 50%;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.icon-inrow {
+    display: flex;
+    align-items: center; /* Centers the content vertically */
+    gap: 10px;
+    padding: 10px;
+}
+
+.profileimg {
+    border-radius: 50%;
+    height: 5vh; /* กำหนดความสูงของรูปภาพไม่เกิน 10% ของความสูงหน้าจอ */
+    width: auto; /* ปรับขนาดความกว้างอัตโนมัติเพื่อรักษาสัดส่วน */
+}
+
+.company-logo {
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    object-fit: contain;
+}
 
 @import "~leaflet/dist/leaflet.css"

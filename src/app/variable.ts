@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable ,NgModule } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import * as CryptoJS from 'crypto-js';
-import { DatePipe } from '@angular/common';
+import { DatePipe,CommonModule } from '@angular/common';
 import liff from '@line/liff';
 import { PagekeyModel } from '../app/models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
@@ -10,8 +10,16 @@ import {ProfileModel} from './models/datamodule.module'
 
 
 @Injectable({ providedIn: 'root' })
+
+@NgModule({
+  declarations: [],
+  imports: [CommonModule],
+  providers: [DatePipe],
+})
+
 export class variable {
-  constructor(private http: HttpClient, private datePipe: DatePipe) { }
+  constructor(private http: HttpClient) { }
+
   
   // public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
   public wsUrl: string = "http://localhost:9080/";
@@ -26,8 +34,9 @@ export class variable {
   public showmenu = false;
   public icon = this.seticon();
 
+  public calendarperiod=15;
 
-  // =========== Encryption=========================
+  // #region  =========== Encryption=========================
   public setpagekey(pagedata: any) {
     try {
       var keyname: string = this.ProgramID + "pagekey"
@@ -87,7 +96,7 @@ export class variable {
     try {
       var keyname: string = this.ProgramID + "Profile"
       var value = localStorage.getItem(keyname);
-      console.log("getprofile profile : ", value);
+      // console.log("getprofile profile : ", value);
       if (value) {
         var strvalue  = JSON.parse(value);
         result = new ProfileModel();
@@ -160,9 +169,9 @@ export class variable {
     // return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return null;
   }
+   // #endregion
 
-
- // =========== driver & Vehicle status =========================
+ // #region =========== driver & Vehicle status =========================
   public getstatuscolor(id:number){
     if(id==5){return "#efbbfc";} //ชมพู
     else if(id==10){return "#f6f8c4";} //เหลือง
@@ -227,21 +236,22 @@ export class variable {
     return days[date.getDay()];
   }
   public getselecttime(period:number,startdate = new Date(2000,1,1)){
+    var datePipe: DatePipe = new DatePipe('en-US');
     var result: any =[];
     var cdate = new Date(startdate);
     cdate.setHours(0, 0, 0, 0);
     var totaldata = Math.floor(1440/period);
     var tdate=new Date(cdate);
     for(var i =0; i< totaldata;i++){
-      var time = this.datePipe.transform(tdate, 'HH:mm') || '00:00';
+      var time = datePipe.transform(tdate, 'HH:mm') || '00:00';
       result.push({id:i,selecttime:tdate,displaytime:time}) ;
       tdate.setMinutes(tdate.getMinutes()+period);
     }
     return result;
   }
+   // #endregion
 
-
-  // =========== APIs & Webservice =========================
+  // #region =========== APIs & Webservice =========================
 
   async getwsnouserdata(wsname: string, params: any, header: any): Promise<any> {
     var response;
@@ -315,8 +325,9 @@ export class variable {
     }
     return response;
   }
-
-  // =========== Line Profile =========================
+  //#endregion
+  
+  // #region =========== Line Profile =========================
   async getlineprofile() {
     try {
       await liff.init({ liffId: this.liffId });
@@ -331,8 +342,9 @@ export class variable {
     }
     return null;
   }
-
-    // =========== MQTT =========================
+  // #endregion
+  
+  // #region  =========== MQTT =========================
  //--------------------- MQTT  Lissening------------------------
 
   public async sendmqtt(topic: string, message: any) {
@@ -350,9 +362,13 @@ export class variable {
    }
    return false;
  }
-  // =========== Date Time =========================
+  // #endregion
+
+
+ // #region =========== Date Time =========================
   public DateToString(format: string, date = new Date()) {
-    var result = this.datePipe.transform(date, format);
+    var datePipe: DatePipe = new DatePipe('en-US');
+    var result = datePipe.transform(date, format);
     if (result != null) {
       return result;
     }
@@ -367,10 +383,38 @@ export class variable {
   public getperiodinminutes(startDate: Date, endDate: Date): number {
     const oneMinute = 60 * 1000; // Milliseconds in one minute
     const diffInTime = endDate.getTime() - startDate.getTime(); // Difference in milliseconds
-    return Math.floor(diffInTime / oneMinute); // Convert to minutes
+    return Math.abs( Math.floor(diffInTime / oneMinute)); // Convert to minutes
   }
-
-
-
+  public getperiodid(time:Date){
+    // console.log("time :",time);
+    // const mytime = new Date(time);
+    // const result = { edate: new Date("2024-10-14T14:30:00") }; // กำหนดวันที่และเวลาที่แน่นอน
+    const totalMinutes = (time.getHours() * 60) + time.getMinutes();
+    return Math.floor(totalMinutes / this.calendarperiod);
+    
+  }
+// #endregion
+}
+ // #region =========== get Function by class =========================
+export function DateToString(date = new Date(),format: string): string {
+  var datePipe: DatePipe = new DatePipe('en-US');
+  var result = datePipe.transform(date, format);
+  if (result != null) {
+    return result;
+  }
+  else {
+    if (format == 'HH:mm') { return "00:00"; }
+    else if (format == 'HH:mm:ss') { return "00:00:00"; }
+    else { return date.toLocaleDateString(); }
+  }
+}
+export function  getdaycolor(date:Date):string {
+  const days = ['#ff6161','#faeca0', '#ffb5fd', '#b1f0bd', '#ffd28a', '#90e5fc', '#cda7db'];
+  return days[date.getDay()];
+}
+export function getdayname(date:Date):string {
+  var days = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์"]
+  return days[date.getDay()];
 }
 
+// #endregion

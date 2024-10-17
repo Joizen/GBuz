@@ -14,18 +14,10 @@
         </div>
         <div class="col" style="flex: 0 0 auto; text-align: right;">
             <div class="row">
-                <div class="col" style="display: flex; align-items: center;"
-                    matTooltip="เพิ่มข้อมูลผู้ดูแล" >
+                <div class="col" style="display: flex; align-items: center; cursor: pointer;"
+                    matTooltip="เพิ่มข้อมูลผู้ดูแล" (click)="addnewuser(addusermodal)" >
                     <mat-icon style="width: 100%; color: blue;">add_box</mat-icon>
                 </div>
-                <!-- <div class="col" style="display: flex; align-items: center;"
-                    matTooltip="แสดงตามกลุ่มสถานะ">
-                    <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
-                </div>
-                <div class="col" style="display: flex; align-items: center;"
-                    matTooltip="แสดงรายพนักงานขับรถ">
-                    <mat-icon style="width: 100%; color: blue;">list</mat-icon>
-                </div> -->
             </div>
         </div>
     </div>
@@ -33,11 +25,10 @@
     <div class="row" style="width:100vw;">
         <div class="user-container">
             <mat-card *ngFor="let user of maindata" class="user-card">
-              <mat-card-header>
+              <mat-card-header style="cursor:pointer;" (click)="Showuser(user,userdetailmodal)">
                 <div mat-card-avatar style="margin-right: 20px;">
                     <img class="profileimg" [src]="user.userimage==''?va.icon.user:user.userimage"/>
                 </div>
-
                 <mat-card-subtitle>{{ user.empname }}</mat-card-subtitle>
                 <mat-card-subtitle>{{ user.rolename }} : {{user.phone}} </mat-card-subtitle>
               </mat-card-header>
@@ -51,7 +42,7 @@
                     <span>: {{user.linename}}</span>
                 </div>
 
-            </mat-card-content>
+              </mat-card-content>
             </mat-card>
           </div>
 
@@ -95,3 +86,11 @@
     </div>
 
 </div>
+
+<ng-template #addusermodal let-modal>
+  <app-addusercomppage [modal]="modal" [activecompany] ="activecompany"  (talk)="refreshuserlist()"></app-addusercomppage>
+</ng-template>
+
+<ng-template #userdetailmodal let-modal>
+  <app-userdatapage [modal]="modal" [activeuser] ="activeuser" [activecompany] ="activecompany"  (talk)="refreshuserlist()" ></app-userdatapage>
+</ng-template>

@@ -8,28 +8,24 @@
 
 <div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
 
-    <div class="container"
-        style="display: flex; justify-content: space-between; align-items: center; width:100hw; margin: 5px;">
-        <div class="col" style="flex: 0 0 auto;">
-
-        </div>
-        <div class="col" style="flex: 0 0 auto; text-align: right;">
-            <div class="row">
-                <div class="col" style="display: flex; align-items: center;"
-                    [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
-                    matTooltip="แสดงข้อมูลแผนการเดินรถล่วงหน้า" (click)="show.viewtype=0">
-                    <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
-                </div>
-                <div class="col" style="display: flex; align-items: center;"
-                    [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
-                    matTooltip="แสดงข้อมูลแผนการเดินรถรายสัปดาห์" (click)="show.viewtype=1">
-                    <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
-                </div>
-                <div class="col" style="display: flex; align-items: center;"
-                    [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
-                    matTooltip="แสดงรายการแผนการเดินรถ" (click)="show.viewtype=2">
-                    <mat-icon style="width: 100%; color: blue;">list</mat-icon>
-                </div>
+    <div class="container" style=" display: flex; justify-content: space-between;  align-items: center; width: 100vw; margin:0px; padding: 0px;">
+        <div class="row" style="width:100vw;">
+            <div class="col-9" style=" flex: 9; " >
+                Header Name
+            </div>
+            <div class="col-3"  style=" flex: 3;  display: flex;  gap: 10px; justify-content: flex-end; ">
+                    <div [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงข้อมูลแผนการเดินรถล่วงหน้า" (click)="show.viewtype=0" style=" cursor: pointer;">
+                        <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
+                    </div>
+                    <div [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงข้อมูลแผนการเดินรถรายสัปดาห์" (click)="show.viewtype=1" style=" cursor: pointer;">
+                        <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
+                    </div>
+                    <div [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
+                        matTooltip="แสดงรายการแผนการเดินรถ" (click)="show.viewtype=2" style=" cursor: pointer;">
+                        <mat-icon style="width: 100%; color: blue;">list</mat-icon>
+                    </div>
             </div>
         </div>
     </div>
@@ -38,7 +34,7 @@
         <!-- Left Column -->
         <div class="col-3" style="height: 70vh; width:40hw; overflow: scroll;">
             <div *ngFor="let item of maindata">
-                <div class="row" (click)="ShowVehicleDetail(item)">
+                <div class="row" (click)="ShowVehicleDetail(item)"  style="cursor: pointer;">
                     <div class="container"
                         style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
                         <div class="col" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
@@ -46,7 +42,7 @@
                             <img class="profileimg" [src]="item.driverimage==''?va.icon.user:item.driverimage" />
                         </div>
 
-                        <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
+                        <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ; ">
                             <!-- setitem 2-->
                             {{item.vname}}
                         </div>
@@ -72,10 +68,10 @@
                     <span> ข้อมูลแผนการเดินรถรายสัปดาห์ {{activedata.vname}} {{activedata.vlicent}} </span>   
                 </div>
                 <div class="col-2" style="display: flex;  justify-content: center ;align-items: center; height: 100%; gap:10px" *ngIf="copyslot">
-                    <mat-icon style="width: auto; color: red;" (click)="clearcopyweekplan()" >
+                    <mat-icon style="width: auto; color: red; cursor: pointer;" (click)="clearcopyweekplan()" >
                         close
                     </mat-icon>
-                    <mat-icon style="width: auto; color: green;" (click)="updatecopyweekplan()" >
+                    <mat-icon style="width: auto; color: green; cursor: pointer;" (click)="updatecopyweekplan()" >
                         content_paste
                     </mat-icon>
                 </div>             
@@ -91,8 +87,8 @@
                     </div>
                     <div class="col-10" style="display: flex; justify-content: start; align-items: center;overflow-x: scroll;">
                         <div *ngFor="let item of wplan.listdata" class="col" style="text-align:center;margin: 0; padding: 0; gap: 0;">
-                            <div class="col" (click)="OpenWeekplan(item,wplan,plandetailmodal)" 
-                                style="display: flex; flex-direction: column; justify-content: space-between;"
+                            <div class="col"  (click)="OpenWeekplan(item,wplan,plandetailmodal)" 
+                                style="display: flex; flex-direction: column; justify-content: space-between;cursor: pointer;"
                                 matTooltip="{{ item.starttime }}" matTooltipPosition="above">
                                 <!-- <div class="row" style="text-align:center ; height: 40px;">
                                 </div> -->
@@ -103,17 +99,12 @@
                                     <div style="display: block;" [style.background-color]="item.plancode==''?'#FFFFFF':'#FFE5B4'">
                                         &nbsp;
                                     </div>
-                                  </ng-template>
-
-                                <!-- <div class="row" style="justify-content: start;  width:50Px;" 
-                                    [style.background-color]="item.plancode==''?'#FFFFFF':'#FFE5B4'">
-                                    {{ item.starttime.includes(':00') ? item.starttime:'' }}
-                                </div> -->
+                                  </ng-template>                              
                               </div>
                         </div>
                     </div>
 
-                    <div class="col-1" *ngIf="(activedata.vid!=0)" style="display: flex;  justify-content: center; align-items: center; height: 100%;">
+                    <div class="col-1" *ngIf="(activedata.vid!=0)" style="display: flex;  justify-content: center; align-items: center; height: 100%; cursor: pointer;">
                         <mat-icon style="color: blue;" *ngIf="!copyslot && !wplan.ismaseter " (click)="copyweekplan(wplan)">content_copy</mat-icon>
                         <mat-checkbox  [(ngModel)]="wplan.isselect" *ngIf="copyslot && !wplan.ismaseter" ></mat-checkbox>
                     </div>

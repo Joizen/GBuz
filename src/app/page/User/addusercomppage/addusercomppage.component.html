@@ -1,0 +1,87 @@
+<div class="header" style="background-color: lightskyblue; padding: 2px; margin: 0px;">
+    <!-- Header data & close button -->
+    <div class="row" 
+         style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 10px; ">
+      
+      <div class="col-2" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
+        <img class="company-logo me-4" [src]="activecompany.complogo==''? va.icon.nologo : activecompany.complogo">
+      </div>
+  
+      <div class="col-7" style="display: flex; justify-content: start; align-items: center;">
+        <!-- <span style="font-size: large;">  {{ activeuser.empname }} </span> -->
+         เพิ่มข้อมูลผู้ดูแลรถ {{activecompany.companyname}}
+      </div>
+  
+      <div class="col-3" style="display: flex;  justify-content:end; align-items:end ;">
+        <div class="row">
+          <div class="icon-inrow">
+            <div class="icon-inrow"  *ngIf="false">
+              <span>ลบ</span>
+              <mat-icon style="width: auto; color: red;">cancel</mat-icon>
+            </div>
+            <div class="icon-inrow" *ngIf="show.Save" style="cursor: pointer;" (click)="saveuser()" >
+              <span>บันทึก</span>
+              <mat-icon style="width: auto; color: green;">send</mat-icon>
+            </div>
+            <div class="icon-inrow" (click)="modal.close()" style="cursor: pointer;">
+              <span>ปิด</span>
+              <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
+   <!-- spinner -->
+   <div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+      Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+  </div>
+
+    <!-- Body -->
+    <div style="width:100%; height: 2100%;">
+      <!-- List of User -->
+      <div style="width:100%; padding: 20px;">
+        <hr/>
+        <div class="row px-3 py-0" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+          <div class="col-8" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+            <span>  ข้อมูล พนักงานที่ต้องการเพิ่ม  </span>     
+          </div>
+          <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
+            <!-- <div class="icon-inrow" style="cursor: pointer;">
+              <mat-icon style="width: auto; color: green; ">domain_add</mat-icon>
+            </div> -->
+           </div> 
+         </div>
+         <hr/>
+        <div *ngFor="let user of listuser">
+          <div class="icon-inrow">
+            <div class="col-2">
+                <img class="profileimg" [src]="user.userimage==''?va.icon.user:user.userimage"/>
+            </div>
+            <div class="col-3">
+              <mat-icon> contacts</mat-icon>
+              <span style="font-size:medium;">  {{ user.empname }} </span>
+            </div>
+            <div class="col-5">
+                <div class="icon-inrow" matTooltip="สิทธิ์การใช้งาน และ หมายเลขโทรศัพท์">
+                    <mat-icon> home </mat-icon>
+                    <span>: {{user.companyname}} : {{ user.rolename }} </span>
+                  </div>
+            </div>
+           
+            <div class="col-2" style="cursor: pointer;" >
+                <mat-checkbox (change)="onSelectuser($event)" [(ngModel)]="user.isselect" ></mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+</div>

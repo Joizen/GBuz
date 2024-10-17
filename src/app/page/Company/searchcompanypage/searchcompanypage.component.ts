@@ -39,18 +39,17 @@ export class SearchcompanypageComponent implements OnInit {
   }
   checktoken(){
     var token = this.va.gettoken();
-    console.log("token : ",token);
+    // console.log("token : ",token);
     if(!token || token==""){
       this.router.navigate(["login"]);
-    }
- 
+    } 
    }
 
   ngAfterViewInit() {
     this.setData();
   }
   onSelectedRow(row: any) {
-    console.log(row);
+    // console.log(row);
   }
 
   applyFilter(event: any) {
@@ -73,6 +72,8 @@ export class SearchcompanypageComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.companydata);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.show.Spinner = false;
+
   }
 
   async getData() {
@@ -90,13 +91,12 @@ export class SearchcompanypageComponent implements OnInit {
     } else {
 
     }
-    this.show.Spinner = false;
     return result;
 
   }
 
   opencompanydata(comp: Companydata, modal: any) {
-    console.log("opencompanydata comp : ", comp);
+    // console.log("opencompanydata comp : ", comp);
     this.activecompany = comp;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     this.modalService.open(modal, { fullscreen: true });

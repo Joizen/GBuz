@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Vehicledata,Companydata,Routedata,Routeplandata, Calendarslot, Selecteddata} from '../../../models/datamodule.module'
+import { Vehicledata,Companydata,Routedata,Routeplandata, Calendarslot, Selecteddata, Comshiftdata} from '../../../models/datamodule.module'
 import { variable } from '../../../variable';
 
 @Component({
@@ -24,10 +24,10 @@ export class PlandatapageComponent implements OnInit {
   show = {Spinner: true};
   routelist: Routedata[] = [];
   selectrout : Routedata = new Routedata();
-  selectshift : Selecteddata = new Selecteddata();
+  selectshift : Comshiftdata = new Comshiftdata();
   selectenttime : string = "00:00" ; 
   activeplan : Routeplandata =new Routeplandata();
-  public listshift : Selecteddata []= [];
+  public listshift : Comshiftdata []= [];
   
   onperiod=false;
 
@@ -56,15 +56,15 @@ export class PlandatapageComponent implements OnInit {
         this.selectrout.endtime = this.activeplan.endtime;
         this.selectenttime = this.va.DateToString("HH:mm",this.activeplan.endtime);
       }else{
+        this.listshift = await this.getshiftData();
         await this.createnewplan();
       } 
       if(this.routedata){
         this.selectrout = this.routedata;
       }
 
-      this.listshift = await this.getshiftData();
 
-    }catch(ex){console.log("ngOnInit error : ", ex);    }
+    }catch(ex){console.log("ngOnInit error : ", ex); }
     this.onperiod = this.checkperiod();
     this.show.Spinner=false;  
   }
@@ -98,7 +98,7 @@ export class PlandatapageComponent implements OnInit {
       }else{
         this.alertMessage("Error","No company data");
       }
-
+      this.shiftchange();
   
     }catch(ex){console.log("createnewplan error : ", ex);    }
   }
@@ -127,7 +127,7 @@ export class PlandatapageComponent implements OnInit {
   }
 
   async getshiftData() {
-    var result: Selecteddata[] = [];
+    var result: Comshiftdata[] = [];
     try{
       var wsname = 'getdata';
       var params = { tbname: 'dllshift', compid: this.company.id };
@@ -136,7 +136,7 @@ export class PlandatapageComponent implements OnInit {
 
       if (jsondata.code == "000") {      
         jsondata.data.forEach((data: any) => {
-          var temp = new Selecteddata();
+          var temp = new Comshiftdata();
           temp.setdata(data);
           result.push(temp);
         });
@@ -154,6 +154,20 @@ export class PlandatapageComponent implements OnInit {
   shiftchange(){
     console.log("Selectedshift : ", this.selectshift);    
     this.activeplan.shiftid = this.selectshift.id;
+    // ปรับ เวลาตาม shipf ที่เลือก
+    if(this.activeplan.issend==0){
+      this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.sendtime);
+    }else{
+      if(this.activeplan.issend==0){
+        this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.receivetime);
+      }else{
+       this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.receivetime);
+
+      }
+      this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.ottime);
+    }
+    this.activeplanchange(0);
+
   }
 
   routechange(){
@@ -181,14 +195,7 @@ export class PlandatapageComponent implements OnInit {
       const [hours, minutes] = this.selectenttime.split(':').map(Number); 
       this.activeplan.endtime.setHours(hours, minutes);
     }
-    else if(index==1){
-      console.log("this.activeplan.period : ",this.activeplan.period);
-     }
-    else if(index==2){ }
-    else if(index==3){ }
-    else if(index==4){ }
-    else if(index==5){ }
-    else{}
+
 
     var starttime = new Date(this.activeplan.endtime);
     starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);

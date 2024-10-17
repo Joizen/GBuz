@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this.mqttClient = await this.connectMqtt();
     this.subscribeMqtt(this.mqttClient, 'gbdashboard');
-    console.log('subscribeMqtt gbdashboard : ',this.mqttClient);
+    // console.log('subscribeMqtt gbdashboard : ',this.mqttClient);
     this.startTimer();
  }
 
@@ -71,7 +71,7 @@ export class AppComponent implements OnInit {
       var  wsname = "refreshtoken";
       var jsondata = await this.va.getwsdata(wsname,{})
       if(jsondata.code=="000"){
-        console.log("refreshtoken jsondata : ",jsondata);     
+        // console.log("refreshtoken jsondata : ",jsondata);     
         if(jsondata.token!=undefined){
           this.va.settoken(jsondata.token);
           return true;

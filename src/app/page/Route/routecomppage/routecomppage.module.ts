@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RoutecomppageRoutingModule } from './routecomppage-routing.module';
@@ -9,7 +9,10 @@ import { RoutevehiclepageModule } from '../routevehiclepage/routevehiclepage.mod
 import { FormsModule } from '@angular/forms';
 import { SelectvehicleplanpageModule } from "../../Plan/selectvehicleplanpage/selectvehicleplanpage.module";
 import { PlandatapageModule } from '../../Plan/plandatapage/plandatapage.module';
+import { registerLocaleData } from '@angular/common';
+import localeTh from '@angular/common/locales/th';
 
+registerLocaleData(localeTh);
 
 @NgModule({
   declarations: [
@@ -27,6 +30,9 @@ import { PlandatapageModule } from '../../Plan/plandatapage/plandatapage.module'
 ],
   exports:[
     RoutecomppageComponent
-  ]
+  ],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'th' }  // Set Thai locale for this module
+  ],
 })
 export class RoutecomppageModule { }

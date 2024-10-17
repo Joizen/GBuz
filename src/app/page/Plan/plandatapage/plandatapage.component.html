@@ -75,7 +75,7 @@
       <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน" *ngIf="editplan || routedata" >
         <mat-icon>linear_scale</mat-icon>
         <span *ngIf="editplan">{{editplan?editplan.routename:''}}</span> 
-        <span *ngIf="routedata">{{routedata?routedata.routename:''}}</span> 
+        <span *ngIf="routedata&&!editplan">{{routedata?routedata.routename:''}}</span> 
       </div>
 
       <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
@@ -130,39 +130,44 @@
   <div style="width:100%; padding: 20px;" [style.background-color]="onperiod?'#c2fbbe':'#faa6a6'" >
     <div class="row" matTooltip="รับ-ส่ง | กะงาน | OT">
       <div class="col-1" style=" align-items: center;">
-        <mat-icon>flag</mat-icon>
+        <mat-icon>directions_bus</mat-icon>
       </div>
 
-      <div class="col-3" style="display: flex;  align-items: center; text-align: right;  text-align-last: right;">
-       <label> รับ-ส่ง </label>
-       <select [(ngModel)]="activeplan.issend">
-        <option [value]="0">ส่งเข้าบริษัท</option>
-        <option [value]="1">รับกลับบ้าน</option>
-      </select>
+      <div class="col-4" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
+        <mat-icon>directions_run</mat-icon>
+        <span *ngIf="editplan && activeplan.issend==0">ส่งเข้าบริษัท </span>
+        <span *ngIf="editplan && activeplan.issend==1">รับกลับบ้าน </span>
+
+        <label for="shiftselect"  *ngIf="!editplan"> รับ-ส่ง </label>
+        <select id="shiftselect" [(ngModel)]="activeplan.issend" *ngIf="!editplan" (change)="shiftchange()">
+          <option [value]="0">ส่งเข้าบริษัท</option>
+          <option [value]="1">รับกลับบ้าน</option>
+        </select>
       </div>
 
-      <div class="col-4" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
-        <div >
-          <label for="routeSelect" style="margin-right: 5px;">กะงาน : </label>
-          <select id="routeSelect" [(ngModel)]="selectshift" style="text-align: right; text-align-last: right; "
-            (change)="shiftchange()">
-            <option *ngFor="let item of listshift" [ngValue]="item">
-              {{item.descp}}
-            </option>
-          </select>
-        </div>
+      <div class="col-4" style="display: flex; align-items: center; gap: 10px; justify-content: start; ">
+        <mat-icon>schedule</mat-icon> 
+        <span *ngIf="editplan">{{activeplan.shiftname}}</span>
+        <label for="routeselect" *ngIf="!editplan"> กะงาน : </label>
+        <select id="routeselect" *ngIf="!editplan" [(ngModel)]="selectshift" (change)="shiftchange()">
+          <option *ngFor="let item of listshift" [ngValue]="item">
+            {{item.shift}}
+          </option>
+        </select>
       </div>
 
-      <div class="col-3" style="display: flex;  align-items: center; justify-content: end;">
-        <label> OT </label>
-        <select [(ngModel)]="activeplan.ot">
+      <div class="col-3" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
+        <mat-icon>update</mat-icon>
+        <span *ngIf="editplan && activeplan.ot==0">ปกติ</span>
+        <span *ngIf="editplan && activeplan.ot==1">OT</span>
+
+        <label for="otselect" *ngIf="!editplan"> OT </label>
+        <select  id="otselect"  *ngIf="!editplan" [(ngModel)]="activeplan.ot" (change)="shiftchange()">
           <option [value]="0">ปกติ</option>
           <option [value]="1">OT</option>
         </select>
       </div>
 
-      <div class="col-1" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-      </div>
       
     </div>
     <hr />

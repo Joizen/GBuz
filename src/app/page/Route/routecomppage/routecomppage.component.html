@@ -36,122 +36,130 @@
         </div>
     </div>
 
-    <div *ngIf="show.viewtype==0" >
-        <div class="row" style="height: 60vh; width:100vw;">
-            <!-- Left Column -->
-            <div class="col-5" style="height: 60vh; width:40hw; overflow-y: scroll; overflow-x: hidden;">
-                <div *ngFor="let item of maindata">
-                    <div class="row" (dblclick)="Showroutedropoint(item,compdetailmodal)" (click)="Showroute(item)">
-                        <div class="container" 
-                            style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
-                            <div class="col ms-2" style="display:flexbox; text-align: start;">
-                                <!-- setitem 1-->
-                                {{item.routename}}
+    <div *ngIf="show.viewtype==0">
+        <div class="container"  style="height: 80vh; width:100vw;  overflow-x: scroll;">
+            <div class="row" style=" margin: 0; padding: 0; gap: 0;" [style.background-color]="dayplan.colorday" >
+                <div class="container" style="display: flex; align-items: center;">
+                    <div class="col-4" style="text-align: center;">
+                        ข้อมูลแผนการเดินรถรายวัน
+                    </div>
+                    <div class="col-1" style="justify-content: center; text-align: start;" (click) = "getdayplan(-1)"
+                        *ngIf="dayplan.plandate>dayplan.today">
+                        <mat-icon>navigate_before</mat-icon>
+                    </div>
+                    <div class="col-6" style="justify-content: center; text-align: center;">
+                        {{ dayplan.plandate | date: 'EEEE' }}  ที่ {{dayplan.plandate  | date: 'dd MMMM yyyy'}} 
+                    </div>
+                    <div class="col-1" style="justify-content: center; text-align: end;" (click) = "getdayplan(1)">
+                        <mat-icon>navigate_next</mat-icon>
+                    </div>               
+                </div>               
+            </div>
+            
+            <!-- ====== Time ====== -->
+            <div class="row" style=" margin: 0; padding: 0; gap: 0;" [style.background-color]="dayplan.colorday"  >
+                <div class="container" style="display: flex; align-items: center;">
+                    <!-- Routename Name -->
+                    <div class="col-2" style="text-align: center;">
+                        เส้นทาง :
+                    </div> 
+                    <!-- Vehicle & Time -->          
+                    <div class="col-10" style="text-align: center;">
+                        <div class="container" style="display: flex; align-items: center;">
+                              <!-- Vehicle-->        
+                            <div class="col-3" style="text-align: center;">
+                                รถ :
+                            </div>
+                            <!-- Time -->
+                            <div class="col-9" style="display: flex;" >
+                                <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                    <div class="col" style="width:5px ;"
+                                        matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                        <!-- Check if the time includes ":00" -->
+                                        <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay" >
+                                            {{ item.starttime.replace(':00', '') }}
+                                        </div>                            
+                                        <!-- No Time Display -->
+                                        <ng-template #noTimeDisplay>
+                                            <div style="display: block;">
+                                                &nbsp;&nbsp;
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
+                   
                 </div>
             </div>
 
-            <!-- Righ Column -->
-            <div  class="col-7" id="map-container" style="height: 60vh; width:60hw; background-color: rgb(193, 237, 196);">
-
-            </div>
-        </div>
-
-        <!-- Vehicle in Route -->
-        <div class="row"  style="height: 2px; width: 100%; background-color: lightgray;"></div>
-        <div class="row" style="max-height: 20vh; width:100vw;">
-            <!-- header -->
-            <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center;  width:100%;  margin: 0; background-color: lightyellow;">
-                <div class="col" style="display: flex; align-items: center; justify-content: start;">
-                <mat-icon> directions_bus </mat-icon>
-                <span class="m-2"> ข้อมูลรถประจำเส้นทาง จำนวน {{activedata.vinroute.length}} คัน </span>
-                </div>
-                <div class="col" style="flex: 0 0 auto; text-align: right; margin: 20px;">
-                <div class="row" (click)="addvehicleinroute(vehicleroutemodal)">
-                    <div class="col" style="display: flex; align-items: center; margin-right: 20px;">
-                    <mat-icon style="width: auto; color: blue;">add_box</mat-icon>
+            <!-- ====== Data ====== -->
+            <hr style="height:2px; margin: 2px;">
+            <div class="row" *ngFor="let routeday of dayplan.activeroute"  style=" margin: 0; padding: 0; gap: 0;">
+                <div class="container"  style="display: flex; align-items: center; justify-content: start;">
+                    <!-- Routename Name -->
+                    <div class="col-2" style="text-align: center;">
+                        {{routeday.route.routename}}
                     </div>
-                </div>
-                </div>
-            </div>
-            <div style="height: 2px; width: 100%; background-color: lightgray;"></div>
-            <!-- body -->
-            <div style="height: 100%; width:100%; overflow: scroll;">
-                <div *ngFor="let vehicle of activedata.vinroute">
-                <div class="row" >
-                    <div class="col-6">
-                        <div style="display: flex; justify-content: space-between; align-items: start;  width:100%;  margin: 0;">
-                            <div class="icon-inrow" matTooltip="ชื่อรถ">
-                              <mat-icon> directions_bus </mat-icon>
-                              <span>{{vehicle.vname}}</span>
+                    <!-- Vehicle & Time -->
+                    <div class="col-10" style="text-align: center;" >
+                        <!-- Empty Vehicle -->
+                        <div class="container" style="display: flex; align-items: center;"  *ngIf="routeday.listvplan.length==0">
+                              <!-- Vehicle-->        
+                              <div class="col-3" style="text-align: center;">
+                                ไม่มีการจัดรถ
                             </div>
-                  
-                            <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
-                              <mat-icon>credit_card</mat-icon>
-                              <span>{{vehicle.vlicent}}</span> 
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="ระยะทาง (กม.)">
-                              <mat-icon> timeline </mat-icon>
-                              <span>{{vehicle.issendname}}</span>  
-                              <span>{{vehicle.shiftname}}</span>  
-                              <span *ngIf="vehicle.item!=1">({{vehicle.item}})</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="ระยะเวลา (นาที)">
-                              <mat-icon>update</mat-icon>
-                              <span>{{vehicle .period}} นาที</span>  
-                              <span>{{ vehicle.distance}} กม.</span>  
+                             
+                            <div class="col-8" style="display: flex; background-color: lightcoral;" >
+                                <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                    <div class="col"  style="width:5px ;"
+                                        matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                        <div style="display: block;">
+                                            &nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-5">
-                        <div style="display: flex; justify-content: space-between; align-items: start;  width:100%;  margin: 0;">
 
-                            <div class="icon-inrow" matTooltip="เริ่มแจ้งพร้อมเริ่มงาน">
-                              <mat-icon>check_circle</mat-icon>
-                              <span>{{ vehicle.wakeupwarn}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เตือนเมื่อไม่แจ้งพร้อมเริ่มงาน">
-                              <mat-icon>cancel</mat-icon>
-                              <span>{{ vehicle.wakeuptime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เตือนเมื่อไม่สตาร์ทรถ">
-                              <mat-icon>power_settings_new</mat-icon>
-                              <span>{{ vehicle.otwtime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เวลาที่ควรถึงจุดแรก">
-                              <mat-icon>departure_board</mat-icon>
-                              <span>{{ vehicle.starttime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เวลาที่ควรถึงปลายทาง">
-                              <mat-icon>flag</mat-icon>
-                              <span>{{ vehicle.endtime}}</span>  
-                            </div>              
-                        </div>
+                        <!-- Vehicle plan data -->
+                        <div class="container" *ngFor="let vehicle of routeday.listvplan" 
+                            style="display: flex; align-items: center;">
+                            <!-- Vehicle-->        
+                            <div class="col-3" style="text-align: center;">
+                              {{vehicle.vname}}
+                          </div>
+                           
+                          <div class="col-8" style="display: flex; background-color: green;" >
+                              <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                  <div class="col"  style="width:5px ;"
+                                      matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                      <div style="display: block;">
+                                          &nbsp;&nbsp;
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
                     </div>
                 </div>
+                <hr style="height:2px; margin: 2px;">
             </div>
-            </div>
-        </div>
+  
+          </div>
     </div>
+
     <div *ngIf="show.viewtype==1">
-        <div class="row" style="height: 60vh; width:100vw;">
+        <div class="row" style="height: 80vh; width:100vw;">
             <!-- Left Column -->
             <div class="col-3" style="height: 60vh; width:40hw; overflow-y: scroll; overflow-x: hidden;">
                 <div *ngFor="let item of maindata">
                     <div class="row" (dblclick)="Showroutedropoint(item,compdetailmodal)" (click)="ShowVehicleDetail(item)">
                         <div class="container" 
                             style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
-                            <div class="col ms-2" style="display:flexbox; text-align: start;">
+                            <div class="col ms-2" style="display:flexbox; text-align: start; cursor: pointer;">
                                 <!-- setitem 1-->
                                 {{item.routename}}
                             </div>
@@ -170,31 +178,26 @@
                         <span> ข้อมูลแผนการเดินรถรายสัปดาห์ {{activedata.routename}} </span>   
                     </div>
                     <div class="col-2" style="display: flex;  justify-content: center ;align-items: center; height: 100%; gap:10px" >
-                        <!-- <mat-icon style="width: auto; color: red;" (click)="clearcopyweekplan()">
-                            close
-                        </mat-icon>
-                        <mat-icon style="width: auto; color: green;" (click)="updatecopyweekplan()">
-                            content_paste
-                        </mat-icon> -->
                     </div>             
     
                 </div>
                 <div *ngFor="let wplan of weekplan" style="margin:0;padding:0;">
                     <div class="container" style="display: flex; margin-left: 20px; ">
-                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;flex-direction: column; padding: 10px;"
+                        <!-- ====== Day name ====== -->
+                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;flex-direction: column; padding: 10px;  cursor: pointer;"
                             [style.background-color]="wplan.colorday==''?'#FFFFFF':wplan.colorday" >
                           <div style="text-align: center;" >
                             {{ wplan.textdate }}
                           </div>
-                          <div style="display: flex; justify-content: end; align-items:center;flex-direction: column;width: 100%;height: 100%;">
+                          <div style="display: flex; justify-content: end; align-items:center;flex-direction: column;width: 100%;height: 100%;  cursor: pointer;">
                             <mat-icon style="width: auto; color: green;" (click)="addvehicleweekplan(wplan,selectvehiclemodal,plandetailmodal)">
                                 add_circle
                             </mat-icon>
                           </div>
                         </div>
                         <div class="col-11" style="overflow-x: scroll;">
-
-                            <div *ngFor="let vehicle of wplan.listvplan" class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;">
+                            <!-- ====== Vehicle ====== -->
+                            <div *ngFor="let vehicle of wplan.listvplan" class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;  cursor: pointer;">
                                 <div class="container" style="display: flex; align-items: center;">
                                     <!-- Vehicle Name -->
                                     <div class="col-1" style="text-align: center; margin-right: 10px;"
@@ -204,12 +207,14 @@
                             
                                     <!-- Vehicle Data -->
                                     <div class="col-11" style="display: flex;">
-                                        <div *ngFor="let item of vehicle.listdata" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                        <div class="col"  *ngFor="let item of vehicle.listdata" (click)="OpenWeekplan(item,wplan,vehicle,plandetailmodal)" 
+                                            style="text-align: center; margin: 0; padding: 0; gap: 0;">
                                             <div class="col" 
                                                 matTooltip="{{ item.starttime }}" matTooltipPosition="above">
                                                 <!-- Check if the time includes ":00" -->
                                                 <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay" 
-                                                     [style.background-color]="item.plancode=='' ? '#FFFFFF' : item.routeid==activedata.id ? '#FFE5B4' : '#CCCCCC'">
+                                                     [style.background-color]="item.plancode=='' ? '#FFFFFF' : item.routeid==activedata.id ? '#FFE5B4' : '#CCCCCC'"
+                                                     [style.color]="item.plancode=='' ? '#FFFFFF' : item.routeid==activedata.id ? '#FFE5B4' : '#CCCCCC'">
                                                     {{ item.starttime.replace(':00', '') }}
                                                 </div>
                             
@@ -222,132 +227,47 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="col-1" style="display: flex;  justify-content: center; align-items: center; height: 100%;">
-                                        <mat-icon style="color: blue;" *ngIf="!copyslot && !vehicle.ismaseter " (click)="copyweekplan(vehicle)">content_copy</mat-icon>
-                                        <mat-checkbox  [(ngModel)]="vehicle.isselect" *ngIf="copyslot && !vehicle.ismaseter" ></mat-checkbox>
-                                    </div> -->
                                 </div>
-                                <hr style="height:2px;">
+                                <hr style="height:2px; margin: 2px;">
                             </div>
 
-                            <!-- <div *ngFor="let vehicle of wplan.listvplan" class="col">
-                               <div class="row">
-                                    <div class="container">
-                                        <div class="col-1 " [style.background-color]="wplan.colorday==''?'#FFFFFF':wplan.colorday" >
-                                        <div style="text-align: center;" >
-                                            {{ vehicle.vname }} 
-                                        </div>
-                                        </div>
-                                        <div class="col-10" >
-                                            <div *ngFor="let item of vehicle.listdata" class="col" >
-                                                <div class="col" matTooltip="{{ item.starttime }}" matTooltipPosition="above">
-                                                    <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay" [style.background-color]="item.plancode==''?'#FFFFFF':'#FFE5B4'">
-                                                        {{item.starttime.replace(':00', '') }}
+                            <!-- ====== Time ====== -->
+                            <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px; width: 100%; height: 20px;"
+                                *ngIf="wplan.listvplan.length==0"></div>
+                            <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;">
+                                <div class="container" style="display: flex; align-items: center;">
+                                    <!-- Vehicle Name -->
+                                    <div class="col-1" style="text-align: center; margin-right: 10px;"
+                                        [style.background-color]="wplan.colorday==''?'#FFFFFF':wplan.colorday">
+                                        Time :
+                                    </div>
+                                    <!-- Vehicle Data -->
+                                    <div class="col-11" style="display: flex;">
+                                        <div *ngFor="let item of wplan.listdata" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                            <div class="col" 
+                                                matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                                <!-- Check if the time includes ":00" -->
+                                                <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay"  style=" background-color:lightgrey">
+                                                    {{ item.starttime.replace(':00', '') }}
+                                                </div>                            
+                                                <!-- No Time Display -->
+                                                <ng-template #noTimeDisplay>
+                                                    <div style="display: block; background-color:lightgrey">
+                                                        &nbsp;
                                                     </div>
-                                                    <ng-template #noTimeDisplay>
-                                                        <div style="display: block;" [style.background-color]="item.plancode==''?'#FFFFFF':'#FFE5B4'">
-                                                            &nbsp;
-                                                        </div>
-                                                    </ng-template>
-                                                </div>
+                                                </ng-template>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                                <hr style="height:2px; margin: 2px;">
+                            </div>
+
+
                         </div>
-    
-                        <!-- <div class="col-1" style="display: flex;  justify-content: center; align-items: center; height: 100%;">
-                            <mat-icon style="color: blue;" >content_copy</mat-icon>
-                            <mat-checkbox  ></mat-checkbox>
-                        </div> -->
                      </div>
                     <hr>
                 </div>
-                
-            </div>
-        </div>
-
-        <!-- Vehicle in Route -->
-        <div class="row"  style="height: 2px; width: 100%; background-color: lightgray;"></div>
-        <div class="row" style="max-height: 20vh; width:100vw;">
-            <!-- header -->
-            <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center;  width:100%;  margin: 0; background-color: lightyellow;">
-                <div class="col" style="display: flex; align-items: center; justify-content: start;">
-                <mat-icon> directions_bus </mat-icon>
-                <span class="m-2"> ข้อมูลรถประจำเส้นทาง จำนวน {{activedata.vinroute.length}} คัน </span>
-                </div>
-                <div class="col" style="flex: 0 0 auto; text-align: right; margin: 20px;">
-                <div class="row" (click)="addvehicleinroute(vehicleroutemodal)">
-                    <div class="col" style="display: flex; align-items: center; margin-right: 20px;">
-                    <mat-icon style="width: auto; color: blue;">add_box</mat-icon>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div style="height: 2px; width: 100%; background-color: lightgray;"></div>
-            <!-- body -->
-            <div style="height: 100%; width:100%; overflow: scroll;">
-                <div *ngFor="let vehicle of activedata.vinroute">
-                <div class="row" >
-                    <div class="col-6">
-                        <div style="display: flex; justify-content: space-between; align-items: start;  width:100%;  margin: 0;">
-                            <div class="icon-inrow" matTooltip="ชื่อรถ">
-                              <mat-icon> directions_bus </mat-icon>
-                              <span>{{vehicle.vname}}</span>
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
-                              <mat-icon>credit_card</mat-icon>
-                              <span>{{vehicle.vlicent}}</span> 
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="ระยะทาง (กม.)">
-                              <mat-icon> timeline </mat-icon>
-                              <span>{{vehicle.issendname}}</span>  
-                              <span>{{vehicle.shiftname}}</span>  
-                              <span *ngIf="vehicle.item!=1">({{vehicle.item}})</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="ระยะเวลา (นาที)">
-                              <mat-icon>update</mat-icon>
-                              <span>{{vehicle .period}} นาที</span>  
-                              <span>{{ vehicle.distance}} กม.</span>  
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <div style="display: flex; justify-content: space-between; align-items: start;  width:100%;  margin: 0;">
-
-                            <div class="icon-inrow" matTooltip="เริ่มแจ้งพร้อมเริ่มงาน">
-                              <mat-icon>check_circle</mat-icon>
-                              <span>{{ vehicle.wakeupwarn}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เตือนเมื่อไม่แจ้งพร้อมเริ่มงาน">
-                              <mat-icon>cancel</mat-icon>
-                              <span>{{ vehicle.wakeuptime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เตือนเมื่อไม่สตาร์ทรถ">
-                              <mat-icon>power_settings_new</mat-icon>
-                              <span>{{ vehicle.otwtime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เวลาที่ควรถึงจุดแรก">
-                              <mat-icon>departure_board</mat-icon>
-                              <span>{{ vehicle.starttime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เวลาที่ควรถึงปลายทาง">
-                              <mat-icon>flag</mat-icon>
-                              <span>{{ vehicle.endtime}}</span>  
-                            </div>              
-                        </div>
-                    </div>
-                </div>
-            </div>
             </div>
         </div>
     </div>
@@ -486,5 +406,5 @@
 
 <ng-template #plandetailmodal let-modal>
     <app-plandatapage  [modal]="modal" [vehicle]="selectedvehicle" [company]="activecompany"  
-    [planslot]="selectedslot" [routedata]="activedata" (talk)="routeplantalkback($event)"></app-plandatapage>
+    [planslot]="activeslot" [routedata]="activedata" [editplan]="activeplan" (talk)="routeplantalkback($event)"></app-plandatapage>
 </ng-template>

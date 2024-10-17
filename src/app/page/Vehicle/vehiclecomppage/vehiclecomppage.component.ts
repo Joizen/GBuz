@@ -42,7 +42,7 @@ export class VehiclecomppageComponent implements OnInit {
     var wsname = 'getdata';
     var params = { tbname: 'vehiclecomp', compid: this.activecompany.id };
     var jsondata = await this.va.getwsdata(wsname, params);
-     console.log("getData jsondata : ", jsondata);
+    //  console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new Vehicledata();
@@ -107,7 +107,7 @@ export class VehiclecomppageComponent implements OnInit {
     // console.log("startweek : ",a);
     this.weekplan=[]
     for(var i =0;i<7;i++){
-      var w =new Calendarplan(15,i,startweek,this.va.getdayname(startweek),this.va.getdaycolor(startweek));
+      var w =new Calendarplan(15,i,startweek);
       w.iddate = this.va.DateToString("yyyyMMdd",w.cdate);
       this.weekplan.push(w);
       startweek.setDate(startweek.getDate()+1);
@@ -129,11 +129,11 @@ export class VehiclecomppageComponent implements OnInit {
         var wplan = this.weekplan.find(x=>x.iddate==id);
         if(wplan){
           const listslot = wplan.listdata.filter(item => 
-            this.getslotinrange(item.sdate,item.edate, plan.starttime, plan.endtime)
+            this.getslotinrange(item.sdate,item.edate, plan.wakeupwarntime, plan.endtime)
           );
-          console.log('plan.starttime:', plan.starttime);
-          console.log('plan.endtime:', plan.endtime);
-          console.log('Items within the date range:', listslot);
+          // console.log('plan.starttime:', plan.starttime);
+          // console.log('plan.endtime:', plan.endtime);
+          // console.log('Items within the date range:', listslot);
           if(listslot){
             listslot.forEach(slot => {
               slot.plancode=plan.plancode;
@@ -141,12 +141,13 @@ export class VehiclecomppageComponent implements OnInit {
           }
           wplan.listplan.push(plan);
         }  
-        console.log("ShowVehicleDetail wplan : ",wplan);
+        // console.log("ShowVehicleDetail wplan : ",wplan);
       });
     }
-      console.log("ShowVehicleDetail this.weekplan : ",this.weekplan);
+      // console.log("ShowVehicleDetail this.weekplan : ",this.weekplan);
       this.show.Spinner=false;
   }
+
   getslotinrange(sdate: Date, edate: Date, startDate: Date, endDate: Date): boolean {
     // const date = new Date(dateStr); // Convert string to Date
     // return !isNaN(date.getTime()) && date >= startDate && date <= endDate;

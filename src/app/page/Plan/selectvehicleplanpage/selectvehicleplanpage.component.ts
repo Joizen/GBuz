@@ -86,12 +86,18 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
   async showvehicleslot() {
     console.log('showvehicleslot : ');
-
     var listwork = await this.getWeekData();
-    console.log('listwork : ', listwork);
-
-    this.listslot = [];
-    if(listwork.length>0){this.listslot = this.setworkslot(listwork)}
+    if(listwork){
+      console.log('listwork : ', listwork);
+      this.listslot = [];
+      if(listwork.length>0){
+        this.listslot = this.setworkslot(listwork)
+      }else{
+        //ไม่มีงาน
+        console.log('this.workslot : ', this.workslot);
+        this.listslot = this.setemptyworkslot();
+      }
+    }
   }
 
   setworkslot(listwork:Routeplandata[]){
@@ -122,16 +128,35 @@ export class SelectvehicleplanpageComponent implements OnInit {
         }
   
         if (lastendtime != nextday) {
-
           var plan = listwork[listwork.length-1];
           var period = this.va.getperiodinminutes(lastendtime, nextday);
           var data = {starttime: lastendtime,endtime: nextday,period: period,plancode: '',plantype: 2, routename:'ว่าง'}
           var emptyslot = this.getslotplan(data);
           result.push(emptyslot);
         }
-  
-        console.log('result : ', result);
+
+        var lastslot = result[result.length-1];
+        lastslot.endid=(Math.floor(1440/this.va.calendarperiod))
+      console.log('result : ', result);
         this.show.step = 1;
+      
+    }catch(ex){ console.log('setworkslot : error : ', ex);}
+    return result;
+  }
+  setemptyworkslot(){
+    var result : Calendarslot[] = [];
+    try{
+      if(this.workslot){
+        var lastendtime =  new Date(this.workslot.cdate);
+        var nextday = new Date(lastendtime);
+        nextday.setDate(nextday.getDate()+1);
+        var period = this.va.getperiodinminutes(lastendtime,nextday);
+        var emptyslot = this.getslotplan({starttime: lastendtime,endtime: nextday,period: period,plancode: '',plantype: 2, routename:'ว่าง'});
+        emptyslot.endid=(Math.floor(1440/this.va.calendarperiod))
+        result.push(emptyslot);
+      }
+      console.log('result : ', result);
+      this.show.step = 1;
       
     }catch(ex){ console.log('setworkslot : error : ', ex);}
     return result;
@@ -140,8 +165,6 @@ export class SelectvehicleplanpageComponent implements OnInit {
   getslotplan(plan: any) {
     var result = new Calendarslot();
     try{
-      // temp.startid = plan.startid;
-      // temp.endid = plan.endid;
       result.sdate = plan.starttime;
       result.edate = plan.endtime;
       result.period = plan.period;
@@ -151,31 +174,46 @@ export class SelectvehicleplanpageComponent implements OnInit {
       result.endtime = this.va.DateToString('HH:mm', plan.endtime);
       result.plancode = plan.plancode;
       result.plantype = plan.plantype;
+      result.startid = this.va.getperiodid(plan.starttime);
+      result.endid =  this.va.getperiodid(plan.endtime);
     }catch(ex){console.log('getslotplan : error : ', ex);}
     return result;
   }
 
   async getWeekData() {
-    var result: Routeplandata[] = [];
-    var wsname = 'getdata';
-    var params = {
-      tbname: 'routeweek',
-      vid: this.activevihicle.vid,
-      routeday: this.workslot?.id,
-    };
-    var jsondata = await this.va.getwsdata(wsname, params);
-    console.log('getWeekData jsondata : ', jsondata);
-    if (jsondata.code == '000') {
-      jsondata.data.forEach((data: any) => {
-        var temp = new Routeplandata();
-        temp.setdata(data);
-        result.push(temp);
-      });
-    } else {
-      alert('getWeekData No data');
+    try{
+      var result: Routeplandata[] = [];
+      var wsname = 'getdata';
+      var params = {
+        tbname: 'routeweek',
+        vid: this.activevihicle.vid,
+        routeday: this.workslot?.id,
+      };
+      var jsondata = await this.va.getwsdata(wsname, params);
+      console.log('getWeekData jsondata : ', jsondata);
+      if (jsondata.code == '000') {
+        if(jsondata.data.length>0){
+          // มีงานบ้างแล้ว
+          jsondata.data.forEach((data: any) => {
+            var temp = new Routeplandata();
+            temp.setdata(data);
+            result.push(temp);
+          });  
+        }else{
+          // ยังไม่มีงานเลย
+         
+        }
+      } else {
+        alert('getWeekData No data');
+        return undefined;
+      }
+      console.log('getWeekData result : ', result);
+      return result;
+  
+    }catch(ex){
+      console.log("getWeekData Error : " ,ex);
+      return undefined;
     }
-    console.log('getWeekData result : ', result);
-    return result;
   }
 
   showcreateplan(slot:Calendarslot){
