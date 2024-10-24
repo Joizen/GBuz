@@ -367,7 +367,7 @@ export class variable {
 
  // #region =========== Date Time =========================
   public DateToString(format: string, date = new Date()) {
-    var datePipe: DatePipe = new DatePipe('en-US');
+    var datePipe: DatePipe = new DatePipe('th');
     var result = datePipe.transform(date, format);
     if (result != null) {
       return result;
@@ -397,7 +397,7 @@ export class variable {
 }
  // #region =========== get Function by class =========================
 export function DateToString(date = new Date(),format: string): string {
-  var datePipe: DatePipe = new DatePipe('en-US');
+  var datePipe: DatePipe = new DatePipe('th');
   var result = datePipe.transform(date, format);
   if (result != null) {
     return result;

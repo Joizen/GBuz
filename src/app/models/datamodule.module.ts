@@ -486,6 +486,7 @@ export class Routedata {
   }
 }
 export class Routeplandata {
+  plankey:string="";
   plancode:string="";
   plantype: number = 0; // 0 = masterplan save in route, 2 = weekplan save in routeday, 3 normal plan save in plan  
   routeid: number = 0;
@@ -514,7 +515,7 @@ export class Routeplandata {
   ot : number = 0;
   otname :string = "ปกติ";
   issend : number = 0;
-  transtatus: number = 0;
+  transtatus: number = 1;
   constructor() {}
 
   setdata(jsondata: any) {
@@ -536,7 +537,6 @@ export class Routeplandata {
     this.wakeupwarn = jsondata.wakeupwarn;
     this.wakeup = jsondata.wakeup;
     this.startwarn = jsondata.startwarn;
-    // this.plandate = parse(jsondata.plandate, 'yyyy-MM-dd HH:mm:ss', new Date());    
     this.plandate = new Date(jsondata.plandate);   
     this.starttime = new Date(this.plandate);
     var st = new Date(jsondata.starttime)
@@ -550,6 +550,7 @@ export class Routeplandata {
     this.wakeuptime.setMinutes(this.wakeuptime.getMinutes() - this.wakeup);
     this.startwarntime.setMinutes(this.startwarntime.getMinutes() - this.startwarn);
     this.endtime.setMinutes(this.endtime.getMinutes() + this.period);
+    this.plankey = va.DateToString(this.starttime,"yyyyMMdd");
 
   }
   setdatabyroute(data: Routedata) {
@@ -869,7 +870,9 @@ export class Calendardayplan{
   listtime : Calendardata[] = [];
   public activeroute: Routedayplan[] =[];
   public listrouteplan: Routedayplan[] =[];
-  
+  public listplan: Routeplandata[] =[];
+  noplan=true;
+
   constructor(period:number){ 
     var totaldata = Math.floor(1440/period);
     this.today.setHours(0, 0, 0, 0);
@@ -884,16 +887,25 @@ export class Calendardayplan{
     this.plankey = va.DateToString(activedate,'yyyyMMdd');  
     this.plandate  = new Date(activedate.getFullYear(),activedate.getMonth(),activedate.getDate(),0,0,0,0);
     this.colorday = va.getdaycolor(activedate);
-
   }
 }
 export class Routedayplan{
   public plankey: string= "20000101";
   public plandate: Date = new Date("2000-01-01 00:00:00");
-  public route: Routedata =new Routedata();
+  route: Routedata =new Routedata();
   listplan : Routeplandata[] = [];
   listvplan : Vehicleplan[] = [];
-  constructor(){}
+  constructor(activedate:Date,route: Routedata ){
+    this.route =route;
+    this.plankey = va.DateToString(activedate,'yyyyMMdd');  
+    this.plandate  = new Date(activedate.getFullYear(),activedate.getMonth(),activedate.getDate(),0,0,0,0);
+  }
+  setactivdayplan(activedate:Date){
+    this.plankey = va.DateToString(activedate,'yyyyMMdd');  
+    this.plandate  = new Date(activedate.getFullYear(),activedate.getMonth(),activedate.getDate(),0,0,0,0);
+    this.listplan  = [];
+    this.listvplan  = [];
+  }
 }
 
 

@@ -25,7 +25,7 @@ export class PlandatapageComponent implements OnInit {
   routelist: Routedata[] = [];
   selectrout : Routedata = new Routedata();
   selectshift : Comshiftdata = new Comshiftdata();
-  selectenttime : string = "00:00" ; 
+  selecttime={start:"00:00", end : "00:00"} ; 
   activeplan : Routeplandata =new Routeplandata();
   public listshift : Comshiftdata []= [];
   
@@ -34,7 +34,9 @@ export class PlandatapageComponent implements OnInit {
 
   async ngOnInit() {
     try{
-      // console.log("ngOnInit this.editplan ",this.editplan) 
+      
+      console.log("ngOnInit this.routedata 1",this.routedata);
+      
       if(this.editplan){
         this.activeplan=this.editplan;
         this.selectrout.routename=this.activeplan.routename;
@@ -54,7 +56,9 @@ export class PlandatapageComponent implements OnInit {
         this.selectrout.startwarn = this.activeplan.startwarn;
         this.selectrout.startwarntime = this.activeplan.startwarntime;
         this.selectrout.endtime = this.activeplan.endtime;
-        this.selectenttime = this.va.DateToString("HH:mm",this.activeplan.endtime);
+        this.selecttime.end = this.va.DateToString("HH:mm",this.activeplan.endtime);
+        this.selecttime.start = this.va.DateToString("HH:mm",this.activeplan.starttime);
+        
       }else{
         this.listshift = await this.getshiftData();
         await this.createnewplan();
@@ -62,7 +66,11 @@ export class PlandatapageComponent implements OnInit {
       if(this.routedata){
         this.selectrout = this.routedata;
       }
-
+      console.log("ngOnInit this.editplan ",this.editplan);
+      console.log("ngOnInit this.routedata ",this.routedata);
+      console.log("ngOnInit this.selectrout ",this.selectrout);
+      console.log("ngOnInit this.activeplan ",this.activeplan);
+      
 
     }catch(ex){console.log("ngOnInit error : ", ex); }
     this.onperiod = this.checkperiod();
@@ -83,6 +91,7 @@ export class PlandatapageComponent implements OnInit {
       this.activeplan.plantype =this.planslot.plantype;
       this.activeplan.plandate=new Date(this.planslot.sdate)
       this.activeplan.plandate.setHours(0,0,0,0);  
+      this.activeplan.plankey=this.va.DateToString("yyyyMMdd",this.activeplan.plandate);  
       if(this.company && this.company.id!=0){
         this.routelist = await this.getrouteData();
         console.log("this.routelist : ",this.routelist);
@@ -151,49 +160,55 @@ export class PlandatapageComponent implements OnInit {
     return result;
   }
 
+  setoptionchange(event: Event,type:number){
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedText = selectElement.options[selectElement.selectedIndex].text;
+    if(type==0){ this.activeplan.routetypename = selectedText; }
+    else if(type==1){ this.activeplan.shiftname= selectedText; }
+    else if(type==2){ this.activeplan.otname= selectedText; }
+    this.shiftchange();
+
+  }
   shiftchange(){
     console.log("Selectedshift : ", this.selectshift);    
     this.activeplan.shiftid = this.selectshift.id;
     // ปรับ เวลาตาม shipf ที่เลือก
-    if(this.activeplan.issend==0){
-      this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.sendtime);
-    }else{
-      if(this.activeplan.issend==0){
-        this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.receivetime);
-      }else{
-       this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.receivetime);
-
+    if(this.activeplan.issend==0){ // ถ้ารับเข้าบริษัท
+      // ปรับเวลาส่ง ให้เป็นไปตามเวลาส่งตามกะ      
+      this.selecttime.end = this.va.DateToString("HH:mm",this.selectshift.sendtime);
+      // ไม่ต้องเลือก OT
+      this.activeplan.ot=0;
+      this.activeplan.otname="ปกติ";
+      this.activeplanchange(0);
+    }
+    else{ // ถ้าส่งกลับบ้าน
+      // ปรับเวลาส่งสุดท้ายให้เป็น เวลารับต้นทางตาม OT + period       
+      if(this.activeplan.ot==0){
+      this.selecttime.start = this.va.DateToString("HH:mm",this.selectshift.receivetime);
       }
-      this.selectenttime = this.va.DateToString("HH:mm",this.selectshift.ottime);
-    }
-    this.activeplanchange(0);
-
-  }
-
-  routechange(){
-    // console.log("Selectedroute selectrout : ", this.selectrout);    
-    this.activeplan.setdatabyroute(this.selectrout);
-    this.selectenttime = this.va.DateToString("HH:mm",this.activeplan.endtime);
-    this.setplancode();
-    console.log("Selectedroute this.activeplan : ", this.activeplan);    
-
-    // console.log("this.selectenttime : ----- ", this.selectenttime);
-  }
-
-  setplancode(){
-    if(this.activeplan.plantype==2 && !this.editplan){
-      this.activeplan.routeday=this.activeplan.plandate.getDay()
-      this.activeplan.plancode = this.va.DateToString("yyyyMMddHHmm",this.activeplan.starttime)+"-"+this.activeplan.routeid+"-"+this.activeplan.vid
-      console.log("this.activeplan.plancode ",this.activeplan.plancode);
+      else{
+        this.selecttime.start = this.va.DateToString("HH:mm",this.selectshift.ottime);
+      }
+      this.activeplanchange(1);
     }
 
-  }
+   
 
+  }
   activeplanchange(index:number){
     if(index==0){
-      console.log("selectenttime : ",this.selectenttime);
-      const [hours, minutes] = this.selectenttime.split(':').map(Number); 
+      // เปลี่ยนเวลาถึงปลายทาง
+      console.log("selecttime.end : ",this.selecttime.end);
+      const [hours, minutes] = this.selecttime.end.split(':').map(Number); 
       this.activeplan.endtime.setHours(hours, minutes);
+    }else if(index==1){
+      // เปลี่ยนเวลาเริ่มต้นทาง
+      console.log("selecttime.start : ",this.selecttime.start);
+      const [hours, minutes] = this.selecttime.start.split(':').map(Number); 
+      this.activeplan.starttime.setHours(hours, minutes);
+      var endtime = new Date(this.activeplan.starttime);
+      endtime.setMinutes(endtime.getMinutes()+this.activeplan.period);
+      this.activeplan.endtime= new Date(endtime);
     }
 
 
@@ -218,9 +233,31 @@ export class PlandatapageComponent implements OnInit {
     this.setplancode();
   }
 
-  async saveplan(){    
+
+  routechange(){
+    // console.log("Selectedroute selectrout : ", this.selectrout);    
+    this.activeplan.setdatabyroute(this.selectrout);
+    this.selecttime.end = this.va.DateToString("HH:mm",this.activeplan.endtime);
     this.setplancode();
-    try{
+    console.log("Selectedroute this.activeplan : ", this.activeplan);    
+
+    // console.log("this.selecttime.end : ----- ", this.selecttime.end);
+  }
+
+  setplancode(){
+    if(this.activeplan.plantype>1 && !this.editplan){
+      this.activeplan.routeday=this.activeplan.plandate.getDay()
+      this.activeplan.plancode = this.va.DateToString("yyyyMMddHHmm",this.activeplan.starttime)+"-"+this.activeplan.routeid+"-"+this.activeplan.vid
+      console.log("this.activeplan.plancode ",this.activeplan.plancode);
+    }
+
+  }
+
+
+  async saveplan(){
+    this.setplancode();
+    console.log("this.activeplan : ",this.activeplan);
+    try{     
       var confirm =await this.OkCancelMessage("ยืนยันการบันทึก","คุณต้องการบันทึกข้อมูลนี้หรือไม่");
       if(confirm=="true"){
         if(await this.saveupdateplan()){
@@ -236,9 +273,14 @@ export class PlandatapageComponent implements OnInit {
 
   async saveupdateplan(){
     try{
-      var tbname =["route","","routeweek","plan"];
+      var tbname =["route","","routeweek","driverplan"];
       var wsname = "updatedata";
-      var jsondata = await this.va.wsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:this.activeplan},"")
+      var strplan = JSON.stringify(this.activeplan);
+      var plan = JSON.parse(strplan);
+      plan.plandate = this.va.DateToString("yyyy-MM-dd 00:00:00",this.activeplan.plandate);
+      plan.starttime = this.va.DateToString("yyyy-MM-dd HH:mm:ss",this.activeplan.starttime);
+      console.log("plan : ",plan);
+      var jsondata = await this.va.wsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:plan},"")
       if(jsondata.code=="000"){
         this.showSanckbar("save or updateplan success",2);
         return true;
@@ -246,7 +288,6 @@ export class PlandatapageComponent implements OnInit {
     }catch(ex){
       console.log("saveupdateplan Error : ",ex)
       this.showSanckbar("save or updateplan error" + ex,2);
-
     }
     return false;
   }
@@ -268,7 +309,7 @@ export class PlandatapageComponent implements OnInit {
 
   async setdeleteplan(){
     try{
-      var tbname =["route","","routeweek","plan"];
+      var tbname =["route","","routeweek","driverplan"];
       var wsname = "deldata";
       var jsondata = await this.va.wsdata(wsname,{tbname:tbname[this.activeplan.plantype],plancode:this.activeplan.plancode},"")
       if(jsondata.code=="000"){

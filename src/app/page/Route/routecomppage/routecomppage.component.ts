@@ -61,13 +61,38 @@ export class RoutecomppageComponent implements OnInit {
 
   async ngOnInit() {
     // console.log('Routecomppage ngOnInit activecompany', this.activecompany);
-    this.maindata = await this.getData();
-    await this.setdayplan();
-    await this.SetdropointRoute();
-    await this.SetVehicleRoute();    
-    this.setweekplan();
-    this.show.Spinner = false;
+
+    await this.showroutetab(this.show.viewtype);
     
+  }
+  async showroutetab(id:number){
+    this.show.viewtype=id;
+    this.show.Spinner = true;
+    if(this.maindata.length==0){this.maindata = await this.getData();}
+
+    if(id==0){
+      if(this.dayplan.plandate  = new Date("2000-01-01 00:00:00")){
+        await this.setdayplan();
+      }
+      await this.setactivedayplan(this.dayplan.plandate);
+    }else if(id==1){
+      if(this.activedata.id==0 && this.maindata.length>0){
+        this.setweekplan();
+        this.activedata =this.maindata[0];
+      }
+      await this.ShowVehicleDetail(this.activedata);
+    }else if(id==2){
+      if(this.activedata.id==0 && this.maindata.length>0){
+        this.activedata =this.maindata[0];
+      }
+      this.Showroute(this.activedata);
+    // await this.SetdropointRoute();
+    // await this.SetVehicleRoute();    
+    // 
+    }
+
+    this.show.Spinner = false;
+      
   }
 
   async getData() {
@@ -86,6 +111,7 @@ export class RoutecomppageComponent implements OnInit {
     }
     return result;
   }
+
   async SetdropointRoute() {
     var result: DPinroutedata[] = [];
     var wsname = 'getdata';
@@ -162,6 +188,7 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   companytalkback(event: any) {}
+
   Showroutedropoint(route: Routedata, modal: any) {
     // console.log('Showroutedropoint route', route);
     this.activedata = route;
@@ -313,52 +340,98 @@ export class RoutecomppageComponent implements OnInit {
   addvehicleinroute(modal: any) {
     this.modalService.open(modal, { fullscreen: true });
   }
+
+
+
   // #endregion
 
   // #region  ========= Day Plan ==============================
   async setdayplan(){
     this.dayplan = new Calendardayplan(this.va.calendarperiod);
-    console.log("this.dayplan : ",this.dayplan);
+    // console.log("this.dayplan : ",this.dayplan);
     this.dayplan.setactivedate(new Date());
     this.dayplan.activeroute =[]
+    // console.log("setdayplan this.maindata : ",this.maindata);
     this.maindata.forEach(route => {
-      var plan: Routedayplan = new Routedayplan();
-      plan.plankey =this.dayplan.plankey;
-      plan.plandate =this.dayplan.plandate;
-      plan.route =route;
+      var plan: Routedayplan = new Routedayplan(this.dayplan.plandate,route);
       this.dayplan.activeroute.push(plan);
     });
-    console.log("setdayplan this.dayplan : ",this.dayplan);
+    // console.log("setdayplan this.dayplan.activeroute : ",this.dayplan.activeroute);
     // await this.setactivedayplan(new Date());
   }
 
   async setactivedayplan(activedate:Date){
-    
+    this.dayplan.setactivedate(activedate);
+
     var listactiveroute = this.dayplan.listrouteplan.filter(x=>x.plankey==this.dayplan.plankey);
+    console.log("setactivedayplan this.dayplan :",this.dayplan)
+    console.log("setactivedayplan listactiveroute :",listactiveroute)
     if(listactiveroute&&listactiveroute.length>0){
       // ใส่ค่าที่หาได้จาก listactiveroute ใน activeroute
-
+      this.dayplan.activeroute=listactiveroute;
     }else{
       // หาค่าจากฐานข้อมูลมาเติม
+      var listnewplan =  await this.getPlandayData(this.dayplan.plankey);
+      if(listnewplan.length>0){
+        this.dayplan.activeroute.forEach(actday => {
+          var newplan:Routedayplan = new Routedayplan(activedate,actday.route);
+          var listnewrouteplan = listnewplan.filter(x=>x.routeid==newplan.route.id);
+          if(listnewrouteplan.length>0){
+            listnewrouteplan.forEach(plan  => {
+              this.dayplan.listplan.push(plan);
+              var vehicle:Vehicleplan|undefined;
+                //หาว่าเคยสร้างข้อมูลรถไว้หรือยัง ถ้าสร้างแล้วไม่ต้องทำอะไร 
+                if(newplan.listvplan.length>0){ 
+                  vehicle = newplan.listvplan.find(x=>x.vid==plan.vid);
+                }
+              //ถ้ายังไม่มีข้อมูลให้สร้างรถ และนำข้อมูลทุกแผนของรถคันนี้มาใส่ข้อมูล แต่ถ้า
+              if(!vehicle){
+                vehicle = new Vehicleplan(plan.vid,plan.vname,plan.vlince,this.va.calendarperiod ,plan.plandate );
+                // นำข้อมูลทุกแผนของรถคันนี้มาใส่ข้อมูล listdata
+                var lisvehicleplan = listnewplan.filter(x=>x.vid==vehicle?.vid);
+                if(lisvehicleplan.length>0){
+                  lisvehicleplan.forEach(vplan=>{
+                    var listslot = vehicle?.listdata.filter((item) =>
+                      this.getslotinrange(item.sdate,item.edate,vplan.wakeupwarntime,vplan.endtime )
+                    );
+                    if(listslot&&listslot.length>0){
+                      listslot.forEach(slot=>{
+                        slot.plancode = vplan.plancode;
+                        slot.routeid = vplan.routeid;
+                      });
+                    }
+                  });
+                }else{
+                  console.log("lisvehicleplan.length:",lisvehicleplan.length)
+                }
+                newplan.listvplan.push(vehicle);
+                console.log("setactivedayplan newplan.listvplan :",newplan);
+                // console.log("vehicle:",vehicle)  
+              }
+            });
+          }
+          actday.listvplan=newplan.listvplan;
+          actday.listplan=newplan.listplan;
+          this.dayplan.listrouteplan.push(Object.assign(newplan));
+        });
+      } 
+      else{
+        this.dayplan.activeroute.forEach(actday => {        
+          actday.listvplan=[];
+        });
+      }
 
-      // เอาค่าที่ได้มาใส่ในแต่ละ route
      
     }
+    this.dayplan.noplan = this.dayplan.activeroute.find(x=>x.listvplan.length>0) != undefined;
 
-    // this.maindata.forEach(route => {
-    //   var plan: Calendardayplan = new Calendardayplan();
-    //   plan.route =route;
-    //   this.dayplan.push(plan);
-    // });
   }
 
-  async getdayplan(step:number){
+  async movedayplan(step:number){
     var actday = new Date( this.dayplan.plandate);
     actday.setDate(actday.getDate()+step);
-    console.log("actday : ",actday);
-    this.dayplan.setactivedate(actday);
-    console.log(" this.dayplan : ", this.dayplan);
-    var data =  await this.getPlandayData(this.dayplan.plankey);
+    await this.setactivedayplan(actday);
+     
   }
 
   async getPlandayData(plankey: string) {
@@ -374,12 +447,179 @@ export class RoutecomppageComponent implements OnInit {
         result.push(temp);
       });
     } else {
-      alert('getPlandayData No data');
+      this.showSanckbar("getPlandayData No data",2);
     }
-    console.log('getPlandayData result : ', result);
+    // console.log('getPlandayData result : ', result);
     return result;
   }
+  async setdayplanfromweekplan(route:Routedata|undefined){
+    try{
+      
+      var plandate = this.va.DateToString("yyyy-MM-dd",this.dayplan.plandate)
+      var msg= "คุณต้องการสร้างแผนงานวันที่ " + plandate + " จากข้อมูลแผนงานรายสัปดาห์ "+(route?("เส้นทาง"+route.routename):"ทั้งหมด") +" หรือไม่";
+      var confirm =await this.OkCancelMessage("ยืนยันการบันทึก",msg);
+      if(confirm=="true"){
+        if(await this.saveweektoplan(plandate,route)){
+          this.clearacttiveplan();
+          await this.setactivedayplan(this.dayplan.plandate);
+        }else{this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")}
+      }
+    }catch(ex){
+      console.log("save plan error ",ex)
+      this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
+    }
+  }
+  async saveweektoplan(plandate:string,route:Routedata|undefined){
+    try{
+      var wsname = "updatedata";
+      var param:any;
+      if(route){ param={tbname:"weektodayplan",plandate:plandate,routeid:route.id} }
+      else { param={tbname:"weektodayplan",plandate:plandate};}
+      var jsondata = await this.va.wsdata(wsname,param,"")
+      if(jsondata.code=="000"){
+        this.showSanckbar("create plan from week success",2);
+        return true;
+      }
+    }catch(ex){
+      console.log("saveupdateplan Error : ",ex)
+      this.showSanckbar("create plan from week  error" + ex,2);
+    }
+    return false;
+  }
+  async deldayplan(route:Routedata|undefined){
+    try{
+      var plandate = this.va.DateToString("yyyy-MM-dd",this.dayplan.plandate)
+      var msg= "คุณต้องการลบแผนงานวันที่ " + plandate + " จากข้อมูลแผนงานรายสัปดาห์ "+(route?("เส้นทาง"+route.routename):"ทั้งหมด") +" หรือไม่";
+      var confirm =await this.OkCancelMessage("ยืนยันการลบ",msg);
+      if(confirm=="true"){
+        if(await this.deletedayplan(plandate,route)){
+          this.clearacttiveplan();
+          await this.setactivedayplan(this.dayplan.plandate);
+        }else{this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")}
+      }
+    }catch(ex){
+      console.log("save plan error ",ex)
+      this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
+    }
+  }
+  async deletedayplan(plandate:string,route:Routedata|undefined){
+    try{
+      var wsname = "deldata";
+      var param:any;
+      if(route){ param={tbname:"weektodayplan",plandate:plandate,routeid:route.id} }
+      else { param={tbname:"weektodayplan",plandate:plandate};}
+      var jsondata = await this.va.wsdata(wsname,param,"")
+      if(jsondata.code=="000"){
+        this.showSanckbar("delete plan from week success",2);
+        return true;
+      }
+    }catch(ex){
+      console.log("saveupdateplan Error : ",ex)
+      this.showSanckbar("delete plan from week  error" + ex,2);
+    }
+    return false;
+  }
+  clearacttiveplan(){
+    this.dayplan.listrouteplan = this.dayplan.listrouteplan.filter(x => x.plankey !== this.dayplan.plankey);
+  }
+  opendayplan(item : Calendardata, vehicle:Vehicleplan,routeid:number,modal:any ){
+    console.log("opendayplan item:",item)
+    item.routeid = routeid;
+    var selectroute = this.maindata.find(x=>x.id==item.routeid);
+    if(selectroute){this.activedata=selectroute;} 
+    console.log("opendayplan this.activedata :",this.activedata);
+    if(item.plancode==""){ 
+      this.CreateDayPlan(item,vehicle,modal);
+    }else{
+      this.activeplan= this.dayplan.listplan.find(x=>x.plancode==item.plancode);
+      var route = this.maindata.find(x=>x.id == this.activeplan?.routeid);
+      if(route){this.activedata=route;}
+      if(this.activeplan && (this.activeplan.routeid==this.activedata.id)){
+        this.EditDayPlan(item,vehicle,modal);
+      }else{
+        var routename ="";
+        if(this.activeplan){routename=this.activeplan.routename;}
+        this.alertMessage("แจ้งเตือน","ไม่สามารถแก้ไขข้อมูล" + routename+ " ข้ามแผนงานได้");
+      }
+    }
 
+  }
+
+  CreateDayPlan(item : Calendardata, vehicle:Vehicleplan,modal:any ){
+    try{
+      this.activeplan=undefined;
+      this.activeslot.setdata(item);
+      this.activeslot.plantype = 3;
+      this.activeslot.dayname = this.va.DateToString("d MMM yyyy",this.dayplan.plandate) ;
+      this.selectedvehicle.vid = vehicle.vid;
+      this.selectedvehicle.vname = vehicle.vname;
+      this.selectedvehicle.vlicent = vehicle.vlince;
+      var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
+      if(startpoint){
+        this.activeslot.startid = startpoint.startid;
+        this.activeslot.sdate = startpoint.starttime;
+        this.activeslot.starttime = this.va.DateToString("HH:mm",startpoint.starttime) ;
+      }    
+      var endpoint = this.GetEndplan( item.id, item.plancode,vehicle);
+      if(endpoint){
+        this.activeslot.endid = endpoint.endid;
+        this.activeslot.edate = endpoint.endtime;
+        this.activeslot.endtime = this.va.DateToString("HH:mm",endpoint.endtime) ;
+      }
+      this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+    }catch(ex){
+      console.log("CreateDayPlan error : ",ex);
+    }
+  }
+
+  EditDayPlan(item : Calendardata,vehicle:Vehicleplan,modal:any ){
+    try{
+      this.activeslot.setdata(item);
+      this.activeslot.plantype = 3;
+      this.activeslot.dayname = this.va.DateToString("d MMM yyyy",this.dayplan.plandate) ;
+      this.selectedvehicle.vid = vehicle.vid;
+      this.selectedvehicle.vname = vehicle.vname;
+      this.selectedvehicle.vlicent = vehicle.vlince;
+      var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
+      if(startpoint){
+        this.activeslot.startid = startpoint.startid;
+        this.activeslot.sdate = startpoint.starttime;
+        this.activeslot.starttime = this.va.DateToString("HH:mm",startpoint.starttime) ;
+      }    
+      var endpoint = this.GetEndplan(item.id, item.plancode,vehicle);
+      if(endpoint){
+        this.activeslot.endid = endpoint.endid;
+        this.activeslot.edate = endpoint.endtime;
+        this.activeslot.endtime = this.va.DateToString("HH:mm",endpoint.endtime) ;
+      }
+        if(this.activeplan){this.activeplan.plantype =3;}
+        // ปรับแต่งแผนงานเดิม (ควรเอา slot ว่างด้านหน้าและด้านหลังไปด้วย )
+        // หาเวลาว่างก่อนplan
+        if(this.activeslot.startid >0){
+          var startempty = this.GetStartplan(this.activeslot.startid-1 , "",vehicle);
+          if(startempty){
+            this.activeslot.startid = startempty.startid;
+            this.activeslot.sdate = startempty.starttime;
+            this.activeslot.starttime = this.va.DateToString("HH:mm",startempty.starttime) ;
+          }      
+        }
+        // หาเวลาว่างหลังplan
+        var totalslot = Math.floor(1440/this.va.calendarperiod);
+        if(this.activeslot.endid< totalslot){
+          var endempty = this.GetEndplan(this.activeslot.endid+1 , "",vehicle);
+          if(endempty){
+            this.activeslot.endid = endempty.endid;
+            this.activeslot.edate = endempty.endtime;
+            this.activeslot.endtime = this.va.DateToString("HH:mm",endempty.endtime) ;
+          }
+        }
+      this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+    }catch(ex){
+      console.log("EditWeekPlan error : ",ex);
+    }
+  }
+
+ 
 
   // #endregion
 
@@ -393,7 +633,7 @@ export class RoutecomppageComponent implements OnInit {
     // console.log("startweek : ",a);
     this.weekplan = [];
     for (var i = 0; i < 7; i++) {
-      var w = new Calendarplan( 15, i, startweek);
+      var w = new Calendarplan( this.va.calendarperiod, i, startweek);
       w.iddate = this.va.DateToString('yyyyMMdd', w.cdate);
       this.weekplan.push(w);
       startweek.setDate(startweek.getDate() + 1);
@@ -413,7 +653,7 @@ export class RoutecomppageComponent implements OnInit {
         if (wplan) {
           var vehicle = wplan.listvplan.find((x) => x.vid == plan.vid);
           if (!vehicle) {
-            vehicle = new Vehicleplan(plan.vid,plan.vname,plan.vlince,15,wplan.cdate );
+            vehicle = new Vehicleplan(plan.vid,plan.vname,plan.vlince,this.va.calendarperiod,wplan.cdate );
             vehicle.routeday = wplan.id;
             wplan.listvplan.push(vehicle);
           }
@@ -449,7 +689,7 @@ export class RoutecomppageComponent implements OnInit {
         result.push(temp);
       });
     } else {
-      alert('getWeekData No data');
+      this.showSanckbar("getWeekData No data",2);
     }
     // console.log('getWeekData result : ', result);
     return result;
@@ -477,11 +717,8 @@ export class RoutecomppageComponent implements OnInit {
     this.modalService.open(this.createroutemodal, { size: 'lg' });
   }
 
-  routeplantalkback(event: any) {
-    this.ShowVehicleDetail(this.activedata);
-  }
-
    // #region  ========= Add & Edit Weekly plan ==============================
+
   OpenWeekplan(item : Calendardata, wplan: Calendarplan,vehicle:Vehicleplan,modal:any ){
     if(item.plancode==""){
       this.CreateWeekPlan(item,wplan,vehicle,modal);
@@ -506,13 +743,13 @@ export class RoutecomppageComponent implements OnInit {
       this.selectedvehicle.vid = vehicle.vid;
       this.selectedvehicle.vname = vehicle.vname;
       this.selectedvehicle.vlicent = vehicle.vlince;
-      var startpoint = this.GetStartWeekplan(wplan, item.id, item.plancode,vehicle);
+      var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
         this.activeslot.sdate = startpoint.starttime;
         this.activeslot.starttime = this.va.DateToString("HH:mm",startpoint.starttime) ;
       }    
-      var endpoint = this.GetEndWeekplan(wplan, item.id, item.plancode,vehicle);
+      var endpoint = this.GetEndplan(item.id, item.plancode,vehicle);
       if(endpoint){
         this.activeslot.endid = endpoint.endid;
         this.activeslot.edate = endpoint.endtime;
@@ -523,7 +760,7 @@ export class RoutecomppageComponent implements OnInit {
         // ปรับแต่งแผนงานเดิม (ควรเอา slot ว่างด้านหน้าและด้านหลังไปด้วย )
         // หาเวลาว่างก่อนplan
         if(this.activeslot.startid >0){
-          var startempty = this.GetStartWeekplan(wplan, this.activeslot.startid-1 , "",vehicle);
+          var startempty = this.GetStartplan(this.activeslot.startid-1 , "",vehicle);
           if(startempty){
             this.activeslot.startid = startempty.startid;
             this.activeslot.sdate = startempty.starttime;
@@ -531,8 +768,9 @@ export class RoutecomppageComponent implements OnInit {
           }      
         }
         // หาเวลาว่างหลังplan
-        if(this.activeslot.endid<wplan.listdata.length){
-          var endempty = this.GetEndWeekplan(wplan, this.activeslot.endid+1 , "",vehicle);
+        var totalslot = Math.floor(1440/this.va.calendarperiod);
+        if(this.activeslot.endid<totalslot){
+          var endempty = this.GetEndplan( this.activeslot.endid+1 , "",vehicle);
           if(endempty){
             this.activeslot.endid = endempty.endid;
             this.activeslot.edate = endempty.endtime;
@@ -545,7 +783,6 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-
   CreateWeekPlan(item : Calendardata, wplan: Calendarplan,vehicle:Vehicleplan,modal:any ){
     try{
       this.activeplan=undefined;
@@ -555,13 +792,13 @@ export class RoutecomppageComponent implements OnInit {
       this.selectedvehicle.vid = vehicle.vid;
       this.selectedvehicle.vname = vehicle.vname;
       this.selectedvehicle.vlicent = vehicle.vlince;
-      var startpoint = this.GetStartWeekplan(wplan, item.id, item.plancode,vehicle);
+      var startpoint = this.GetStartplan( item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
         this.activeslot.sdate = startpoint.starttime;
         this.activeslot.starttime = this.va.DateToString("HH:mm",startpoint.starttime) ;
       }    
-      var endpoint = this.GetEndWeekplan(wplan, item.id, item.plancode,vehicle);
+      var endpoint = this.GetEndplan(item.id, item.plancode,vehicle);
       if(endpoint){
         this.activeslot.endid = endpoint.endid;
         this.activeslot.edate = endpoint.endtime;
@@ -573,8 +810,30 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-   GetStartWeekplan(wplan: Calendarplan, id:number, plancode: string,vehicle:Vehicleplan){
-    // console.log("GetStartWeekplan this.activeplan ",this.activeplan);
+  // #endregion
+
+
+  // #endregion
+
+
+  // #region  ========= update data and find plan slot ==============================
+
+  async routeplantalkback(routeplan: Routeplandata) {
+    console.log("routeplantalkback event : ",event);
+    if(routeplan.plantype==3){
+      // ปรับข้อมูลแผนงานรายวันใหม่
+      this.dayplan.listrouteplan = this.dayplan.listrouteplan.filter(x => x.plankey !== this.dayplan.plankey);
+      await this.setactivedayplan( this.dayplan.plandate);
+    } else if(routeplan.plantype==2){
+      // ปรับข้อมูลแผนงานรายสัปดาห์ใหม่
+      await this.ShowVehicleDetail(this.activedata);
+    } else {
+
+    }
+  }
+
+  GetStartplan(id:number, plancode: string,vehicle:Vehicleplan){
+    // console.log("GetStartplan this.activeplan ",this.activeplan);
     var result = {startid:id, starttime: vehicle.listdata[id].sdate}
     for(var i=id; i>=0;i--){
       var slot = vehicle.listdata[i];
@@ -589,7 +848,7 @@ export class RoutecomppageComponent implements OnInit {
     return result;
   }
 
-  GetEndWeekplan(wplan: Calendarplan, id:number, plancode: string,vehicle:Vehicleplan){
+  GetEndplan( id:number, plancode: string,vehicle:Vehicleplan){
     var result = {endid:id, endtime: vehicle.listdata[id].edate}
     for(var i=id; i<vehicle.listdata.length;i++){
       var slot = vehicle.listdata[i];
@@ -605,10 +864,6 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   // #endregion
-
-
-  // #endregion
-
 
   // #region ===== Message Dialog ====================
 

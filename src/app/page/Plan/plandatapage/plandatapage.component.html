@@ -9,16 +9,17 @@
 
     <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
       <div >
-        <div class="row" *ngIf="planslot.plantype == 2">
+        <div class="row" *ngIf="planslot.plantype > 1">
           <span *ngIf="!editplan" > 
             สร้างแผนการทำงานประจำวัน
             {{planslot.dayname}} ({{planslot.starttime}} - {{planslot.endtime}})
           </span>
           <span *ngIf="editplan"> 
             แก้ไขแผนการทำงานประจำวัน
-            {{planslot.dayname}} ({{planslot.starttime}} - {{planslot.endtime}})
+            {{planslot.dayname}} ( {{editplan.wakeupwarntime | date:'HH:mm'}}-  {{editplan.endtime | date:'HH:mm'}})
           </span>
         </div>
+
         <div class="row">
           <span> รถ {{vehicle.vlicent}} ({{vehicle.vname}}) </span>
         </div>
@@ -139,7 +140,7 @@
         <span *ngIf="editplan && activeplan.issend==1">รับกลับบ้าน </span>
 
         <label for="shiftselect"  *ngIf="!editplan"> รับ-ส่ง </label>
-        <select id="shiftselect" [(ngModel)]="activeplan.issend" *ngIf="!editplan" (change)="shiftchange()">
+        <select id="shiftselect" [(ngModel)]="activeplan.issend" *ngIf="!editplan" (change)="setoptionchange($event,0)">
           <option [value]="0">ส่งเข้าบริษัท</option>
           <option [value]="1">รับกลับบ้าน</option>
         </select>
@@ -149,23 +150,25 @@
         <mat-icon>schedule</mat-icon> 
         <span *ngIf="editplan">{{activeplan.shiftname}}</span>
         <label for="routeselect" *ngIf="!editplan"> กะงาน : </label>
-        <select id="routeselect" *ngIf="!editplan" [(ngModel)]="selectshift" (change)="shiftchange()">
+        <select id="routeselect" *ngIf="!editplan" [(ngModel)]="selectshift" (change)="setoptionchange($event,1)">
           <option *ngFor="let item of listshift" [ngValue]="item">
             {{item.shift}}
           </option>
         </select>
       </div>
 
-      <div class="col-3" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
+      <div class="col-3"  *ngIf="activeplan.issend==1"
+        style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
         <mat-icon>update</mat-icon>
         <span *ngIf="editplan && activeplan.ot==0">ปกติ</span>
         <span *ngIf="editplan && activeplan.ot==1">OT</span>
-
-        <label for="otselect" *ngIf="!editplan"> OT </label>
-        <select  id="otselect"  *ngIf="!editplan" [(ngModel)]="activeplan.ot" (change)="shiftchange()">
-          <option [value]="0">ปกติ</option>
-          <option [value]="1">OT</option>
-        </select>
+        <div  *ngIf="!editplan">
+          <label for="otselect"> OT </label>
+          <select  id="otselect" [(ngModel)]="activeplan.ot" (change)="setoptionchange($event,2)">
+            <option [value]="0">ปกติ</option>
+            <option [value]="1">OT</option>
+          </select>
+          </div>
       </div>
 
       
@@ -188,15 +191,9 @@
       </div>
 
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <!-- <select id="routeSelect" [(ngModel)]="selectdate" (change)="activeplanchange(0)">
-          <option *ngFor="let item of selectdate" [ngValue]="item">
-            {{ item.displaytime }}
-          </option>
-        </select>
-        <label style="margin-left: 5px;" for="routeSelect"> น.</label> -->
-
-        <input type="time" style="width: 80%;" [(ngModel)]="selectenttime"
-        (ngModelChange)="activeplanchange(0)" />
+        <span  *ngIf="activeplan.issend==1"> {{activeplan.endtime | date:'HH:mm'}} น.</span>
+        <input type="time" style="width: 80%;" [(ngModel)]="selecttime.end"
+        (ngModelChange)="activeplanchange(0)"   *ngIf="activeplan.issend==0"/>
         <label>นาที</label>
 
       </div>
@@ -223,7 +220,10 @@
         <span>เวลาที่ควรถึงจุดแรก</span>
       </div>
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <span> {{activeplan.starttime | date:'HH:mm'}} น.</span>
+        <span *ngIf="activeplan.issend==0"> {{activeplan.starttime | date:'HH:mm'}} น.</span>
+        <input type="time" style="width: 80%;" [(ngModel)]="selecttime.start"
+        (ngModelChange)="activeplanchange(1)"   *ngIf="activeplan.issend==1"/>
+        <label>นาที</label>
       </div>
     </div>
     <hr />
