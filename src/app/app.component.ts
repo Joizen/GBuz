@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   constructor(public va: variable,private router: Router) {}
   menuopen=false;
   showmenu=false;
-  title = 'Gbus Driver Dashboard';  
+  title = 'Smart Control';  
   timeLeft: number = 5;  // Refresh token after timeLeft (300) seconds
   interval: any;
   colck:Date = new Date;

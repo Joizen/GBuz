@@ -21,6 +21,10 @@ export class UsercompageComponent implements OnInit {
   async ngOnInit()  {
     this.maindata = await this.getData();
   }
+  async refreshpage(){
+    console.log("Usercomppage.refreshdata : ");
+    // await this.showroutetab(this.show.viewtype);
+  }
 
   async getData() {
     var result: UserModel[] = [];

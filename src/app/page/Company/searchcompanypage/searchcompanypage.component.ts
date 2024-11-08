@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import { Companydata } from '../../../models/datamodule.module'
 
@@ -24,7 +24,7 @@ export class SearchcompanypageComponent implements OnInit {
     private snacbar: MatSnackBar
   ) { }
 
-  show = { Spinner: true, viewtype: 0 };
+  show = { Spinner: true, viewtype: 0 ,addcompany:true};
   public companydata: Companydata[] = [];
   public displayedColumns: string[] = [];
   public displayedColumnsData: string[] = [];
@@ -95,6 +95,10 @@ export class SearchcompanypageComponent implements OnInit {
 
   }
 
+  addcompany(modal: any){
+    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+  }
+
   opencompanydata(comp: Companydata, modal: any) {
     // console.log("opencompanydata comp : ", comp);
     this.activecompany = comp;
@@ -104,5 +108,6 @@ export class SearchcompanypageComponent implements OnInit {
   companytalkback(event: any) {
 
   }
+  
 
 }

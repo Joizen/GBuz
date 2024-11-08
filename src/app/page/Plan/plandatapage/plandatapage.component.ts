@@ -78,6 +78,10 @@ export class PlandatapageComponent implements OnInit {
   }
 
   checkperiod(){
+    console.log('this.activeplan.starttime',this.activeplan.starttime);
+    console.log('this.activeplan.endtime',this.activeplan.endtime);
+    console.log('this.planslot.sdate',this.planslot.sdate);
+    console.log('this.planslot.edate',this.planslot.edate);
     if(this.activeplan.starttime < this.planslot.sdate ||this.activeplan.starttime > this.planslot.edate ){return false;} 
     if(this.activeplan.endtime < this.planslot.sdate ||this.activeplan.endtime > this.planslot.edate ){return false;} 
     if(this.activeplan.wakeuptime < this.planslot.sdate ||this.activeplan.wakeuptime > this.planslot.edate ){return false;} 
@@ -89,20 +93,33 @@ export class PlandatapageComponent implements OnInit {
   async createnewplan(){
     try{
       this.activeplan.plantype =this.planslot.plantype;
-      this.activeplan.plandate=new Date(this.planslot.sdate)
+      this.activeplan.plandate=new Date(this.planslot.sdate);
       this.activeplan.plandate.setHours(0,0,0,0);  
       this.activeplan.plankey=this.va.DateToString("yyyyMMdd",this.activeplan.plandate);  
+      this.activeplan.plantype = this.planslot.plantype;
+      this.activeplan.starttime = new Date(this.activeplan.plandate);
+      this.activeplan.endtime = new Date(this.activeplan.plandate);
+
       if(this.company && this.company.id!=0){
-        this.routelist = await this.getrouteData();
-        console.log("this.routelist : ",this.routelist);
-        if(this.routelist.length>0){
-          this.selectrout =this.routelist[0]; 
-          this.routechange();
-        }
-        this.activeplan.plantype = this.planslot.plantype;
         // สำหรับ สร้างแผนงานที่ต้องใช้ข้อมูลรถ
-        if(this.activeplan.plantype>1){
+        this.activeplan.ownerid =this.company.id;
+        if(this.vehicle){
           this.activeplan.vid = this.vehicle.vid;
+          this.activeplan.vlince = this.vehicle.vlicent;
+          this.activeplan.vname = this.vehicle.vname;
+        }
+        if(this.routedata){
+          this.activeplan.routeid = this.routedata.id;
+          this.activeplan.routecode = this.routedata.routecode;
+          this.activeplan.routename = this.routedata.routename;
+          this.activeplan.routetype = this.routedata.routetype;
+          this.activeplan.routetypename = this.routedata.routetypename;
+        }else{
+          this.routelist = await this.getrouteData();
+          if(this.routelist.length>0){
+            this.selectrout =this.routelist[0]; 
+            this.routechange();
+          }
         }
       }else{
         this.alertMessage("Error","No company data");
@@ -196,25 +213,33 @@ export class PlandatapageComponent implements OnInit {
 
   }
   activeplanchange(index:number){
+    index = this.activeplan.issend;
+    console.log("selecttime.index : ",index);
     if(index==0){
       // เปลี่ยนเวลาถึงปลายทาง
       console.log("selecttime.end : ",this.selecttime.end);
       const [hours, minutes] = this.selecttime.end.split(':').map(Number); 
       this.activeplan.endtime.setHours(hours, minutes);
+
+      var starttime = new Date(this.activeplan.endtime);
+      starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
+      this.activeplan.starttime= new Date(starttime);
+
     }else if(index==1){
       // เปลี่ยนเวลาเริ่มต้นทาง
       console.log("selecttime.start : ",this.selecttime.start);
       const [hours, minutes] = this.selecttime.start.split(':').map(Number); 
       this.activeplan.starttime.setHours(hours, minutes);
+
       var endtime = new Date(this.activeplan.starttime);
       endtime.setMinutes(endtime.getMinutes()+this.activeplan.period);
       this.activeplan.endtime= new Date(endtime);
     }
 
 
-    var starttime = new Date(this.activeplan.endtime);
-    starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
-    this.activeplan.starttime= new Date(starttime);
+    var starttime = new Date(this.activeplan.starttime);
+    // starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
+    // this.activeplan.starttime= new Date(starttime);
 
     var temptime = new Date(starttime);
     temptime.setMinutes(temptime.getMinutes()-this.activeplan.startwarn);
@@ -279,6 +304,7 @@ export class PlandatapageComponent implements OnInit {
       var plan = JSON.parse(strplan);
       plan.plandate = this.va.DateToString("yyyy-MM-dd 00:00:00",this.activeplan.plandate);
       plan.starttime = this.va.DateToString("yyyy-MM-dd HH:mm:ss",this.activeplan.starttime);
+      
       console.log("plan : ",plan);
       var jsondata = await this.va.wsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:plan},"")
       if(jsondata.code=="000"){

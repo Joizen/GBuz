@@ -6,7 +6,7 @@ import liff from '@line/liff';
 import { PagekeyModel } from '../app/models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
 import {ProfileModel} from './models/datamodule.module'
-
+import { LOCALE_ID } from '@angular/core';
 
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +14,7 @@ import {ProfileModel} from './models/datamodule.module'
 @NgModule({
   declarations: [],
   imports: [CommonModule],
-  providers: [DatePipe],
+  providers: [DatePipe, [{ provide: LOCALE_ID, useValue: 'th' }]],
 })
 
 export class variable {
@@ -137,6 +137,9 @@ export class variable {
     }
     return false;
   }
+
+
+
 
 
   public settoken(token: string) { localStorage.setItem("token", token); }

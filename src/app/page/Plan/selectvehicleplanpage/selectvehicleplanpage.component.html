@@ -1,10 +1,9 @@
 <div class="header">
     <!-- Header data & close button -->
-    <div class="row px-3 py-0"
-        style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+    <div class="row" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px; padding:20px ;">
 
         <div class="col-1" style="display: flex; justify-content: center; align-items: center; padding:5px ;">
-            <img class="profileimg me-4" [src]="activevihicle.driverimage">
+            <img class="profileimg" [src]="activevihicle.driverimage">
         </div>
 
         <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
@@ -28,16 +27,16 @@
         <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
             <div class="row">
                 <div class="icon-inrow">
-                    <div class="icon-inrow" *ngIf="show.step==1" (click)="show.step=0">
+                    <div class="icon-inrow" *ngIf="show.step==1" (click)="show.step=0" style="cursor:pointer">
                         <mat-icon style="width: auto; color: green;">chevron_left</mat-icon>
                         <span>Back</span>
                     </div>
-                    <div class="icon-inrow" *ngIf="(show.step==0) && (activevihicle.vid!=0)" (click)="showvehicleslot()">
+                    <div class="icon-inrow" style="cursor:pointer" *ngIf="(show.step==0) && (activevihicle.vid!=0)" (click)="showvehicleslot()">
                         <span>Next</span>
                         <mat-icon style="width: auto; color: green;">chevron_right</mat-icon>
                     </div>
 
-                    <div class="icon-inrow" (click)="modal.close()">
+                    <div class="icon-inrow" style="cursor:pointer" (click)="modal.close()">
                         <span>ปิด</span>
                         <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
                     </div>
@@ -63,27 +62,28 @@
     <div style="width:100%; height:50vh; padding: 20px;" *ngIf="show.step==0">
         <div class="icon-inrow" matTooltip="ค้นหาข้อมูลรถ / พนักงานขับรถ" >
             <span>ค้นหาข้อมูลรถ</span>
-            <input type="text" [(ngModel)]="keyword" (keydown.enter)="searchvehicle()">
-            <mat-icon (click)="searchvehicle()">search</mat-icon>
+            <input type="text" [(ngModel)]="keyword" (input)="inputchange()">
         </div>
-
-        <div *ngFor="let item of listvehicle">
-            <div class="row" (click)="showvehicledetail(item)" [style.background-color]="selectedvid==item.vid?'#FFE5B4':'#00FFFFFF'" >
-                <div class="container"
-                    style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
-                    <div class="col" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
-                        <!-- setitem 1-->
-                        <img class="profileimg" [src]="item.driverimage==''?va.icon.user:item.driverimage" />
-                    </div>
-
-                    <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
-                        <!-- setitem 2-->
-                        {{item.vname}}
-                    </div>
-
-                    <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
-                        <!-- setitem 3-->
-                        {{item.vlicent}}
+        <div style="overflow: auto; height: 90%;">
+            <div *ngFor="let item of showvehicle" >
+                <div class="row" (click)="showvehicledetail(item)" style="cursor:pointer"
+                [style.background-color]="selectedvid==item.vid?'#FFE5B4':'#00FFFFFF'" >
+                    <div class="container" (dblclick)="showvehicleslot()"
+                        style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
+                        <div class="col" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+                            <!-- setitem 1-->
+                            <img class="profileimg" [src]="item.driverimage==''?va.icon.user:item.driverimage" />
+                        </div>
+    
+                        <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
+                            <!-- setitem 2-->
+                            {{item.vname}}
+                        </div>
+    
+                        <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
+                            <!-- setitem 3-->
+                            {{item.vlicent}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,9 @@
                     <span>{{slot.dayname}}</span>
                 </div>
     
-                <div style="display: flex; text-align:right;" (click)="showcreateplan(slot)" *ngIf="slot.plancode==''">
+                <div style="display: flex; text-align:right; cursor: pointer; padding:10px; border-radius:10%;" 
+                [style.background-color]="slot.plancode==''?'#a9cc78':'#cccccc'"
+                (click)="showcreateplan(slot)" *ngIf="slot.plancode==''">
                     <span>สร้างแผนงาน</span>
                 </div>
             </div>

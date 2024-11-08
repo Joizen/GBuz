@@ -1,0 +1,139 @@
+
+<div style="width:100%;margin: 0,5px; overflow:hidden">
+    <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
+        <div class="col text-align start" style="margin-right: 20px;">
+            <img class="company-logo me-4" [src]="company.complogo==''? va.icon.nologo : company.complogo">
+            <span style="font-size: large;">สร้างข้อมูลเส้นทางการเดินรถ </span>
+            <span class="m-2" style="font-size: large;"> ({{activedata.routename}}) </span>
+        </div>
+        <div class="col-auto icon-inrow text-align end"   style="margin-right: 10px;" >
+            <div class="icon-inrow" (click)="deleteroute()" *ngIf="activedata.id!=0" style="cursor:pointer;">
+                <span>ลบ</span>
+                <mat-icon style="width: auto; color: red;">cancel</mat-icon>
+              </div>
+              <div class="icon-inrow" (click)="saveroute()" *ngIf="show.save" style="cursor:pointer;">
+                <span>บันทึก</span>
+                <mat-icon style="width: auto; color: green;">send</mat-icon>
+              </div>
+              <div class="icon-inrow" (click)="modal.close()" style="cursor:pointer;">
+                <span>ปิด</span>
+                <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
+              </div>
+         </div>        
+    </div>
+</div>
+
+<div class="position-relative" style="height: 100%; width:100%; overflow:hidden">
+    <!-- spinner -->
+    <div class="container-spiner" *ngIf="show.Spinner">
+        <div class="row">
+            Please Watting...
+        </div>
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <div class="row" style="margin:20px ;">
+        <div class="icon-inrow" matTooltip="ชื่อเส้นทาง">
+            <mat-icon> map </mat-icon>
+            <input [(ngModel)]="editroute.routename" placeholder="ชื่อเส้นทาง" 
+            (ngModelChange)="routenamechang()"  type="text"  style="width: 100%;" >
+        </div>
+
+        <div class="icon-inrow" style="width: 100%;" matTooltip="ระยะทาง">
+            <div class="col-1"><mat-icon> timeline </mat-icon></div>
+            <div class="col-5"><span> ระยะทางจากจุดแรก-ปลายทาง</span></div>
+            <div class="col-2 icon-inrow">
+            </div>
+            <div class="col-3 icon-inrow">
+                <input [(ngModel)]="editroute.distance" placeholder="ระยะทาง" 
+                type="number"  style="width: 100%; text-align: right;" >
+                <span> กม.</span>
+            </div>
+        </div>
+
+                
+        <div class="icon-inrow" style="width: 100%;" matTooltip="ระยะทาง">
+            <div class="col-1"><mat-icon> flag </mat-icon></div>
+            <div class="col-5"><span>กำหนดเวลาปลายทาง</span></div>
+            <div class="col-2 icon-inrow">
+            </div>
+            <div class="col-3 icon-inrow">
+                <input type="time" style="width: 100%; text-align: right;" 
+                [(ngModel)]="show.endtime"
+                (ngModelChange)="activeplanchange()"  />
+
+                <!-- <input type="time"  [(ngModel)]="editroute.distance" placeholder="ระยะเวลาเดินทาง" 
+                type="number"  style="width: 100%; text-align: right;" > -->
+                <span> น.</span>
+            </div>
+        </div>
+
+        
+        <div class="icon-inrow" style="width: 100%;" matTooltip="ระยะเวลาเดินทาง">
+            <div class="col-1"><mat-icon> update </mat-icon></div>
+            <div class="col-5"><span> ระยะเวลาเดินทางจากจุดแรก-ปลายทาง</span></div>
+            <div class="col-2  icon-inrow">
+                <input [(ngModel)]="editroute.period" placeholder="ระยะเวลาเดินทาง" 
+                type="number"  style="width: 100%; text-align: right;" 
+                (ngModelChange)="activeplanchange()" >
+                <span> นาที.</span>
+            </div>
+            <div class="col-3" style="text-align: right;;">
+                <span style="display: inline-block;  width: 100%">
+                    {{ editroute.starttime | date : "HH:mm" }} น.
+                </span>
+            </div>
+        </div>
+
+        <div class="icon-inrow" style="width: 100%;" matTooltip="เตือนเมื่อไม่สตาร์ทก่อนเข้าจุดแรก">
+            <div class="col-1"><mat-icon> power_settings_new </mat-icon></div>
+            <div class="col-5"><span> เตือนเมื่อไม่สตาร์ทก่อนเข้าจุดแรก</span></div>
+            <div class="col-2  icon-inrow">
+                <input [(ngModel)]="editroute.startwarn" placeholder="เตือนสตาร์ท" 
+                type="number"  style="width: 100%; text-align: right;" 
+                (ngModelChange)="activeplanchange()" >
+                <span> นาที.</span>
+            </div>
+            <div class="col-3" style="text-align: right;;">
+                <span style="display: inline-block;  width: 100%">
+                    {{ editroute.startwarntime | date : "HH:mm" }} น.
+                </span>
+            </div>
+          </div>
+
+          <div class="icon-inrow" style="width: 100%;" matTooltip="เตือนเมื่อไม่รายงานตัวก่อนเข้าจุดแรก">
+            <div class="col-1"><mat-icon>  cancel </mat-icon></div>
+            <div class="col-5"><span> เตือนเมื่อไม่รายงานตัวก่อนเข้าจุดแรก</span></div>
+            <div class="col-2  icon-inrow">
+                <input [(ngModel)]="editroute.wakeup" placeholder="เตือนรายงาน" 
+                type="number"  style="width: 100%; text-align: right;" 
+                (ngModelChange)="activeplanchange()" >
+                <span> นาที.</span>
+            </div>
+            <div class="col-3" style="text-align: right;;">
+                <span style="display: inline-block;  width: 100%">
+                    {{ editroute.wakeuptime | date : "HH:mm" }} น.
+                </span>
+            </div>
+          </div>
+
+          <div class="icon-inrow" style="width: 100%;" matTooltip="สามารถเริ่มรายงานตัวก่อนเข้าจุดแรก">
+            <div class="col-1"><mat-icon>check_circle </mat-icon></div>
+            <div class="col-5"><span> สามารถเริ่มรายงานตัวก่อนเข้าจุดแรก</span></div>
+            <div class="col-2  icon-inrow">
+                <input [(ngModel)]="editroute.wakeupwarn" placeholder="เริ่มรายงานตัว" 
+                type="number"  style="width: 100%; text-align: right;" 
+                (ngModelChange)="activeplanchange()" >
+                <span> นาที.</span>
+            </div>
+            <div class="col-3" style="text-align: right;;">
+                <span style="display: inline-block;  width: 100%">
+                    {{ editroute.wakeupwarntime | date : "HH:mm" }} น.
+                </span>
+            </div>
+          </div>
+    </div>
+
+
+
+</div>

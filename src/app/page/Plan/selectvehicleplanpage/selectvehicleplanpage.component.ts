@@ -3,18 +3,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
-import {
-  DialogpageComponent,
-  DialogConfig,
-} from '../../../material/dialogpage/dialogpage.component';
-import {
-  Vehicledata,
-  Companydata,
-  Routedata,
-  Routeplandata,
-  Calendarslot,
-  Calendarplan,
-} from '../../../models/datamodule.module';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { DialogpageComponent,DialogConfig} from '../../../material/dialogpage/dialogpage.component';
+import { Vehicledata,Routedata,Routeplandata,Calendarslot, Calendarplan} from '../../../models/datamodule.module';
 
 @Component({
   selector: 'app-selectvehicleplanpage',
@@ -36,17 +29,56 @@ export class SelectvehicleplanpageComponent implements OnInit {
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   show = { Spinner: true, step: 0 };
   keyword = '';
-  public listvehicle: Vehicledata[] = [];
   public activevihicle: Vehicledata = new Vehicledata();
   public selectedvid: number = 0;
   public listslot: Calendarslot[] = [];
 
-  ngOnInit(): void {
+  public listvehicle: Vehicledata[] = [];
+  showvehicle: Vehicledata[]=[];
+
+  async ngOnInit() {
+    this.listvehicle = await this.getallvehicle();
     this.show.Spinner = false;
-    console.log('workslot : ', this.workslot);
+    // console.log('workslot : ', this.workslot);
+  }
+ 
+  async inputchange(){
+    this.show.Spinner = true;
+       console.log('keyword : ', this.keyword);
+    this.showvehicle = this.filtervehicle(this.keyword);
+    this.show.Spinner = false;
+  }
+
+  filtervehicle(value:string):Vehicledata[]{
+    const filterValue = this.keyword.toLowerCase();
+    var result = this.listvehicle.filter(item => item.vname.toLowerCase().includes(filterValue));
+    if(!result){result=[]}
+    return result;
+
+  }
+
+
+
+  async getallvehicle() {
+    var result: Vehicledata[] = [];
+    var wsname = 'getdata';
+    var params = { tbname: 'vehicle', keyword: this.keyword };
+    var jsondata = await this.va.getwsdata(wsname, params);
+    // console.log("searchvehicle jsondata : ", jsondata);
+    if (jsondata.code == '000') {
+      jsondata.data.forEach((data: any) => {
+        var temp = new Vehicledata();
+        temp.setdata(data);
+        result.push(temp);
+      });
+    } else {
+    }
+    // console.log("searchvehicle result : ", result);
+    return result;
   }
 
   async searchvehicle() {
+    console.log("showvehicle ",this.showvehicle);
     this.show.Spinner = true;
     this.listvehicle = await this.getlistvehicle();
     if (this.listvehicle.length > 0) {
@@ -85,7 +117,8 @@ export class SelectvehicleplanpageComponent implements OnInit {
   }
 
   async showvehicleslot() {
-    console.log('showvehicleslot : ');
+    console.log('workslot : ',this.workslot);
+    // if(workslot?.)
     var listwork = await this.getWeekData();
     if(listwork){
       console.log('listwork : ', listwork);
@@ -215,8 +248,47 @@ export class SelectvehicleplanpageComponent implements OnInit {
       return undefined;
     }
   }
+  async getPlanData() {
+    try{
+      var result: Routeplandata[] = [];
+      var wsname = 'getdata';
+      var params = {
+        tbname: 'planday',
+        vid: this.activevihicle.vid,
+        plankey: this.workslot?.id,
+      };
+      var jsondata = await this.va.getwsdata(wsname, params);
+      console.log('getWeekData jsondata : ', jsondata);
+      if (jsondata.code == '000') {
+        if(jsondata.data.length>0){
+          // มีงานบ้างแล้ว
+          jsondata.data.forEach((data: any) => {
+            var temp = new Routeplandata();
+            temp.setdata(data);
+            result.push(temp);
+          });  
+        }else{
+          // ยังไม่มีงานเลย
+         
+        }
+      } else {
+        alert('getWeekData No data');
+        return undefined;
+      }
+      console.log('getWeekData result : ', result);
+      return result;
+  
+    }catch(ex){
+      console.log("getWeekData Error : " ,ex);
+      return undefined;
+    }
+  }
+
 
   showcreateplan(slot:Calendarslot){
+    console.log('slot',slot);
+    console.log('this.activevihicle',this.activevihicle);
+
     if(slot.plancode==""){
       slot.dayname = (this.workslot?this.workslot.textdate:"");
       var returndata = {slot:slot,vehicle:this.activevihicle}

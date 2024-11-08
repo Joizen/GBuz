@@ -39,6 +39,8 @@ const routes: Routes = [
   { path: 'selectvehicleplan', loadChildren: () => import('./page/Plan/selectvehicleplanpage/selectvehicleplanpage.module').then(m => m.SelectvehicleplanpageModule) },
   { path: 'userdata', loadChildren: () => import('./page/User/userdatapage/userdatapage.module').then(m => m.UserdatapageModule) },
   { path: 'addusercomp', loadChildren: () => import('./page/User/addusercomppage/addusercomppage.module').then(m => m.AddusercomppageModule) },
+  { path: 'companyprofile', loadChildren: () => import('./page/Company/companyprofilepage/companyprofilepage.module').then(m => m.CompanyprofilepageModule) },
+  { path: 'routeconfig', loadChildren: () => import('./page/Route/routeconfigpage/routeconfigpage.module').then(m => m.RouteconfigpageModule) },
 ];
 
 @NgModule({

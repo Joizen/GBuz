@@ -1,0 +1,106 @@
+<div class="header">
+    <!-- Header data & close button -->
+    <div class="row px-3 py-0" [style.background-color]="editcompany?'#effc8d':'#8dfcf6'"
+         style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+      
+      <div class="col-1" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
+        <img class="profileimg me-4" [src]="(editcompany&&editcompany.complogo!='')? editcompany.complogo: va.icon.nologo">
+      </div>
+  
+      <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+        <div >
+          <div class="row">
+            <span > {{editcompany?"แก้ข้อมูลลูกค้า":"สร้างข้อมูลลูกค้าใหม่"}} </span>
+            <span *ngIf="editcompany"> {{editcompany.companyname}}
+            </span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
+        <div class="row">
+          <div class="icon-inrow">
+            <div class="icon-inrow" (click)="deletecompany()" *ngIf="editcompany" style="cursor:pointer;">
+              <span>ลบ</span>
+              <mat-icon style="width: auto; color: red;">cancel</mat-icon>
+            </div>
+            <div class="icon-inrow" (click)="savecompany()" *ngIf="show.save" style="cursor:pointer;">
+              <span>บันทึก</span>
+              <mat-icon style="width: auto; color: green;">send</mat-icon>
+            </div>
+            <div class="icon-inrow" (click)="modal.close()" style="cursor:pointer;">
+              <span>ปิด</span>
+              <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+</div>
+<!-- Body & spinner -->
+<div class="position-relative" style="height: 40vh; width:100%; overflow: hidden; background-color: turquoise;">
+     <!-- spinner -->
+  <div class="container-spiner" *ngIf="show.Spinner">
+    <div class="row">
+      Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+  </div>
+  <div style="width:100%; padding: 20px;"  >
+
+    <div class="row" >
+        <div class="col-6 d-flex flex-column" style="gap: 10px;">
+          <div class="row">
+            <img class="companyimg" (click)="onImageClick()"
+                [src]="activecompany.complogo==''?va.icon.nologo:activecompany.complogo"/>
+
+            <input type="file" #fileInput (change)="onFileSelected($event)" 
+                accept="image/*" style="display: none;" />    
+          </div>
+
+          <div class="row">
+            <div class="col-3" style="text-align: right;"><mat-icon matPrefix>business</mat-icon></div>
+            <div class="col-9">
+              <input [(ngModel)]="activecompany.companyname" placeholder="Company Name" style="width: 100%;" >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3" style="text-align: right;"><mat-icon matPrefix>dialer_sip</mat-icon></div>
+            <div class="col-9">
+              <input [(ngModel)]="activecompany.phone" type="tel" placeholder="Company Phone" required pattern="[0-9]{10}" style="width: 100%;" >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3" style="text-align: right;"><mat-icon matPrefix>contacts</mat-icon></div>
+            <div class="col-9">
+              <input  [(ngModel)]="activecompany.contract"  placeholder="Contact Person" style="width: 100%;" >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3" style="text-align: right;"><mat-icon matPrefix>contact_phone</mat-icon></div>
+            <div class="col-9">
+              <input [(ngModel)]="activecompany.contractphone" type="tel" placeholder="contract Phone" required pattern="[0-9]{10}" style="width: 100%;" >
+            </div>
+          </div>
+
+          <div class="row"  >
+            <div class="col-3" style="text-align: right;"> <mat-icon matPrefix>place</mat-icon></div>
+            <div class="col-9" >{{activecompany.lat | number: '1.6-6'}}  ,  {{activecompany.lng | number: '1.6-6'}} </div> 
+          </div>
+
+        </div>
+        <div class="col-6" style="position: relative; height:35vh;">
+          <div id="companymap" style="height: 100%; width:100%;"></div>
+            <mat-icon style="position: absolute; top: 10px; right: 20px; width:30px; height:30px; 
+                      font-size: 30px; z-index: 1000; background-color: transparent; 
+                      cursor: pointer;"> directions 
+            </mat-icon>      
+        </div>
+        
+    </div>  
+  </div>
+</div>

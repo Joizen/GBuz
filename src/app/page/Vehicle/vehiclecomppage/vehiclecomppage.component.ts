@@ -34,8 +34,10 @@ export class VehiclecomppageComponent implements OnInit {
     await this.SetVehicleRoute();
     await this.setweekplan();
   }
-
-
+  async refreshpage(){
+    console.log("Vehiclecomppage.refreshdata : ",this.show.viewtype)
+    // await this.showroutetab(this.show.viewtype);
+  }
 
   async getData() {
     var result: Vehicledata[] = [];

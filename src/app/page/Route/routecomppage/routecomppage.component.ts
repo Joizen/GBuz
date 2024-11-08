@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import {
   DialogpageComponent,
@@ -41,7 +41,7 @@ export class RoutecomppageComponent implements OnInit {
 
   @Input() activecompany: Companydata = new Companydata();
 
-  show = { Spinner: true, viewtype: 0 };
+  show = { Spinner: true, viewtype: 2 };
   public maindata: Routedata[] = [];
   public activedata: Routedata = new Routedata();
   public activevehicle: VehicleRoutedata = new VehicleRoutedata();
@@ -60,11 +60,14 @@ export class RoutecomppageComponent implements OnInit {
   public createroutemodal : any;
 
   async ngOnInit() {
-    // console.log('Routecomppage ngOnInit activecompany', this.activecompany);
-
     await this.showroutetab(this.show.viewtype);
-    
   }
+  
+  async refreshpage(){
+    console.log("Routecomppage.refreshdata : ",this.show.viewtype)
+    await this.showroutetab(this.show.viewtype);
+  }
+
   async showroutetab(id:number){
     this.show.viewtype=id;
     this.show.Spinner = true;
@@ -187,12 +190,14 @@ export class RoutecomppageComponent implements OnInit {
     this.modalService.open(modal, { fullscreen: true });
   }
 
-  companytalkback(event: any) {}
+  routedetailtalkback(event: any) {}
 
-  Showroutedropoint(route: Routedata, modal: any) {
+  Showrouteconfig(route: Routedata, modal: any) {
     // console.log('Showroutedropoint route', route);
     this.activedata = route;
-    this.modalService.open(modal, { fullscreen: true });
+    // this.modalService.open(modal, { fullscreen: true });
+    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+
   }
 
   // #region  ========= Route Map ==============================
@@ -341,6 +346,12 @@ export class RoutecomppageComponent implements OnInit {
     this.modalService.open(modal, { fullscreen: true });
   }
 
+  addnewroute(modal :any){
+    this.activedata = new Routedata();
+    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    // this.modalService.open(modal, { fullscreen: true });
+  }
+  routeconfigtalkback(event: any) {}
 
 
   // #endregion
@@ -619,6 +630,12 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
+  addvehicledayplan(route:Routedata,modal:any,routemodal:any){
+    this.activecalendar =  new Calendarplan(1440,0,this.dayplan.plandate);
+    this.activedata = route;
+    this.createroutemodal = routemodal;
+    this.modalService.open(modal, { size: 'lg' });
+  }
  
 
   // #endregion
@@ -638,6 +655,12 @@ export class RoutecomppageComponent implements OnInit {
       this.weekplan.push(w);
       startweek.setDate(startweek.getDate() + 1);
     }
+  }
+
+  Showroutedropoint(route: Routedata, modal: any) {
+    // console.log('Showroutedropoint route', route);
+    this.activedata = route;
+    this.modalService.open(modal, { fullscreen: true });
   }
 
   async ShowVehicleDetail(route: Routedata) {
@@ -712,8 +735,10 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   async selectvehicletalkback(event: any) {
+    console.log('event',event);
     this.activeslot = event.slot;
     this.selectedvehicle = event.vehicle;
+    this.activeplan = undefined;
     this.modalService.open(this.createroutemodal, { size: 'lg' });
   }
 

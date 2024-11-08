@@ -5,6 +5,7 @@ import { SearchcompanypageRoutingModule } from './searchcompanypage-routing.modu
 import { SearchcompanypageComponent } from './searchcompanypage.component';
 import { MaterialModule } from '../../../material/material.module';
 import { CompanypageModule } from "../companypage/companypage.module";
+import { CompanyprofilepageModule } from "../companyprofilepage/companyprofilepage.module";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { CompanypageModule } from "../companypage/companypage.module";
     CommonModule,
     SearchcompanypageRoutingModule,
     MaterialModule,
-    CompanypageModule
+    CompanypageModule,
+    CompanyprofilepageModule
 ]
 })
 export class SearchcompanypageModule { }

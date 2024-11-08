@@ -2,14 +2,14 @@
 
     <mat-sidenav mode="over" [(opened)]="menuopen" style="background-color: #1e88e5;">
       <mat-toolbar style="background-color: #1976d2;" >
-        <img class="userimg" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
+        <img class="profileimg" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
         <div style="display: flex; flex-direction: column; justify-content: center;">
             <div class="empname" style="margin-left: 10px; font-size: medium ;">{{UserProfile?UserProfile.empname:''}} </div>
             <div style="margin-left: 10px; font-size: small;"> {{UserProfile?UserProfile.rolename:''}} </div>
         </div>   
 <!--         
         <span style="width: 80%; padding: 10px; color: white;"> {{UserProfile?UserProfile.empname:''}}</span> -->
-        <mat-icon (click)="menuopen=false" style="color: white; display: flex; justify-content: flex-end;">navigate_before</mat-icon>
+        <mat-icon (click)="menuopen=false" style="cursor: pointer; color: white; display: flex; justify-content: flex-end;">navigate_before</mat-icon>
       </mat-toolbar>
 
       <div class="container">
@@ -149,7 +149,7 @@
           <mat-icon class="navmenu" style="color: #b3e5fc;">description</mat-icon>
           <span class="navtxt">Manual</span>
 
-          <img class="userimg ml-5" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
+          <img class="profileimg ml-5" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
 
 
         </div>

@@ -18,7 +18,9 @@ import { MatTableModule } from '@angular/material/table';
 import { QRCodeModule } from 'angularx-qrcode';
 import {variable} from './variable'
 import { MatSelectModule } from '@angular/material/select';
-
+import { registerLocaleData } from '@angular/common';
+import localeTh from '@angular/common/locales/th';
+registerLocaleData(localeTh, 'th');
 
 @NgModule({
   declarations: [

@@ -1,171 +1,190 @@
-<!-- spinner -->
-<div class="container-spiner" *ngIf="show.Spinner">
-    <div class="row">
-        Please Watting...
+
+
+<div class="position-relative" style="height: 100%; width:100%; overflow:hidden">
+    <!-- spinner -->
+    <div class="container-spiner" *ngIf="show.Spinner">
+        <div class="row">
+            Please Watting...
+        </div>
+        <mat-spinner></mat-spinner>
     </div>
-    <mat-spinner></mat-spinner>
-</div>
 
-<div class="position-relative" style="height: 100%; width:100%; overflow-x:hidden">
-
-    <div>
-        <div class="container"
-            style="display: flex; justify-content: space-between; align-items: center; width:100hw; margin: 5px;">
-            <div class="col" style="flex: 0 0 auto;">
-
+    <div style="margin: 0,5px;">
+         <!-- tab header -->
+        <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
+            <div class="col-1" *ngIf="show.viewtype==2" (click)="addnewroute(routeconfigmodal)"
+                    style="display: flex; align-items: center; justify-content: center;">
+                <mat-icon style="color: royalblue;" >add_box</mat-icon>
             </div>
-            <div class="col" style="flex: 0 0 auto; text-align: right;">
-                <div class="row">
+
+            <div class="col text-center" style="display: flex; align-items: center; justify-content: center;">
+                <h1 *ngIf="show.viewtype==0"> ข้อมูลแผนการเดินรถรายวัน </h1> 
+                <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  </h1> 
+                <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ </h1> 
+            </div>
+            <div class="col-auto text-align end" >
+                <div class="row" style="text-align: right; margin-right: 10px;">
                     <div class="col" style="display: flex; align-items: center;"
-                        [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'"
                         matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="showroutetab(0)">
-                        <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
+                        <mat-icon style="width: 100%;" [style.color]="show.viewtype==0?'blue':'lightgray'">dashboard</mat-icon>
                     </div>
                     <div class="col" style="display: flex; align-items: center;"
-                        [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'"
                         matTooltip="แสดงตามกลุ่มสถานะ" (click)="showroutetab(1)">
-                        <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
+                        <mat-icon style="width: 100%; " [style.color]="show.viewtype==1?'blue':'lightgray'">dns</mat-icon>
                     </div>
                     <div class="col" style="display: flex; align-items: center;"
-                        [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'"
                         matTooltip="แสดงรายพนักงานขับรถ" (click)="showroutetab(2)">
-                        <mat-icon style="width: 100%; color: blue;">list</mat-icon>
+                        <mat-icon style="width: 100%; " 
+                        [style.color]="show.viewtype==2?'blue':'lightgray'"
+                        >list</mat-icon>
                     </div>
                 </div>
-            </div>
+            </div>        
         </div>
     </div>
 
     <div *ngIf="show.viewtype==0">
-        <div class="container"  style="height: 80vh; width:100vw;  overflow-x: scroll;">
-            <div class="row" style=" margin: 0; padding: 0; gap: 0;" [style.background-color]="dayplan.colorday" >
-                <div class="container" style="display: flex; align-items: center;">
-                    <div class="col-2" style="text-align: center;">
-                        ข้อมูลแผนการเดินรถรายวัน
-                    </div>
-                    <div class="col-1" style="justify-content: center; text-align: start;" (click) = "movedayplan(-1)">
-                        <!-- *ngIf="dayplan.plandate>dayplan.today" -->
-                        <mat-icon>navigate_before</mat-icon>
-                    </div>
-                    <div class="col-7" style="justify-content: center; text-align: center;">
-                        {{ dayplan.plandate | date: 'EEEE' }}  ที่ {{dayplan.plandate  | date: 'dd MMMM yyyy'}} 
-                    </div>
-                    <div class="col-1" style="justify-content: center; text-align: end;" (click) = "movedayplan(1)">
-                        <mat-icon>navigate_next</mat-icon>
-                    </div>    
-                    <div class="col-1" style="justify-content: center; text-align: end; cursor: pointer; " 
-                        *ngIf="!dayplan.noplan"  (click) = "setdayplanfromweekplan(undefined)">
-                        <mat-icon style="color: blue;"  >content_copy</mat-icon>
-                    </div>             
-                    <div class="col-1" style="justify-content: center; text-align: end; cursor: pointer; " 
-                        *ngIf="dayplan.noplan" (click) = "deldayplan(undefined)">
-                        <mat-icon style="color: red;" >delete</mat-icon>
-                    </div>             
-                </div>               
+        <!-- header -->
+        <div class="row" style=" margin: 0; padding: 0; gap: 0;" [style.background-color]="dayplan.colorday" >
+            <div class="col-2" style="text-align: center;">
+                ข้อมูลแผนการเดินรถรายวัน
             </div>
+            <div class="col-1" style="justify-content: center; text-align: start;" (click) = "movedayplan(-1)">
+                <!-- *ngIf="dayplan.plandate>dayplan.today" -->
+                <mat-icon>navigate_before</mat-icon>
+            </div>
+            <div class="col-7" style="justify-content: center; text-align: center;">
+                {{ dayplan.plandate | date: 'EEEE' }}  ที่ {{dayplan.plandate  | date: 'dd MMMM yyyy'}} 
+            </div>
+            <div class="col-1" style="justify-content: center; text-align: end;" (click) = "movedayplan(1)">
+                <mat-icon>navigate_next</mat-icon>
+            </div>    
+            <div class="col-1" style="justify-content: center; text-align: end; cursor: pointer; " 
+                *ngIf="!dayplan.noplan"  (click) = "setdayplanfromweekplan(undefined)">
+                <mat-icon style="color: blue;"  >content_copy</mat-icon>
+            </div>             
+            <div class="col-1" style="justify-content: center; text-align: end; cursor: pointer; " 
+                *ngIf="dayplan.noplan" (click) = "deldayplan(undefined)">
+                <mat-icon style="color: red;" >delete</mat-icon>
+            </div>                      
+        </div>
 
-            <!-- ====== Data ====== -->
-            <hr style="height:2px; margin: 2px;">
-            <div class="row" *ngFor="let routeday of dayplan.activeroute"  style=" margin: 0; padding: 0; gap: 0;">
-                <div class="container"  style="display: flex; align-items: center; justify-content: start;">
-                    <!-- Routename Name -->
-                    <div class="col-2" style="display: flex; align-items: center;  justify-content: center;  text-align: center;  height:100%;  padding: 0px; margin: 0px;" [style.background-color]="routeday.listvplan.length==0?'#f98989':'#c9f989'">
-                        {{routeday.route.routename}}
+        <div class="row" style="height: 80vh; width:100vw; overflow-x: scroll;">
+            <div class="col-12" style="height: 70vh; width:40hw; overflow-y: scroll; overflow-x: hidden;">
+        <!-- ====== Data ====== -->
+        <hr style="height:2px; margin: 2px;">
+        <div class="row" *ngFor="let routeday of dayplan.activeroute"  style=" margin: 0; padding: 0; gap: 0;">
+            <div class="container"  style="display: flex; align-items: center; justify-content: start;">
+                <!-- Routename Name -->
+                <div class="col-2" style="display: flex; justify-content: center; align-items: center;flex-direction: column; padding: 10px;  cursor: pointer;"
+                [style.background-color]="routeday.listvplan.length==0?'#f98989':'#c9f989'">
+                    <div style="text-align: center;" >
+                        {{ routeday.route.routename }}
                     </div>
-                    <!-- Vehicle & Time -->
-                    <div class="col-9" style="text-align: center;" >
-                        <!-- Empty Vehicle -->
-                        <!-- <div class="container" style="display: flex; align-items: center;"  *ngIf="routeday.listvplan.length==0">
-                              <div class="col-3" style="text-align: center;">
-                                ไม่มีการจัดรถ
-                            </div>
-                             
-                            <div class="col-8" style="display: flex; background-color: lightcoral;" >
-                                <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
-                                    <div class="col"  style="width:5px ;"
-                                        matTooltip="{{ item.starttime }}" matTooltipPosition="above">
-                                        <div style="display: block;">
-                                            &nbsp;&nbsp;
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
-                            <!-- ====== Vehicle ====== -->
-                            <div *ngFor="let vehicle of routeday.listvplan" class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;  cursor: pointer;">
-                                <div class="container" style="display: flex; align-items: center;">
-                                    <!-- Vehicle Name -->
-                                    <div class="col-1" style="text-align: center; color: royalblue;background-color: lightcyan;" >
-                                        {{ vehicle.vname }}
-                                    </div>
-                            
-                                    <!-- Vehicle Data -->
-                                    <div class="col-11" style="display: flex;">
-                                        <div class="col"  *ngFor="let item of vehicle.listdata" (click)="opendayplan(item,vehicle,routeday.route.id,plandetailmodal)" 
-                                            style="text-align: center; margin: 0; padding: 0; gap: 0;">
-                                            <div class="col" 
-                                                matTooltip="{{ item.starttime }}" matTooltipPosition="above">
-                                                <!-- Check if the time includes ":00" -->
-                                                <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay" 
-                                                    
-                                                     [style.background-color]="item.plancode=='' ? '#FFFFFF' : item.routeid==routeday.route.id ? '#FFE5B4' : '#CCCCCC'"
-                                                     [style.color]="item.plancode=='' ? '#FFFFFF' : item.routeid==routeday.route.id ? '#FFE5B4' : '#CCCCCC'">
-                                                    {{ item.starttime.replace(':00', '') }}
-                                                </div>
-                            
-                                                <!-- No Time Display -->
-                                                <ng-template #noTimeDisplay>
-                                                    <div style="display: block;" 
-                                                    [style.background-color]="item.plancode=='' ? '#FFFFFF' : item.routeid==routeday.route.id ? '#FFE5B4' : '#CCCCCC'">
-                                                        &nbsp;
-                                                    </div>
-                                                </ng-template>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr style="height:2px; margin: 2px;">
-                            </div>
-
-                            <!-- ====== Time ====== -->
-                            <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px; width: 100%; height: 20px;"
-                                *ngIf="routeday.listvplan.length==0"></div>
-                            <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;">
-                                <div class="container" style="display: flex; align-items: center;">
-                                    <!-- Vehicle Name -->
-                                    <div class="col-1" style="text-align: center; background-color:lightgrey" >
-                                        Time :
-                                    </div>
-                                    <!-- Vehicle Data -->
-                                    <div class="col-11" style="display: flex;">
-                                        <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
-                                            <div class="col" 
-                                                matTooltip="{{ item.starttime }}" matTooltipPosition="above">
-                                                <!-- Check if the time includes ":00" -->
-                                                <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay"  style=" background-color:lightgrey">
-                                                    {{ item.starttime.replace(':00', '') }}
-                                                </div>                            
-                                                <!-- No Time Display -->
-                                                <ng-template #noTimeDisplay>
-                                                    <div style="display: block; background-color:lightgrey">
-                                                        &nbsp;
-                                                    </div>
-                                                </ng-template>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr style="height:2px; margin: 2px;">
-                            </div>
-                    </div>
-                    <div class="col-1" style="display: flex;  justify-content: center; align-items: center; height: 100%; cursor: pointer;" *ngIf="dayplan.noplan" >
-                        <mat-icon style="color: blue;" *ngIf="routeday.listvplan.length==0" (click) = "setdayplanfromweekplan(routeday.route)">assignment</mat-icon>
-                        <mat-icon style="color: red;" *ngIf="routeday.listvplan.length!=0" (click) = "deldayplan(routeday.route)">delete</mat-icon>
-                        <!-- <mat-checkbox  [(ngModel)]="routeday.isselect" *ngIf="routeday.listvplan.length==0" ></mat-checkbox> -->
+                    <div style="display: flex; justify-content: end; align-items:center;flex-direction: column;width: 100%;height: 100%;  cursor: pointer;"
+                    (click)="addvehicledayplan(routeday.route,selectvehiclemodal,plandetailmodal)">
+                        <mat-icon style="width: auto; color: green;">
+                            add_circle
+                        </mat-icon>
                     </div>
                 </div>
-                <hr style="height:2px; margin: 2px;">
+
+                <!-- Vehicle & Time -->
+                <div class="col-9" style="text-align: center;" >
+                    <!-- Empty Vehicle -->
+                    <!-- <div class="container" style="display: flex; align-items: center;"  *ngIf="routeday.listvplan.length==0">
+                          <div class="col-3" style="text-align: center;">
+                            ไม่มีการจัดรถ
+                        </div>
+                         
+                        <div class="col-8" style="display: flex; background-color: lightcoral;" >
+                            <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                <div class="col"  style="width:5px ;"
+                                    matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                    <div style="display: block;">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                        <!-- ====== Vehicle ====== -->
+                        <div *ngFor="let vehicle of routeday.listvplan" class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;  cursor: pointer;">
+                            <div class="container" style="display: flex; align-items: center;">
+                                <!-- Vehicle Name -->
+                                <div class="col-1" style="text-align: center; color: royalblue;background-color: lightcyan;" >
+                                    {{ vehicle.vname }}
+                                </div>
+                        
+                                <!-- Vehicle Data -->
+                                <div class="col-11" style="display: flex;">
+                                    <div class="col"  *ngFor="let item of vehicle.listdata" (click)="opendayplan(item,vehicle,routeday.route.id,plandetailmodal)" 
+                                        style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                        <div class="col" 
+                                            matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                            <!-- Check if the time includes ":00" -->
+                                            <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay" 
+                                                
+                                                 [style.background-color]="item.plancode=='' ? '#FFFFFF' : item.routeid==routeday.route.id ? '#FFE5B4' : '#CCCCCC'"
+                                                 [style.color]="item.plancode=='' ? '#FFFFFF' : item.routeid==routeday.route.id ? '#FFE5B4' : '#CCCCCC'">
+                                                {{ item.starttime.replace(':00', '') }}
+                                            </div>
+                        
+                                            <!-- No Time Display -->
+                                            <ng-template #noTimeDisplay>
+                                                <div style="display: block;" 
+                                                [style.background-color]="item.plancode=='' ? '#FFFFFF' : item.routeid==routeday.route.id ? '#FFE5B4' : '#CCCCCC'">
+                                                    &nbsp;
+                                                </div>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="height:2px; margin: 2px;">
+                        </div>
+
+                        <!-- ====== Time ====== -->
+                        <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px; width: 100%; height: 20px;"
+                            *ngIf="routeday.listvplan.length==0"></div>
+                        <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;">
+                            <div class="container" style="display: flex; align-items: center;">
+                                <!-- Vehicle Name -->
+                                <div class="col-1" style="text-align: center; background-color:lightgrey" >
+                                    Time :
+                                </div>
+                                <!-- Vehicle Data -->
+                                <div class="col-11" style="display: flex;">
+                                    <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
+                                        <div class="col" 
+                                            matTooltip="{{ item.starttime }}" matTooltipPosition="above">
+                                            <!-- Check if the time includes ":00" -->
+                                            <div *ngIf="item.starttime.includes(':00'); else noTimeDisplay"  style=" background-color:lightgrey">
+                                                {{ item.starttime.replace(':00', '') }}
+                                            </div>                            
+                                            <!-- No Time Display -->
+                                            <ng-template #noTimeDisplay>
+                                                <div style="display: block; background-color:lightgrey">
+                                                    &nbsp;
+                                                </div>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="height:2px; margin: 2px;">
+                        </div>
+                </div>
+                <div class="col-1" style="display: flex;  justify-content: center; align-items: center; height: 100%; cursor: pointer;" *ngIf="dayplan.noplan" >
+                    <mat-icon style="color: blue;" *ngIf="routeday.listvplan.length==0" (click) = "setdayplanfromweekplan(routeday.route)">assignment</mat-icon>
+                    <mat-icon style="color: red;" *ngIf="routeday.listvplan.length!=0" (click) = "deldayplan(routeday.route)">delete</mat-icon>
+                    <!-- <mat-checkbox  [(ngModel)]="routeday.isselect" *ngIf="routeday.listvplan.length==0" ></mat-checkbox> -->
+                </div>
+            </div>
+            <hr style="height:2px; margin: 2px;">
+        </div>
+
             </div>
         </div>
     </div>
@@ -177,7 +196,7 @@
                 <mat-list role="list">
                     <mat-list-item *ngFor="let item of maindata" role="listitem"
                     [style.background-color]="(activedata.id==item.id)?'#FFE5B4':'#FFFFFF'"
-                    (dblclick)="Showroutedropoint(item,compdetailmodal)" (click)="ShowVehicleDetail(item)">
+                    (dblclick)="Showroutedropoint(item,routedetailmodal)" (click)="ShowVehicleDetail(item)">
                       {{ item.routename }}
                     </mat-list-item>
                 </mat-list>
@@ -284,6 +303,7 @@
             </div>
         </div>
     </div>
+
     <div *ngIf="show.viewtype==2" >
         
         <div class="row" style="height: 60vh; width:100vw;">
@@ -292,7 +312,7 @@
                 <mat-list role="list">
                     <mat-list-item *ngFor="let item of maindata" role="listitem"
                     [style.background-color]="(activedata.id==item.id)?'#FFE5B4':'#FFFFFF'"
-                    (dblclick)="Showroutedropoint(item,compdetailmodal)" (click)="Showroute(item)">
+                    (dblclick)="Showrouteconfig(item,routeconfigmodal)" (click)="Showroute(item)">
                       {{ item.routename }}
                     </mat-list-item>
                 </mat-list>
@@ -397,9 +417,14 @@
     </div>
 </div>
 
-<ng-template #compdetailmodal let-modal>
-    <app-routepage [modal]="modal" [activedata]="activedata" [company]="activecompany"  (talk)="companytalkback($event)"></app-routepage>
+<ng-template #routedetailmodal let-modal>
+    <app-routepage [modal]="modal" [activedata]="activedata" [company]="activecompany"  (talk)="routedetailtalkback($event)"></app-routepage>
 </ng-template>
+
+<ng-template #routeconfigmodal let-modal>
+    <app-routeconfigpage [modal]="modal" [activedata]="activedata" [company]="activecompany"  (talk)="routeconfigtalkback($event)"></app-routeconfigpage>
+</ng-template>
+
 
 <ng-template #vehicleroutemodal let-modal>
     <app-routevehiclepage [modal]="modal" [company]="activecompany" [activeroute]="activedata" [company]="activecompany"></app-routevehiclepage>

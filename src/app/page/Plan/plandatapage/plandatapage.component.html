@@ -31,15 +31,15 @@
     <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
       <div class="row">
         <div class="icon-inrow">
-          <div class="icon-inrow" (click)="deleteplan()" *ngIf="editplan" >
+          <div class="icon-inrow" (click)="deleteplan()" *ngIf="editplan" style="cursor:pointer;">
             <span>ลบ</span>
             <mat-icon style="width: auto; color: red;">cancel</mat-icon>
           </div>
-          <div class="icon-inrow" (click)="saveplan()" *ngIf="onperiod">
+          <div class="icon-inrow" (click)="saveplan()" *ngIf="onperiod" style="cursor:pointer;">
             <span>บันทึก</span>
             <mat-icon style="width: auto; color: green;">send</mat-icon>
           </div>
-          <div class="icon-inrow" (click)="modal.close()">
+          <div class="icon-inrow" (click)="modal.close()" style="cursor:pointer;">
             <span>ปิด</span>
             <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
           </div>

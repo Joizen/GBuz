@@ -1,14 +1,44 @@
-<!-- spinner -->
-<div class="container-spiner" *ngIf="show.Spinner">
-    <div class="row">
-        Please Watting...
+
+<div class="position-relative" style="height: 100%; width:100%; overflow:hidden">
+    <!-- spinner -->
+    <div class="container-spiner" *ngIf="show.Spinner">
+        <div class="row">
+            Please Watting...
+        </div>
+        <mat-spinner></mat-spinner>
     </div>
-    <mat-spinner></mat-spinner>
-</div>
 
-<div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
+    <div style="margin: 0,5px;">
+        <!-- tab header -->
+       <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
+           <div class="col text-center" style="justify-content: center;">
+               <h1 *ngIf="show.viewtype==0"> ข้อมูลแผนการเดินรถรายวัน {{activedata.vname}} {{activedata.vlicent}}</h1> 
+               <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  {{activedata.vname}} {{activedata.vlicent}}</h1> 
+               <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ {{activedata.vname}} {{activedata.vlicent}}</h1> 
+           </div>
+           <div class="col-auto text-align end" >
+               <div class="row" style="text-align: right; margin-right: 10px;">
+                   <div class="col" style="display: flex; align-items: center;"
+                       matTooltip="แสดงข้อมูลแผนการเดินรถล่วงหน้า" (click)="show.viewtype=0">
+                       <mat-icon style="width: 100%;" [style.color]="show.viewtype==0?'blue':'lightgray'">dashboard</mat-icon>
+                   </div>
+                   <div class="col" style="display: flex; align-items: center;"
+                       matTooltip="แสดงข้อมูลแผนการเดินรถรายสัปดาห์" (click)="show.viewtype=1">
+                       <mat-icon style="width: 100%; " [style.color]="show.viewtype==1?'blue':'lightgray'">dns</mat-icon>
+                   </div>
+                   <div class="col" style="display: flex; align-items: center;"
+                       matTooltip="แสดงรายการแผนการเดินรถ" (click)="show.viewtype=2">
+                       <mat-icon style="width: 100%; " 
+                       [style.color]="show.viewtype==2?'blue':'lightgray'"
+                       >list</mat-icon>
+                   </div>
+               </div>
+           </div>        
+       </div>
+   </div>
 
-    <div class="container" style=" display: flex; justify-content: space-between;  align-items: center; width: 100vw; margin:0px; padding: 0px;">
+
+    <!-- <div class="container" style=" display: flex; justify-content: space-between;  align-items: center; width: 100vw; margin:0px; padding: 0px;">
         <div class="row" style="width:100vw;">
             <div class="col-9" style=" flex: 9; " >
                 Header Name
@@ -28,7 +58,7 @@
                     </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="row" style="width:100vw;">
         <!-- Left Column -->

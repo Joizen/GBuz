@@ -64,9 +64,12 @@ body {
 }
 
 .profileimg {
+    padding: 5px;
     border-radius: 50%;
-    height: 5vh; /* กำหนดความสูงของรูปภาพไม่เกิน 10% ของความสูงหน้าจอ */
-    width: auto; /* ปรับขนาดความกว้างอัตโนมัติเพื่อรักษาสัดส่วน */
+    height: 5vh; 
+    width: 5vh; 
+    vertical-align: middle;
+    border: 1px solid #cee1f0;
 }
 
 .company-logo {

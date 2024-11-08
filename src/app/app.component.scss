@@ -17,6 +17,7 @@
 
   .clickable-div:hover {
       background-color: #1565c0;
+      cursor: pointer;
   }
 
   .menu-item {
@@ -35,14 +36,6 @@
       margin-left: 5px;
   }
 
-  .userimg {
-    padding: 5px;
-    width: 5vh;
-    height: 5vh;
-    border-radius: 50%;
-    vertical-align: middle;
-    // border: 1px solid #cee1f0;
-  }
   .empname {
     white-space: nowrap;
     overflow: hidden;

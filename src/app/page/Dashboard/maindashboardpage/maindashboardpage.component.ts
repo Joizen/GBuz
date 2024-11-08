@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Dashboarddata,ProfileModel,DoCompany,DoData,DoActivity,VehicleDashboard} from '../../../models/datamodule.module';
 import mqtt, { MqttClient } from 'mqtt';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import 'leaflet.markercluster'; // Import the marker cluster plugin
 import * as L from 'leaflet';
 import { elementAt } from 'rxjs';
 
@@ -48,7 +49,7 @@ export class MaindashboardpageComponent implements OnInit {
    public listdashboaddo: DoData[]=[];
    public listcompimage: any=[];
    public listdashboadvehicle: VehicleDashboard[]=[];
-
+   private markersGroup : L.MarkerClusterGroup|undefined ;
 
    public showtype=2;
 
@@ -61,12 +62,11 @@ export class MaindashboardpageComponent implements OnInit {
      this.initMap();
      this.mqttClient = await this.connectMqtt();
      this.subscribeMqtt(this.mqttClient, 'gbdupdate');
-     this.subscribeMqtt(this.mqttClient, 'gbvupdate');
+     this.subscribeMqtt(this.mqttClient, 'gbusvupdate');
      await this.getactivedo();
    }
    
    checktoken(){
-
     var token = this.va.gettoken();
     console.log("token : ",token);
     if(!token || token==""){
@@ -74,7 +74,7 @@ export class MaindashboardpageComponent implements OnInit {
     }
  
    }
-
+  // #region  =========== Dash board Data =========================
    //----------------- Dash board Data ---------------------------------------
    async getactivedo() {
 
@@ -117,7 +117,7 @@ export class MaindashboardpageComponent implements OnInit {
     var listcom:DoCompany[] =[];
     var listvehicle = "";
     var listcomid = "";
-    
+    // console.log('setcompanydata ');
     try{
       // จัดข้อมูล Dostatus ทุก DO ลงใน listdo พร้อมสร้างข้อมูล Company
       const ld = this.listdostatus.reduce((acc: any, item: any) => {
@@ -176,6 +176,7 @@ export class MaindashboardpageComponent implements OnInit {
         return acc;
       }, {} as { [key: string]: any[] });
        
+    
       // console.log("listdo :", this.listdashboaddo);
       // console.log("listcom :", listcom);
 
@@ -316,6 +317,9 @@ export class MaindashboardpageComponent implements OnInit {
         if (jsondata.data.length > 0) {          
           jsondata.data.forEach((item: any) => {
             var v:VehicleDashboard = new VehicleDashboard();
+            var vd = this.listdashboaddo.find(x=>x.serialbox==v.serialbox);
+            // console.log("getvehicledata vd",vd);
+            if(vd){item.vid=vd.vid;}
             v.setdata(item);
             result.push(item);
             var vdo = this.listdashboaddo.filter(x=>x.serialbox==v.serialbox);
@@ -339,6 +343,7 @@ export class MaindashboardpageComponent implements OnInit {
       // console.log(this.listdashboaddo);
   
     }catch(ex){console.log("getvehicledata error : ",ex)}
+    //  console.log("getvehicledata result",result);
     return result;
   }
 
@@ -375,7 +380,7 @@ export class MaindashboardpageComponent implements OnInit {
     // ================ test  remove 
 
   }
-
+ // #endregion
   async driverdetailtalkback(event: any) {
     var dodata = event.do;
     var transtatus = event.transtatus;
@@ -634,7 +639,6 @@ export class MaindashboardpageComponent implements OnInit {
 
   }
 
-
   showdriverposition(driver: any){
     try{
       // console.log("showdriverposition :"+ driver.vlat, driver.vlng);
@@ -649,7 +653,9 @@ export class MaindashboardpageComponent implements OnInit {
       }
     }catch(ex){console.log("showdriverposition error :", ex);}
   }
- 
+
+
+  // #region  =========== MQTT =========================
    //--------------------- MQTT  Lissening------------------------
    mqttconfig = this.va.mqttconfig;
    async connectMqtt() {
@@ -676,12 +682,22 @@ export class MaindashboardpageComponent implements OnInit {
            if (err) {
              console.log('err');
            } else {
-             console.log('Subscribed');
+             console.log('Subscribed',topic);
            }
          });
        } else {
          console.log('MQTT client is not connected.');
        }
+       mqttclient.on('message', (topic, message) => {
+        if(topic=="gbusvupdate"){
+          // console.log(`Received message on topic ${topic}: ${message.toString()}`);
+          var data =message.toString();
+          var jsondata = JSON.parse(data);
+          this.updatevehicledata(jsondata);
+        }else if(topic=="gbdupdate"){
+
+        }
+      });
      } catch (ex) {
        console.log('Error ========> ', ex);
      }
@@ -714,8 +730,32 @@ export class MaindashboardpageComponent implements OnInit {
      }
    }
 
+   updatevehicledata(jsondata:any){
+    //  console.log("updatevehicledata jsondata : ",jsondata);
+     var vehicle = this.listdashboadvehicle.find(x=>x.serialbox==jsondata.imei);
+     if(vehicle){
+      vehicle.lat=jsondata.lat;
+      vehicle.lng=jsondata.lng;
+      vehicle.gpsstatus=jsondata.gpsevent;
+      vehicle.speed=jsondata.speed;
+      vehicle.header =jsondata.header;
+      vehicle.gpstime =jsondata.gpstime;
+      vehicle.driverlicence =jsondata.idcard;
+      vehicle.io =jsondata.io;
+      // vehicle.drivername =jsondata.drivername;
 
- 
+      // ปรับค่า ตำบลอำเภอ จังหวัด
+      // vehicle.admincode=;
+      // vehicle.adminname=;
+      // console.log("updatevehicledata vehicle : ",vehicle);
+      this.updateMarkerPosition(vehicle);
+      // move point
+     }
+   }
+
+// #endregion
+
+ // #region  =========== Leaflet  Map =========================
    //--------------------- Leaflet  Map------------------------
    private initMap(): void {
      this.map = L.map('map', {
@@ -729,8 +769,43 @@ export class MaindashboardpageComponent implements OnInit {
        ],
      });
    }
+
+  setmarkersGroup():Promise<void>{
+    return new Promise((resolve, reject) => {
+      try{
+        this.markersGroup = L.markerClusterGroup({ 
+          iconCreateFunction: this.customClusterIcon // Set custom icon function
+        });  
+        resolve();
+      }catch(ex){console.log("setmarkersGroup error :",ex);  reject(ex); }
+    });
+  }
+  customClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
+    const count = cluster.getChildCount();
+    
+    // Determine background color based on count
+    let backgroundColor = '#ff7800'; // Default color
+    if (count >= 100) {
+      backgroundColor = '#d9534f'; // Red for > 100
+    } else if (count >= 50) {
+      backgroundColor = '#f0ad4e'; // Orange for >= 50
+    } else if (count >= 10) {
+      backgroundColor = '#5bc0de'; // Light Blue for >= 10
+    }else if (count >= 5) {
+      backgroundColor = '#90EE90'; // Light Green for >= 5
+    }
+
+    // Create a custom HTML element for the cluster icon
+    const customIcon = L.divIcon({
+      html: `<div style="background-color: ${backgroundColor}; color: white; border-radius: 50%; text-align: center; width: 40px; height: 40px; line-height: 40px;">${count}</div>`,
+      className: 'custom-cluster-icon',
+      iconSize: L.point(40, 40),
+    });
+    return customIcon;
+  }
  
-   plotvehecle(){
+  async plotvehecle(){
+    // if(!this.markersGroup){await this.setmarkersGroup() }
     var lastpoint:any =[13,100];
     this.listdashboaddo.forEach(vehicle => {
       if(vehicle.vlat!=0&&vehicle.vlng!=0){
@@ -744,10 +819,25 @@ export class MaindashboardpageComponent implements OnInit {
       }
     });
     if(this.map){this.map.panTo(lastpoint);}  
-    this.vmarkers
-   }
+    // console.log("this.vmarkers :",this.vmarkers);
+    
 
-   private plotMarker(lat:any,lng:any,header:string,description:string,image:any,vstatus:string){
+  }
+  
+  addveheclepoint(vehicle:DoData){
+    if(vehicle.vlat!=0&&vehicle.vlng!=0){
+      var details = vehicle.doname
+      var marker = this.plotMarker(vehicle.vlat,vehicle.vlng,vehicle.fullname,details,vehicle.lineimage,vehicle.vstatuscorlor);
+      if(marker!=null){
+        var id:number = vehicle.vid;
+        this.vmarkers.push({id, marker});
+      }
+    }
+    if(this.map){this.map.panTo([vehicle.vlat,vehicle.vlng]);}  
+
+  }
+
+  private plotMarker(lat:any,lng:any,header:string,description:string,image:any,vstatus:string){
     if(this.map){     
       // var vstatus ="#fa0404"; 
       const customIcon = L.divIcon({
@@ -803,9 +893,9 @@ export class MaindashboardpageComponent implements OnInit {
       return marker;
     }
     return null;
-   }
+  }
 
-   private ShowCurrentPosition(lat:any,lng:any){
+  private ShowCurrentPosition(lat:any,lng:any){
     try{
       if(this.map){   
         if(this.cmarkers){
@@ -837,12 +927,66 @@ export class MaindashboardpageComponent implements OnInit {
       }
     }catch(ex){console.log("ShowCurrentPosition error : ",ex)}
 
-   }
+  }
 
-   openmap(modal: any) {
+  updateMarkerPosition(vehicle:VehicleDashboard): void {
+    var vmarker = this.vmarkers.find(x=>x.id==vehicle.vid);
+    var vd = this.listdashboaddo.find(x=>x.vid==vehicle.vid);
+    if(vd){
+      vd.vlat=vehicle.lat;
+      vd.vlng=vehicle.lng;
+      vd.vstatus =vehicle.gpsstatus;
+      vd.vstatuscorlor =  this.va.getvcolor(vehicle.gpsstatus);
+      vd.vstatusname = this.va.getvstatusname(vehicle.gpsstatus);
+    }
+    if(vmarker){
+      var marker =vmarker.marker;
+      marker.setLatLng([vehicle.lat, vehicle.lng]);
+      // this.ShowCurrentPosition(vehicle.lat, vehicle.lng);
+      this.setCenter(vehicle.lat, vehicle.lng); 
+      var msg = "Update location";
+      if(vd){
+        msg+=" of " +vd.vname + " On " + vehicle.lat +","+vehicle.lng;
+        this.showSanckbar(msg,1)
+      }
+      // console.log("marker :",marker);
+    }
+    else{
+      if(vd){
+        this.addveheclepoint(vd);
+        this.setCenter(vehicle.lat, vehicle.lng); 
+        // this.ShowCurrentPosition(vehicle.lat, vehicle.lng);
+        var msg = "Update location of " +vd.vname + " On " + vehicle.lat +","+vehicle.lng;
+        this.showSanckbar(msg,1)
+      }
+      else{ 
+        console.log("marker not found id :",vehicle.vid);
+      }
+    }
+    
+    // if (marker) {
+    //   marker.setLatLng([lat, lng]);
+    // } else {
+    //   console.error(`Marker with ID ${id} not found`);
+    // }
+  }
+  
+  setCenter(lat: number, lng: number, zoomLevel?: number): void {
+    if (this.map) {
+      this.map.setView([lat, lng], zoomLevel ?? this.map.getZoom());
+      if(this.cmarkers){
+        this.cmarkers.setLatLng([lat,lng]);
+      } else{
+        this.ShowCurrentPosition(lat,lng);
+      }
+    }
+  }
+
+  openmap(modal: any) {
      this.modalService.open(modal, { fullscreen:true});
    }
- 
+ // #endregion
+
    showSanckbar(message: string, duration = 5) {
      this.snacbar.open(message, 'Close', {
        duration: duration * 1000,
