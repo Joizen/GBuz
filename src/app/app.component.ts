@@ -124,7 +124,10 @@ export class AppComponent implements OnInit {
         // console.log('decodemqtt data: ', msg);
         var token =this.va.gettoken();
         // console.log('decodemqtt token: ', token);
-        if(msg==token){this.showmenu=true;}
+        if(msg==token){
+          this.UserProfile = await this.va.getprofile();
+          this.showmenu=true;
+        }
       } 
     }
 

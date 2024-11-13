@@ -32,6 +32,8 @@ export class MaindashboardpageComponent implements OnInit {
   public mqttClient: any;
   
   async ngOnInit() {
+    var userprofile= await this.va.getprofile();
+    if(userprofile){this.UserProfile =userprofile;}
     this.initMap();
     this.mqttClient = await this.connectMqtt();
     this.subscribeMqtt(this.mqttClient, 'gbdupdate');
