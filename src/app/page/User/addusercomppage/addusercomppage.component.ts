@@ -79,7 +79,7 @@ export class AddusercomppageComponent implements OnInit {
   async saveupdateuser(listuser:string){
     try{
       var wsname = "updatedata";
-      var jsondata = await this.va.wsdata(wsname,{tbname:"usercompany",data:{listuid:listuser,compid:this.activecompany.id}},"")
+      var jsondata = await this.va.getwsdata(wsname,{tbname:"usercompany",data:{listuid:listuser,compid:this.activecompany.id}})
       if(jsondata.code=="000"){
         this.showSanckbar("save or update user in company success",2);
         return true;

@@ -41,7 +41,7 @@ export class RoutecomppageComponent implements OnInit {
 
   @Input() activecompany: Companydata = new Companydata();
 
-  show = { Spinner: true, viewtype: 2 };
+  show = { Spinner: true, viewtype: 0 };
   public maindata: Routedata[] = [];
   public activedata: Routedata = new Routedata();
   public activevehicle: VehicleRoutedata = new VehicleRoutedata();
@@ -64,6 +64,7 @@ export class RoutecomppageComponent implements OnInit {
   }
   
   async refreshpage(){
+    this.maindata = await this.getData();
     console.log("Routecomppage.refreshdata : ",this.show.viewtype)
     await this.showroutetab(this.show.viewtype);
   }
@@ -103,7 +104,7 @@ export class RoutecomppageComponent implements OnInit {
     var wsname = 'getdata';
     var params = { tbname: 'routecomp', compid: this.activecompany.id };
     var jsondata = await this.va.getwsdata(wsname, params);
-    // console.log("getData jsondata : ", jsondata);
+    console.log("getData routecomp jsondata : ", jsondata);
     if (jsondata.code == '000') {
       jsondata.data.forEach((data: any) => {
         var temp = new Routedata();
@@ -190,10 +191,12 @@ export class RoutecomppageComponent implements OnInit {
     this.modalService.open(modal, { fullscreen: true });
   }
 
-  routedetailtalkback(event: any) {}
+  routedetailtalkback(event: any) {
+    this.refreshpage();
+  }
 
   Showrouteconfig(route: Routedata, modal: any) {
-    // console.log('Showroutedropoint route', route);
+    console.log('Showroutedropoint route', route);
     this.activedata = route;
     // this.modalService.open(modal, { fullscreen: true });
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
@@ -348,10 +351,13 @@ export class RoutecomppageComponent implements OnInit {
 
   addnewroute(modal :any){
     this.activedata = new Routedata();
+    this.activedata.ownerid = this.activecompany.id;
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     // this.modalService.open(modal, { fullscreen: true });
   }
-  routeconfigtalkback(event: any) {}
+  routeconfigtalkback(event: any) {
+    this.refreshpage();
+  }
 
 
   // #endregion
@@ -484,9 +490,9 @@ export class RoutecomppageComponent implements OnInit {
     try{
       var wsname = "updatedata";
       var param:any;
-      if(route){ param={tbname:"weektodayplan",plandate:plandate,routeid:route.id} }
-      else { param={tbname:"weektodayplan",plandate:plandate};}
-      var jsondata = await this.va.wsdata(wsname,param,"")
+      if(route){ param={tbname:"weektodayplan",plandate:plandate,routeid:route.id,compid:this.activecompany.id} }
+      else { param={tbname:"weektodayplan",plandate:plandate,compid:this.activecompany.id};}
+      var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         this.showSanckbar("create plan from week success",2);
         return true;
@@ -517,9 +523,9 @@ export class RoutecomppageComponent implements OnInit {
     try{
       var wsname = "deldata";
       var param:any;
-      if(route){ param={tbname:"weektodayplan",plandate:plandate,routeid:route.id} }
-      else { param={tbname:"weektodayplan",plandate:plandate};}
-      var jsondata = await this.va.wsdata(wsname,param,"")
+      if(route){ param={tbname:"weektodayplan",plandate:plandate,routeid:route.id,compid:this.activecompany.id} }
+      else { param={tbname:"weektodayplan",plandate:plandate,compid:this.activecompany.id};}
+      var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         this.showSanckbar("delete plan from week success",2);
         return true;

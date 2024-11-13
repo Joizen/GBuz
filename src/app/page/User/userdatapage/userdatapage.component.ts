@@ -64,7 +64,7 @@ export class UserdatapageComponent implements OnInit {
   async setdeleteuser(){
     try{
       var wsname = "deldata";
-      var jsondata = await this.va.wsdata(wsname,{tbname:"usercompany",empid:this.activeuser.id,compid:this.activecompany.id},"");
+      var jsondata = await this.va.getwsdata(wsname,{tbname:"usercompany",empid:this.activeuser.id,compid:this.activecompany.id});
       if(jsondata.code=="000"){
         this.showSanckbar("delete user of company success",2);
         return true;

@@ -309,7 +309,7 @@ export class VehiclecomppageComponent implements OnInit {
   async setcopyplan(data:any){
     try{
       var wsname = "copyweekplan";
-      var jsondata = await this.va.wsdata(wsname,data,"")
+      var jsondata = await this.va.getwsdata(wsname,data)
       if(jsondata.code=="000"){
         this.showSanckbar("Copy plan "+ data.torouteday +" success",2);
         return true;

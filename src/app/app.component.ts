@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     this.mqttClient = await this.connectMqtt();
     this.subscribeMqtt(this.mqttClient, 'gbdashboard');
     // console.log('subscribeMqtt gbdashboard : ',this.mqttClient);
-    this.startTimer();
+    // this.startTimer();
  }
 
   openPage(pagename:string){
@@ -48,7 +48,6 @@ export class AppComponent implements OnInit {
         }
         if(this.timeLeft<=0){
           if(await this.refreshtoken()){       
-            // console.log("this.timeLeft : ",this.timeLeft);     
             this.timeLeft=300; // Refresh token after timeLeft (300) seconds
             this.resetcounter=60;
           }else{
@@ -107,7 +106,7 @@ export class AppComponent implements OnInit {
             if (err) {
               console.log('err');
             } else {
-              console.log('Subscribed',topic);
+              // console.log('Subscribed',topic);
             }
           });
         } else {

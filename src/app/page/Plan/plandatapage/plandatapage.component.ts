@@ -196,7 +196,7 @@ export class PlandatapageComponent implements OnInit {
       // ไม่ต้องเลือก OT
       this.activeplan.ot=0;
       this.activeplan.otname="ปกติ";
-      this.activeplanchange(0);
+      this.activeplanchange();
     }
     else{ // ถ้าส่งกลับบ้าน
       // ปรับเวลาส่งสุดท้ายให้เป็น เวลารับต้นทางตาม OT + period       
@@ -206,14 +206,14 @@ export class PlandatapageComponent implements OnInit {
       else{
         this.selecttime.start = this.va.DateToString("HH:mm",this.selectshift.ottime);
       }
-      this.activeplanchange(1);
+      this.activeplanchange();
     }
 
    
 
   }
-  activeplanchange(index:number){
-    index = this.activeplan.issend;
+  activeplanchange(){
+    var index = this.activeplan.issend;
     console.log("selecttime.index : ",index);
     if(index==0){
       // เปลี่ยนเวลาถึงปลายทาง
@@ -300,13 +300,7 @@ export class PlandatapageComponent implements OnInit {
     try{
       var tbname =["route","","routeweek","driverplan"];
       var wsname = "updatedata";
-      var strplan = JSON.stringify(this.activeplan);
-      var plan = JSON.parse(strplan);
-      plan.plandate = this.va.DateToString("yyyy-MM-dd 00:00:00",this.activeplan.plandate);
-      plan.starttime = this.va.DateToString("yyyy-MM-dd HH:mm:ss",this.activeplan.starttime);
-      
-      console.log("plan : ",plan);
-      var jsondata = await this.va.wsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:plan},"")
+      var jsondata = await this.va.getwsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:this.activeplan})
       if(jsondata.code=="000"){
         this.showSanckbar("save or updateplan success",2);
         return true;
@@ -337,7 +331,7 @@ export class PlandatapageComponent implements OnInit {
     try{
       var tbname =["route","","routeweek","driverplan"];
       var wsname = "deldata";
-      var jsondata = await this.va.wsdata(wsname,{tbname:tbname[this.activeplan.plantype],plancode:this.activeplan.plancode},"")
+      var jsondata = await this.va.getwsdata(wsname,{tbname:tbname[this.activeplan.plantype],plancode:this.activeplan.plancode})
       if(jsondata.code=="000"){
         this.showSanckbar("delete plan success",2);
         return true;

@@ -24,10 +24,11 @@ export class RouteconfigpageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // if()
+    if(this.activedata){this.editroute = new Routedata(this.activedata); }
     console.log("this.editroute ",this.editroute);
     console.log("this.activedata ",this.activedata);
-    this.editroute.ownerid =this.company.id;
+    this.show.endtime = this.va.DateToString("HH:mm",this.editroute.endtime); 
+    // this.editroute.ownerid =this.company.id;
     this.show.Spinner= false;
   }
   activeplanchange(){
@@ -77,7 +78,7 @@ export class RouteconfigpageComponent implements OnInit {
         }else{this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")}
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("save route error ",ex)
       this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
@@ -90,7 +91,7 @@ export class RouteconfigpageComponent implements OnInit {
       route.starttime = this.va.DateToString("yyyy-MM-dd HH:mm:ss",this.editroute.starttime);
       
       console.log("route : ",route);
-      var jsondata = await this.va.wsdata(wsname,{tbname:"route",data:route},"")
+      var jsondata = await this.va.getwsdata(wsname,{tbname:"route",data:route})
       if(jsondata.code=="000"){
         this.showSanckbar("save or update route success",2);
         return true;
@@ -103,7 +104,20 @@ export class RouteconfigpageComponent implements OnInit {
   }
 
 
-  deleteroute(){
+  async deleteroute(){
+    try{     
+      var confirm =await this.OkCancelMessage("ยืนยันการลบ","คุณต้องการลบข้อมูลนี้หรือไม่");
+      if(confirm=="true"){
+        this.editroute.transtatus=-3;
+        if(await this.saveupdateroute()){
+            this.talk.emit(this.editroute);
+            this.modal.close();
+        }else{this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")}
+      }
+    }catch(ex){
+      console.log("delete route error ",ex)
+      this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
+    }
 
   }
 

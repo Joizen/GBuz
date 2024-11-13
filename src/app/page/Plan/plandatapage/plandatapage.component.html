@@ -193,7 +193,7 @@
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
         <span  *ngIf="activeplan.issend==1"> {{activeplan.endtime | date:'HH:mm'}} น.</span>
         <input type="time" style="width: 80%;" [(ngModel)]="selecttime.end"
-        (ngModelChange)="activeplanchange(0)"   *ngIf="activeplan.issend==0"/>
+        (ngModelChange)="activeplanchange()"   *ngIf="activeplan.issend==0"/>
         <label>นาที</label>
 
       </div>
@@ -212,7 +212,7 @@
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
         <input type="number" style="width: 80%;" [(ngModel)]="activeplan.period"
-          (ngModelChange)="activeplanchange(1)" />
+          (ngModelChange)="activeplanchange()" />
         <label>นาที</label>
       </div>
 
@@ -222,7 +222,7 @@
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
         <span *ngIf="activeplan.issend==0"> {{activeplan.starttime | date:'HH:mm'}} น.</span>
         <input type="time" style="width: 80%;" [(ngModel)]="selecttime.start"
-        (ngModelChange)="activeplanchange(1)"   *ngIf="activeplan.issend==1"/>
+        (ngModelChange)="activeplanchange()"   *ngIf="activeplan.issend==1"/>
         <label>นาที</label>
       </div>
     </div>
@@ -239,7 +239,7 @@
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
         <input type="number" style="width: 80%;" [(ngModel)]="activeplan.startwarn"
-          (ngModelChange)="activeplanchange(2)" />
+          (ngModelChange)="activeplanchange()" />
         <label>นาที</label>
       </div>
 
@@ -263,7 +263,7 @@
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
         <input type="number" style="width: 80%;" [(ngModel)]="activeplan.wakeup"
-          (ngModelChange)="activeplanchange(3)" />
+          (ngModelChange)="activeplanchange()" />
         <label>นาที</label>
       </div>
 
@@ -288,7 +288,7 @@
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
         <input type="number" style="width: 80%;" [(ngModel)]="activeplan.wakeupwarn"
-          (ngModelChange)="activeplanchange(4)" />
+          (ngModelChange)="activeplanchange()" />
         <label>นาที</label>
       </div>
 

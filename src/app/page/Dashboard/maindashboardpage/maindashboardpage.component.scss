@@ -1,3 +1,50 @@
+
+  //#region move left right
+/* Ensure full width and height for the whole page */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Container for split screen */
+.mainbody {
+  display: flex;
+  width: 100vw;
+  height: 95vh;
+  overflow: hidden;
+}
+
+/* Left and right sections */
+.left, .right {
+  height: 100%;
+}
+.left {
+  width: 100%;
+}
+.right {
+  background-color: yellow;
+  width: 100%;
+}
+
+/* Divider in the middle */
+.divider {
+  width: 5px;
+  background-color: #333;
+  cursor: ew-resize;
+}
+
+#map {
+  height: 100vh;
+  flex: 1; /* Expands to fill available height */
+  width: 100%; /* Full width */
+}
+  //#endregion
+
+
+
 .img-background {
     position: relative;
     top: 50%;
@@ -25,11 +72,7 @@
     left: 0;
     z-index: 1;
   }
-  .profileimg {
-    border-radius: 50%;
-    height: 10vh; /* กำหนดความสูงของรูปภาพไม่เกิน 10% ของความสูงหน้าจอ */
-    width: auto; /* ปรับขนาดความกว้างอัตโนมัติเพื่อรักษาสัดส่วน */
-  }
+
   .divstatuscolor {
     border-radius: 50%;
     height: 2vh; /* กำหนดความสูงของรูปภาพไม่เกิน 10% ของความสูงหน้าจอ */
@@ -67,14 +110,6 @@
     white-space:pre-line;
   }
 
-  // .resizemuti {
-  //   background-size: contain;
-  //   cursor: col-resize;
-  //   resize: horizontal;
-  //   width: 100%;
-  //   height: 90%;
-  //   overflow: scroll;
-  // }
 
   .rectangle {
     position: relative;
@@ -101,3 +136,4 @@
   .resize-handle-left {
     left: 0;
   }
+

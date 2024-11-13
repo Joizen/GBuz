@@ -29,7 +29,7 @@ export class ProfileModel {
   companyname : string = "";
   rolename : string = "";
   remark : string = "";
-  transtatus : number = 0;
+  transtatus : number = 1;
   setData(jsondata: any) {
     // console.log('setData jsondata : ', jsondata);
     this.empcode = jsondata.empcode; 
@@ -51,10 +51,9 @@ export class UserModel {
   linename : string = "";
   userimage : string = "";
   phone : string = "";
-  department: string = "";
   companyname : string = "";
   rolename : string = "";
-  transtatus : number = 0;
+  transtatus : number = 1;
   isselect:boolean=false;
   setdata(jsondata: any) {
     // console.log('setData jsondata : ', jsondata);
@@ -65,7 +64,6 @@ export class UserModel {
     this.userimage = jsondata.userimage; 
     this.phone = jsondata.phone; 
     this.companyname = jsondata.companyname; 
-    this.department = jsondata.department; 
     this.rolename = jsondata.rolename; 
     this.transtatus = jsondata.transtatus; 
   }
@@ -91,6 +89,219 @@ export class privilegeModel {
 
 // ============= Main Dashboar  ==================
 
+//#region for smart control dashboard
+export class DashboardcompanyModel {
+  cid: number = 0;
+  company: string = "";
+  comadmin: string = "";
+  complogo: string = "";
+  phone: string = "";
+  totaltemp: number = 0;
+  totaldrop: number = 0;
+  totalemp: number = 0;
+  totalroute: number = 0;
+  totalvehicle: number = 0;
+  totaldo: number = 0;
+  totalwake: number = 0;
+  totalalc: number = 0;
+  totalstart: number = 0;
+  totalotw: number = 0;
+  totalfinish: number = 0;
+  dolist:DashboardplanModel[]=[];
+  showdetail: boolean = true;
+  showgroup: boolean[] = [true, true, true, true, true];
+  get groupunwakeup() { return this.dolist.filter(item => item.laststatus<5); }
+  get groupwakeup() { return this.dolist.filter(item => item.laststatus==5); }
+  get groupalc() { return this.dolist.filter(item => item.laststatus==10); }
+  get groupstart() { return this.dolist.filter(item => item.laststatus==20); }
+  get groupotw() { return this.dolist.filter(item => item.laststatus==25); }
+  get groupfinish() { return this.dolist.filter(item => item.laststatus==30); }
+
+
+
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any) { 
+    this.cid = jsondata.id;
+    this.company = jsondata.companyname;
+    this.comadmin = jsondata.contract;
+    this.complogo = jsondata.complogo;
+    this.phone = jsondata.phone;
+    this.totaltemp = jsondata.totaltemp;
+    this.totaldrop = jsondata.totaldrop;
+    this.totalemp = jsondata.totalemp;
+    this.totalroute = jsondata.totalroute;
+    this.totalvehicle = jsondata.totalvehicle;
+
+  }
+}
+
+export class DashboardplanModel {
+  cid: number = 0;
+  companyname: string = "";
+  complogo: string = "";
+  docode: string = "";
+  plankey: string = "";
+  plandate:Date = new Date();
+  vid: number = 0;
+  vname: string = "";
+  vlicent: string = "";
+  serialbox: string = "";
+  driverid: number = 0;
+  fullname: string = "";
+  phone: string = "";
+  mobile: string = "";
+  linename: string = "";
+  lineimage: string = "";
+  routeid: number = 0;
+  routename: string = "";
+  issend: number = 0;
+  isendname: string = "";
+  ot: number = 0;
+  otname: string = "";
+  shifid: number = 0;
+  shift: string = "";
+  distance: number = 0;
+  starttime:Date = new Date("2000-01-01 00:00:00");
+  startact:Date = new Date("2000-01-01 00:00:00");
+  period: number = 0;
+  finishtime:Date = new Date("2000-01-01 00:00:00");
+  finishact:Date = new Date("2000-01-01 00:00:00");
+  wakeupwarn: number = 0;
+  wakeupworntime:Date = new Date("2000-01-01 00:00:00");
+  wakeup: number = 0;
+  wakeuptime:Date = new Date("2000-01-01 00:00:00");
+  wakeupact:Date = new Date("2000-01-01 00:00:00");
+  startwarn: number = 0;
+  startwarntime:Date = new Date("2000-01-01 00:00:00");
+  startwarnact:Date = new Date("2000-01-01 00:00:00");
+  alcstatus: number = 0;
+  alcvalue: number = 0;
+  acltime:Date = new Date("2000-01-01 00:00:00");
+  listactivity:PlanactivityModel[] =[];
+  laststatus: number = 0;
+  laststatuscolor: string = "#FFFFFF";
+  laststatusname: string = "";
+  laststatuswarn: Date = new Date("2000-01-01 00:00:00");
+  laststatustaget: Date = new Date("2000-01-01 00:00:00");
+  laststatustime: Date = new Date("2000-01-01 00:00:00");
+  laststatuslevel: number = 0;
+
+  vlat: number = 0.0;
+  vlng: number = 0.0;
+  vstatus: number = 0.0;
+  vstatuscorlor: string = "#d6d4d4"
+  vstatusname: string = "";
+  vlocation: string = "";
+  vlocationcode: string = "";
+  vspeed: number = 0;
+  vheader: number = 0;
+  vio: string = "";
+  lastlat: number = 0.0;
+  lastlng: number = 0.0;
+  gpstime: Date = new Date("2000-01-01 00:00:00");
+
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any) { 
+
+    this.cid = jsondata.cid;
+    this.companyname = jsondata.companyname;
+    this.docode = jsondata.docode;
+    this.plankey = jsondata.plankey;
+    this.vid = jsondata.vid;
+    this.vname = jsondata.vname;
+    this.vlicent = jsondata.vlicent;
+    this.serialbox = jsondata.serialbox;
+    this.driverid = jsondata.driverid;
+    this.fullname = jsondata.fullname;
+    this.phone = jsondata.phone;
+    this.mobile = jsondata.mobile;
+    this.linename = jsondata.linename;
+    this.lineimage = jsondata.lineimage;
+    this.routeid = jsondata.routeid;
+    this.routename = jsondata.routename;
+    this.issend = jsondata.issend;
+    this.isendname = jsondata.isendname;
+    this.ot = jsondata.ot;
+    this.otname = jsondata.otname;
+    this.shifid = jsondata.shifid;
+    this.shift = jsondata.shift;
+    this.distance = jsondata.distance;
+    this.period = jsondata.period;
+    this.wakeupwarn = jsondata.wakeupwarn;
+    this.wakeup = jsondata.wakeup;
+    this.plandate = new Date(jsondata.plandate);
+    this.starttime = new Date(jsondata.starttime);
+    this.finishtime = new Date(jsondata.finishtime);
+    this.wakeupworntime = new Date(jsondata.wakeupworntime);
+    this.wakeuptime = new Date(jsondata.wakeuptime);
+    this.startwarntime= new Date(jsondata.startwarntime);
+    this.laststatuswarn=new Date(jsondata.wakeupworntime);
+    var actwakeup = new  PlanactivityModel(5,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actwakeup);
+    var actalc = new  PlanactivityModel(10,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actalc);
+    var actpoweron = new  PlanactivityModel(20,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actpoweron);
+    var actstart = new  PlanactivityModel(25,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actstart);
+    var actfinsh = new  PlanactivityModel(30,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actfinsh);  
+  }
+}
+
+export class PlanactivityModel {
+  vid: number = 0;
+  cid: number = 0;
+  driverid: number = 0;
+  docode: string = "";
+  lineimage: string = "";
+  statusid: number = 0;
+  statusname: string = "";
+  statuswarn: Date = new Date("2000-01-01 00:00:00");
+  statustaget: Date = new Date("2000-01-01 00:00:00");
+  statustime: Date = new Date("2000-01-01 00:00:00");
+  statuslevel: number = 0;
+  lat: number = 0.0;
+  lng: number = 0.0;
+  icon: string = "";
+  transtatus: number = 0;
+  constructor();
+  constructor(jsondata: any);
+  constructor(statusid: number,vid: number,cid: number,driverid:number,docode: string, lineimage: string);
+  constructor(statusid?: number, vid?: number,cid?: number,driverid?: number,docode?: string, lineimage?: string) {
+    if(vid){this.vid = vid;}
+    if(cid){this.cid = cid;}
+    if(driverid){this.driverid = driverid;}
+    if(lineimage){this.lineimage = lineimage;}
+    if(docode){this.docode = docode;}
+    if(statusid){
+      this.statusid = statusid;
+      this.statusname = va.getstatusname(statusid);
+      this.icon = va.getactiveicon(statusid);;
+    }
+   }
+  setdata(jsondata: any) {
+    this.cid = jsondata.cid;
+    this.driverid = jsondata.driverid;
+    this.docode = jsondata.docode;
+    this.statusid = jsondata.dstatus;
+    this.transtatus = jsondata.transtatus;
+    this.statusname = jsondata.dstatusname;
+    this.statuswarn = new Date(jsondata.dstatuswarn); 
+    this.statustaget = new Date(jsondata.dstatustaget); 
+    this.statustime = new Date(jsondata.dstatustime);
+    this.statuslevel = jsondata.dstatuslevel;
+    this.lat = jsondata.dlat;
+    this.lng = jsondata.dlng;
+    this.icon = jsondata.icon;
+    this.lineimage = jsondata.lineimage;    
+  }
+}
+
+//#endregion
+
 export class Dashboarddata {
   cid: number = 0;
   companyname: string = "";
@@ -115,18 +326,27 @@ export class Dashboarddata {
   otname: string = "";
   shifid: number = 0;
   shift: string = "";
-  startpoint: number = 0;
-  startpointname: string = "";
-  endpoint: number = 0;
-  endpointname: string = "";
   distance: number = 0;
+  starttime:Date = new Date("2000-01-01 00:00:00");
+  startact:Date = new Date("2000-01-01 00:00:00");
   period: number = 0;
+  finishtime:Date = new Date("2000-01-01 00:00:00");
+  finishact:Date = new Date("2000-01-01 00:00:00");
   wakeupwarn: number = 0;
+  wakeupworntime:Date = new Date("2000-01-01 00:00:00");
   wakeup: number = 0;
-  starttime:Date = new Date();
-  finishtime:Date = new Date();
-  wakeupworntime:Date = new Date();
-  wakeuptime:Date = new Date();
+  wakeuptime:Date = new Date("2000-01-01 00:00:00");
+  wakeupact:Date = new Date("2000-01-01 00:00:00");
+  startwarn: number = 0;
+  startwarntime:Date = new Date("2000-01-01 00:00:00");
+  startwarnact:Date = new Date("2000-01-01 00:00:00");
+  alcstatus: number = 0;
+  alcvalue: number = 0;
+  acltime:Date = new Date("2000-01-01 00:00:00");
+  listactivity:DoActivity[] =[];
+
+
+  
   dstatus: number = 0;
   dstatusname: string = "";
   dstatuswarn: Date = new Date("2000-01-01 00:00:00");
@@ -137,8 +357,9 @@ export class Dashboarddata {
   dlng: number = 0.0;
   icon: string = "";
   actvalue: number = 0;
-  constructor() { }
-  setdata(jsondata: any) {
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any) { 
     this.cid = jsondata.cid;
     this.companyname = jsondata.companyname;
     this.docode = jsondata.docode;
@@ -161,10 +382,6 @@ export class Dashboarddata {
     this.otname = jsondata.otname;
     this.shifid = jsondata.shifid;
     this.shift = jsondata.shift;
-    this.startpoint = jsondata.startpoint;
-    this.startpointname = jsondata.startpointname;
-    this.endpoint = jsondata.endpoint;
-    this.endpointname = jsondata.endpointname;
     this.distance = jsondata.distance;
     this.period = jsondata.period;
     this.wakeupwarn = jsondata.wakeupwarn;
@@ -174,8 +391,20 @@ export class Dashboarddata {
     this.finishtime = new Date(jsondata.finishtime);
     this.wakeupworntime = new Date(jsondata.wakeupworntime);
     this.wakeuptime = new Date(jsondata.wakeuptime);
+    this.startwarntime= new Date(jsondata.startwarntime);
+    var actwakeup = new  DoActivity(5,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actwakeup);
+    var actalc = new  DoActivity(10,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actalc);
+    var actpoweron = new  DoActivity(20,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actpoweron);
+    var actstart = new  DoActivity(25,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actstart);
+    var actfinsh = new  DoActivity(30,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
+    this.listactivity.push(actfinsh);
   }
 }
+
 export class DoCompany {
   cid: number = 0;
   company: string = "";
@@ -240,8 +469,6 @@ export class DoData {
   vspeed: number = 0;
   vheader: number = 0;
   vio: string = "";
-  startpoint: string = "";
-  startpointname: string = "";
   starttext: string = "";
   starttime: string = "2000-01-01 00:00:00";
   finishtext: string = "";
@@ -313,7 +540,7 @@ export class DoData {
   }
 }
 export class DoActivity {
-  constructor() { }
+  vid: number = 0;
   cid: number = 0;
   driverid: number = 0;
   docode: string = "";
@@ -329,6 +556,20 @@ export class DoActivity {
   lng: number = 0.0;
   icon: string = "";
   transtatus: number = 0;
+  constructor();
+  constructor(statusid: number,vid: number,cid: number,driverid:number,docode: string, lineimage: string);
+  constructor(statusid?: number, vid?: number,cid?: number,driverid?: number,docode?: string, lineimage?: string) {
+    if(vid){this.vid = vid;}
+    if(cid){this.cid = cid;}
+    if(driverid){this.driverid = driverid;}
+    if(lineimage){this.lineimage = lineimage;}
+    if(docode){this.docode = docode;}
+    if(statusid){
+      this.statusid = statusid;
+      this.statusname = va.getstatusname(statusid);
+      this.icon = va.getactiveicon(statusid);;
+    }
+   }
   setdata(jsondata: any) {
     this.cid = jsondata.cid;
     this.driverid = jsondata.driverid;
@@ -470,20 +711,34 @@ export class Routedata {
   dpinroute: DPinroutedata[] = [];
   vinroute: VehicleRoutedata[] = [];
   empinroute: Employeedata[]=[];
-  startpoint:number = 0;
-  startpointname: string = "";
-  endpoint:number = 0;
-  endpointname: string = "";
   transtatus: number = 1;
-  listdp: string = "";
-  listperiod: string = "";
-  constructor() { 
-    // this.wakeupwarntime.setMinutes(this.starttime.getMinutes() - this.wakeupwarn);
-    // this.wakeuptime.setMinutes(this.starttime.getMinutes() - this.wakeup);
-    // this.startwarntime.setMinutes(this.starttime.getMinutes() - this.startwarn);
-    // this.endtime.setMinutes(this.starttime.getMinutes() + this.period);
-  }
+  constructor();
+  constructor(data:Routedata);
 
+  constructor(data?:Routedata) { 
+    if(data){
+      this.id = data.id;
+      this.routecode = data.routecode;
+      this.ownerid = data.ownerid;
+      this.routename = data.routename;
+      this.routetype = data.routetype;
+      this.routetypename = data.routetypename;
+      this.distance = data.distance;
+      this.endtime = data.endtime;
+      this.period = data.period;
+      this.starttime = data.starttime;
+      this.wakeupwarn = data.wakeupwarn;
+      this.wakeupwarntime = data.wakeupwarntime;
+      this.wakeup = data.wakeup;
+      this.wakeuptime = data.wakeuptime;
+      this.startwarn = data.startwarn;
+      this.startwarntime = data.startwarntime;
+      this.dpinroute = data.dpinroute;
+      this.vinroute = data.vinroute;
+      this.empinroute = data.empinroute;
+      this.transtatus = data.transtatus;
+    }
+  }
   setdata(jsondata: any) {
     this.id = jsondata.id;
     this.routecode = jsondata.routecode;
@@ -491,8 +746,6 @@ export class Routedata {
     this.routename = jsondata.routename;
     this.routetype = jsondata.routetype;
     this.period = jsondata.period;
-    this.listdp = jsondata.listdp;
-    this.listperiod = jsondata.listperiod;
     this.transtatus = jsondata.transtatus;
     this.routetypename = jsondata.routetypename;
     this.distance = jsondata.distance;
@@ -672,9 +925,10 @@ export class Vehicledata {
 export class VehicleRoutedata {
   constructor() { }
   vid: number = 0;
-  item: number = 0;
   vname: string = "";
   vlicent: string = "";
+  driverid: number = 0;
+  drivername: string = "";
   routeid: number = 0;
   routename: string = "";
   routecode: string = "";
@@ -692,7 +946,8 @@ export class VehicleRoutedata {
     this.vid = jsondata.vid;
     this.vname = jsondata.vname;
     this.vlicent = jsondata.vlicent;
-    this.item = jsondata.item;
+    this.driverid = jsondata.driverid;
+    this.drivername = jsondata.drivername;
     this.routeid = jsondata.routeid;    
     this.routename = jsondata.routename;
     this.routecode = jsondata.routecode;

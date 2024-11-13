@@ -11,7 +11,7 @@
                 <span>ลบ</span>
                 <mat-icon style="width: auto; color: red;">cancel</mat-icon>
               </div>
-              <div class="icon-inrow" (click)="saveroute()" *ngIf="show.save" style="cursor:pointer;">
+              <div class="icon-inrow" (click)="saveroute()" *ngIf="activedata.id!=0||show.save" style="cursor:pointer;">
                 <span>บันทึก</span>
                 <mat-icon style="width: auto; color: green;">send</mat-icon>
               </div>

@@ -19,6 +19,7 @@ export class LoginpageComponent implements OnInit {
   public passwordVisible = false; 
 
   ngOnInit(): void {
+    this.va.removepagekey();
     this.va.settoken("");
   }
 
@@ -27,9 +28,10 @@ export class LoginpageComponent implements OnInit {
     if(await this.Checklogin()){
       // login success
       if(await this.va.getprofiledata()){
+        // this.router.navigate(["driverdashboard"]);
         this.router.navigate(["maindashboard"]);
-        // var token =this.va.gettoken();
-        // this.va.sendmqtt("gbdashboard",token)
+        var token =this.va.gettoken();
+        this.va.sendmqtt("gbdashboard",token)
         }
       else{
         this.alertMessage("get Profile Failed","Please try again");
@@ -45,13 +47,13 @@ export class LoginpageComponent implements OnInit {
       this.login.encpwd = crypto.MD5(this.login.pwd).toString().toLocaleUpperCase();
       var  wsname = "checklogin";
       var param ={login:this.login.user,pwd:this.login.encpwd};
-      var header ="";
-      var jsondata = await this.va.wsdata(wsname,param,header)
+      var jsondata = await this.va.wsdata(wsname,param,"");
       console.log("onLogin jsondata : ", jsondata);
       if(jsondata.code=="000"){
         this.showSanckbar("Login success",2);
         if(jsondata.data.token!=undefined){
-          this.va.settoken(jsondata.data.token);
+          // this.va.settoken(jsondata.data.token);
+          this.va.setlogin(jsondata);
           return true;
         }
       }

@@ -1,170 +1,165 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor</title>
-</head>
-
-<body>
-    <div class="modal-body" >
-        <div>
-            <!-- company & close button -->
-            <div class="container" style="display: flex; justify-content: space-between; align-items: center; 
-                        width:100%; padding: 20px; margin-bottom: 20px; background-color: lightblue;">
-                <div class="col" style="flex: 0 0 auto;">
-                    <img [src]="activedriver.complogo==''? va.icon.nologo : activedriver.complogo" class="companyimg">
+<div>
+    <!-- =========== company & close button ===========-->
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; 
+                width:100%; padding: 20px; margin-bottom: 20px; background-color: lightblue;">
+        <div class="col" style="flex: 0 0 auto;">
+            <img [src]="activeplan?.complogo==''? va.icon.nologo : activeplan?.complogo" class="companyimg">
+        </div>
+        <div class="col" style="flex: 0 0 auto; text-align: right;">
+            <div class="row">
+                <div class="col" style="display: flex; align-items: center;">
+                    <mat-icon style="width: auto; color: red;" (click)="modal.close()">cancel</mat-icon>
                 </div>
-                <div class="col" style="flex: 0 0 auto; text-align: right;">
-                    <div class="row">
-                        <div class="col" style="display: flex; align-items: center;">
-                            <mat-icon style="width: auto; color: red;" (click)="modal.close()">cancel</mat-icon>
-                        </div>
-                    </div>   
+            </div>   
+        </div>
+    </div>
+
+    <!-- ===========User image ============== -->
+    <div class="row" style="display: flex; justify-content: space-between; align-items: center;  margin: 20px; 
+                width:100%;" >
+        <div class="col" style="flex: 0 0 auto;gap: 5px;" (click)="setcurrentposition()">
+            <img [src]="activeplan?.lineimage==''? va.icon.user : activeplan?.lineimage" class="profileimg">
+            {{activeplan?.routename}}
+        </div>
+    </div>
+
+     <!-- ===========Body=========== -->
+    <div class="row" style="display: flex; height: 100%; margin: 20px;">
+        <div class="col" style="flex: 1; width:100%; height:100%;">
+            <div>
+                <div class="row px-3">
+                    <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">person</mat-icon>
+                    <div class="col-auto fw-bold" style="font-size:12px;">{{activeplan?.fullname}}</div>
                 </div>
+
+                <div class="row px-3">
+                    <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">local_phone</mat-icon>
+                    <div class="col-auto" style="font-size:12px;"> {{activeplan?.phone}} </div>
+                </div>
+
+                <div class="row px-3">
+                    <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">drive_eta</mat-icon>
+                    <div class="col-auto" style="font-size:12px;">
+                        {{activeplan?.vname}} : {{activeplan?.vlicent}}
+                    </div>
+                </div>
+
+                <div class="row px-3">
+                    <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">home</mat-icon>
+                    <div class="col-auto" style="font-size:12px; overflow-y: hidden; ">
+                        {{activeplan?.companyname}}
+                    </div>
+                </div>
+
+                <div class="row px-3">
+                    <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">rv_hookup</mat-icon>
+                    <div class="col-auto" style="font-size:12px; overflow-y: hidden; ">
+                        {{activeplan?.isendname}} &nbsp; {{activeplan?.shift}} &nbsp; {{activeplan?.otname}}
+                    </div>
+                </div>
+
+                <div class="row px-3">
+                    <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">location_on</mat-icon>
+                    <div class="col-auto" style="font-size:12px; overflow-y: hidden; ">
+                        {{activeplan?.vlocation}}
+                    </div>
+                </div>
+
             </div>
 
-            <!-- User image -->
-            <div class="row" style="display: flex; justify-content: space-between; align-items: center;  margin: 20px; 
-                        width:100%;" >
-                <div class="col" style="flex: 0 0 auto;gap: 5px;" (click)="setcurrentposition()">
-                    <img [src]="activedriver.lineimage==''? va.icon.user : activedriver.lineimage" class="profileimg">
-                    {{activedriver.doname}}
+            <br><br>
+            <div class="row px-3">
+                <div class="container" style="display: flex; justify-content: center; align-items: center; 
+                width:100%; padding: 10px;background-color: lightblue;">
+                 <h4 style="font-weight:bold;"> Activity Log</h4>
                 </div>
+                
             </div>
 
-             <!-- Body -->
-            <div class="row" style="display: flex; height: 100%; margin: 20px;">
-                <!-- Route Data -->
-                <div class="col" style="flex: 1; width:100%; height:100%;">
-                    <!-- Route Data -->
-                    <div>
-                        <!-- fullname -->
-                        <div class="row px-3">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">person</mat-icon>
-                            <div class="col-auto fw-bold" style="font-size:12px;">{{activedriver.fullname}}</div>
-                        </div>
-        
-                        <!-- phone -->
-                        <div class="row px-3">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">local_phone</mat-icon>
-                            <div class="col-auto" style="font-size:12px;"> {{activedriver.phone}} </div>
-                        </div>
-        
-                        <!-- Vehicle -->
-                        <div class="row px-3">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">drive_eta</mat-icon>
-                            <div class="col-auto" style="font-size:12px;">
-                                {{activedriver.vname}} : {{activedriver.vlicent}}
-                            </div>
-                        </div>
-        
-                        <!-- companyname -->
-                        <div class="row px-3">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">home</mat-icon>
-                            <div class="col-auto" style="font-size:12px; overflow-y: hidden; ">
-                                {{activedriver.companyname}}
-                            </div>
-                        </div>
-        
-                        <!-- shift -->
-                        <div class="row px-3">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">rv_hookup</mat-icon>
-                            <div class="col-auto" style="font-size:12px; overflow-y: hidden; ">
-                                {{activedriver.isendname}} &nbsp; {{activedriver.shift}} &nbsp; {{activedriver.otname}}
-                            </div>
-                        </div>
-        
-                        <!-- location -->
-                        <div class="row px-3">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:blue">location_on</mat-icon>
-                            <div class="col-auto" style="font-size:12px; overflow-y: hidden; ">
-                                {{activedriver.vlocation}}
-                            </div>
-                        </div>
-        
-                    </div>
-        
-                    <!-- event log -->
-                    <br><br>
-                    <div class="row px-3">
-                        <div class="container" style="display: flex; justify-content: center; align-items: center; 
-                        width:100%; padding: 10px;background-color: lightblue;">
-                         <h4 style="font-weight:bold;"> Activity Log</h4>
-                        </div>
-                        
+            <br>
+            <!-- <div *ngFor="let event of activeplan?.listactivity">
+                <div class="row px-3"  [style.color]="event.transtatus==0?'#f5071d':'#036d0e'">
+                    <mat-icon class="col-auto fs-5" style="width:40px; color:'#07f520';">
+                        {{va.getactiveicon(event.statusid)}}
+                    </mat-icon>
+                    
+                    <div class="col-auto fw-bold" style="font-size:small;">
+                        {{event.statustaget| date:'HH:mm'}}
                     </div>
 
-                    <br>
-                    <div *ngFor="let event of activedriver.listactivity">
-                        <div class="row px-3"  [style.color]="event.transtatus==0?'#f5071d':'#036d0e'">
-                            <mat-icon class="me-1 col-auto fs-5" style="width:40px; color:'#07f520'; "
-                               >
-                                {{va.getactiveicon(event.statusid)}}
-                            </mat-icon>
-                            
-                            <div class="col-auto fw-bold" style="font-size:small;">
-                                {{event.statustaget| date:'HH:mm'}}
-                            </div>
+                    <div class="col-auto fw-bold" style="font-size:small;">
+                        {{event.statusname}} : 
+                    </div>
+
+                    <div class="col-auto fw-bold" style="font-size:small;" *ngIf="event.transtatus==1">
+                        <span>{{event.statustime | date:'HH:mm'}}</span>
+                        <span *ngIf="event.statusid==10">({{event.statuslevel}})</span>
+                    </div>
+
+                    <div class="col-auto fw-bold" style="font-size:small;" >
+                        <mat-icon style="width: auto; color: red;"> undo </mat-icon>
+                        <mat-icon style="width: auto; color: red;"> send </mat-icon>
+                    </div>
+                </div>
+            </div> -->
+            <div *ngFor="let event of activeplan?.listactivity">
+                <div class="row px-3"  style="font-size:small;" [style.color]="event.transtatus==0?'#f5071d':'#036d0e'">
+                    <div class="col-2">
+                        <mat-icon  style="width:auto;">
+                            {{va.getactiveicon(event.statusid)}}
+                        </mat-icon>
+                    </div>
+
+                    <div class="col-2">
+                        {{event.statustaget| date:'HH:mm'}}
+                    </div>
     
-                            <div class="col-auto fw-bold" style="font-size:small;">
-                                {{event.statusname}} : 
-                            </div>
-        
-                            <div class="col-auto fw-bold" style="font-size:small;" *ngIf="event.transtatus==1">
-                                <span>{{event.statustime | date:'HH:mm'}}</span>
-                                <span *ngIf="event.statusid==10">({{event.statuslevel}})</span>
-                            </div>
+                    <div class="col-6" style="display: flex; justify-content: flex-start;">
+                        {{event.statusname}} : 
+                        <div  *ngIf="event.transtatus!=0">
+                            <span>{{event.statustime | date:'HH:mm'}}</span>
+                            <span *ngIf="event.statusid==10"> &nbsp; ({{event.statuslevel}} Mg%)</span>    
                         </div>
                     </div>
-                    <br><br>
-                    <div class="container" style="display: flex; justify-content: space-between; align-items: center; 
-                                width:100%; margin: 20px;">
-                        <div class="col" style="flex: 0 0 auto;">
-                            <mat-icon style="width: auto; color: red;" *ngIf = "(activedriver.laststatus!=0)"
-                                (click)="Changestatus(activedriver.laststatus,0)">
-                                {{va.getactiveicon(activedriver.laststatus)}}
-                            </mat-icon>
+    
+                    <div class="col-2" style="display: flex; justify-content: flex-end;">
+                        <mat-icon style="width: auto; color: red;" (click)="changestatus(event,0)" 
+                        *ngIf="event.transtatus!=0" > undo </mat-icon>
+                    <mat-icon style="width: auto; color: green;" (click)="changestatus(event,1)" 
+                        *ngIf="event.transtatus==0"> send </mat-icon>
+                    </div>
+    
 
-                        </div>
-                        <div class="col" >
-                            <mat-form-field appearance="fill">
-                                <textarea matInput placeholder="Message for line of Driver" cdkTextareaAutosize></textarea>
-                              </mat-form-field>
-                            <button> sens to line</button>
-                        </div>
-                        <div class="col" style="flex: 0 0 auto; text-align: right;">
-                            <div class="row">
-                                <div class="col" style="display: flex; align-items: center; margin: 20px;">
-                                    <mat-icon style="width: auto; color: green;" *ngIf = "(activedriver.laststatus!=30)"
-                                            (click)="Changestatus(activedriver.nextstatus,1)">
-                                        {{va.getactiveicon(activedriver.nextstatus)}}
-                                    </mat-icon>
-                                </div>
-                            </div>   
-                        </div>
-                    </div>
                 </div>
+            </div>
 
-                <!-- MAP -->
-                <div class="col" style="flex: 1; width:100%; height:100%; background-color: antiquewhite;">
-                    <div style="width:100%; height:100%;">
-                        <div class="row" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px;">
-                            <div class="col" style="flex: 0 0 auto; text-align: right; vertical-align: top;">
-                                <div style="width: 100%; margin:5px ;">{{locationname}}</div>
-                            </div>    
-                        </div>
-                        <div id="drivermap" style="height: 60vh; width: 100%; margin:5px ;"></div>
-                        <div class="row" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px;">
-                            <div class="col" style="flex: 0 0 auto; text-align: right; vertical-align: top;">
-                                <div style="width: 100%; margin:5px ;">{{activedriver.vlocation}}</div>
-                            </div>    
-                        </div>
-                    </div>
+            <!-- <br><br>
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center; 
+                        width:100%; margin: 20px;">
+                <div class="col" style="flex: 0 0 auto;">
+                    <mat-icon style="width: auto; color: red;" *ngIf = "(activeplan?.laststatus!=0)"
+                        (click)="changestatus(activeplan?.laststatus,0)">
+                        {{va.getactiveicon(activeplan?.laststatus)}}
+                    </mat-icon>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- =========== MAP ===========-->
+        <div class="col" style="flex: 1; width:100%; height:100%; background-color: antiquewhite;">
+            <div style="width:100%; height:100%;">
+                <div class="row" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px;">
+                    <div class="col" style="flex: 0 0 auto; text-align: right; vertical-align: top;">
+                        <div style="width: 100%; margin:5px ;">{{locationname}}</div>
+                    </div>    
+                </div>
+                <div id="drivermap" style="height: 60vh; width: 100%; margin:5px ;"></div>
+                <div class="row" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 5px;">
+                    <div class="col" style="flex: 0 0 auto; text-align: right; vertical-align: top;">
+                        <div style="width: 100%; margin:5px ;">{{activeplan?.vlocation}}</div>
+                    </div>    
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>

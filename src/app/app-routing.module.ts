@@ -25,7 +25,6 @@ const routes: Routes = [
   { path: 'driver', loadChildren: () => import('./page/Driver/searchdriverpage/searchdriverpage.module').then(m => m.SearchdriverpageModule) },
   { path: 'driverdata', loadChildren: () => import('./page/Driver/driverpage/driverpage.module').then(m => m.DriverpageModule) },
   { path: 'maindashboard', loadChildren: () => import('./page/Dashboard/maindashboardpage/maindashboardpage.module').then(m => m.MaindashboardpageModule) },
-  { path: 'wakedashboard', loadChildren: () => import('./page/Dashboard/wakedashboardpage/wakedashboardpage.module').then(m => m.WakedashboardpageModule) },
   { path: 'driverdetail', loadChildren: () => import('./page/Dashboard/driverdetailpage/driverdetailpage.module').then(m => m.DriverdetailpageModule) },
   { path: 'employee', loadChildren: () => import('./page/Employee/searchemployeepage/searchemployeepage.module').then(m => m.SearchemployeepageModule) },
   { path: 'employeedata', loadChildren: () => import('./page/Employee/employeepage/employeepage.module').then(m => m.EmployeepageModule) },

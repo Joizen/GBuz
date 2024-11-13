@@ -35,6 +35,7 @@ export class variable {
   public icon = this.seticon();
 
   public calendarperiod=15;
+  public defultdate = new Date('2000-01-01 00:00:00')
 
   // #region  =========== Encryption=========================
   public setpagekey(pagedata: any) {
@@ -94,7 +95,7 @@ export class variable {
   public async getprofile() {
     var result : ProfileModel| undefined;
     try {
-      var keyname: string = this.ProgramID + "Profile"
+      var keyname: string = this.ProgramID + "-Profile"
       var value = localStorage.getItem(keyname);
       // console.log("getprofile profile : ", value);
       if (value) {
@@ -112,7 +113,7 @@ export class variable {
   
   public async setprofile(profile:any) {
     try {
-      var keyname: string = this.ProgramID + "Profile"
+      var keyname: string = this.ProgramID + "-Profile"
       var value = JSON.stringify(profile);
       localStorage.setItem(keyname,value);
       return true;
@@ -137,15 +138,24 @@ export class variable {
     }
     return false;
   }
+  
+  public setlogin(jsondata: any) { 
+    console.log("setlogin data :",jsondata) 
+    localStorage.setItem( (this.ProgramID +"-token"), jsondata.data.token); 
+    localStorage.setItem((this.ProgramID +"-uid"), jsondata.member); 
+  }
+
+  public getmember() {
+    var item = localStorage.getItem(this.ProgramID +"-uid");
+    return (item) ? item : "";
+  }
 
 
 
-
-
-  public settoken(token: string) { localStorage.setItem("token", token); }
+  public settoken(token: string) { localStorage.setItem((this.ProgramID +"-token"), token); }
 
   public gettoken() {
-    var item = localStorage.getItem("token");
+    var item = localStorage.getItem(this.ProgramID +"-token");
     return (item) ? item : "";
   }
   encrypjson(data: any, key: string) {
@@ -221,7 +231,7 @@ export class variable {
       thispoint : this.imagepath + "thispoint.png",
     }
   }
-  public getactiveicon(id:number){
+  public getactiveicon(id:any){
     if(id==5){return "check_circle";}
     else if(id==10){return "record_voice_over";}
     else if(id==15){return "hot_tub";}
@@ -283,28 +293,47 @@ export class variable {
     }
     return response;
   }
+// get APIs with token
+  // async getwsdata(wsname: string, params: any): Promise<any> {
+  //   var response;
+  //   try {
+  //     wsname = this.wsUrl + wsname;
+  //     var tokenitem = localStorage.getItem("token"); 
+  //     if (tokenitem) {
+  //       const headers = new HttpHeaders({
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ` + tokenitem
+  //       });
+  //       response = await this.http.post<any>(wsname, params, { headers }).toPromise();
+  //       return(response);
+  //     }
+  //     else {
+  //       response = { code: "-3", message: "no user token", data: null };
+  //     }
 
+  //   } catch (ex) {
+  //     response = { code: "-1", msg: ex };
+  //   }
+  //   return response;
+  // }
+
+// get APIs with out token
   async getwsdata(wsname: string, params: any): Promise<any> {
-    var response;
     try {
-      wsname = this.wsUrl + wsname;
-      var tokenitem = localStorage.getItem("token"); 
-      if (tokenitem) {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ` + tokenitem
-        });
-        response = await this.http.post<any>(wsname, params, { headers }).toPromise();
+      wsname = this.wsUrl +"_"+ wsname;
+      var tokenitem = "";
+      params.uid = this.getmember();
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + tokenitem});
+        // console.log ("wsname ",wsname);
+        // console.log ("params ",params);  
+        var response = await this.http.post<any>(wsname, params, { headers }).toPromise();
         return(response);
       }
-      else {
-        response = { code: "-3", message: "no user token", data: null };
-      }
-
-    } catch (ex) {
-      response = { code: "-1", msg: ex };
+    catch (ex) {
+      return { code: "-1", msg: ex };
     }
-    return response;
   }
 
   async wsdata(wsname: string, params: any, header: string): Promise<any> {
@@ -316,18 +345,30 @@ export class variable {
         'Authorization': `Bearer ` + header
       });
       var payload = params;
-      if(!payload.uid){payload.uid=1;}
-      console.log("payload", payload);
+      // if(!payload.uid){payload.uid=1;}
+      // console.log("payload", payload);
 
       response = await this.http.post<any>(wsname, payload, { headers }).toPromise();
-      console.log("wsdata " + wsname + " response ", response);
+      // console.log("wsdata " + wsname + " response ", response);
       return response;
     } catch (ex) {
       response = { code: "-1", msg: ex };
-      console.log("wsdata error " , ex);
+      // console.log("wsdata error " , ex);
     }
     return response;
   }
+
+  async getadmin(lat:number,lng:number){
+    try{
+      var wsname = 'getdata';
+      var params = { tbname: 'adminlocation', lat: lat,lng:lng ,isone:true};
+      var jsondata = await this.getwsdata(wsname, params);
+      if (jsondata.code == '000') { return jsondata.data}
+    }
+    catch(ex){console.log("getadmin error :", ex);}
+    return undefined;
+  }
+
   //#endregion
   
   // #region =========== Line Profile =========================
@@ -382,7 +423,6 @@ export class variable {
 
     }
   }
-
   public getperiodinminutes(startDate: Date, endDate: Date): number {
     const oneMinute = 60 * 1000; // Milliseconds in one minute
     const diffInTime = endDate.getTime() - startDate.getTime(); // Difference in milliseconds
@@ -395,6 +435,21 @@ export class variable {
     const totalMinutes = (time.getHours() * 60) + time.getMinutes();
     return Math.floor(totalMinutes / this.calendarperiod);
     
+  }
+  public isNotDefaultDate(date: Date | string): boolean {
+    return new Date(date).getTime() !== this.defultdate.getTime();
+  }
+  public getdistance(fromlat:number,fromlng:number,tolat:number,tolng:number){
+    const R = 6371; // รัศมีของโลกในหน่วยกิโลเมตร
+    const dLat = (tolat - fromlat) * Math.PI / 180;
+    const dLon = (tolng - fromlng) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(fromlat * Math.PI / 180) * Math.cos(tolat * Math.PI / 180) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+    const distance = (R * c)*1000; // ระยะทางในหน่วยเมตร
+    return distance;
   }
 // #endregion
 }
@@ -418,6 +473,24 @@ export function  getdaycolor(date:Date):string {
 export function getdayname(date:Date):string {
   var days = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์"]
   return days[date.getDay()];
+}
+export function getactiveicon(id:number):string{
+  if(id==5){return "check_circle";}
+  else if(id==10){return "record_voice_over";}
+  else if(id==15){return "hot_tub";}
+  else if(id==20){return "power_settings_new";}
+  else if(id==25){return "local_shipping";}
+  else if(id==30){return "flag";}
+  else {return "report";}
+}
+export function  getstatusname(id:number):string{
+  if(id==5){return "Wakeup";} //ชมพู
+  else if(id==10){return "Alcohol";} //เหลือง
+  else if(id==15){return "Temperature";} //เหลือง
+  else if(id==20){return "Engine start";} //ฟ้า
+  else if(id==25){return "On the way";} //เขียว
+  else if(id==30){return "Finish";} //เทา
+  else{return "Not available ";} //สีขาว
 }
 
 // #endregion
