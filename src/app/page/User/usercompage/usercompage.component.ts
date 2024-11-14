@@ -19,6 +19,8 @@ export class UsercompageComponent implements OnInit {
   public activeuser:  UserModel = new UserModel();
   show = { Spinner: true };
   async ngOnInit()  {
+    console.log("ngOnInit : this.va.icon.user ",this.va.icon.user);
+    
     this.maindata = await this.getData();
   }
   async refreshpage(){

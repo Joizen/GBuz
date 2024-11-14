@@ -1,5 +1,70 @@
-.profileimg {
+// .employee-card {
+//     max-width: 400px;
+//     margin: auto;
+// }
+  
+.employee-image img {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    height: 5vh; /* กำหนดความสูงของรูปภาพไม่เกิน 10% ของความสูงหน้าจอ */
-    width: auto; /* ปรับขนาดความกว้างอัตโนมัติเพื่อรักษาสัดส่วน */
+}
+
+.employee-card .title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.employee-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Space between cards */
+  }
+  
+  .employee-card {
+    width: 300px; /* Set card width */
+    margin-bottom: 16px; /* Margin for vertical space on smaller screens */
+  }
+  .row.no-gutter {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 16px;
+    gap: 16px; /* Space between items in the row */
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 16px;
+    box-sizing: border-box;
+  }
+  
+  .col-3 {
+    flex: 1 1 23%;
+    max-width: 23%;
+  }
+  
+  .employee-card {
+    width: 100%;
+  }
+
+  /* Style for employee image */
+.employee-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  /* Style for the table to ensure it's full width */
+  table {
+    width: 100%;
+    margin: 20px 0;
+  }
+  
+  mat-header-cell, mat-cell {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  mat-header-row {
+    background-color: #f4f4f4;
+    font-weight: bold;
   }

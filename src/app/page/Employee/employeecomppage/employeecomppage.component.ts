@@ -1,9 +1,10 @@
 import { Component, OnInit,Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { variable } from '../../../variable';
-import { Employeedata,Companydata } from '../../../models/datamodule.module'
+import { MatDialog } from '@angular/material/dialog';
+import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
+import { Companydata, Employeedata } from 'src/app/models/datamodule.module';
+import { variable } from 'src/app/variable';
+
 
 @Component({
   selector: 'app-employeecomppage',
@@ -11,57 +12,70 @@ import { Employeedata,Companydata } from '../../../models/datamodule.module'
   styleUrls: ['./employeecomppage.component.scss']
 })
 
-export class EmployeecomppageComponent implements OnInit {
-  constructor(
-    private modalService: NgbModal,
-    public va: variable,
-    private dialog: MatDialog,
-    private snacbar: MatSnackBar
-  ) { }
+export class EmployeecomppageComponent implements OnInit{
   @Input() activecompany : Companydata = new Companydata();
 
-  show = { Spinner: true, viewtype: 0 };
-  public maindata: Employeedata[] = [];
-  public activedata: Employeedata = new Employeedata();
-  
+  constructor(public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar ) { }
+  show = { Spinner: true, type: 0 };
+  public listuser: Employeedata[] = [];
+  displayedColumns: string[] = ['image', 'empname', 'rolename', 'empcode', 'phone', 'companyname'];
 
   async ngOnInit() {
+    // this.activecompany.id=7;
     console.log("Employeecomppage ngOnInit activecompany",this.activecompany)
-    this.maindata = await this.getData();
+    this.listuser = await this.getData();
   }
-
-
 
   async getData() {
     var result: Employeedata[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'empcomp', compid: this.activecompany.id};
     var jsondata = await this.va.getwsdata(wsname, params);
-    // console.log("getData jsondata : ", jsondata);
+    console.log("getData Employeedata jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Employeedata();
-        temp.setdata(data);
+        var temp = new Employeedata(data);
         result.push(temp);
       });
     } else {
-
+      this.showSanckbar("Get List of control User Erreo" + jsondata.message)
     }
     this.show.Spinner = false;
     return result;
 
   }
 
-  openempdata(item: Employeedata, modal: any) {
-    console.log("opencompanydata comp : ", item);
-    this.activedata = item;
-    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
-    this.modalService.open(modal, { fullscreen: true });
 
-  }
   
-  companytalkback(event: any) {
+  //===================================================================
+  // #region  =========== Message Dialog ==============================
 
+  alertMessage(header: string, message: string) {
+    var dialogRef = this.dialog.open(DialogpageComponent,
+      { data: new DialogConfig(header, message, false) }
+    );
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log("Dialog result : ",result);
+    });
   }
+  OkCancelMessage(header: string, message: string): Promise<any>{
+    try{
+      var dialogRef = this.dialog.open(DialogpageComponent,
+        { data: new DialogConfig(header, message, true) }
+      );
+      return dialogRef.afterClosed().toPromise();
+    }catch(ex){
+      console.log("OkCancelMessage error ",ex)
+      return Promise.reject(ex); // If there's an error, reject the promise
+    }
+  }
+  showSanckbar(message: string, duration = 5) {
+    this.snacbar.open(message, 'Close',
+      { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });
+  }
+
+  // #endregion  =========== Message Dialog ===========================
+  //===================================================================
+
 
 }

@@ -27,7 +27,7 @@
             <mat-card *ngFor="let user of maindata" class="user-card">
               <mat-card-header style="cursor:pointer;" (click)="Showuser(user,userdetailmodal)">
                 <div mat-card-avatar style="margin-right: 20px;">
-                    <img class="profileimg" [src]="user.userimage==''?va.icon.user:user.userimage"/>
+                    <img class="profileimg" [src]="user.userimage===''?va.icon.user:user.userimage"/>
                 </div>
                 <mat-card-subtitle>{{ user.empname }}</mat-card-subtitle>
                 <mat-card-subtitle>{{ user.rolename }} : {{user.phone}} </mat-card-subtitle>

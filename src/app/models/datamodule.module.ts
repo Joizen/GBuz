@@ -61,7 +61,7 @@ export class UserModel {
     this.empcode = jsondata.empcode; 
     this.empname = jsondata.empname; 
     this.linename = jsondata.linename; 
-    this.userimage = jsondata.userimage; 
+    this.userimage =  jsondata.userimage==""?"assets/images/user.png":jsondata.userimage; 
     this.phone = jsondata.phone; 
     this.companyname = jsondata.companyname; 
     this.rolename = jsondata.rolename; 
@@ -658,38 +658,32 @@ export class Companydata {
   }
 }
 export class Employeedata {
-  constructor() { }
-  lineimg: string = "";
   id: number = 0;
   empcode: string = "";
   empname: string = "";
-  department: string = "";
+  prefix: string = "";
+  firstname: string = "";
+  surename: string = "";
   phone: string = "";
+  lineimg: string = "";
+  companyname: string = "";
   rolename: string = "";
-  shift: string = "";
-  otname: string = "";
-  dpname: string = "";
-  dplat: number = 0;
-  dplng: number = 0;
-  officename: string = "";
-  routename: string = "";
   remark: string = "";
-  setdata(jsondata: any) {
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any){
     this.id = jsondata.id;
     this.empcode = jsondata.empcode;
     this.empname = jsondata.empname;
-    this.department = jsondata.department;
+    this.prefix = jsondata.prefix;
+    this.firstname = jsondata.firstname;
+    this.surename = jsondata.surename;
     this.phone = jsondata.phone;
+    this.lineimg = jsondata.lineimg;
+    this.companyname = jsondata.companyname;
     this.rolename = jsondata.rolename;
-    this.shift = jsondata.shift;
-    this.otname = jsondata.otname;
-    this.dpname = jsondata.dpname;
-    this.dplat = jsondata.dplat;
-    this.dplng = jsondata.dplng;
-    this.officename = jsondata.officename;
-    this.routename = jsondata.routename;
     this.remark = jsondata.remark;
-  }
+   }
 }
 export class Routedata {
   id: number = 0;

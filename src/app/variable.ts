@@ -223,7 +223,7 @@ export class variable {
   }
   public seticon(){
     return{
-      user:this.imagepath + "user-ic.png",
+      user:this.imagepath + "user.png",
       poi: this.imagepath + "poi.png",
       dpoi: this.imagepath + "dp.png",
       logo : this.imagepath + "logo.png",

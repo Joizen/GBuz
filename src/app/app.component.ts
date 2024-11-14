@@ -13,7 +13,7 @@ import { ProfileModel} from './models/datamodule.module';
 export class AppComponent implements OnInit {
   constructor(public va: variable,private router: Router) {}
   menuopen=false;
-  showmenu=false;
+  showmenu=true;
   title = 'Smart Control';  
   timeLeft: number = 5;  // Refresh token after timeLeft (300) seconds
   interval: any;
