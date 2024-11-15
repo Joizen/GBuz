@@ -8,14 +8,16 @@
 <mat-card class="example-card" appearance="outlined">
   <div class="row no-gutters">
     <div class="col-2 m-2">
-      <img class="driverimg" [src]="viewData.lineimage==''?va.icon.user:viewData.lineimage">
+      <img class="driverimg" [src]="viewData.lineimage==''?base64Image:viewData.lineimage"
+           (click)="fileInput.click()">
+      <input type="file" (change)="onFileSelect($event)" #fileInput style="display: none;"/>
     </div>
     <div class="col-6">
       <div class="row m-2"><mat-icon style="width: auto;">person</mat-icon> {{viewData.drivername}} </div>
       <div class="row m-2"><mat-icon style="width: auto;">calendar_view_day</mat-icon> {{viewData.surname}} </div>
       <div class="row m-2"><mat-icon style="width: auto;">assignment_ind</mat-icon> {{viewData.license}} </div>
       <div class="row m-2"><mat-icon style="width: auto;">phone</mat-icon> {{viewData.phone}} </div>
-      <div class="row m-2"><mat-icon style="width: auto;">sentiment_very_satisfied</mat-icon> {{viewData.linename}} </div>
+      <div class="row m-2"><mat-icon style="width: auto;">face</mat-icon> {{viewData.linename}} </div>
       <!-- <div class="row"> {{viewData.vname}} </div> -->
     </div>
     <div class="col-2">

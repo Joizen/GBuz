@@ -1012,7 +1012,7 @@ export class DPinroutedata {
   }
 }
 export class Driverdata {
-  constructor() { }
+  id:number=0;
   drivercode: string = "";
   fullname: string = "";
   linename: string = "";
@@ -1026,7 +1026,10 @@ export class Driverdata {
   vlicent: string = "";
   vid: number = 0;
   driverimg: string = "";
-  setdata(jsondata: any) {
+  constructor();
+  constructor(jsondata:any);
+  constructor(jsondata?:any) {
+    this.id = jsondata.id;
     this.drivercode = jsondata.drivercode;
     this.fullname = jsondata.fullname;
     this.prefix = jsondata.prefix;
@@ -1039,7 +1042,7 @@ export class Driverdata {
     this.vlicent = jsondata.vlicent;
     this.vid = jsondata.vid;
     this.driverimg = jsondata.driverimg;
-  }
+   }
 }
 export class Comshiftdata {
   id : number =0;

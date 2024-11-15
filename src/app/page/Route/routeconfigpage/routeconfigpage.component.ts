@@ -86,12 +86,7 @@ export class RouteconfigpageComponent implements OnInit {
   async saveupdateroute(){
     try{
       var wsname = "updatedata";
-      var strplan = JSON.stringify(this.editroute);
-      var route = JSON.parse(strplan);
-      route.starttime = this.va.DateToString("yyyy-MM-dd HH:mm:ss",this.editroute.starttime);
-      
-      console.log("route : ",route);
-      var jsondata = await this.va.getwsdata(wsname,{tbname:"route",data:route})
+      var jsondata = await this.va.getwsdata(wsname,{tbname:"route",data:this.editroute})
       if(jsondata.code=="000"){
         this.showSanckbar("save or update route success",2);
         return true;

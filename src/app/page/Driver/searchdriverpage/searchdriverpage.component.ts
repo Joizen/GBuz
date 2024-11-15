@@ -26,7 +26,7 @@ export class SearchdriverpageComponent implements OnInit {
   public listdata = [];
   public viewtype = false;
   public activedata: any;
-  public activedriver: Driverdata = new Driverdata;
+  public activedriver: Driverdata |undefined;
 
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -46,8 +46,7 @@ export class SearchdriverpageComponent implements OnInit {
     // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Driverdata();
-        temp.setdata(data);
+        var temp = new Driverdata(data);
         result.push(temp);
       });
     } else {
