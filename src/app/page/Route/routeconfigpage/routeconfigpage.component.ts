@@ -1,6 +1,6 @@
 import { Component,Input,EventEmitter, Output, OnInit } from '@angular/core';
 import {NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {Routedata,Companydata} from '../../../models/datamodule.module'
+import {RouteModel,CompanyModel} from '../../../models/datamodule.module'
 import { variable } from 'src/app/variable';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
@@ -13,18 +13,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RouteconfigpageComponent implements OnInit {
   @Input() modal: any;
-  @Input() activedata : Routedata = new Routedata();
-  @Input() company : Companydata = new Companydata();
+  @Input() activedata : RouteModel = new RouteModel();
+  @Input() company : CompanyModel = new CompanyModel();
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   show = {Spinner: true,save:false,endtime:"08:00"};
-  editroute : Routedata = new Routedata();
+  editroute : RouteModel = new RouteModel();
 
   constructor(
     private modalService: NgbModal,public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    if(this.activedata){this.editroute = new Routedata(this.activedata); }
+    if(this.activedata){this.editroute = new RouteModel(this.activedata); }
     console.log("this.editroute ",this.editroute);
     console.log("this.activedata ",this.activedata);
     this.show.endtime = this.va.DateToString("HH:mm",this.editroute.endtime); 

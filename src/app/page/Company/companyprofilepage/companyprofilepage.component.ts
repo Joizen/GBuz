@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import { DialogpageComponent, DialogConfig} from '../../../material/dialogpage/dialogpage.component';
-import { Companydata } from 'src/app/models/datamodule.module';
+import { CompanyModel } from 'src/app/models/datamodule.module';
 import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
 import * as L from 'leaflet';
 
@@ -25,12 +25,12 @@ export class CompanyprofilepageComponent implements OnInit {
       });
     }
   @Input() modal: any;
-  @Input() editcompany:Companydata|undefined;
+  @Input() editcompany:CompanyModel|undefined;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   show = {Spinner: true,save:false};
   private map: L.Map | undefined;
-  activecompany:Companydata=new Companydata();
+  activecompany:CompanyModel=new CompanyModel();
   companyForm: FormGroup;
   imageUrl: string | ArrayBuffer |undefined | null = null ;
   

@@ -2,7 +2,7 @@ import { Component, OnInit,Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
-import { Companydata, Employeedata } from 'src/app/models/datamodule.module';
+import { CompanyModel, EmployeeModel } from 'src/app/models/datamodule.module';
 import { variable } from 'src/app/variable';
 
 
@@ -13,11 +13,11 @@ import { variable } from 'src/app/variable';
 })
 
 export class EmployeecomppageComponent implements OnInit{
-  @Input() activecompany : Companydata = new Companydata();
+  @Input() activecompany : CompanyModel = new CompanyModel();
 
   constructor(public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar ) { }
   show = { Spinner: true, type: 0 };
-  public listuser: Employeedata[] = [];
+  public listuser: EmployeeModel[] = [];
   displayedColumns: string[] = ['image', 'empname', 'rolename', 'empcode', 'phone', 'companyname'];
 
   async ngOnInit() {
@@ -27,14 +27,14 @@ export class EmployeecomppageComponent implements OnInit{
   }
 
   async getData() {
-    var result: Employeedata[] = [];
+    var result: EmployeeModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'empcomp', compid: this.activecompany.id};
     var jsondata = await this.va.getwsdata(wsname, params);
     console.log("getData Employeedata jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Employeedata(data);
+        var temp = new EmployeeModel(data);
         result.push(temp);
       });
     } else {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Companydata,UserModel } from '../../../models/datamodule.module'
+import { CompanyModel,UserModel } from '../../../models/datamodule.module'
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,7 @@ export class UsercompageComponent implements OnInit {
   constructor( private modalService: NgbModal, public va: variable,
     private dialog: MatDialog, private snacbar: MatSnackBar
   ) { }
-  @Input() activecompany: Companydata = new Companydata();
+  @Input() activecompany: CompanyModel = new CompanyModel();
   public maindata:  UserModel[] = [];
   public activeuser:  UserModel = new UserModel();
   show = { Spinner: true };
@@ -36,8 +36,8 @@ export class UsercompageComponent implements OnInit {
     // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new UserModel();
-        temp.setdata(data);
+        var temp = new UserModel(data);
+        // temp.setdata(data);
         result.push(temp);
       });
     } else {

@@ -1,6 +1,6 @@
 import { Component,Input,EventEmitter, Output, OnInit   } from '@angular/core';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {Routedata,Companydata} from '../../../models/datamodule.module'
+import {RouteModel,CompanyModel} from '../../../models/datamodule.module'
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
@@ -14,8 +14,8 @@ import * as L from 'leaflet';
 
 export class RoutepageComponent implements OnInit {
   @Input() modal: any;
-  @Input() activedata : Routedata = new Routedata();
-  @Input() company : Companydata = new Companydata();
+  @Input() activedata : RouteModel = new RouteModel();
+  @Input() company : CompanyModel = new CompanyModel();
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private modalService: NgbModal,

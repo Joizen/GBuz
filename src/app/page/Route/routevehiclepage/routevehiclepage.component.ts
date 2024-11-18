@@ -1,6 +1,6 @@
 import { Component, OnInit, Input ,EventEmitter, Output } from '@angular/core';
-import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Routedata, Companydata, VehicleRoutedata } from '../../../models/datamodule.module'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RouteModel, CompanyModel } from '../../../models/datamodule.module'
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
@@ -17,8 +17,8 @@ import * as L from 'leaflet';
 export class RoutevehiclepageComponent implements OnInit {
   constructor(private modalService: NgbModal,public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar){ }
   @Input() modal: any;
-  @Input() company: Companydata = new Companydata();
-  @Input() activeroute: Routedata = new Routedata();
+  @Input() company: CompanyModel = new CompanyModel();
+  @Input() activeroute: RouteModel = new RouteModel();
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   show = {Spinner: true};
   private map: L.Map | undefined;

@@ -1,0 +1,71 @@
+<div class="position-relative" style="height: 100%; width:100%; overflow:hidden">
+    <!-- spinner -->
+    <div class="container-spiner" *ngIf="show.Spinner">
+      <div class="row">
+        Please Watting...
+      </div>
+      <mat-spinner></mat-spinner>
+    </div>
+    
+    <!-- Header -->
+    <div class="container" style="display: flex; justify-content: space-between; 
+        align-items: center; width:100hw; margin: 5px; overflow:hidden;">
+      <div class="col" style="display: flex; justify-content: center; ">
+        <div class="search-container"  style="width: 100%; gap:10px;">
+          <mat-form-field appearance="outline" style="width: 50vw;">
+            <input matInput placeholder="Search" [(ngModel)]="keyword" (click)="searchdata()" (keydown.enter)="searchdata()"  />
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+          <select matNativeControl [(ngModel)]="show.limit" (ngModelChange)="searchdata()">
+            <option value="10">ไม่เกิน 10</option>
+            <option value="20">ไม่เกิน 20</option>
+            <option value="30">ไม่เกิน 30</option>
+            <option value="40">ไม่เกิน 40</option>
+            <option value="50">ไม่เกิน 50</option>
+            <option value="0">เลือกทั้งหมด</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="col" style="flex: 0 0 auto; text-align: right;">
+        <div class="row">
+          <div class="col" style="display: flex; align-items: center;" 
+            mat-raised-button matTooltip="เพิ่มข้อมูลพนักงานขับรถ" (click)="adddriver(userdetailmodal)">
+            <mat-icon style="width: 100%; color: blue;">add_box</mat-icon>
+          </div>
+          <div class="col" style="display: flex; align-items: center;" 
+            mat-raised-button matTooltip="พิมพ์ข้อมูลพนักงานขับรถ" (click)="exportprint()">
+            <mat-icon style="width: 100%; color: blue;">print</mat-icon>
+          </div>
+          <div class="col" style="display: flex; align-items: center;" 
+            mat-raised-button matTooltip="ส่งออกข้อมูลพนักงานขับรถเป็น Excel" (click)="exportexcel()">
+            <mat-icon style="width: 100%; color: blue;">file_download</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Body -->
+    <div  style="width:100%; height: 90%; overflow :scroll">
+      <div class="card-container" style="width:100%;">
+        <div class="card-item" *ngFor="let user of listuser" >
+          <mat-card (click)="showDriver(user,userdetailmodal)">
+            <mat-card-header style="background-color:lightsalmon;">
+              <div mat-card-avatar style="background-size:cover;" 
+              [style.background-image]="user.userimage === '' ? 'url(' + va.icon.user + ')' : 'url(' + user.userimage + ')'"></div>
+              <mat-card-title>{{user.empname }}</mat-card-title>
+              <mat-card-subtitle>{{user.rolename }}</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <div class="center-content" ><mat-icon>phone</mat-icon> {{ user.phone }}</div>
+              <div class="center-content" ><mat-icon>badge</mat-icon> {{ user.empcode }}</div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #userdetailmodal let-modal>
+    <app-userdatapage [modal]="modal" [activeuser] ="activedriver"  (talk)="talkbackdata($event)" ></app-userdatapage>
+  </ng-template>

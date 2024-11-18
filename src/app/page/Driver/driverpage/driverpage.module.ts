@@ -5,6 +5,7 @@ import { DriverpageRoutingModule } from './driverpage-routing.module';
 import { QRCodeModule } from 'angularx-qrcode';
 import { DriverpageComponent } from './driverpage.component';
 import { MaterialModule } from 'src/app/material/material.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { MaterialModule } from 'src/app/material/material.module';
     CommonModule,
     DriverpageRoutingModule,
     QRCodeModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule
   ],
   exports:[
     DriverpageComponent

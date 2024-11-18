@@ -1,0 +1,72 @@
+.example-card {
+    max-width: 100%;
+  }
+  
+  .example-header-image {
+    background-size: cover;
+  }
+  
+  .driverimg {
+    max-width: 30%;    /* Prevents the image from exceeding container width */
+    max-height: 100%;   /* Prevents the image from exceeding container height */
+    object-fit: contain; /* Ensures the image maintains aspect ratio and fits within the container */
+  }
+
+  .container-gps {
+    position: absolute; 
+    top: 0;    
+    left: 0; 
+    right: 0;
+    bottom: 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: 50%;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%; /* Set modal width */
+  max-height: 80vh; /* Restrict height */
+  overflow-y: hidden; /* Disable vertical scrolling */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.scrollable-container {
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Disable horizontal scrolling */
+  max-height: 50vh; /* Limit height for scrolling */
+  border: 1px solid #ccc; /* Optional: Add border for clarity */
+  padding: 8px;
+}
+
+.record-row {
+  display: flex;
+  gap: 16px; /* Adds space between columns */
+  padding: 8px 0;
+}
+
+.record-row div {
+  white-space: nowrap; /* Prevents text wrapping */
+}

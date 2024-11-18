@@ -1,0 +1,21 @@
+.example-card {
+    max-width: 100%;
+  }
+  
+  .example-header-image {
+    background-size: cover;
+  }
+  
+  .driverimg {
+    max-width: 30%;    /* Prevents the image from exceeding container width */
+    max-height: 100%;   /* Prevents the image from exceeding container height */
+    object-fit: contain; /* Ensures the image maintains aspect ratio and fits within the container */
+  }
+  .custom-select {
+    width: 90%;
+    text-align: left;
+    text-align-last: left;
+    // padding: 4px 8px;
+    // border-radius: 4px; /* Optional: for rounded corners */
+    // font-size: 14px; /* Optional: Adjust font size */
+  }

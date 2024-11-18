@@ -7,6 +7,7 @@ import { SearchdriverpageComponent } from './searchdriverpage.component';
 
 import { MaterialModule } from '../../../material/material.module';
 import { DriverpageModule  } from '../../Driver/driverpage/driverpage.module';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -20,6 +21,7 @@ import { DriverpageModule  } from '../../Driver/driverpage/driverpage.module';
     SearchdriverpageRoutingModule,
     MaterialModule,
     DriverpageModule,
+    FormsModule
   ]
 })
 export class SearchdriverpageModule { }

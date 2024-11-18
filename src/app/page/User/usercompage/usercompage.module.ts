@@ -6,6 +6,8 @@ import { UsercompageComponent } from './usercompage.component';
 import { MaterialModule } from 'src/app/material/material.module';
 import { UserdatapageModule } from "../userdatapage/userdatapage.module";
 import { AddusercomppageModule } from "../addusercomppage/addusercomppage.module";
+import { UserdatapageComponent } from '../userdatapage/userdatapage.component';
+import { UsercomdatapageModule } from "../usercomdatapage/usercomdatapage.module";
 
 
 @NgModule({
@@ -17,7 +19,8 @@ import { AddusercomppageModule } from "../addusercomppage/addusercomppage.module
     MaterialModule,
     UsercompageRoutingModule,
     UserdatapageModule,
-    AddusercomppageModule
+    AddusercomppageModule,
+    UsercomdatapageModule
 ],
   exports:[
     UsercompageComponent

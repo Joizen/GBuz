@@ -2,16 +2,13 @@
     <!-- Header data & close button -->
     <div class="row" 
          style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 10px; ">
-      
-      <div class="col-2" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
-        <img class="profileimg" [src]="activeuser.userimage==''?va.icon.user:activeuser.userimage"/>
-      </div>
   
       <div class="col-7" style="display: flex; justify-content: start; align-items: center;">
-        <span style="font-size: large;">  {{ activeuser.empname }} </span>
+        <h1 *ngIf="activeuser">  {{ activeuser.empname }} </h1>
+        <h1 *ngIf="!activeuser"> สร้างข้อมูลผู้ใช้งาน </h1>
       </div>
   
-      <div class="col-3" style="display: flex;  justify-content:end; align-items:end ;">
+      <div class="col-5" style="display: flex;  justify-content:end; align-items:end ;">
         <div class="row">
           <div class="icon-inrow">
             <div class="icon-inrow" *ngIf="false">
@@ -43,56 +40,131 @@
   </div>
 
     <!-- Body -->
-    <div style="width:100%; height: 2100%;">
+    <div style="width:100%; height: 100%;">
       <!-- User data -->
       <div style="width:100%; padding: 20px;">
-        <div class="icon-inrow" matTooltip="สิทธิ์การใช้งาน และ หมายเลขโทรศัพท์">
-          <mat-icon> admin_panel_settings </mat-icon>
-          <span>:  {{ activeuser.rolename }} : {{activeuser.phone}} </span>
-        </div>
-        <div class="icon-inrow" matTooltip="บริษัทที่สังกัด">
-          <mat-icon> home </mat-icon>
-          <span>{{activeuser.companyname}}</span>
-        </div>
-        <div class="icon-inrow" matTooltip="Line name">
-          <mat-icon> account_circle </mat-icon>
-          <span>: {{activeuser.linename}}</span>
-        </div>
+        <mat-card class="example-card" appearance="outlined">
+          <div class="row no-gutters" style="display: flex; justify-content: center; padding: 10px;">
+            <div class="col-6">
+              <div class="icon-inrow" *ngIf="!activeuser">
+                <mat-icon style="width: auto; margin-right: 8px;">home</mat-icon>
+                <select  [(ngModel)]="editdata.selectcomp" style="width: 90%; text-align: left; text-align-last: left; "
+                (change)="userdatachange('compid')">
+                  <option *ngFor="let item of listcomp" [ngValue]="item.id">
+                    {{item.display}}
+                  </option> 
+                </select>
+              </div>
+              <div class="icon-inrow"  *ngIf="activeuser">
+                <mat-icon style="width: auto; margin-right: 8px;">home</mat-icon>
+                <span>{{editdata.companyname}} </span>
+              </div>
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">label</mat-icon>
+                <select [(ngModel)]="editdata.prefix" (ngModelChange)="userdatachange('prefix')"
+                 style="width: 90%;" >
+                  <option>นาย</option>
+                  <option>นาง</option>
+                  <option>นางสาว</option>
+                </select>
+              </div>
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">person</mat-icon>
+                <input matInput [(ngModel)]="editdata.firstname" placeholder="ชื่อผู้ใช้งาน" 
+                      (ngModelChange)="userdatachange('firstname')" style="width: 90%;"/>
+              </div>
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">calendar_view_day</mat-icon>
+                <input matInput [(ngModel)]="editdata.surename" placeholder="นามสกุล" 
+                      (ngModelChange)="userdatachange('surname')" style="width: 90%;"/>
+              </div>
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">phone</mat-icon>
+                <input matInput [(ngModel)]="show.phone" type="tel" value="show.phone"  placeholder="หมายเลขโทรศัพท์" 
+                      (ngModelChange)="validatePhoneNumber($event)" style="width: 90%;"/>
+              </div>
+              <div class="icon-inrow" *ngIf="activeuser">
+                <mat-icon style="width: auto; margin-right: 8px;">assignment_ind</mat-icon>
+                <input matInput [(ngModel)]="editdata.empcode" placeholder="รหัสพนักงาน" 
+                      (ngModelChange)="userdatachange('empcode')" style="width: 90%;"/>
+              </div>
+              <div class="icon-inrow"  *ngIf="!activeuser">
+                <mat-icon style="width: auto; margin-right: 8px;">badge</mat-icon>
+                <select class="custom-select" [(ngModel)]="editdata.selectrole" 
+                (change)="userdatachange('roleid')">
+                  <option *ngFor="let item of listrole" [ngValue]="item.id">
+                    {{item.display}}
+                  </option> 
+                </select>
+              </div>
+              <div class="icon-inrow"  *ngIf="activeuser">
+                <mat-icon style="width: auto; margin-right: 8px;">badge</mat-icon>
+                <span>{{editdata.rolename}} </span>
+              </div>
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">short_text</mat-icon>
+                <textarea  matInput cdkTextareaAutosize [(ngModel)]="editdata.remark" placeholder="หมายเหตุ"  
+                      (ngModelChange)="userdatachange('remark')" style="width: 90%; resize: none;"></textarea>
+              </div>    
+              <div class="icon-inrow"  *ngIf="activeuser">
+                <mat-icon style="width: auto; margin-right: 8px;">face</mat-icon>
+                <span> Line name : {{editdata.linename}} </span>
+              </div>
+              <hr>
+              <div style="display: flex; justify-content: center;margin: 16px;">
+                <button mat-raised-button color="warn" style="margin: 0 8px; cursor: pointer;" 
+                        (click)="deleteuser()" *ngIf="show.delete" >Delete</button>
+                <button mat-raised-button color="primary" style="margin: 0 8px;cursor: pointer;"
+                        (click)="updateuser()" *ngIf="show.edit">Save</button>
+                <button mat-raised-button color="primary" style="margin: 0 8px;cursor: pointer;"
+                        (click)="saveuser()" *ngIf="!activeuser">Save</button>
+              </div>
+      
+
+            </div>
+            <div class="col-6">
+              <div class="d-flex align-items-start  justify-content-center" style="height: auto;" *ngIf="activeuser" >
+                <img class="driverimg" [src]="editdata.userimage==''?base64Image:editdata.userimage"
+                     (click)="fileInput.click()">
+                <input type="file" (change)="onFileSelect($event)" #fileInput style="display: none;"/>
+              </div>
+              <!-- List of Customer -->
+              <div style="width:100%; padding: 20px;" *ngIf="activeuser">
+                <!-- <hr/> -->
+                <div class="row px-3 py-0" 
+                      style="display: flex; background-color: aquamarine; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+                  <div class="col-12" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+                    <span>  ข้อมูล บริษัทที่สามารถใช้งานได้  </span>     
+                  </div>
+                </div>
+                <!-- <hr/> -->
+                <div style="height: 250px; overflow: auto;">
+                  <div *ngFor="let comp of listcustomer" >
+                    <div class="icon-inrow" [style.background-color]="(comp.id==comp.compid)?'lightgreen':'lightpink'">
+                      <div class="col-3">
+                        <img [src]="comp.complogo" class="company-logo">
+                      </div>
+                      <div class="col-5" style="display: flex;  justify-content: start;">
+                        <span>{{(comp.id==comp.compid)?'ใช้งานได้':'ใช้งานไม่ได้'}}</span>
+                      </div>  
+                      <div class="col-3" style="display: flex;  justify-content: end;cursor: pointer;"  >
+                          <div (click)="addcompany(comp)"  *ngIf="!(comp.id==comp.compid)">
+                            <mat-icon style="color:green;"  > check_circle</mat-icon>
+                          </div>
+                          <div (click)="deletecompany(comp)"  *ngIf="(comp.id==comp.compid)">
+                            <mat-icon style="color:red;"> delete</mat-icon>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  </div>
+              </div>
+            </div>            
+          </div>    
+        </mat-card>
       </div>
 
-      <!-- List of Customer -->
-      <div style="width:100%; padding: 20px;">
-        <hr/>
-        <div class="row px-3 py-0" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
-          <div class="col-8" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
-            <span>  ข้อมูล บริษัทที่สามารถใช้งานได้  </span>     
-          </div>
-          <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
-            <div class="icon-inrow" style="cursor: pointer;">
-              <mat-icon style="width: auto; color: green; ">domain_add</mat-icon>
-            </div>
-           </div> 
-         </div>
-         <hr/>
-        <div *ngFor="let comp of listcustomer">
-          <div class="icon-inrow">
-            <div class="col-2">
-              <img [src]="comp.complogo" class="company-logo">
-            </div>
-            <div class="col-4">
-              <mat-icon> contacts</mat-icon>
-              <span> {{ comp.contract }}</span>
-            </div>
-            <div class="col-4">
-              <mat-icon> phone</mat-icon>
-              <span>{{ comp.phone }}</span>
-            </div>
-            <div class="col-2" style="cursor: pointer;" *ngIf="activecompany.id==comp.id" (click)="deleteuser()" >
-              <mat-icon color="warn" > delete</mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       
     </div>
 

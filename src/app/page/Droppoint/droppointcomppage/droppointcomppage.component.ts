@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
-import { Droppointdata, Companydata } from '../../../models/datamodule.module'
+import { Droppointdata, CompanyModel } from '../../../models/datamodule.module'
 import * as L from 'leaflet';
 
 
@@ -21,7 +21,7 @@ export class DroppointcomppageComponent implements OnInit, AfterViewInit {
     private snacbar: MatSnackBar
   ) { }
 
-  @Input() activecompany: Companydata = new Companydata();
+  @Input() activecompany: CompanyModel = new CompanyModel();
   show = { Spinner: true, viewtype: 0 };
   public maindata: Droppointdata[] = [];
   public activedata: Droppointdata = new Droppointdata();

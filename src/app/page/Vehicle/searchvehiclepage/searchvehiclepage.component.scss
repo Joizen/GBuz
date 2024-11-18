@@ -1,0 +1,69 @@
+.container {
+  overflow: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+.center-header {
+  text-align: center;
+  border-right: 1px solid #e0e0e0;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.centered-button {
+  display: flex;
+  justify-content: center; /* จัดไอคอนให้อยู่กึ่งกลางแนวนอน */
+  align-items: center; /* จัดไอคอนให้อยู่กึ่งกลางแนวตั้ง */
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.company-logo {
+  width: 50px; /* Set the width of the logo */
+  height: 50px; /* Set the height of the logo */
+  object-fit: contain; /* Ensure the logo fits nicely */
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* ให้ไอเท็มเกินไปแสดงในบรรทัดใหม่ */
+  justify-content: space-between; /* จัดระยะห่างระหว่างการ์ด */
+}
+
+.card-item {
+  flex: 1 1 calc(20% - 10px); /* ให้การ์ดมีความกว้าง 20% ของแถว */
+  margin: 5px; /* เว้นระยะห่างระหว่างการ์ด */
+  min-width: 200px; /* กำหนดความกว้างขั้นต่ำ */
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  margin: 5px;
+}
+
+
+.search-container {
+  display: flex;
+  height: 56px; /* Match the height of the mat-form-field input */
+  padding: 0 10px;
+  font-size: 16px;
+  // border-radius: 4px;
+  // border: 1px solid #ccc;
+
+}
+
+.search-icon {
+  color: blue;
+  cursor: pointer; /* Optional: adds a pointer cursor on hover */
+  margin-left: 8px; /* Optional: adds some spacing between input and icon */
+}

@@ -6,8 +6,8 @@
   background-size: cover;
 }
 
-
 .driverimg {
-  width: 100%;
-  height: auto;
+  max-width: 100%;    /* Prevents the image from exceeding container width */
+  max-height: 100%;   /* Prevents the image from exceeding container height */
+  object-fit: contain; /* Ensures the image maintains aspect ratio and fits within the container */
 }

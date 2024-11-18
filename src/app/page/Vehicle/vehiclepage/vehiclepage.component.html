@@ -1,1 +1,171 @@
-<p>vehiclepage works!</p>
+<div class="modal-container">
+  <div class="modal-header">
+    <h1 *ngIf="vehicledata">{{vehicledata.vlicent}}</h1>
+    <h1 *ngIf="!vehicledata">เพิ่มข้อมูลรถ</h1>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+ </div>
+ <div class="modal-body">
+  <div class="position-relative" style="height: 100%; width:100%;">
+    <!-- spinner -->
+    <div class="container-spiner" *ngIf="show.Spinner">
+      <div class="row">
+        Please Watting...
+      </div>
+      <mat-spinner></mat-spinner>
+    </div>
+    <!-- Body -->
+    <div  style="width:100%; height: 100%;"  *ngIf="!show.editgps">
+      <mat-card class="example-card" appearance="outlined">
+        
+        <div class="row no-gutters" style="display: flex; justify-content: center; padding: 10px;">
+          <!-- Vehicle Data -->
+          <div class="col-6">
+            <div #Licent style="border: 1px solid #ccc; padding: 16px; border-radius: 8px;">
+              <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                <mat-icon style="width: auto; margin-right: 8px;">calendar_view_day</mat-icon> 
+                <span>ทะเบียนรถ</span>
+              </div>
+              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <input  matInput  [(ngModel)]="editdata.licent1"  placeholder="1กก"  maxlength="3" 
+                  (ngModelChange)="vehicledatachange('licent1')"  style="flex: 1;" />
+                  <span>-</span>
+                <input matInput  [(ngModel)]="editdata.licent2"  placeholder="0000"   maxlength="4"
+                (ngModelChange)="vehicledatachange('licent2')"  style="flex: 1;" />
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px; width: 100%; padding: 8px;">
+                <span>{{editdata.vlicent}}</span>
+                <select 
+                  style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" 
+                  [(ngModel)]="editdata.provinceid" 
+                  (change)="vehicledatachange('province')">
+                  <option *ngFor="let item of listprovince" [ngValue]="item.id">
+                    {{item.display}}
+                  </option> 
+                </select>
+              </div>
+            </div>
+            <div #Vtype style="display: flex; align-items: center; gap: 8px; padding: 16px;">
+              <mat-icon style="width: auto; margin-right: 8px;">label</mat-icon>
+              <select  style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: auto;"
+              [(ngModel)]="editdata.vtype"   (change)="vehicledatachange('vtype')">
+                  <option *ngFor="let item of listvtype" [ngValue]="item.id">
+                    {{item.display}}
+                  </option> 
+              </select>
+            </div>
+            <div #GPS style="display: flex; align-items: center; color: blue; gap: 8px; padding: 16px;">
+              <mat-icon style="width: auto; margin-right: 8px;">add_location</mat-icon> 
+              <span style="width:70% ;"> GPS : {{editdata.serialbox}}</span>
+              <mat-icon style="width: auto; margin-right: 16px; color: green;"
+                        (click)="editgps()">
+                edit_location </mat-icon> 
+              <mat-icon style="width: auto; color: red;" *ngIf="editdata.serialbox!=''"
+                        (click)="deletegps()">
+                delete</mat-icon> 
+            </div>
+
+            <div #Remark style="display: flex; align-items: center; gap: 8px; padding: 16px;">
+              <mat-icon style="width: auto; margin-right: 8px;">short_text</mat-icon>
+              <textarea  matInput cdkTextareaAutosize [(ngModel)]="editdata.remark" placeholder="หมายเหตุ"  
+                    (ngModelChange)="vehicledatachange('remark')" style="width: 90%; resize: none;"></textarea>
+            </div>  
+          </div>   
+          
+          <!-- Driver Data -->
+          <div class="col-4 m-2 d-flex flex-column align-items-center justify-content-center" 
+              style="height: auto; border: 1px solid #ccc; padding: 16px; border-radius: 8px;"  *ngIf="vehicledata && !show.editdriver">
+            <img class="driverimg" [src]="editdata.driverimage==''?base64Image:editdata.driverimage" style="margin-bottom: 16px;"  />
+            <div  style="width: 100%;" >
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">person</mat-icon>
+                <span>{{editdata.fullname}}</span>
+              </div> 
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">phone</mat-icon>
+                <span>{{editdata.driverphone}}</span>
+              </div> 
+            </div>
+            <div style="display: flex; justify-content: center;margin: 16px;">
+              <button mat-raised-button  style="color: red; margin: 0 8px; cursor: pointer;" 
+                      (click)="deletedriver()" >Delete</button>
+              <button mat-raised-button  style="color: blue; margin: 0 8px;cursor: pointer;"
+                      (click)="editdriver(true)" >Edit</button>
+            </div>
+          </div>
+          <!-- Edit Driver Data -->
+          <div class="col-4 m-2 d-flex flex-column align-items-center justify-content-center" *ngIf="vehicledata && show.editdriver"
+              style="height: auto; border: 1px solid #ccc; padding: 16px; border-radius: 8px;"  >
+            <div #Selectdriver style="width: 100%; margin-bottom: 16px;">
+              <select  style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%;"
+                [(ngModel)]="selecteddriver.id"   (change)="driverchange(selecteddriver.id)">
+                    <option value="0" disabled selected>-- Select a Driver --</option>
+                    <option *ngFor="let item of listdriver" [ngValue]="item.id">
+                      {{item.fullname}}
+                    </option> 
+              </select>
+            </div>
+            <img class="driverimg" [src]="selecteddriver.driverimg==''?va.icon.user:selecteddriver.driverimg" style="margin-bottom: 16px;"  />
+            <div  style="width: 100%;"  *ngIf="(selecteddriver.id!=0)">
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">person</mat-icon>
+                <span>{{selecteddriver.fullname}}</span>
+              </div> 
+              <div class="icon-inrow">
+                <mat-icon style="width: auto; margin-right: 8px;">phone</mat-icon>
+                <span>{{selecteddriver.phone}}</span>
+              </div> 
+            </div>
+            <div style="display: flex; justify-content: center;margin: 16px;">
+              <button mat-raised-button style="color: red; margin: 0 8px; cursor: pointer;" 
+                      (click)="editdriver(false)"  *ngIf="(editdata.driverid!=0)">cancle</button>
+              <button mat-raised-button style="color: green; margin: 0 8px;cursor: pointer;"
+                      (click)="updatedriver()"  *ngIf="(editdata.driverid!=selecteddriver.id)">Save</button>
+            </div>
+          </div>
+        </div>    
+      </mat-card>      
+      <div style="display: flex; justify-content: center;margin: 16px;">
+        <button mat-raised-button color="warn" style="margin: 0 8px; cursor: pointer;" 
+                (click)="deletevehicle()" *ngIf="vehicledata&&editdata.driverid==0" >Delete</button>
+        <button mat-raised-button color="primary" style="margin: 0 8px;cursor: pointer;"
+                (click)="updatevehicle()" *ngIf="show.edit">Save</button>
+        <button mat-raised-button color="primary" style="margin: 0 8px;cursor: pointer;"
+                (click)="savevehicle()" *ngIf="!vehicledata">Save</button>
+      </div>
+    </div>
+    
+    <div  style="width:100%; height: 100%; "  *ngIf="show.editgps">
+      <div class="row" style="width:100%; height: 100%;"  >
+        <div style="display: flex; align-items: center; gap: 16px; width: 100%; padding: 8px;">
+
+          <div class="icon-inrow" style="width: 50%;">
+            <mat-icon style="width: auto; margin-right: 8px;">calendar_view_day</mat-icon> 
+            <span> {{selectedgps.display}}</span>
+            <mat-icon style="width: auto; margin-right: 8px;">add_location</mat-icon> 
+            <span> GPS : {{selectedgps.ref1}}</span>
+          </div>
+          <mat-form-field appearance="outline" style="width: 50%;">
+            <input matInput placeholder="Search" [(ngModel)]="show.keyword" (keyup)="searchgps()"  />
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+
+        </div>
+        <div class="scrollable-container">
+          <div *ngFor="let gps of gpsfilter" class="row record-row" 
+              (click)="selecteddata(gps)" [style.background-color]="(gps.id==selectedgps.id?'lightseagreen':'white')">
+            <div class="col-3" >{{ gps.display }}</div>
+            <div class="col-4" >{{ gps.ref2 }}</div>
+            <div class="col-4">{{ gps.ref3 }}</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;margin: 16px;">
+          <button mat-raised-button color="primary" style="margin: 0 8px;cursor: pointer;"
+                  (click)="savegps()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+</div>
+  
+  

@@ -3,25 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
-import {
-  DialogpageComponent,
-  DialogConfig,
-} from '../../../material/dialogpage/dialogpage.component';
-
-import {
-  Routedata,
-  Companydata,
-  DPinroutedata,
-  VehicleRoutedata,
-  Calendarplan,
-  Routeplandata,
-  Vehicleplan,
-  Calendarslot,
-  Vehicledata,
-  Calendardata,
-  Calendardayplan,
-  Routedayplan
-} from '../../../models/datamodule.module';
+import { DialogpageComponent,DialogConfig} from '../../../material/dialogpage/dialogpage.component';
+import { RouteModel,CompanyModel,DPinroutedata,VehicleRoutedata,
+  CalendarplanModel,RouteplanModel,Vehicleplan,Calendarslot,VehicledataModel,
+  Calendardata,CalendardayplanModel,RoutedayplanModel} from '../../../models/datamodule.module';
 import * as L from 'leaflet';
 
 
@@ -39,24 +24,24 @@ export class RoutecomppageComponent implements OnInit {
     private snacbar: MatSnackBar
   ) {}
 
-  @Input() activecompany: Companydata = new Companydata();
+  @Input() activecompany: CompanyModel = new CompanyModel();
 
   show = { Spinner: true, viewtype: 0 };
-  public maindata: Routedata[] = [];
-  public activedata: Routedata = new Routedata();
+  public maindata: RouteModel[] = [];
+  public activedata: RouteModel = new RouteModel();
   public activevehicle: VehicleRoutedata = new VehicleRoutedata();
   private map: L.Map | undefined;
   private mapIconSize = 30;
   private cmarkers: L.Marker | undefined;
 
-  public weekplan: Calendarplan[] = [];
-  public dayplan: Calendardayplan = new Calendardayplan(this.va.calendarperiod);
+  public weekplan: CalendarplanModel[] = [];
+  public dayplan: CalendardayplanModel = new CalendardayplanModel(this.va.calendarperiod);
   
-  public activecalendar: Calendarplan | undefined;
+  public activecalendar: CalendarplanModel | undefined;
   public copyslot: Vehicleplan | undefined;
-  public selectedvehicle: Vehicledata = new Vehicledata();
+  public selectedvehicle: VehicledataModel = new VehicledataModel();
   public activeslot: Calendarslot = new Calendarslot();
-  public activeplan :Routeplandata|undefined;
+  public activeplan :RouteplanModel|undefined;
   public createroutemodal : any;
 
   async ngOnInit() {
@@ -100,14 +85,14 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   async getData() {
-    var result: Routedata[] = [];
+    var result: RouteModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'routecomp', compid: this.activecompany.id };
     var jsondata = await this.va.getwsdata(wsname, params);
     console.log("getData routecomp jsondata : ", jsondata);
     if (jsondata.code == '000') {
       jsondata.data.forEach((data: any) => {
-        var temp = new Routedata();
+        var temp = new RouteModel();
         temp.setdata(data);
         result.push(temp);
       });      
@@ -184,7 +169,7 @@ export class RoutecomppageComponent implements OnInit {
     return result;
   }
 
-  openempdata(item: Routedata, modal: any) {
+  openempdata(item: RouteModel, modal: any) {
     // console.log('opencompanydata comp : ', item);
     this.activedata = item;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
@@ -195,7 +180,7 @@ export class RoutecomppageComponent implements OnInit {
     this.refreshpage();
   }
 
-  Showrouteconfig(route: Routedata, modal: any) {
+  Showrouteconfig(route: RouteModel, modal: any) {
     console.log('Showroutedropoint route', route);
     this.activedata = route;
     // this.modalService.open(modal, { fullscreen: true });
@@ -227,7 +212,7 @@ export class RoutecomppageComponent implements OnInit {
     return false;
   }
 
-  Showroute(route: Routedata) {
+  Showroute(route: RouteModel) {
     // console.log('Showroute route : ', route);
     this.activedata = route;
     if (!this.map) {
@@ -350,7 +335,7 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   addnewroute(modal :any){
-    this.activedata = new Routedata();
+    this.activedata = new RouteModel();
     this.activedata.ownerid = this.activecompany.id;
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     // this.modalService.open(modal, { fullscreen: true });
@@ -364,13 +349,13 @@ export class RoutecomppageComponent implements OnInit {
 
   // #region  ========= Day Plan ==============================
   async setdayplan(){
-    this.dayplan = new Calendardayplan(this.va.calendarperiod);
+    this.dayplan = new CalendardayplanModel(this.va.calendarperiod);
     // console.log("this.dayplan : ",this.dayplan);
     this.dayplan.setactivedate(new Date());
     this.dayplan.activeroute =[]
     // console.log("setdayplan this.maindata : ",this.maindata);
     this.maindata.forEach(route => {
-      var plan: Routedayplan = new Routedayplan(this.dayplan.plandate,route);
+      var plan: RoutedayplanModel = new RoutedayplanModel(this.dayplan.plandate,route);
       this.dayplan.activeroute.push(plan);
     });
     // console.log("setdayplan this.dayplan.activeroute : ",this.dayplan.activeroute);
@@ -391,7 +376,7 @@ export class RoutecomppageComponent implements OnInit {
       var listnewplan =  await this.getPlandayData(this.dayplan.plankey);
       if(listnewplan.length>0){
         this.dayplan.activeroute.forEach(actday => {
-          var newplan:Routedayplan = new Routedayplan(activedate,actday.route);
+          var newplan:RoutedayplanModel = new RoutedayplanModel(activedate,actday.route);
           var listnewrouteplan = listnewplan.filter(x=>x.routeid==newplan.route.id);
           if(listnewrouteplan.length>0){
             listnewrouteplan.forEach(plan  => {
@@ -452,15 +437,15 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   async getPlandayData(plankey: string) {
-    var result: Routeplandata[] = [];
+    var result: RouteplanModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'planday', plankey: plankey };
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log('getWeekData jsondata : ', jsondata);
     if (jsondata.code == '000') {
       jsondata.data.forEach((data: any) => {
-        var temp = new Routeplandata();
-        temp.setdata(data);
+        var temp = new RouteplanModel(data);
+        // temp.setdata(data);
         result.push(temp);
       });
     } else {
@@ -469,7 +454,7 @@ export class RoutecomppageComponent implements OnInit {
     // console.log('getPlandayData result : ', result);
     return result;
   }
-  async setdayplanfromweekplan(route:Routedata|undefined){
+  async setdayplanfromweekplan(route:RouteModel|undefined){
     try{
       
       var plandate = this.va.DateToString("yyyy-MM-dd",this.dayplan.plandate)
@@ -486,7 +471,7 @@ export class RoutecomppageComponent implements OnInit {
       this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
-  async saveweektoplan(plandate:string,route:Routedata|undefined){
+  async saveweektoplan(plandate:string,route:RouteModel|undefined){
     try{
       var wsname = "updatedata";
       var param:any;
@@ -503,7 +488,7 @@ export class RoutecomppageComponent implements OnInit {
     }
     return false;
   }
-  async deldayplan(route:Routedata|undefined){
+  async deldayplan(route:RouteModel|undefined){
     try{
       var plandate = this.va.DateToString("yyyy-MM-dd",this.dayplan.plandate)
       var msg= "คุณต้องการลบแผนงานวันที่ " + plandate + " จากข้อมูลแผนงานรายสัปดาห์ "+(route?("เส้นทาง"+route.routename):"ทั้งหมด") +" หรือไม่";
@@ -519,7 +504,7 @@ export class RoutecomppageComponent implements OnInit {
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
-  async deletedayplan(plandate:string,route:Routedata|undefined){
+  async deletedayplan(plandate:string,route:RouteModel|undefined){
     try{
       var wsname = "deldata";
       var param:any;
@@ -636,8 +621,8 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  addvehicledayplan(route:Routedata,modal:any,routemodal:any){
-    this.activecalendar =  new Calendarplan(1440,0,this.dayplan.plandate);
+  addvehicledayplan(route:RouteModel,modal:any,routemodal:any){
+    this.activecalendar =  new CalendarplanModel(1440,0,this.dayplan.plandate);
     this.activedata = route;
     this.createroutemodal = routemodal;
     this.modalService.open(modal, { size: 'lg' });
@@ -656,26 +641,26 @@ export class RoutecomppageComponent implements OnInit {
     // console.log("startweek : ",a);
     this.weekplan = [];
     for (var i = 0; i < 7; i++) {
-      var w = new Calendarplan( this.va.calendarperiod, i, startweek);
+      var w = new CalendarplanModel( this.va.calendarperiod, i, startweek);
       w.iddate = this.va.DateToString('yyyyMMdd', w.cdate);
       this.weekplan.push(w);
       startweek.setDate(startweek.getDate() + 1);
     }
   }
 
-  Showroutedropoint(route: Routedata, modal: any) {
+  Showroutedropoint(route: RouteModel, modal: any) {
     // console.log('Showroutedropoint route', route);
     this.activedata = route;
     this.modalService.open(modal, { fullscreen: true });
   }
 
-  async ShowVehicleDetail(route: Routedata) {
+  async ShowVehicleDetail(route: RouteModel) {
     this.show.Spinner = true;
     this.activedata = route;
 
     if (this.show.viewtype == 1) {
       await this.setweekplan();
-      var weekdata: Routeplandata[] = await this.getWeekData(route.id);
+      var weekdata: RouteplanModel[] = await this.getWeekData(route.id);
       weekdata.forEach((plan) => {
         var id = this.va.DateToString('yyyyMMdd', plan.plandate);
         var wplan = this.weekplan.find((x) => x.iddate == id);
@@ -706,15 +691,15 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   async getWeekData(routeid: number) {
-    var result: Routeplandata[] = [];
+    var result: RouteplanModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'routeweek', routeid: routeid };
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log('getWeekData jsondata : ', jsondata);
     if (jsondata.code == '000') {
       jsondata.data.forEach((data: any) => {
-        var temp = new Routeplandata();
-        temp.setdata(data);
+        var temp = new RouteplanModel(data);
+        // temp.setdata(data);
         result.push(temp);
       });
     } else {
@@ -730,7 +715,7 @@ export class RoutecomppageComponent implements OnInit {
     return sdate <= endDate && edate > startDate;
   }
 
-  addvehicleweekplan(selectedslot: Calendarplan, modal: any, routemodal:any) {
+  addvehicleweekplan(selectedslot: CalendarplanModel, modal: any, routemodal:any) {
     if (this.activedata.id != 0) {
       this.activecalendar = selectedslot;
       this.createroutemodal = routemodal;
@@ -750,7 +735,7 @@ export class RoutecomppageComponent implements OnInit {
 
    // #region  ========= Add & Edit Weekly plan ==============================
 
-  OpenWeekplan(item : Calendardata, wplan: Calendarplan,vehicle:Vehicleplan,modal:any ){
+  OpenWeekplan(item : Calendardata, wplan: CalendarplanModel,vehicle:Vehicleplan,modal:any ){
     if(item.plancode==""){
       this.CreateWeekPlan(item,wplan,vehicle,modal);
     }else{
@@ -766,7 +751,7 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  EditWeekPlan(item : Calendardata, wplan: Calendarplan,vehicle:Vehicleplan,modal:any ){
+  EditWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:Vehicleplan,modal:any ){
     try{
       this.activeslot.setdata(item);
       this.activeslot.plantype = 2;
@@ -814,7 +799,7 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  CreateWeekPlan(item : Calendardata, wplan: Calendarplan,vehicle:Vehicleplan,modal:any ){
+  CreateWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:Vehicleplan,modal:any ){
     try{
       this.activeplan=undefined;
       this.activeslot.setdata(item);
@@ -849,7 +834,7 @@ export class RoutecomppageComponent implements OnInit {
 
   // #region  ========= update data and find plan slot ==============================
 
-  async routeplantalkback(routeplan: Routeplandata) {
+  async routeplantalkback(routeplan: RouteplanModel) {
     console.log("routeplantalkback event : ",event);
     if(routeplan.plantype==3){
       // ปรับข้อมูลแผนงานรายวันใหม่

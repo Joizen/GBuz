@@ -4,7 +4,7 @@ import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
-import { Vehicledata, Companydata, VehicleRoutedata,Calendarplan, Calendardata, Calendarslot, Routeplandata } from '../../../models/datamodule.module'
+import { VehicledataModel, CompanyModel, VehicleRoutedata,CalendarplanModel, Calendardata, Calendarslot, RouteplanModel } from '../../../models/datamodule.module'
 
 
 @Component({
@@ -20,14 +20,14 @@ export class VehiclecomppageComponent implements OnInit {
     private dialog: MatDialog,
     private snacbar: MatSnackBar
   ) { }
-  @Input() activecompany: Companydata = new Companydata();
+  @Input() activecompany: CompanyModel = new CompanyModel();
   show = { Spinner: true, viewtype: 1 };
-  public maindata: Vehicledata[] = [];
-  public activedata: Vehicledata = new Vehicledata();
-  public weekplan: Calendarplan[] = [];
+  public maindata: VehicledataModel[] = [];
+  public activedata: VehicledataModel = new VehicledataModel();
+  public weekplan: CalendarplanModel[] = [];
   public activeslot : Calendarslot = new Calendarslot();
-  public activeplan :Routeplandata|undefined;
-  public copyslot :Calendarplan|undefined;
+  public activeplan :RouteplanModel|undefined;
+  public copyslot :CalendarplanModel|undefined;
 
   async ngOnInit() {
     this.maindata = await this.getData();
@@ -40,15 +40,14 @@ export class VehiclecomppageComponent implements OnInit {
   }
 
   async getData() {
-    var result: Vehicledata[] = [];
+    var result: VehicledataModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'vehiclecomp', compid: this.activecompany.id };
     var jsondata = await this.va.getwsdata(wsname, params);
     //  console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Vehicledata();
-        temp.setdata(data);
+        var temp = new VehicledataModel(data);
         result.push(temp);
       });
     } else {
@@ -109,7 +108,7 @@ export class VehiclecomppageComponent implements OnInit {
     // console.log("startweek : ",a);
     this.weekplan=[]
     for(var i =0;i<7;i++){
-      var w =new Calendarplan(15,i,startweek);
+      var w =new CalendarplanModel(15,i,startweek);
       w.iddate = this.va.DateToString("yyyyMMdd",w.cdate);
       this.weekplan.push(w);
       startweek.setDate(startweek.getDate()+1);
@@ -119,13 +118,13 @@ export class VehiclecomppageComponent implements OnInit {
 
   }
   
-   async ShowVehicleDetail(vehicle:Vehicledata){
+   async ShowVehicleDetail(vehicle:VehicledataModel){
     this.show.Spinner=true;
     this.activedata = vehicle;
 
     if(this.show.viewtype==1){
       await this.setweekplan();
-      var weekdata:Routeplandata[] =  await this.getWeekData(vehicle.vid);
+      var weekdata:RouteplanModel[] =  await this.getWeekData(vehicle.vid);
       weekdata.forEach(plan => {
         var id = this.va.DateToString("yyyyMMdd",plan.plandate)
         var wplan = this.weekplan.find(x=>x.iddate==id);
@@ -156,15 +155,15 @@ export class VehiclecomppageComponent implements OnInit {
     return sdate<=endDate && edate > startDate;
   }
   async getWeekData(vid:number) {
-    var result: Routeplandata[] = [];
+    var result: RouteplanModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'routeweek', vid: vid };
     var jsondata = await this.va.getwsdata(wsname, params);
     console.log("getWeekData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Routeplandata();
-        temp.setdata(data);
+        var temp = new RouteplanModel(data);
+        // temp.setdata(data);
         result.push(temp);
       });
     } else {
@@ -175,7 +174,7 @@ export class VehiclecomppageComponent implements OnInit {
   }
 
    // ========= Add & Edit Weekly plan ==============================
-  OpenWeekplan(item : Calendardata, wplan: Calendarplan,modal:any ){
+  OpenWeekplan(item : Calendardata, wplan: CalendarplanModel,modal:any ){
     this.activeslot.setdata(item);
     this.activeslot.plantype = 2;
     this.activeslot.dayname = wplan.textdate;
@@ -229,7 +228,7 @@ export class VehiclecomppageComponent implements OnInit {
     }
     this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
   }
-  GetStartWeekplan(wplan: Calendarplan, id:number, plancode: string){
+  GetStartWeekplan(wplan: CalendarplanModel, id:number, plancode: string){
     var result = {startid:id, starttime: wplan.listdata[id].sdate}
     for(var i=id; i>=0;i--){
       var slot = wplan.listdata[i];
@@ -243,7 +242,7 @@ export class VehiclecomppageComponent implements OnInit {
     }
     return result;
   }
-  GetEndWeekplan(wplan: Calendarplan, id:number, plancode: string){
+  GetEndWeekplan(wplan: CalendarplanModel, id:number, plancode: string){
     var result = {endid:id, endtime: wplan.listdata[id].edate}
     for(var i=id; i<wplan.listdata.length;i++){
       var slot = wplan.listdata[i];
@@ -262,7 +261,7 @@ export class VehiclecomppageComponent implements OnInit {
   }
 
  // ========= Copy & Paste==============================
-  copyweekplan(wplan: Calendarplan){
+  copyweekplan(wplan: CalendarplanModel){
     wplan.ismaseter=true;
     this.copyslot =wplan;    
   }
@@ -276,7 +275,7 @@ export class VehiclecomppageComponent implements OnInit {
 
   async updatecopyweekplan(){
     // delete old & save new
-    var slotcopyto : Calendarplan[] = [];
+    var slotcopyto : CalendarplanModel[] = [];
     var strday : string = "";
     var copyweekplan: any[] = [];
     var vid =  this.activedata.vid;

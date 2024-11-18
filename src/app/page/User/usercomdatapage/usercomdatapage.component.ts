@@ -6,36 +6,35 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import { CompanyModel, UserModel } from 'src/app/models/datamodule.module';
 
-
 @Component({
-  selector: 'app-addusercomppage',
-  templateUrl: './addusercomppage.component.html',
-  styleUrls: ['./addusercomppage.component.scss']
+  selector: 'app-usercomdatapage',
+  templateUrl: './usercomdatapage.component.html',
+  styleUrls: ['./usercomdatapage.component.scss']
 })
-export class AddusercomppageComponent implements OnInit {
+export class UsercomdatapageComponent implements OnInit {
   constructor( private modalService: NgbModal, public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar ) { }
   @Input() modal: any;
+  @Input()  activeuser:  UserModel = new UserModel();
   @Input()  activecompany:  CompanyModel = new CompanyModel();
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
-  listuser : UserModel[]=[];
-  showSave:boolean = true;
-  show = { Spinner: true ,Save: false};
+  listcustomer : CompanyModel[]=[];
+  show = { Spinner: true };
 
   async ngOnInit() {
-    if(this.activecompany.id!=0) {this.listuser = await this.getData();} 
-    console.log("this.listuser : ",this.listuser);
+    if(this.activeuser.id!=0) {this.listcustomer = await this.getData();} 
+    console.log("this.listcustomer : ",this.listcustomer);
     this.show.Spinner=false;
   }
 
   async getData() {
-    var result: UserModel[] = [];
+    var result: CompanyModel[] = [];
     var wsname = 'getdata';
-    var params = { tbname: 'unusercustomer', compid: this.activecompany.id };
+    var params = { tbname: 'company', empid: this.activeuser.id };
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new UserModel(data);
+        var temp = new CompanyModel(data);
         // temp.setdata(data);
         result.push(temp);
       });
@@ -46,51 +45,38 @@ export class AddusercomppageComponent implements OnInit {
 
   }
 
-  onSelectuser(event:any){
-    var list = this.listuser.filter(x=>x.isselect);
-    this.show.Save  =(list&&list.length>0)
-  }
-
-  async saveuser(){    
+ 
+  async deleteuser(){
     try{
-      var listuser = {name:"",id:""};
-      var list = this.listuser.filter(x=>x.isselect);
-      if(list&&list.length>0){
-        list.forEach(user => {
-          listuser.name+= ((listuser.name==""?"":", ") +user.empname);
-          listuser.id+= ((listuser.id==""?"'":",'") +user.id + "'");
-        });
-      }
-      else{return;}
-
-      var confirm =await this.OkCancelMessage("ยืนยันการบันทึก","คุณต้องการเพิ่มผู้ใช้งาน "+ listuser.name + " ดูแลบริษัทนี้หรือไม่");
+      var confirm =await this.OkCancelMessage("ยืนยันการบันทึก","คุณต้องการลบผู้ใช้งาน "+ this.activeuser.empname + " ออกจากการดูแลบริษัทนี้หรือไม่");
       if(confirm=="true"){
-        if(await this.saveupdateuser(listuser.id)){
+        if(await this.setdeleteuser()){
             this.talk.emit();
             this.modal.close();
-        }else{this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")}
+        }else{this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง");}
       }
     }catch(ex){
-      console.log("save plan error ",ex)
-      this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
+      console.log("OkCancelMessage error ",ex);
+      this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง");
     }
   }
 
-  async saveupdateuser(listuser:string){
+  async setdeleteuser(){
     try{
-      var wsname = "updatedata";
-      var jsondata = await this.va.getwsdata(wsname,{tbname:"usercompany",data:{listuid:listuser,compid:this.activecompany.id}})
+      var wsname = "deldata";
+      var jsondata = await this.va.getwsdata(wsname,{tbname:"usercompany",empid:this.activeuser.id,compid:this.activecompany.id});
       if(jsondata.code=="000"){
-        this.showSanckbar("save or update user in company success",2);
+        this.showSanckbar("delete user of company success",2);
         return true;
       }
     }catch(ex){
-      console.log("saveupdateplan Error : ",ex)
-      this.showSanckbar("save or update user in company  error" + ex,2);
-
+      this.showSanckbar("delete  user of company Error" + ex,2);
+      console.log("setdeleteuser Error : ",ex)
     }
     return false;
   }
+
+
 
   // ===== Message Dialog ====================
 
@@ -121,4 +107,6 @@ export class AddusercomppageComponent implements OnInit {
       { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });
   }
   
+
 }
+

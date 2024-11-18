@@ -92,5 +92,6 @@
 </ng-template>
 
 <ng-template #userdetailmodal let-modal>
-  <app-userdatapage [modal]="modal" [activeuser] ="activeuser" [activecompany] ="activecompany"  (talk)="refreshuserlist()" ></app-userdatapage>
+ <app-usercomdatapage  [modal]="modal" [activeuser] ="activeuser" [activecompany] ="activecompany"  (talk)="refreshuserlist()" ></app-usercomdatapage>
+  <!-- <app-userdatapage [modal]="modal" [activeuser] ="activeuser" [activecompany] ="activecompany"  (talk)="refreshuserlist()" ></app-userdatapage> -->
 </ng-template>

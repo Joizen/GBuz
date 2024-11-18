@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Vehicledata,Companydata,Routedata,Routeplandata, Calendarslot, Selecteddata, Comshiftdata} from '../../../models/datamodule.module'
+import { VehicledataModel,CompanyModel,RouteModel,RouteplanModel, Calendarslot, Comshiftdata} from '../../../models/datamodule.module'
 import { variable } from '../../../variable';
 
 @Component({
@@ -14,19 +14,19 @@ import { variable } from '../../../variable';
 export class PlandatapageComponent implements OnInit {
   constructor(private modalService: NgbModal,public va: variable,private snacbar: MatSnackBar,private dialog:MatDialog){ }
   @Input() modal: any;
-  @Input() vehicle: Vehicledata = new Vehicledata();
-  @Input() company: Companydata = new Companydata();
+  @Input() vehicle: VehicledataModel = new VehicledataModel();
+  @Input() company: CompanyModel = new CompanyModel();
   @Input() planslot: Calendarslot = new Calendarslot();
-  @Input() editplan: Routeplandata |undefined;
-  @Input() routedata : Routedata | undefined;
+  @Input() editplan: RouteplanModel |undefined;
+  @Input() routedata : RouteModel | undefined;
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
 
   show = {Spinner: true};
-  routelist: Routedata[] = [];
-  selectrout : Routedata = new Routedata();
+  routelist: RouteModel[] = [];
+  selectrout : RouteModel = new RouteModel();
   selectshift : Comshiftdata = new Comshiftdata();
   selecttime={start:"00:00", end : "00:00"} ; 
-  activeplan : Routeplandata =new Routeplandata();
+  activeplan : RouteplanModel =new RouteplanModel();
   public listshift : Comshiftdata []= [];
   
   onperiod=false;
@@ -130,14 +130,14 @@ export class PlandatapageComponent implements OnInit {
   }
 
   async getrouteData() {
-    var result: Routedata[] = [];
+    var result: RouteModel[] = [];
     try{
       var wsname = 'getdata';
       var params = { tbname: 'routecomp', compid: this.company.id };
       var jsondata = await this.va.getwsdata(wsname, params);
       if (jsondata.code == "000") {      
         jsondata.data.forEach((data: any) => {
-          var temp = new Routedata();
+          var temp = new RouteModel();
           temp.setdata(data);
           result.push(temp);
         });

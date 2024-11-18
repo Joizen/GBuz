@@ -1,42 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { VehicledataModel } from '../../../models/datamodule.module'
+import { UserModel } from '../../../models/datamodule.module'
 import { variable } from '../../../variable';
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-searchvehiclepage',
-  templateUrl: './searchvehiclepage.component.html',
-  styleUrls: ['./searchvehiclepage.component.scss']
+  selector: 'app-searchuserpage',
+  templateUrl: './searchuserpage.component.html',
+  styleUrls: ['./searchuserpage.component.scss']
 })
 
-export class SearchvehiclepageComponent implements OnInit {
+export class SearchuserpageComponent implements OnInit {
 
   constructor(private modalService: NgbModal, public va: variable) { }
 
   show = { Spinner: true, viewtype: 0 ,limit:10};
   keyword:string ="";
-  public listvehicle : VehicledataModel[] = [];
-  public activevehicle: VehicledataModel |undefined;
+  public listuser : UserModel[] = [];
+  public activedriver: UserModel |undefined;
 
   async ngOnInit() {
-    this.listvehicle = await this.getvehicle();
+    this.listuser = await this.getdata();
     this.show.Spinner = false;
 
   }
 
-  async getvehicle() {
-    var result: VehicledataModel[] = [];
+  async getdata() {
+    var result: UserModel[] = [];
     try{
       var wsname = 'getdata';
-      var params = { tbname: 'vehicle',keyword:this.keyword,limit:this.show.limit};
-      console.log("getvehicle params : ", params);
-      
+      var params = { tbname: 'usercustomer',keyword:this.keyword,limit:this.show.limit};
       var jsondata = await this.va.getwsdata(wsname, params);
-      // console.log("getData jsondata : ", jsondata);
+      console.log("getData jsondata : ", jsondata);
       if (jsondata.code == "000") {
         jsondata.data.forEach((data: any) => {
-          var temp = new VehicledataModel(data);
+          var temp = new UserModel(data);
           result.push(temp);
         });
       } 
@@ -50,33 +48,34 @@ export class SearchvehiclepageComponent implements OnInit {
   }
   async searchdata(){
     this.show.Spinner = true;
-    this.listvehicle = await this.getvehicle();
+    this.listuser = await this.getdata();
     this.show.Spinner = false;
   }
 
-  showvehicle(data: any, modal: any) {
-    this.activevehicle = data;
+  showDriver(data: any, modal: any) {
+    this.activedriver = data;
+    console.log( "this.activedriver ", this.activedriver  )
     this.modalService.open(modal, { size: 'lg',backdrop: 'static',keyboard: false }); // 'sm', 'lg', 'xl' available sizes
 
     // this.modalService.open(modal, { fullscreen: true, scrollable: true });
   }
   
-  async talkbackdata(data: VehicledataModel) {
+  async talkbackdata(data: UserModel) {
     console.log("talkbackdata data",data)
     if(data){
       this.show.Spinner = true;
-      this.keyword=data.vlicent
-      this.listvehicle = await this.getvehicle();
+      this.keyword=data.firstname
+      this.listuser = await this.getdata();
       this.show.Spinner = false;
     }else{
       this.show.Spinner = true;
-      this.listvehicle = await this.getvehicle();
+      this.listuser = await this.getdata();
       this.show.Spinner = false;
     }
   }
 
-  addvehicle(modal:any){
-    this.activevehicle = undefined;
+  adddriver(modal:any){
+    this.activedriver = undefined;
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
 
     // this.modalService.open(modal, { fullscreen: true, scrollable: true });
@@ -86,19 +85,19 @@ export class SearchvehiclepageComponent implements OnInit {
   }
   exportexcel(){
     // Step 1: ลบฟิลด์ id, driverimg ออกจากข้อมูล
-    const filteredData = this.listvehicle.map(({vid,driverimage,driverid,qrcode, ...rest }) => rest);
+    const filteredData = this.listuser.map(({id,userimage,linename,transtatus,isselect, ...rest }) => rest);
 
     // Step 2: สร้าง worksheet จากข้อมูลที่ถูกกรองแล้ว
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
 
     // Step 3: สร้าง workbook และเพิ่ม worksheet
     const workbook: XLSX.WorkBook = {
-      Sheets: { 'Drivers': worksheet },
-      SheetNames: ['Drivers']
+      Sheets: { 'User': worksheet },
+      SheetNames: ['User']
     };
 
     // Step 4: ส่งออก workbook เป็นไฟล์ Excel
-    XLSX.writeFile(workbook, 'DriverData.xlsx');
+    XLSX.writeFile(workbook, 'UserData.xlsx');
   }
 
 

@@ -1,6 +1,6 @@
 import { Component,Input,EventEmitter,ViewChild,Output, OnInit   } from '@angular/core';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {Companydata} from '../../../models/datamodule.module'
+import {CompanyModel} from '../../../models/datamodule.module'
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
@@ -17,7 +17,7 @@ import { UsercompageComponent } from '../../User/usercompage/usercompage.compone
 
 export class CompanypageComponent implements OnInit {
   @Input() modal: any;
-  @Input() activecompany : Companydata = new Companydata();
+  @Input() activecompany : CompanyModel = new CompanyModel();
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild(RoutecomppageComponent) routecomppage!: RoutecomppageComponent;
   @ViewChild(VehiclecomppageComponent) vehiclecomppage!: VehiclecomppageComponent;

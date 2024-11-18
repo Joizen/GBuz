@@ -1,6 +1,6 @@
 import { Component,Input,EventEmitter, Output, OnInit   } from '@angular/core';
-import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {Employeedata} from '../../../models/datamodule.module'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {EmployeeModel} from '../../../models/datamodule.module'
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { variable } from '../../../variable';
@@ -12,7 +12,7 @@ import { variable } from '../../../variable';
 })
 export class EmployeepageComponent implements OnInit {
   @Input() modal: any;
-  @Input() activedata : Employeedata = new Employeedata();
+  @Input() activedata : EmployeeModel = new EmployeeModel();
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private modalService: NgbModal,

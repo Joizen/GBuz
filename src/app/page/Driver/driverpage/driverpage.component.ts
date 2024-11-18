@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { QRCodeModule } from 'angularx-qrcode';
-import { Driverdata } from 'src/app/models/datamodule.module';
+import { DriverdataModel } from 'src/app/models/datamodule.module';
 import { variable } from '../../../variable';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
@@ -16,36 +16,184 @@ export class DriverpageComponent {
   constructor(public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar) { }
 
   @Input() modal: any;
-  @Input() viewData: any;
-  @Input() driverData: Driverdata |undefined;
-  @Output() repage: EventEmitter<any> = new EventEmitter<any>();
+  @Input() editdata: DriverdataModel =new DriverdataModel() ;
+  @Input() driverdata: DriverdataModel |undefined;
+  @Output() talk: EventEmitter<any> = new EventEmitter<any>();
 
   // public Qrdata:string = JSON.stringify({empname:"thavon",surname:"seesai",phone:"093368131"});
+  show = { Spinner: false, edit: false ,phone:"" };
   public Qrdata: string = "";
   base64Image: string = this.va.icon.user;
 
   ngOnInit(): void {
-    console.log("this.driverData : ",this.driverData);
-    if (this.viewData) {
-      this.Qrdata = JSON.stringify({ empname: this.viewData.drivername, surname: this.viewData.surname, phone: this.viewData.phone });
-    }
-    else {
-      this.Qrdata = JSON.stringify({ empname: this.driverData?.empname, surname: this.driverData?.surname, phone: this.driverData?.phone });
-      this.viewData = {
-        lineimage : this.driverData?.driverimg,
-        driverfullname: this.driverData?.fullname,
-        drivername: this.driverData?.empname,
-        surname: this.driverData?.surname,
-        nickname: this.driverData?.empname,
-        license: this.driverData?.licent,
-        licensetype: "",
-        phone: this.driverData?.phone,
-        mobile: this.driverData?.phone,
-        linename: this.driverData?.linename,
+    try{
+      // console.log("this.driverdata : ",this.driverdata);
+      if(this.driverdata) {
+        this.editdata = new DriverdataModel(this.driverdata) ;
+        this.validatePhoneNumber(this.editdata.phone);
+        this.craeteqrcode()
       }
-    }
-    console.log("viewdata 2: ", this.viewData);
+      console.log("this.viewData :",this.editdata);
+    }catch(ex){ console.log("ngOnInit Error :",ex);}
   }
+
+  //===================================================================
+  // #region  =========== Validate Data & QR Code =====================
+  craeteqrcode(){
+    if(this.driverdata){
+      this.Qrdata = JSON.stringify(
+        { empname: this.driverdata.empname, 
+          surname: this.driverdata.surname, 
+          phone: this.driverdata.phone 
+        });
+    }
+  }
+
+  driverdatachange(type:string){
+    if(this.driverdata){
+      if(type=="prefix"){
+        if(!this.show.edit){this.show.edit = (this.driverdata.prefix!=this.editdata.prefix);}
+      }else if(type=="empname"){
+        if(!this.show.edit){this.show.edit = (this.driverdata.empname!=this.editdata.empname);}
+      }else if(type=="surname"){
+        if(!this.show.edit){this.show.edit = (this.driverdata.surname!=this.editdata.surname);}
+      }else if(type=="remark"){
+        if(!this.show.edit){this.show.edit = (this.driverdata.remark!=this.editdata.remark);}
+      }else if(type=="licent"){
+        if(!this.show.edit){this.show.edit = (this.driverdata.licent!=this.editdata.licent);}
+      }
+      this.editdata.fullname =this.editdata.prefix+" "+this.editdata.empname+" "+this.editdata.surname;
+    }
+    console.log("this.show.edit ",this.show.edit )
+  }
+
+  validatePhoneNumber(value: string) {
+    // Remove non-digit characters
+    let formattedValue = value.replace(/\D/g, '');
+    // Format as phone number (e.g., (123) 456-7890)
+    if (formattedValue.length > 6) {
+      formattedValue = formattedValue.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        '($1) $2-$3'
+      );
+    } else if (formattedValue.length > 3) {
+      formattedValue = formattedValue.replace(/(\d{3})(\d{3})/, '($1) $2-');
+    } else {
+      formattedValue = formattedValue.replace(/(\d{3})/, '($1)');
+    }
+    this.show.phone = formattedValue
+    // console.log("formattedValue :",formattedValue);
+    this.editdata.phone = formattedValue.replace(/\D/g, '');
+    // console.log("this.editdata.phone :",this.editdata.phone); 
+    console.log("this.show.phone  :",this.show.phone ); 
+
+    if(this.driverdata && !this.show.edit){this.show.edit = (this.driverdata.phone!=this.editdata.phone);}
+        // Update the form control with the first 10 digits
+  }
+
+  // #endregion  =========== Validate Data & QR Code ==================
+  //===================================================================
+
+  //===================================================================
+  // #region  =========== Save Update Delete ==========================
+  validatedata(){
+    var msg ="Please Fill in prefix"
+    if(this.editdata.prefix.trim()==""){this.showSanckbar(msg); return false;}  
+    msg ="Please Fill in empname"
+    if(this.editdata.empname.trim()==""){this.showSanckbar(msg); return false;}  
+    msg ="Please Fill in surname"
+    if(this.editdata.surname.trim()==""){this.showSanckbar(msg); return false;}  
+    msg ="Please Fill in phone"
+    this.editdata.phone = this.editdata.phone.replace(/\D/g, '');
+    if(this.editdata.phone.trim()==""|| this.editdata.phone.length<10){this.showSanckbar(msg); return;}  
+    return true;
+  }
+  async savedriver(){
+    if(this.validatedata()){
+      try{     
+        var confirm =await this.OkCancelMessage("ยืนยันการบันทึก","คุณต้องการบันทึกข้อมูลพนักงานขับรถใหม่หรือไม่");
+        if(confirm=="true"){
+          if(await this.saveupdatedriver(0)){
+              this.alertMessage("แจ้งเตือน", "บันทึกข้อมูลข้อมูลพนักงานใหม่เรียบร้อยแล้ว");
+              this.talk.emit(this.driverdata);
+              this.modal.close();
+          }else{
+            this.alertMessage("แจ้งเตือน", "บันทึกข้อมูลข้อมูลพนักงานใหม่ผิดพลาดโปรดลองอีกครัง");
+            this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง");
+          }
+        }
+      }catch(ex){
+        console.log("save plan error ",ex)
+        this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
+      }
+  
+    } 
+  }
+  async updatedriver(){
+    if(this.validatedata()){
+      try{     
+        var confirm =await this.OkCancelMessage("ยืนยันการบันทึก","คุณต้องการแก้ไขข้อมูลพนักงานขับรถหรือไม่");
+        if(confirm=="true"){
+          if(await this.saveupdatedriver(1)){
+              this.alertMessage("แจ้งเตือน", "บันทึกข้อมูลการแก้ไขข้อมูลพนักงานเรียบร้อยแล้ว");
+              this.talk.emit(this.driverdata);
+              this.modal.close();
+          }else{
+            this.alertMessage("แจ้งเตือน", "บันทึกข้อมูลการแก้ไขข้อมูลพนักงานผิดพลาดโปรดลองอีกครัง");
+            this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง");
+          }
+        }
+      }catch(ex){
+        console.log("save plan error ",ex)
+        this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
+      }
+  
+    } 
+  }
+  async deletedriver(){
+    try{     
+      var confirm =await this.OkCancelMessage("ยืนยันการบันทึก","คุณต้องการลบข้อมูลพนักงานขับรถหรือไม่");
+      if(confirm=="true"){
+        if(await this.saveupdatedriver(-3)){
+          this.alertMessage("แจ้งเตือน", "ข้อมูลพนักงานขับรถถูกลบแล้ว")
+          this.showSanckbar("ลบข้อมูลเรียบร้อยแล้ว");
+            this.talk.emit(this.driverdata);
+            this.modal.close();
+        }else{
+          this.alertMessage("แจ้งเตือน", "ลบข้อมูลผิดพลาดโปรดลองอีกครัง")
+          this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง");
+        }
+      }
+    }catch(ex){
+      console.log("save plan error ",ex)
+      this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
+    }
+  }
+
+  async saveupdatedriver(status:number){
+    try{
+      var tbname =((status==0)?"newdriver":"driver");
+      var wsname = ((status<0)?"deldata":"updatedata");
+      if(status<1){this.editdata.transtatus = status;}
+      console.log("saveupdatedriver this.editdata : ",this.editdata);
+      var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,data:this.editdata})
+      if(jsondata.code=="000"){       
+        if(status<0){this.driverdata=undefined;}
+        else{ this.driverdata=this.editdata;}
+        return true;
+      }
+    }catch(ex){
+      console.log("saveupdatedriver Error : ",ex);
+      this.showSanckbar("save or updatedriver error" + ex,2);
+    }
+    this.editdata.transtatus =(this.driverdata?this.driverdata.transtatus:0) ;
+    return false;
+  }
+  // #endregion  =========== Save Update Delete ==========================
+  //===================================================================
+
+  //===================================================================
+  // #region  =========== Update Image ==============================
 
   async  onFileSelect(event: any) {
     const file = event.target.files[0];
@@ -54,7 +202,7 @@ export class DriverpageComponent {
         const base64 = await this.resizeImage(file); 
         if(await this.saveimage(base64)){
           this.base64Image = base64;
-          if(this.driverData){this.driverData.driverimg =this.base64Image;}          
+          if(this.driverdata){this.driverdata.driverimg =this.base64Image;}          
         }
       } catch (error) {
         console.error('Error handling image:', error);
@@ -264,7 +412,7 @@ export class DriverpageComponent {
   async saveimage(image: string){
     try{
       var wsname = "saveimage";
-      var param = {tbname:"driverimage",driverid:this.driverData?.id,image:image};
+      var param = {tbname:"driverimage",driverid:this.driverdata?.id,image:image};
       console.log("saveimage ",param)
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
@@ -276,8 +424,12 @@ export class DriverpageComponent {
     }
     return false;
   }
+  // #endregion  =========== Update Image =============================
+  //===================================================================
 
-  // ===== Message Dialog ====================
+
+  //===================================================================
+  // #region  =========== Message Dialog ==============================
 
   alertMessage(header: string, message: string) {
     var dialogRef = this.dialog.open(DialogpageComponent,
@@ -304,5 +456,7 @@ export class DriverpageComponent {
     this.snacbar.open(message, 'Close',
       { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });
   }
+  // #endregion  =========== Message Dialog ===========================
+  //===================================================================
 
 }

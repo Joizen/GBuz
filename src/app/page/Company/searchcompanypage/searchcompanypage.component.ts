@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
-import { Companydata } from '../../../models/datamodule.module'
+import { CompanyModel } from '../../../models/datamodule.module'
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -25,10 +25,10 @@ export class SearchcompanypageComponent implements OnInit {
   ) { }
 
   show = { Spinner: true, viewtype: 0 ,addcompany:true};
-  public companydata: Companydata[] = [];
+  public companydata: CompanyModel[] = [];
   public displayedColumns: string[] = [];
   public displayedColumnsData: string[] = [];
-  public activecompany: Companydata = new Companydata();
+  public activecompany: CompanyModel = new CompanyModel();
   // public  dataSource = new MatTableDataSource(this.companydata); 
   public dataSource = new MatTableDataSource(this.companydata);
   @ViewChild(MatSort) sort!: MatSort;
@@ -77,15 +77,15 @@ export class SearchcompanypageComponent implements OnInit {
   }
 
   async getData() {
-    var result: Companydata[] = [];
+    var result: CompanyModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'company' };
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Companydata();
-        temp.setdata(data);
+        var temp = new CompanyModel(data);
+        // temp.setdata(data);
         result.push(temp);
       });
     } else {
@@ -99,7 +99,7 @@ export class SearchcompanypageComponent implements OnInit {
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
   }
 
-  opencompanydata(comp: Companydata, modal: any) {
+  opencompanydata(comp: CompanyModel, modal: any) {
     // console.log("opencompanydata comp : ", comp);
     this.activecompany = comp;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes

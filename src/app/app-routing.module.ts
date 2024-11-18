@@ -26,7 +26,6 @@ const routes: Routes = [
   { path: 'driverdata', loadChildren: () => import('./page/Driver/driverpage/driverpage.module').then(m => m.DriverpageModule) },
   { path: 'maindashboard', loadChildren: () => import('./page/Dashboard/maindashboardpage/maindashboardpage.module').then(m => m.MaindashboardpageModule) },
   { path: 'driverdetail', loadChildren: () => import('./page/Dashboard/driverdetailpage/driverdetailpage.module').then(m => m.DriverdetailpageModule) },
-  { path: 'employee', loadChildren: () => import('./page/Employee/searchemployeepage/searchemployeepage.module').then(m => m.SearchemployeepageModule) },
   { path: 'employeedata', loadChildren: () => import('./page/Employee/employeepage/employeepage.module').then(m => m.EmployeepageModule) },
   { path: 'employeecomp', loadChildren: () => import('./page/Employee/employeecomppage/employeecomppage.module').then(m => m.EmployeecomppageModule) },
   { path: 'vehiclecomp', loadChildren: () => import('./page/Vehicle/vehiclecomppage/vehiclecomppage.module').then(m => m.VehiclecomppageModule) },
@@ -40,6 +39,8 @@ const routes: Routes = [
   { path: 'addusercomp', loadChildren: () => import('./page/User/addusercomppage/addusercomppage.module').then(m => m.AddusercomppageModule) },
   { path: 'companyprofile', loadChildren: () => import('./page/Company/companyprofilepage/companyprofilepage.module').then(m => m.CompanyprofilepageModule) },
   { path: 'routeconfig', loadChildren: () => import('./page/Route/routeconfigpage/routeconfigpage.module').then(m => m.RouteconfigpageModule) },
+  { path: 'user', loadChildren: () => import('./page/User/searchuserpage/searchuserpage.module').then(m => m.SearchuserpageModule) },
+  { path: 'usercomdata', loadChildren: () => import('./page/User/usercomdatapage/usercomdatapage.module').then(m => m.UsercomdatapageModule) },
 ];
 
 @NgModule({

@@ -13,6 +13,37 @@
       </mat-toolbar>
 
       <div class="container">
+        <div *ngIf="true" (click)="openPage('maindashboard')"  class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item"> Dashboard </span>
+        </div>
+        <div *ngIf="true" (click)="openPage('company')"  class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item">company </span>
+        </div>
+        <div *ngIf="true" (click)="openPage('driver')"  class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item">driver </span>
+        </div>
+        <div *ngIf="true" (click)="openPage('vehicle')" class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item">vehicle </span>
+        </div>
+        <div *ngIf="true" (click)="openPage('user')" class="clickable-div">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
+            <span class="menu-item">User </span>
+        </div>
+
+        <hr style="border: none; border-top: 1px dashed white;margin:0;"/>
+
+        <div class="clickable-div" (click)="openPage('login')">
+            <mat-icon style="margin-right: 20px; color: #b3e5fc;">input</mat-icon>
+            <span class="menu-item"> LOGOUT </span>
+        </div>
+
+
+
+
         <div *ngIf="false" (click)="openPage('login')"  class="clickable-div" >
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">login </span>
@@ -25,34 +56,17 @@
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> driverdashboard </span>
         </div>
-        <div *ngIf="true" (click)="openPage('maindashboard')"  class="clickable-div">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item"> Dashboard </span>
-        </div>
         <div *ngIf="false" (click)="openPage('wakeupdashboard')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> WakeUp dashboard </span>
-        </div>
-        <div *ngIf="true" (click)="openPage('driver')"  class="clickable-div">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item">driver </span>
         </div>
         <div *ngIf="false" (click)="openPage('driverdata')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item">driverdata </span>
         </div>
-
-        <div *ngIf="true" (click)="openPage('vehicle')" class="clickable-div">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item">vehicle </span>
-        </div>
         <div *ngIf="false" (click)="openPage('vehicledata')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> vehicledata </span>
-        </div>
-        <div *ngIf="true" (click)="openPage('company')"  class="clickable-div">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item">company </span>
         </div>
         <div *ngIf="false" (click)="openPage('companydata')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
@@ -66,10 +80,6 @@
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> routedata </span>
         </div>
-        <!-- <div *ngIf="true" (click)="openPage('driverregister')"  class="clickable-div">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
-            <span class="menu-item"> driverregister </span>
-       </div> -->
 
        <!-- LINE OA / drivergbus.gpsasiagps.com -->
         <div *ngIf="false" (click)="openPage('drivercheckin')"  class="clickable-div">
@@ -84,8 +94,6 @@
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> driverworkreport </span>
         </div>
-
-
         <div *ngIf="false" (click)="openPage('confirmjob')"  class="clickable-div">
             <mat-icon style="margin-right: 20px; color: #b3e5fc;">menu</mat-icon>
             <span class="menu-item"> daily job </span>
@@ -119,16 +127,11 @@
             <span class="menu-item"> plandata </span>
         </div>
 
-        <hr style="border: none; border-top: 1px dashed white;margin:0;"/>
-
-        <div class="clickable-div" (click)="openPage('login')">
-            <mat-icon style="margin-right: 20px; color: #b3e5fc;">input</mat-icon>
-            <span class="menu-item"> LOGOUT </span>
-        </div>
+        
     </div>
     </mat-sidenav>
 
-    <mat-sidenav-content  >
+    <mat-sidenav-content  style="overflow: hidden;" >
       <mat-toolbar class="navbar" style="background-color:#1976d2;" *ngIf="showmenu">
         <div class="d-flex flex-wrap align-items-center">
           <mat-icon class="navmenu" (click)="menuopen=true" style="color: #b3e5fc;">menu</mat-icon>

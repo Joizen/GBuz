@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { DialogpageComponent,DialogConfig} from '../../../material/dialogpage/dialogpage.component';
-import { Vehicledata,Routedata,Routeplandata,Calendarslot, Calendarplan} from '../../../models/datamodule.module';
+import { VehicledataModel,RouteModel,RouteplanModel,Calendarslot, CalendarplanModel} from '../../../models/datamodule.module';
 
 @Component({
   selector: 'app-selectvehicleplanpage',
@@ -23,18 +23,18 @@ export class SelectvehicleplanpageComponent implements OnInit {
   ) {}
 
   @Input() modal: any;
-  @Input() workslot: Calendarplan | undefined;
-  @Input() route: Routedata | undefined;
+  @Input() workslot: CalendarplanModel | undefined;
+  @Input() route: RouteModel | undefined;
 
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   show = { Spinner: true, step: 0 };
   keyword = '';
-  public activevihicle: Vehicledata = new Vehicledata();
+  public activevihicle: VehicledataModel = new VehicledataModel();
   public selectedvid: number = 0;
   public listslot: Calendarslot[] = [];
 
-  public listvehicle: Vehicledata[] = [];
-  showvehicle: Vehicledata[]=[];
+  public listvehicle: VehicledataModel[] = [];
+  showvehicle: VehicledataModel[]=[];
 
   async ngOnInit() {
     this.listvehicle = await this.getallvehicle();
@@ -49,7 +49,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
     this.show.Spinner = false;
   }
 
-  filtervehicle(value:string):Vehicledata[]{
+  filtervehicle(value:string):VehicledataModel[]{
     const filterValue = this.keyword.toLowerCase();
     var result = this.listvehicle.filter(item => item.vname.toLowerCase().includes(filterValue));
     if(!result){result=[]}
@@ -60,15 +60,14 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
 
   async getallvehicle() {
-    var result: Vehicledata[] = [];
+    var result: VehicledataModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'vehicle', keyword: this.keyword };
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log("searchvehicle jsondata : ", jsondata);
     if (jsondata.code == '000') {
       jsondata.data.forEach((data: any) => {
-        var temp = new Vehicledata();
-        temp.setdata(data);
+        var temp = new VehicledataModel(data);
         result.push(temp);
       });
     } else {
@@ -90,7 +89,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
   async getlistvehicle() {
     this.keyword = this.keyword.trim();
-    var result: Vehicledata[] = [];
+    var result: VehicledataModel[] = [];
     if (this.keyword.length > 2) {
       var wsname = 'getdata';
       var params = { tbname: 'vehicle', keyword: this.keyword };
@@ -98,8 +97,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
       // console.log("searchvehicle jsondata : ", jsondata);
       if (jsondata.code == '000') {
         jsondata.data.forEach((data: any) => {
-          var temp = new Vehicledata();
-          temp.setdata(data);
+          var temp = new VehicledataModel(data);
           result.push(temp);
         });
       } else {
@@ -111,7 +109,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
     return result;
   }
 
-  showvehicledetail(vehicle: Vehicledata) {
+  showvehicledetail(vehicle: VehicledataModel) {
     this.activevihicle = vehicle;
     this.selectedvid = vehicle.vid;
   }
@@ -133,7 +131,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
     }
   }
 
-  setworkslot(listwork:Routeplandata[]){
+  setworkslot(listwork:RouteplanModel[]){
     var result : Calendarslot[] = [];
     try{
         var lastendtime = new Date(listwork[0].starttime);
@@ -215,7 +213,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
   async getWeekData() {
     try{
-      var result: Routeplandata[] = [];
+      var result: RouteplanModel[] = [];
       var wsname = 'getdata';
       var params = {
         tbname: 'routeweek',
@@ -228,8 +226,8 @@ export class SelectvehicleplanpageComponent implements OnInit {
         if(jsondata.data.length>0){
           // มีงานบ้างแล้ว
           jsondata.data.forEach((data: any) => {
-            var temp = new Routeplandata();
-            temp.setdata(data);
+            var temp = new RouteplanModel(data);
+            // temp.setdata(data);
             result.push(temp);
           });  
         }else{
@@ -250,7 +248,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
   }
   async getPlanData() {
     try{
-      var result: Routeplandata[] = [];
+      var result: RouteplanModel[] = [];
       var wsname = 'getdata';
       var params = {
         tbname: 'planday',
@@ -263,8 +261,8 @@ export class SelectvehicleplanpageComponent implements OnInit {
         if(jsondata.data.length>0){
           // มีงานบ้างแล้ว
           jsondata.data.forEach((data: any) => {
-            var temp = new Routeplandata();
-            temp.setdata(data);
+            var temp = new RouteplanModel(data);
+            // temp.setdata(data);
             result.push(temp);
           });  
         }else{
