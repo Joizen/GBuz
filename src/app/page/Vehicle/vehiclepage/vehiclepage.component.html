@@ -53,7 +53,7 @@
                   </option> 
               </select>
             </div>
-            <div #GPS style="display: flex; align-items: center; color: blue; gap: 8px; padding: 16px;">
+            <div #GPS style="display: flex; align-items: center; color: blue; gap: 8px; padding: 16px;"  *ngIf="vehicledata">
               <mat-icon style="width: auto; margin-right: 8px;">add_location</mat-icon> 
               <span style="width:70% ;"> GPS : {{editdata.serialbox}}</span>
               <mat-icon style="width: auto; margin-right: 16px; color: green;"
