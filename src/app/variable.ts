@@ -262,6 +262,11 @@ export class variable {
     }
     return result;
   }
+  public setphoneformat(phone: string): string {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const match = cleanPhone.match(/^(\d{3})(\d{3})(\d{4})$/);
+    return match ? `(${match[1]}) ${match[2]}-${match[3]}` : phone;
+  }
    // #endregion
 
   // #region =========== APIs & Webservice =========================

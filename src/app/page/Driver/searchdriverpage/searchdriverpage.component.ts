@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DriverdataModel } from '../../../models/datamodule.module'
 import { variable } from '../../../variable';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -12,9 +15,9 @@ import * as XLSX from 'xlsx';
 
 export class SearchdriverpageComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public va: variable) { }
+  constructor(private modalService:NgbModal,public va:variable,private dialog:MatDialog,private snacbar:MatSnackBar) { }
 
-  show = { Spinner: true, viewtype: 0 ,limit:10};
+  show = { Spinner: true, viewtype: 0 ,limit:10,search:false};
   keyword:string ="";
   public listdriver : DriverdataModel[] = [];
   public activedriver: DriverdataModel |undefined;
@@ -49,6 +52,7 @@ export class SearchdriverpageComponent implements OnInit {
   async searchdata(){
     this.show.Spinner = true;
     this.listdriver = await this.getDriver();
+    this.show.search = false;
     this.show.Spinner = false;
   }
 
@@ -97,6 +101,36 @@ export class SearchdriverpageComponent implements OnInit {
     XLSX.writeFile(workbook, 'DriverData.xlsx');
   }
 
+  //===================================================================
+  // #region  =========== Message Dialog ==============================
+
+  alertMessage(header: string, message: string) {
+    var dialogRef = this.dialog.open(DialogpageComponent,
+      { data: new DialogConfig(header, message, false) }
+    );
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log("Dialog result : ",result);
+    });
+  }
+
+  OkCancelMessage(header: string, message: string): Promise<any>{
+    try{
+      var dialogRef = this.dialog.open(DialogpageComponent,
+        { data: new DialogConfig(header, message, true) }
+      );
+      return dialogRef.afterClosed().toPromise();
+      }catch(ex){
+        console.log("OkCancelMessage error ",ex)
+        return Promise.reject(ex); // If there's an error, reject the promise
+      }
+  }
+
+  showSanckbar(message: string, duration = 5) {
+    this.snacbar.open(message, 'Close',
+      { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });
+  }
+  // #endregion  =========== Message Dialog ===========================
+  //===================================================================
 
 
 

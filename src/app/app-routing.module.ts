@@ -41,6 +41,7 @@ const routes: Routes = [
   { path: 'routeconfig', loadChildren: () => import('./page/Route/routeconfigpage/routeconfigpage.module').then(m => m.RouteconfigpageModule) },
   { path: 'user', loadChildren: () => import('./page/User/searchuserpage/searchuserpage.module').then(m => m.SearchuserpageModule) },
   { path: 'usercomdata', loadChildren: () => import('./page/User/usercomdatapage/usercomdatapage.module').then(m => m.UsercomdatapageModule) },
+  { path: 'comshift', loadChildren: () => import('./page/Company/shiftpage/shiftpage.module').then(m => m.ShiftpageModule) },
 ];
 
 @NgModule({

@@ -4,7 +4,8 @@ import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
-import { VehicledataModel, CompanyModel, VehicleRoutedata,CalendarplanModel, Calendardata, Calendarslot, RouteplanModel } from '../../../models/datamodule.module'
+import { VehicleModel, CompanyModel, VehicleRoutedata,CalendarplanModel, Calendardata, Calendarslot, RouteplanModel } from '../../../models/datamodule.module'
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -21,18 +22,22 @@ export class VehiclecomppageComponent implements OnInit {
     private snacbar: MatSnackBar
   ) { }
   @Input() activecompany: CompanyModel = new CompanyModel();
-  show = { Spinner: true, viewtype: 1 };
-  public maindata: VehicledataModel[] = [];
-  public activedata: VehicledataModel = new VehicledataModel();
+  show = { Spinner: true, viewtype: 1 ,filter:false,vid:0,day:7};
+  public maindata: VehicleModel[] = [];
+  public activedata: VehicleModel = new VehicleModel();
   public weekplan: CalendarplanModel[] = [];
   public activeslot : Calendarslot = new Calendarslot();
+  public listplan :RouteplanModel[]=[];
+  public listfillterplan :RouteplanModel[]=[];
   public activeplan :RouteplanModel|undefined;
+
   public copyslot :CalendarplanModel|undefined;
 
   async ngOnInit() {
     this.maindata = await this.getData();
     await this.SetVehicleRoute();
     await this.setweekplan();
+    await this.settablevplan();
   }
   async refreshpage(){
     console.log("Vehiclecomppage.refreshdata : ",this.show.viewtype)
@@ -40,14 +45,14 @@ export class VehiclecomppageComponent implements OnInit {
   }
 
   async getData() {
-    var result: VehicledataModel[] = [];
+    var result: VehicleModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'vehiclecomp', compid: this.activecompany.id };
     var jsondata = await this.va.getwsdata(wsname, params);
     //  console.log("getData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new VehicledataModel(data);
+        var temp = new VehicleModel(data);
         result.push(temp);
       });
     } else {
@@ -118,23 +123,20 @@ export class VehiclecomppageComponent implements OnInit {
 
   }
   
-   async ShowVehicleDetail(vehicle:VehicledataModel){
+   async ShowVehicleDetail(vehicle:VehicleModel){
     this.show.Spinner=true;
     this.activedata = vehicle;
 
     if(this.show.viewtype==1){
       await this.setweekplan();
-      var weekdata:RouteplanModel[] =  await this.getWeekData(vehicle.vid);
-      weekdata.forEach(plan => {
+      var weekplan =  await this.getWeekData(vehicle.vid);
+      weekplan.forEach(plan => {
         var id = this.va.DateToString("yyyyMMdd",plan.plandate)
         var wplan = this.weekplan.find(x=>x.iddate==id);
         if(wplan){
           const listslot = wplan.listdata.filter(item => 
             this.getslotinrange(item.sdate,item.edate, plan.wakeupwarntime, plan.endtime)
           );
-          // console.log('plan.starttime:', plan.starttime);
-          // console.log('plan.endtime:', plan.endtime);
-          // console.log('Items within the date range:', listslot);
           if(listslot){
             listslot.forEach(slot => {
               slot.plancode=plan.plancode;
@@ -154,10 +156,11 @@ export class VehiclecomppageComponent implements OnInit {
     // return !isNaN(date.getTime()) && date >= startDate && date <= endDate;
     return sdate<=endDate && edate > startDate;
   }
-  async getWeekData(vid:number) {
+
+  async getWeekData(vid:number|undefined) {
     var result: RouteplanModel[] = [];
     var wsname = 'getdata';
-    var params = { tbname: 'routeweek', vid: vid };
+    var params = { tbname: 'routeweek', vid: vid,compid: this.activecompany.id};
     var jsondata = await this.va.getwsdata(wsname, params);
     console.log("getWeekData jsondata : ", jsondata);
     if (jsondata.code == "000") {
@@ -320,8 +323,75 @@ export class VehiclecomppageComponent implements OnInit {
     return false;
   }
 
+  exportprint(){}
+  exportexcel(){
+    if(this.show.viewtype==1){
+      // Step 1: ลบฟิลด์ id, driverimg ออกจากข้อมูล
+      const filteredData = this.maindata.map(({driverid,driverimage,vid,listroute,provinceid,qrcode, ...rest }) => rest);
+      // Step 2: สร้าง worksheet จากข้อมูลที่ถูกกรองแล้ว
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      // Step 3: สร้าง workbook และเพิ่ม worksheet
+      const workbook: XLSX.WorkBook = {
+        Sheets: { 'Vehicle': worksheet },
+        SheetNames: ['Vehicle']
+      };
+      // Step 4: ส่งออก workbook เป็นไฟล์ Excel
+      XLSX.writeFile(workbook, 'VehicleInCompanyData.xlsx');
+      }
 
-// ===== Message Dialog ====================
+    if(this.show.viewtype==2){
+      // Step 1: ลบฟิลด์ ออกจากข้อมูล
+      const filteredData = this.listfillterplan.map(({ownerid,issend,ot,plandate,plankey,plantype,routecode,routeday,routeid,routetype,shiftid,transtatus,vid, ...rest }) => rest);
+      // Step 2: สร้าง worksheet จากข้อมูลที่ถูกกรองแล้ว
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      // Step 3: Set custom specific columns
+      // worksheet['!cols'] = [
+      //   { wch: 5 }, // Column width for "id"
+      //   { wch: 20 }, // Column width for "name"
+      //   { wch: 20 }, // Column width for "timestamp"
+      // ];
+
+      // Step 4: สร้าง workbook และเพิ่ม worksheet
+      const workbook: XLSX.WorkBook = {
+        Sheets: { 'MasterPlan': worksheet },
+        SheetNames: ['MasterPlan']
+      };
+      // Step 4: ส่งออก workbook เป็นไฟล์ Excel
+      XLSX.writeFile(workbook, 'MasterPlanData.xlsx');
+
+    }
+  }
+
+  //===================================================================
+  // #region  =========== Table Vehicle Plan ==========================
+
+  async settablevplan(){
+    this.listplan = await this.getWeekData(undefined);
+    this.listfillterplan = this.listplan;
+  }
+  searchlistplan(){
+    console.log("this.show ",this.show);
+    if(this.show.vid==0&&this.show.day<7){
+      this.listfillterplan = this.listplan.filter(x=>x.routeday==this.show.day);
+    }else if(this.show.vid>0&&this.show.day==7){
+      this.listfillterplan = this.listplan.filter(x=>x.vid==this.show.vid);
+    }else if(this.show.vid>0&&this.show.day<7){
+      this.listfillterplan = this.listplan.filter(x=>x.routeday==this.show.day&&x.vid==this.show.vid);      
+    }else if(this.show.vid==0&&this.show.day<7){
+      this.listfillterplan = this.listplan;      
+    }
+  }
+
+  Showweekplan(item : RouteplanModel, modal:any ){
+    this.activeplan =item;
+  }
+
+  // #endregion  =========== Table Vehicle Plan =======================
+  //===================================================================
+
+
+  //===================================================================
+  // #region  =========== Message Dialog ==============================
 
   alertMessage(header: string, message: string) {
     var dialogRef = this.dialog.open(DialogpageComponent,
@@ -332,22 +402,25 @@ export class VehiclecomppageComponent implements OnInit {
     });
   }
 
-   OkCancelMessage(header: string, message: string): Promise<any>{
+  OkCancelMessage(header: string, message: string): Promise<any>{
     try{
       var dialogRef = this.dialog.open(DialogpageComponent,
         { data: new DialogConfig(header, message, true) }
       );
       return dialogRef.afterClosed().toPromise();
-    }catch(ex){
-      console.log("OkCancelMessage error ",ex)
-      return Promise.reject(ex); // If there's an error, reject the promise
-    }
+      }catch(ex){
+        console.log("OkCancelMessage error ",ex)
+        return Promise.reject(ex); // If there's an error, reject the promise
+      }
   }
 
   showSanckbar(message: string, duration = 5) {
     this.snacbar.open(message, 'Close',
       { duration: (duration * 1000), horizontalPosition: 'center', verticalPosition: 'bottom' });
   }
+  // #endregion  =========== Message Dialog ===========================
+  //===================================================================
+
 
 
 }

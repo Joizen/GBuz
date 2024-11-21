@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import { DialogpageComponent,DialogConfig} from '../../../material/dialogpage/dialogpage.component';
 import { RouteModel,CompanyModel,DPinroutedata,VehicleRoutedata,
-  CalendarplanModel,RouteplanModel,Vehicleplan,Calendarslot,VehicledataModel,
+  CalendarplanModel,RouteplanModel,Vehicleplan,Calendarslot,VehicleModel,
   Calendardata,CalendardayplanModel,RoutedayplanModel} from '../../../models/datamodule.module';
 import * as L from 'leaflet';
 
@@ -39,7 +39,7 @@ export class RoutecomppageComponent implements OnInit {
   
   public activecalendar: CalendarplanModel | undefined;
   public copyslot: Vehicleplan | undefined;
-  public selectedvehicle: VehicledataModel = new VehicledataModel();
+  public selectedvehicle: VehicleModel = new VehicleModel();
   public activeslot: Calendarslot = new Calendarslot();
   public activeplan :RouteplanModel|undefined;
   public createroutemodal : any;
@@ -880,6 +880,9 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   // #endregion
+
+  exportprint(){}
+  exportexcel(){}
 
   // #region ===== Message Dialog ====================
 

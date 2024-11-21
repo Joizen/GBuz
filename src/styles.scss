@@ -78,4 +78,77 @@ body {
     object-fit: contain;
 }
 
+.table-container {
+  width: 100%;
+  // height: 100%;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  // overflow:hidden;
+}
+
+.table-header {
+  background-color: #00796b; /* Teal color */
+  height: auto;
+  color: white;
+  font-weight: bold;
+  padding: 10px 0;
+  text-align: center;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  flex: 0 0 auto; /* Keeps the header fixed */
+}
+
+.table-data {
+  flex: 1; /* Fills the remaining space */
+  overflow-y: scroll; /* Enables vertical scrolling */
+  width:100%;
+  height: 100%;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  background-color: white;
+}
+
+.table-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.table-row:hover {
+  background-color: #e0f7fa; /* Light teal hover effect */
+  cursor: pointer;
+}
+
+.table-row.selected {
+  background-color: lightgoldenrodyellow;
+  color: white;
+}
+
+.table-row > div {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.table-row .edit-icon {
+  color: #4caf50; /* Green */
+  cursor: pointer;
+}
+
+.table-row .delete-icon {
+  color: #f44336; /* Red */
+  cursor: pointer;
+}
+
+.col-1, .col-2, .col-3 {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @import "~leaflet/dist/leaflet.css"

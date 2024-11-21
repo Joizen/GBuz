@@ -8,21 +8,11 @@
         </div>
         <mat-spinner></mat-spinner>
     </div>
-
+    
+    <!-- tab header -->
     <div style="margin: 0,5px;">
-         <!-- tab header -->
         <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
-            <div class="col-1" *ngIf="show.viewtype==2" (click)="addnewroute(routeconfigmodal)"
-                    style="display: flex; align-items: center; justify-content: center;">
-                <mat-icon style="color: royalblue;" >add_box</mat-icon>
-            </div>
-
-            <div class="col text-center" style="display: flex; align-items: center; justify-content: center;">
-                <h1 *ngIf="show.viewtype==0"> ข้อมูลแผนการเดินรถรายวัน </h1> 
-                <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  </h1> 
-                <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ </h1> 
-            </div>
-            <div class="col-auto text-align end" >
+            <div class="col-auto text-align start" >
                 <div class="row" style="text-align: right; margin-right: 10px;">
                     <div class="col" style="display: flex; align-items: center;"
                         matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="showroutetab(0)">
@@ -37,6 +27,29 @@
                         <mat-icon style="width: 100%; " 
                         [style.color]="show.viewtype==2?'blue':'lightgray'"
                         >list</mat-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col text-center" style="display: flex; align-items: center; justify-content: center;">
+                <h1 *ngIf="show.viewtype==0"> ข้อมูลแผนการเดินรถรายวัน </h1> 
+                <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  </h1> 
+                <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ </h1> 
+            </div>
+
+            <div class="col-auto text-align end" style="display: flex; align-items: center; justify-content: center;gap: 20px; ">
+                <div class="row" style="text-align: right; margin-right: 10px; color: blue;">                       
+                    <div class="col" style="display: flex; align-items: center;"*ngIf="show.viewtype==2" (click)="addnewroute(routeconfigmodal)"
+                        matTooltip="เพิ่มแผนให้รถใหม่">
+                        <mat-icon style="width: 100%;">add_box</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;" *ngIf="false"
+                        matTooltip="พิมพ์ข้อมูลเส้นทาง/แผนงาน" (click)="exportprint()">
+                        <mat-icon style="width: 100%;">print</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"
+                        matTooltip="ดาวน์โหลดข้อมูลเส้นทาง/แผนงาน" (click)="exportexcel()">
+                        <mat-icon style="width: 100%; ">file_download</mat-icon>
                     </div>
                 </div>
             </div>        
@@ -308,18 +321,41 @@
         
         <div class="row" style="height: 60vh; width:100vw;">
             <!-- Left Column -->
-            <div class="col-2" style="height: 60vh; width:40hw; overflow-y: scroll; overflow-x: hidden;">
-                <mat-list role="list">
+             
+            <div class="col-6" style="height: 60vh; width:40hw; overflow: hidden;">
+                <div class="table-container">
+                    <div class="row table-header">
+                      <div class="col-3">routename</div>
+                      <div class="col-1">Wakeup warning</div>
+                      <div class="col-1">Wakeup</div>
+                      <div class="col-1">Start engine</div>
+                      <div class="col-1">On Route</div>
+                      <div class="col-1">Finisn</div>
+                    </div>
+                </div>
+                <div class="table-data"  >
+                    <div *ngFor="let plan of maindata"  class="row table-row"
+                        [class.selected]="plan.id == activedata.id" 
+                        (click)="Showroute(plan)" (dblclick)="Showrouteconfig(plan,routeconfigmodal)">
+                        <div class="col-3">{{ plan.routename}}</div>
+                        <div class="col-1">{{ plan.wakeupwarntime|date:"HH:mm"}}</div>
+                        <div class="col-1">{{ plan.wakeuptime|date:"HH:mm"}}</div>
+                        <div class="col-1">{{ plan.startwarntime|date:"HH:mm"}}</div>
+                        <div class="col-1">{{ plan.starttime|date:"HH:mm"}}</div>
+                    </div>
+                </div>
+        
+                <!-- <mat-list role="list">
                     <mat-list-item *ngFor="let item of maindata" role="listitem"
                     [style.background-color]="(activedata.id==item.id)?'#FFE5B4':'#FFFFFF'"
                     (dblclick)="Showrouteconfig(item,routeconfigmodal)" (click)="Showroute(item)">
                       {{ item.routename }}
                     </mat-list-item>
-                </mat-list>
+                </mat-list> -->
             </div>
 
             <!-- Righ Column -->
-            <div  class="col-10" id="map-container" style="height: 60vh; width:60hw; background-color: lightyellow;">
+            <div  class="col-6" id="map-container" style="height: 60vh; width:50vw; background-color: lightyellow;">
 
                 <div class="data-box-container" >
                         <div class="data-box m-2" *ngFor="let box of activedata.dpinroute">
@@ -335,7 +371,7 @@
 
         <!-- Vehicle in Route -->
         <div class="row"  style="height: 2px; width: 100%; background-color: lightgray;"></div>
-        <div class="row" style="max-height: 20vh; width:100vw;">
+        <div class="row" style="max-height: 20vh; width:100vw;" *ngIf="false">
             <!-- header -->
             <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center;  width:100%;  margin: 0; background-color: lightyellow;">
                 <div class="col" style="display: flex; align-items: center; justify-content: start;">

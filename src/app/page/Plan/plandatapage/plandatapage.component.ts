@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { VehicledataModel,CompanyModel,RouteModel,RouteplanModel, Calendarslot, Comshiftdata} from '../../../models/datamodule.module'
+import { VehicleModel,CompanyModel,RouteModel,RouteplanModel, Calendarslot, ComshiftModel} from '../../../models/datamodule.module'
 import { variable } from '../../../variable';
 
 @Component({
@@ -14,7 +14,7 @@ import { variable } from '../../../variable';
 export class PlandatapageComponent implements OnInit {
   constructor(private modalService: NgbModal,public va: variable,private snacbar: MatSnackBar,private dialog:MatDialog){ }
   @Input() modal: any;
-  @Input() vehicle: VehicledataModel = new VehicledataModel();
+  @Input() vehicle: VehicleModel = new VehicleModel();
   @Input() company: CompanyModel = new CompanyModel();
   @Input() planslot: Calendarslot = new Calendarslot();
   @Input() editplan: RouteplanModel |undefined;
@@ -24,10 +24,10 @@ export class PlandatapageComponent implements OnInit {
   show = {Spinner: true};
   routelist: RouteModel[] = [];
   selectrout : RouteModel = new RouteModel();
-  selectshift : Comshiftdata = new Comshiftdata();
+  selectshift : ComshiftModel = new ComshiftModel();
   selecttime={start:"00:00", end : "00:00"} ; 
   activeplan : RouteplanModel =new RouteplanModel();
-  public listshift : Comshiftdata []= [];
+  public listshift : ComshiftModel []= [];
   
   onperiod=false;
 
@@ -153,7 +153,7 @@ export class PlandatapageComponent implements OnInit {
   }
 
   async getshiftData() {
-    var result: Comshiftdata[] = [];
+    var result: ComshiftModel[] = [];
     try{
       var wsname = 'getdata';
       var params = { tbname: 'dllshift', compid: this.company.id };
@@ -162,8 +162,7 @@ export class PlandatapageComponent implements OnInit {
 
       if (jsondata.code == "000") {      
         jsondata.data.forEach((data: any) => {
-          var temp = new Comshiftdata();
-          temp.setdata(data);
+          var temp = new ComshiftModel(data);
           result.push(temp);
         });
         this.showSanckbar("getshiftData success",2);

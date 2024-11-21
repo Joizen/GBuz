@@ -81,7 +81,7 @@
               <div class="icon-inrow">
                 <mat-icon style="width: auto; margin-right: 8px;">phone</mat-icon>
                 <input matInput [(ngModel)]="show.phone" type="tel" value="show.phone"  placeholder="หมายเลขโทรศัพท์" 
-                      (ngModelChange)="validatePhoneNumber($event)" style="width: 90%;"/>
+                      (ngModelChange)="validatePhoneNumber($event)" style="width: 90%;" maxlength="14"  />
               </div>
               <div class="icon-inrow" *ngIf="activeuser">
                 <mat-icon style="width: auto; margin-right: 8px;">assignment_ind</mat-icon>
@@ -103,7 +103,7 @@
               </div>
               <div class="icon-inrow">
                 <mat-icon style="width: auto; margin-right: 8px;">short_text</mat-icon>
-                <textarea  matInput cdkTextareaAutosize [(ngModel)]="editdata.remark" placeholder="หมายเหตุ"  
+                <textarea  matInput cdkTextareaAutosize [(ngModel)]="editdata.remark" placeholder="หมายเหตุ" maxlength="250"  
                       (ngModelChange)="userdatachange('remark')" style="width: 90%; resize: none;"></textarea>
               </div>    
               <div class="icon-inrow"  *ngIf="activeuser">

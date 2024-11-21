@@ -7,60 +7,78 @@
         </div>
         <mat-spinner></mat-spinner>
     </div>
-
+    
+    <!-- tab header -->
     <div style="margin: 0,5px;">
-        <!-- tab header -->
-       <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
-           <div class="col text-center" style="justify-content: center;">
-               <h1 *ngIf="show.viewtype==0"> ข้อมูลแผนการเดินรถรายวัน {{activedata.vname}} {{activedata.vlicent}}</h1> 
-               <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  {{activedata.vname}} {{activedata.vlicent}}</h1> 
-               <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ {{activedata.vname}} {{activedata.vlicent}}</h1> 
-           </div>
-           <div class="col-auto text-align end" >
-               <div class="row" style="text-align: right; margin-right: 10px;">
-                   <div class="col" style="display: flex; align-items: center;"
-                       matTooltip="แสดงข้อมูลแผนการเดินรถล่วงหน้า" (click)="show.viewtype=0">
-                       <mat-icon style="width: 100%;" [style.color]="show.viewtype==0?'blue':'lightgray'">dashboard</mat-icon>
-                   </div>
-                   <div class="col" style="display: flex; align-items: center;"
-                       matTooltip="แสดงข้อมูลแผนการเดินรถรายสัปดาห์" (click)="show.viewtype=1">
-                       <mat-icon style="width: 100%; " [style.color]="show.viewtype==1?'blue':'lightgray'">dns</mat-icon>
-                   </div>
-                   <div class="col" style="display: flex; align-items: center;"
-                       matTooltip="แสดงรายการแผนการเดินรถ" (click)="show.viewtype=2">
-                       <mat-icon style="width: 100%; " 
-                       [style.color]="show.viewtype==2?'blue':'lightgray'"
-                       >list</mat-icon>
-                   </div>
-               </div>
-           </div>        
-       </div>
-   </div>
-
-
-    <!-- <div class="container" style=" display: flex; justify-content: space-between;  align-items: center; width: 100vw; margin:0px; padding: 0px;">
-        <div class="row" style="width:100vw;">
-            <div class="col-9" style=" flex: 9; " >
-                Header Name
+        <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
+            <div class="col-auto text-align start" >
+                <div class="row" style="text-align: right; margin-right: 10px;">
+                    <div class="col" style="display: flex; align-items: center;" *ngIf="false"
+                        matTooltip="ข้อมูลรถและแผนการทำงาน"  (click)="show.viewtype=0" >
+                        <mat-icon style="width: 100%;" [style.color]="show.viewtype==0?'blue':'lightgray'">dashboard</mat-icon>
+                    </div>       
+                    <div class="col" style="display: flex; align-items: center;"
+                        matTooltip="ข้อมูลรถและแผนการทำงานหลัก"  (click)="show.viewtype=1" >
+                        <mat-icon style="width: 100%;" [style.color]="show.viewtype==1?'blue':'lightgray'">dns</mat-icon>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"
+                        matTooltip="ตารางข้อมูลรถและแผนการทำงาน" (click)="show.viewtype=2">
+                        <mat-icon style="width: 100%;" [style.color]="show.viewtype==2?'blue':'lightgray'" >list</mat-icon>
+                    </div>
+                </div>
             </div>
-            <div class="col-3"  style=" flex: 3;  display: flex;  gap: 10px; justify-content: flex-end; ">
-                    <div [style.background-color]="show.viewtype==0?'#FFE5B4':'#FFFFFF'" mat-raised-button
-                        matTooltip="แสดงข้อมูลแผนการเดินรถล่วงหน้า" (click)="show.viewtype=0" style=" cursor: pointer;">
-                        <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
-                    </div>
-                    <div [style.background-color]="show.viewtype==1?'#FFE5B4':'#FFFFFF'" mat-raised-button
-                        matTooltip="แสดงข้อมูลแผนการเดินรถรายสัปดาห์" (click)="show.viewtype=1" style=" cursor: pointer;">
-                        <mat-icon style="width: 100%; color: blue;">dns</mat-icon>
-                    </div>
-                    <div [style.background-color]="show.viewtype==2?'#FFE5B4':'#FFFFFF'" mat-raised-button
-                        matTooltip="แสดงรายการแผนการเดินรถ" (click)="show.viewtype=2" style=" cursor: pointer;">
-                        <mat-icon style="width: 100%; color: blue;">list</mat-icon>
-                    </div>
+            <div class="col text-center" style="display: flex; align-items: center; justify-content: center;">
+                <h1 *ngIf="show.viewtype==0"> Vehicle Plan </h1> 
+                <h1 *ngIf="show.viewtype==1"> Vehicle Masterplan</h1> 
+                <h1 *ngIf="show.viewtype==2"> List of Vehicle Masterplan </h1> 
             </div>
+            <div class="col-auto text-align end" style="display: flex; align-items: center; justify-content: center;gap: 20px; ">
+            <div class="filter-container" style="color: blue;" *ngIf="show.filter">
+                    <span class="filter-label">วัน:</span>
+                    <select matNativeControl [(ngModel)]="show.day" class="filter-select" (change)="searchlistplan()" >
+                      <option [ngValue]="7">ไม่ระบุ</option>
+                      <option *ngFor="let item of weekplan" [ngValue]="item.id">
+                        {{ item.textdate }}
+                      </option>
+                    </select>                  
+                    <span class="filter-label" style="margin-left:20px;">ทะเบียน:</span>
+                    <select matNativeControl [(ngModel)]="show.vid" class="filter-select" (change)="searchlistplan()">
+                      <option value="0">ไม่ระบุ</option>
+                      <option *ngFor="let item of maindata" [ngValue]="item.vid">
+                        {{ item.vlicent }}
+                      </option>
+                    </select>
+            </div>
+            <div class="row" style="text-align: right; margin-right: 10px; color: blue;">                       
+                        <div class="col" style="display: flex; align-items: center;"
+                            matTooltip="ตัวกรองข้อมูล" *ngIf="show.viewtype==2" (click)="show.filter=!show.filter"  >
+                            <mat-icon style="width: 100%;">filter_list</mat-icon>
+                        </div>
+                        <div class="col" style="display: flex; align-items: center;"
+                            matTooltip="เพิ่มแผนให้รถใหม่">
+                            <mat-icon style="width: 100%;">add_box</mat-icon>
+                        </div>
+                        <div class="col" style="display: flex; align-items: center;" *ngIf="false"
+                            matTooltip="พิมพ์ข้อมูลรถที่ใช้งานลูกค้า" (click)="exportprint()">
+                            <mat-icon style="width: 100%; ">print</mat-icon>
+                        </div>
+                        <div class="col" style="display: flex; align-items: center;"
+                            matTooltip="ดาวน์โหลดข้อมูลรถที่ใช้งานลูกค้า" (click)="exportexcel()">
+                            <mat-icon style="width: 100%; ">file_download</mat-icon>
+                        </div>
+            </div>
+            </div>        
         </div>
-    </div> -->
+    </div>
+    
+    <!-- tab Body -->
+    <div class="row" style="width:100vw;"  *ngIf="show.viewtype==0">
+        <div class="col-12" style="height: 70vh; width:60hw;" >
+            <div>ข้อมูลแผนการเดินรถล่วงหน้า</div> 
+        </div>
+    </div>
 
-    <div class="row" style="width:100vw;">
+    <div class="row" style="width:100vw;"  *ngIf="show.viewtype==1">
         <!-- Left Column -->
         <div class="col-3" style="height: 70vh; width:40hw; overflow: scroll;">
             <div *ngFor="let item of maindata">
@@ -74,28 +92,24 @@
 
                         <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ; ">
                             <!-- setitem 2-->
-                            {{item.vname}}
+                            {{item.vlicent}}
                         </div>
 
                         <div class="col" style="display: flex; justify-content: start; align-items: center; height: 100%; padding:5px ;">
                             <!-- setitem 3-->
-                            {{item.vlicent}}
+                            {{item.fullname}}
                         </div>
                     </div>
                 </div>
             </div>
+ 
         </div>
-
         <!-- Righ Column -->
-        <div class="col-9" style="height: 70vh; width:60hw;" *ngIf="show.viewtype==0">
-            <div>ข้อมูลแผนการเดินรถล่วงหน้า {{activedata.vname}} {{activedata.vlicent}}</div> 
-        </div>
-
         <div class="col-9" style="height: 70vh; width:60hw;" *ngIf="show.viewtype==1">
             <div class="row" style="display: flex;  justify-content: space-between; width: 100%; height:4vh ; 
                 background-color: lightblue; margin: 5px 30px;">
                 <div class="col-10" style="display: flex;  justify-content: start;align-items: center; height: 100%;">
-                    <span> ข้อมูลแผนการเดินรถรายสัปดาห์ {{activedata.vname}} {{activedata.vlicent}} </span>   
+                    <span> ข้อมูลแผนการเดินรถประจำของ {{activedata.vlicent}}-{{activedata.fullname}}  </span>   
                 </div>
                 <div class="col-2" style="display: flex;  justify-content: center ;align-items: center; height: 100%; gap:10px" *ngIf="copyslot">
                     <mat-icon style="width: auto; color: red; cursor: pointer;" (click)="clearcopyweekplan()" >
@@ -143,63 +157,34 @@
             </div>
             
         </div>
-
-        <div class="col-9" style="height: 70vh; width:60hw;" *ngIf="show.viewtype==2" >
-           
-            <div>รายการแผนการเดินรถ {{activedata.vname}} {{activedata.vlicent}}</div> 
-
-            <div *ngFor="let route of activedata.listroute">
-                <div class="container"
-                    style="display: flex; justify-content: space-between; align-items: start; width:100hw; margin: 5px;">
-                    <div class="col ms-2" style="display:flexbox; text-align: start;">
-                        {{route.routecode}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.routename}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.endtime}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.drivername}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.routename}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.routecode}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.starttime}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.endtime}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.wakeuptime}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.wakeupwarn}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.otwtime}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.shiftname}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.otname}}
-                    </div>
-                    <div class="col" style="display:flexbox; text-align: start;">
-                        {{route.issendname}}
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
     </div>
 
+    <div  style="width:100%;"  *ngIf="show.viewtype==2">
+        <div class="table-container">
+            <div class="row table-header">
+              <div class="col-3">Vehicle</div>
+              <div class="col-3">Route</div>
+              <div class="col-1">Day</div>
+              <div class="col-1">Wakeup warning</div>
+              <div class="col-1">Wakeup</div>
+              <div class="col-1">Start engine</div>
+              <div class="col-1">On Route</div>
+            </div>
+        </div>
+        <div class="table-container" style="width:100%; height: 70vh; overflow :scroll" >
+            <div *ngFor="let plan of listfillterplan"  class="row table-row"
+                [class.selected]="plan.plancode == activeplan?.plancode" 
+                (click)="Showweekplan(plan,plandetailmodal)" >
+                <div class="col-3">{{ plan.vname }}</div>
+                <div class="col-3">{{ plan.routename}} {{plan.shiftname}} {{plan.issend==0?'(รับ)':'(ส่ง'+(plan.ot==0?'': plan.otname)+')'}} </div>
+                <div class="col-1">{{ plan.plandate|date:"EEEE" : 'th-TH'}}</div>
+                <div class="col-1">{{ plan.wakeupwarntime|date:"HH:mm"}}</div>
+                <div class="col-1">{{ plan.wakeuptime|date:"HH:mm"}}</div>
+                <div class="col-1">{{ plan.startwarntime|date:"HH:mm"}}</div>
+                <div class="col-1">{{ plan.starttime|date:"HH:mm"}}</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

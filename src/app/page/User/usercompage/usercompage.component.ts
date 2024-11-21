@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-usercompage',
@@ -17,7 +18,7 @@ export class UsercompageComponent implements OnInit {
   @Input() activecompany: CompanyModel = new CompanyModel();
   public maindata:  UserModel[] = [];
   public activeuser:  UserModel = new UserModel();
-  show = { Spinner: true };
+  show = { Spinner: true,viewtype:0 };
   async ngOnInit()  {
     console.log("ngOnInit : this.va.icon.user ",this.va.icon.user);
     
@@ -60,7 +61,21 @@ export class UsercompageComponent implements OnInit {
   async refreshuserlist(){
     this.maindata = await this.getData();
   }
+  exportprint(){}
 
+  exportexcel(){
+    // Step 1: ลบฟิลด์ id, driverimg ออกจากข้อมูล
+    const filteredData = this.maindata.map(({id,userimage ,linename,isselect, ...rest }) => rest);
+    // Step 2: สร้าง worksheet จากข้อมูลที่ถูกกรองแล้ว
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    // Step 3: สร้าง workbook และเพิ่ม worksheet
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'User': worksheet },
+      SheetNames: ['User']
+    };
+    // Step 4: ส่งออก workbook เป็นไฟล์ Excel
+    XLSX.writeFile(workbook, 'UserInCompanyData.xlsx');
+  }
 
   
 }

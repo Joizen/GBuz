@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { QRCodeModule } from 'angularx-qrcode';
-import { DriverdataModel, Selecteddata, VehicledataModel } from 'src/app/models/datamodule.module';
+import { DriverdataModel, Selecteddata, VehicleModel } from 'src/app/models/datamodule.module';
 import { variable } from '../../../variable';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
@@ -17,8 +17,8 @@ export class VehiclepageComponent {
   constructor(public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar) { }
 
   @Input() modal: any;
-  @Input() editdata: VehicledataModel =new VehicledataModel() ;
-  @Input() vehicledata: VehicledataModel |undefined;
+  @Input() editdata: VehicleModel =new VehicleModel() ;
+  @Input() vehicledata: VehicleModel |undefined;
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
 
   // public Qrdata:string = JSON.stringify({empname:"thavon",surname:"seesai",phone:"093368131"});
@@ -37,7 +37,7 @@ export class VehiclepageComponent {
     try{
       // console.log("this.vehicledata : ",this.vehicledata);
       if(this.vehicledata) {
-        this.editdata = new VehicledataModel(this.vehicledata) ;
+        this.editdata = new VehicleModel(this.vehicledata) ;
         this.listdriver = await this.getlistdriver();
         this.show.editdriver=this.editdata.driverid==0;
       }

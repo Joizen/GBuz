@@ -3,8 +3,8 @@
     <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" >
         <div class="col text-align start" style="margin-right: 20px;">
             <img class="company-logo me-4" [src]="company.complogo==''? va.icon.nologo : company.complogo">
-            <span style="font-size: large;">สร้างข้อมูลเส้นทางการเดินรถ </span>
-            <span class="m-2" style="font-size: large;"> ({{activedata.routename}}) </span>
+            <span style="font-size: large;">{{activedata.id==0?'สร้างข้อมูลเส้นทางการเดินรถ':'แก้ไขข้อมูลเส้นทางการเดินรถ'}}  </span>
+            <span class="m-2" style="font-size: large;" *ngIf="activedata.id!=0"> ({{activedata.routename}}) </span>
         </div>
         <div class="col-auto icon-inrow text-align end"   style="margin-right: 10px;" >
             <div class="icon-inrow" (click)="deleteroute()" *ngIf="activedata.id!=0" style="cursor:pointer;">

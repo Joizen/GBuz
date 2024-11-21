@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-searchcompanypage',
@@ -24,7 +25,7 @@ export class SearchcompanypageComponent implements OnInit {
     private snacbar: MatSnackBar
   ) { }
 
-  show = { Spinner: true, viewtype: 0 ,addcompany:true};
+  show = { Spinner: true, viewtype: 0 ,addcompany:true,search:false};
   public companydata: CompanyModel[] = [];
   public displayedColumns: string[] = [];
   public displayedColumnsData: string[] = [];
@@ -94,6 +95,28 @@ export class SearchcompanypageComponent implements OnInit {
     return result;
 
   }
+
+  exportprint(){
+
+  }
+
+  exportexcel(){
+    // Step 1: ลบฟิลด์ id, driverimg ออกจากข้อมูล
+    const filteredData = this.companydata.map(({id,complogo, ...rest }) => rest);
+
+    // Step 2: สร้าง worksheet จากข้อมูลที่ถูกกรองแล้ว
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // Step 3: สร้าง workbook และเพิ่ม worksheet
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Company': worksheet },
+      SheetNames: ['Company']
+    };
+
+    // Step 4: ส่งออก workbook เป็นไฟล์ Excel
+    XLSX.writeFile(workbook, 'CompanyData.xlsx');
+  }
+
 
   addcompany(modal: any){
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes

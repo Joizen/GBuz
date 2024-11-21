@@ -125,6 +125,7 @@ export class UserdatapageComponent implements OnInit {
         const base64 = await this.resizeImage(file); 
         if(await this.saveimage(base64)){
           this.base64Image = base64;
+          this.editdata.userimage = base64;
           if(this.activeuser){this.activeuser.userimage =this.base64Image;}          
         }
       } catch (error) {
@@ -335,7 +336,7 @@ export class UserdatapageComponent implements OnInit {
   async saveimage(image: string){
     try{
       var wsname = "saveimage";
-      var param = {tbname:"userimage",driverid:this.activeuser?.id,image:image};
+      var param = {tbname:"userimage",empid:this.activeuser?.id,image:image};
       console.log("saveimage ",param)
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
@@ -504,7 +505,10 @@ export class UserdatapageComponent implements OnInit {
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,data:this.editdata})
       if(jsondata.code=="000"){       
         if(status<0){this.activeuser=undefined;}
-        else{ this.activeuser=this.editdata;}
+        else{ 
+          this.editdata.empname=(this.editdata.prefix+' '+this.editdata.firstname+' '+this.editdata.surename) ;
+          this.activeuser=this.editdata;
+        }
         return true;
       }
     }catch(ex){

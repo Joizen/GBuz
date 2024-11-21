@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { DialogpageComponent,DialogConfig} from '../../../material/dialogpage/dialogpage.component';
-import { VehicledataModel,RouteModel,RouteplanModel,Calendarslot, CalendarplanModel} from '../../../models/datamodule.module';
+import { VehicleModel,RouteModel,RouteplanModel,Calendarslot, CalendarplanModel} from '../../../models/datamodule.module';
 
 @Component({
   selector: 'app-selectvehicleplanpage',
@@ -29,12 +29,12 @@ export class SelectvehicleplanpageComponent implements OnInit {
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   show = { Spinner: true, step: 0 };
   keyword = '';
-  public activevihicle: VehicledataModel = new VehicledataModel();
+  public activevihicle: VehicleModel = new VehicleModel();
   public selectedvid: number = 0;
   public listslot: Calendarslot[] = [];
 
-  public listvehicle: VehicledataModel[] = [];
-  showvehicle: VehicledataModel[]=[];
+  public listvehicle: VehicleModel[] = [];
+  showvehicle: VehicleModel[]=[];
 
   async ngOnInit() {
     this.listvehicle = await this.getallvehicle();
@@ -49,7 +49,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
     this.show.Spinner = false;
   }
 
-  filtervehicle(value:string):VehicledataModel[]{
+  filtervehicle(value:string):VehicleModel[]{
     const filterValue = this.keyword.toLowerCase();
     var result = this.listvehicle.filter(item => item.vname.toLowerCase().includes(filterValue));
     if(!result){result=[]}
@@ -60,14 +60,14 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
 
   async getallvehicle() {
-    var result: VehicledataModel[] = [];
+    var result: VehicleModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'vehicle', keyword: this.keyword };
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log("searchvehicle jsondata : ", jsondata);
     if (jsondata.code == '000') {
       jsondata.data.forEach((data: any) => {
-        var temp = new VehicledataModel(data);
+        var temp = new VehicleModel(data);
         result.push(temp);
       });
     } else {
@@ -89,7 +89,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
   async getlistvehicle() {
     this.keyword = this.keyword.trim();
-    var result: VehicledataModel[] = [];
+    var result: VehicleModel[] = [];
     if (this.keyword.length > 2) {
       var wsname = 'getdata';
       var params = { tbname: 'vehicle', keyword: this.keyword };
@@ -97,7 +97,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
       // console.log("searchvehicle jsondata : ", jsondata);
       if (jsondata.code == '000') {
         jsondata.data.forEach((data: any) => {
-          var temp = new VehicledataModel(data);
+          var temp = new VehicleModel(data);
           result.push(temp);
         });
       } else {
@@ -109,7 +109,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
     return result;
   }
 
-  showvehicledetail(vehicle: VehicledataModel) {
+  showvehicledetail(vehicle: VehicleModel) {
     this.activevihicle = vehicle;
     this.selectedvid = vehicle.vid;
   }

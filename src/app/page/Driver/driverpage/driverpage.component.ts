@@ -179,7 +179,10 @@ export class DriverpageComponent {
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,data:this.editdata})
       if(jsondata.code=="000"){       
         if(status<0){this.driverdata=undefined;}
-        else{ this.driverdata=this.editdata;}
+        else{ 
+          this.editdata.fullname=(this.editdata.prefix+' '+this.editdata.empname+' '+this.editdata.surname) ;
+          this.driverdata=this.editdata;
+        }
         return true;
       }
     }catch(ex){
@@ -202,6 +205,7 @@ export class DriverpageComponent {
         const base64 = await this.resizeImage(file); 
         if(await this.saveimage(base64)){
           this.base64Image = base64;
+          this.editdata.driverimg = base64;
           if(this.driverdata){this.driverdata.driverimg =this.base64Image;}          
         }
       } catch (error) {

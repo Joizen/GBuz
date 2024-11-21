@@ -40,7 +40,7 @@
           <div class="row m-2">
             <mat-icon style="width: auto;">phone</mat-icon>
             <input matInput [(ngModel)]="show.phone" type="tel" value="show.phone"
-            (ngModelChange)="validatePhoneNumber($event)" placeholder="หมายเลขโทรศัพท์" />
+            (ngModelChange)="validatePhoneNumber($event)" placeholder="หมายเลขโทรศัพท์" maxlength="14"   />
           </div>
           <div class="row m-2">
             <mat-icon style="width: auto;">assignment_ind</mat-icon>
@@ -48,7 +48,8 @@
           </div>
           <div class="row m-2">
             <mat-icon style="width: auto;">short_text</mat-icon>
-            <input matInput [(ngModel)]="editdata.remark" placeholder="หมายเหตุ"  (ngModelChange)="driverdatachange('remark')"/>
+            <textarea  matInput cdkTextareaAutosize [(ngModel)]="editdata.remark" placeholder="หมายเหตุ" maxlength="250"  
+            (ngModelChange)="driverdatachange('remark')" style="width: 90%; resize: none;"></textarea>
           </div>
 
           <div class="row m-2">

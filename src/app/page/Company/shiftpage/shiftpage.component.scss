@@ -1,0 +1,77 @@
+.shift-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns items to the top-left */
+    padding: 20px; /* Adds spacing */
+    background-color: #f9f9f9; /* Light background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    gap: 15px; /* Spacing between rows */
+  
+    .input-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px; /* Spacing between input and label */
+      width: 100%; /* Full width alignment */
+    }
+  
+    input[type='text'],
+    input[type='time'] {
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc; /* Light border */
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s;
+  
+      &:focus {
+        border-color: #00796b; /* Teal color on focus */
+        box-shadow: 0 0 5px rgba(0, 121, 107, 0.5); /* Glow effect */
+      }
+    }
+  
+    label {
+      font-size: 14px;
+      color: #555; /* Neutral text color */
+    }
+  
+    .button-row {
+      display: flex;
+      justify-content: flex-start;
+      gap: 15px; /* Space between buttons */
+      margin-top: 20px;
+  
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+  
+        &.save-btn {
+          background-color: #00796b;
+          color: white;
+  
+          &:hover {
+            background-color: #005f56;
+            transform: scale(1.05); /* Slight zoom on hover */
+          }
+        }
+  
+        &.delete-btn {
+          background-color: #f44336;
+          color: white;
+  
+          &:hover {
+            background-color: #c62828;
+            transform: scale(1.05); /* Slight zoom on hover */
+          }
+        }
+      }
+    }
+  }
+  
+  

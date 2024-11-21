@@ -540,6 +540,7 @@ export class RouteplanModel {
   ot : number = 0;
   otname :string = "ปกติ";
   issend : number = 0;
+  issendname :string = "รับพนักงาน";
   transtatus: number = 1;
   constructor();
   constructor(jsondata: any);
@@ -563,6 +564,12 @@ export class RouteplanModel {
       this.wakeupwarn = jsondata.wakeupwarn;
       this.wakeup = jsondata.wakeup;
       this.startwarn = jsondata.startwarn;
+      this.shiftid = jsondata.shiftid?jsondata.shiftid:0;
+      this.shiftname = jsondata.shiftname?jsondata.shiftname:"กะเช้า";
+      this.ot = jsondata.ot?jsondata.ot:0;
+      this.otname = jsondata.otname?jsondata.otname:"ปกติ";
+      this.issend = jsondata.issend?jsondata.issend:0;
+      this.issendname = jsondata.issendname?jsondata.issendname:"รับพนักงาน";
       this.plandate = new Date(jsondata.plandate);   
       this.starttime = new Date(this.plandate);
       var st = new Date(jsondata.starttime)
@@ -684,7 +691,7 @@ export class CalendarplanModel {
   }
   
 }
-export class VehicledataModel {
+export class VehicleModel {
   vid: number = 0;
   vname: string = "";
   vlicent: string = "";
@@ -739,6 +746,31 @@ export class VehicledataModel {
       }
     }
   }
+}
+export class ComshiftModel {
+  id : number =0;
+  compid:number =0;
+  shift : string ="";
+  sendtime : Date =new Date("2000-01-01 00:00:00");
+  receivetime : Date =new Date("2000-01-01 00:00:00");
+  ottime : Date =new Date("2000-01-01 00:00:00");
+  transtatus :number =1;
+
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any){
+    if(jsondata){
+      this.id = jsondata.id;
+      this.shift = jsondata.shift;
+      this.sendtime = new Date(jsondata.sendtime);
+      this.receivetime = new Date(jsondata.receivetime);
+      this.ottime = new Date(jsondata.ottime);
+      this.compid =jsondata.compid;
+    }
+  }
+  setdata() {
+   
+  };
 }
 
 
@@ -1196,28 +1228,6 @@ export class DPinroutedata {
     this.totaldistance = jsondata.totaldistance;
     this.transtatus = jsondata.transtatus;
   }
-}
-
-export class Comshiftdata {
-  id : number =0;
-  shift : string ="";
-  sendtime : Date =new Date("2000-01-01 00:00:00");
-  receivetime : Date =new Date("2000-01-01 00:00:00");
-  ottime : Date =new Date("2000-01-01 00:00:00");
-  showsendtime : string = "00:00";
-  showreceivetime : string = "00:00";
-  showottime : string = "00:00";
-  constructor(){}
-  setdata(jsondata: any) {
-    this.id = jsondata.id;
-    this.shift = jsondata.shift;
-    this.sendtime = new Date(jsondata.sendtime);
-    this.receivetime = new Date(jsondata.receivetime);
-    this.ottime = new Date(jsondata.ottime);
-    this.showsendtime = va.DateToString(this.sendtime,"HH:mm");
-    this.showreceivetime =  va.DateToString(this.receivetime,"HH:mm", );
-    this.showottime =  va.DateToString(this.ottime,"HH:mm");
-  };
 }
 
 export class Calendardata {

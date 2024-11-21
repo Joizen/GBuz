@@ -6,46 +6,68 @@
       </div>
       <mat-spinner></mat-spinner>
     </div>
-    
     <!-- Header -->
-    <div class="container" style="display: flex; justify-content: space-between; 
-        align-items: center; width:100hw; margin: 5px; overflow:hidden;">
-      <div class="col" style="display: flex; justify-content: center; ">
-        <div class="search-container"  style="width: 100%; gap:10px;">
-          <mat-form-field appearance="outline" style="width: 50vw;">
-            <input matInput placeholder="Search" [(ngModel)]="keyword" (click)="searchdata()" (keydown.enter)="searchdata()"  />
-            <mat-icon matPrefix>search</mat-icon>
-          </mat-form-field>
-          <select matNativeControl [(ngModel)]="show.limit" (ngModelChange)="searchdata()">
-            <option value="10">ไม่เกิน 10</option>
-            <option value="20">ไม่เกิน 20</option>
-            <option value="30">ไม่เกิน 30</option>
-            <option value="40">ไม่เกิน 40</option>
-            <option value="50">ไม่เกิน 50</option>
-            <option value="0">เลือกทั้งหมด</option>
-          </select>
-        </div>
-      </div>
-  
-      <div class="col" style="flex: 0 0 auto; text-align: right;">
-        <div class="row">
-          <div class="col" style="display: flex; align-items: center;" 
-            mat-raised-button matTooltip="เพิ่มข้อมูลพนักงานขับรถ" (click)="adddriver(userdetailmodal)">
-            <mat-icon style="width: 100%; color: blue;">add_box</mat-icon>
+    <div style="margin: 0,5px;">
+      <div class="row align-items-center" style="background-color: lightskyblue; padding:5px ;" > 
+          <div class="col-auto text-align start" >
+              <div class="row" style="text-align: right; margin-right: 10px; color: blue;">
+                  <div class="col" style="display: flex; align-items: center;"
+                      matTooltip="แสดงบัตรพนักงาน"  (click)="show.viewtype=0" >
+                      <mat-icon style="width: 100%; " [style.color]="show.viewtype==0?'blue':'lightgray'">dns</mat-icon>
+                  </div>
+                  <div class="col" style="display: flex; align-items: center;"
+                      matTooltip="แสดงตารางพนักงาน" (click)="show.viewtype=1">
+                      <mat-icon style="width: 100%; " [style.color]="show.viewtype==1?'blue':'lightgray'" >list</mat-icon>
+                  </div>
+              </div>
+          </div>        
+    
+          <div class="col text-center" style="display: flex; align-items: center; justify-content: center;">
+            <h1 *ngIf="show.viewtype==0"> ข้อมูลพนักงาน </h1> 
+            <h1 *ngIf="show.viewtype==1"> ตารางพนักงาน  </h1> 
+            <div class="col" style="display: flex; justify-content: center;" *ngIf="show.search">
+              <div class="search-container"  style="width: 100%; gap:10px;">
+                <mat-form-field appearance="outline" style="width: 50vw;">
+                  <input matInput placeholder="Search" [(ngModel)]="keyword" (click)="searchdata()" (keydown.enter)="searchdata()"  />
+                  <mat-icon matPrefix>search</mat-icon>
+                </mat-form-field>
+                <select matNativeControl [(ngModel)]="show.limit" (ngModelChange)="searchdata()">
+                  <option value="10">ไม่เกิน 10</option>
+                  <option value="20">ไม่เกิน 20</option>
+                  <option value="30">ไม่เกิน 30</option>
+                  <option value="40">ไม่เกิน 40</option>
+                  <option value="50">ไม่เกิน 50</option>
+                  <option value="0">เลือกทั้งหมด</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="col" style="display: flex; align-items: center;" 
-            mat-raised-button matTooltip="พิมพ์ข้อมูลพนักงานขับรถ" (click)="exportprint()">
-            <mat-icon style="width: 100%; color: blue;">print</mat-icon>
-          </div>
-          <div class="col" style="display: flex; align-items: center;" 
-            mat-raised-button matTooltip="ส่งออกข้อมูลพนักงานขับรถเป็น Excel" (click)="exportexcel()">
-            <mat-icon style="width: 100%; color: blue;">file_download</mat-icon>
-          </div>
-        </div>
+
+          <div class="col-auto text-align end" >
+            <div class="row" style="text-align: right; margin-right: 10px; color: blue;">
+              <div class="col" style="display: flex; align-items: center;"
+                matTooltip="ค้นหาพนักงาน" (click)="show.search=!show.search" >
+                <mat-icon style="width: 100%;">search</mat-icon>
+              </div>
+              <div class="col" style="display: flex; align-items: center;" 
+                mat-raised-button matTooltip="เพิ่มข้อมูลพนักงานในระบบ" (click)="adddriver(userdetailmodal)">
+                <mat-icon style="width: 100%; color: blue;">add_box</mat-icon>
+              </div>
+              <div class="col" style="display: flex; align-items: center;"  *ngIf="false"
+                mat-raised-button matTooltip="พิมพ์ข้อมูลพนักงานในระบบ" (click)="exportprint()">
+                <mat-icon style="width: 100%; color: blue;">print</mat-icon>
+              </div>
+              <div class="col" style="display: flex; align-items: center;" 
+                mat-raised-button matTooltip="ส่งออกข้อมูลพนักงานในระบบเป็น Excel" (click)="exportexcel()">
+                <mat-icon style="width: 100%; color: blue;">file_download</mat-icon>
+              </div>  
+            </div>
+          </div>        
       </div>
     </div>
+    
     <!-- Body -->
-    <div  style="width:100%; height: 90%; overflow :scroll">
+    <div  style="width:100%; height: 90%; overflow :scroll" *ngIf="show.viewtype==0">
       <div class="card-container" style="width:100%;">
         <div class="card-item" *ngFor="let user of listuser" >
           <mat-card (click)="showDriver(user,userdetailmodal)">
@@ -63,6 +85,32 @@
           </mat-card>
         </div>
       </div>
+    </div>
+    
+    <div  style="width:100%; height: 90%; overflow :scroll" *ngIf="show.viewtype==1">
+    <div class="table-container">
+      <div class="row table-header">
+        <div class="col-1">image</div>
+        <div class="col-3">empname</div>
+        <div class="col-2">rolename</div>
+        <div class="col-2">phone</div>
+        <div class="col-2">empcode</div>
+        <!-- <div class="col-1">Edit</div>
+        <div class="col-1">Delete</div> -->
+      </div>
+      <div *ngFor="let user of listuser" 
+           class="row table-row"
+           [class.selected]="user.id === activedriver?.id" 
+           (click)="showDriver(user,userdetailmodal)">
+        <div class="col-2">
+           <img class="profileimg" [src]="user.userimage === '' ?va.icon.user:user.userimage">
+        </div>
+        <div class="col-3">{{ user.empname }}</div>
+        <div class="col-2">{{ user.rolename }}</div>
+        <div class="col-2">{{ va.setphoneformat(user.phone)}}</div>
+        <div class="col-2">{{ user.empcode}}</div>
+      </div>
+    </div>
     </div>
   </div>
 
