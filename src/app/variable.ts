@@ -8,7 +8,6 @@ import mqtt, { MqttClient } from 'mqtt';
 import {ProfileModel} from './models/datamodule.module'
 import { LOCALE_ID } from '@angular/core';
 
-
 @Injectable({ providedIn: 'root' })
 
 @NgModule({
@@ -496,6 +495,9 @@ export function  getstatusname(id:number):string{
   else if(id==25){return "On the way";} //เขียว
   else if(id==30){return "Finish";} //เทา
   else{return "Not available ";} //สีขาว
+}
+export function getCalendarPeriod(variableInstance: variable): number {
+  return variableInstance.calendarperiod;
 }
 
 // #endregion

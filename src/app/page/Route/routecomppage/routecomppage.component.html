@@ -104,26 +104,9 @@
 
                 <!-- Vehicle & Time -->
                 <div class="col-9" style="text-align: center;" >
-                    <!-- Empty Vehicle -->
-                    <!-- <div class="container" style="display: flex; align-items: center;"  *ngIf="routeday.listvplan.length==0">
-                          <div class="col-3" style="text-align: center;">
-                            ไม่มีการจัดรถ
-                        </div>
-                         
-                        <div class="col-8" style="display: flex; background-color: lightcoral;" >
-                            <div *ngFor="let item of dayplan.listtime" class="col" style="text-align: center; margin: 0; padding: 0; gap: 0;">
-                                <div class="col"  style="width:5px ;"
-                                    matTooltip="{{ item.starttime }}" matTooltipPosition="above">
-                                    <div style="display: block;">
-                                        &nbsp;&nbsp;
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
 
-                        <!-- ====== Vehicle ====== -->
-                        <div *ngFor="let vehicle of routeday.listvplan" class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;  cursor: pointer;">
+                    <!-- ====== Vehicle ====== -->
+                    <div *ngFor="let vehicle of routeday.listvplan" class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;  cursor: pointer;">
                             <div class="container" style="display: flex; align-items: center;">
                                 <!-- Vehicle Name -->
                                 <div class="col-1" style="text-align: center; color: royalblue;background-color: lightcyan;" >
@@ -156,12 +139,12 @@
                                 </div>
                             </div>
                             <hr style="height:2px; margin: 2px;">
-                        </div>
+                    </div>
 
-                        <!-- ====== Time ====== -->
-                        <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px; width: 100%; height: 20px;"
-                            *ngIf="routeday.listvplan.length==0"></div>
-                        <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;">
+                    <!-- ====== Time ====== -->
+                    <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px; width: 100%; height: 20px;"
+                        *ngIf="routeday.listvplan.length==0"></div>
+                    <div class="row" style=" margin: 0; padding: 0; gap: 0; margin-right: 20px;">
                             <div class="container" style="display: flex; align-items: center;">
                                 <!-- Vehicle Name -->
                                 <div class="col-1" style="text-align: center; background-color:lightgrey" >
@@ -187,7 +170,7 @@
                                 </div>
                             </div>
                             <hr style="height:2px; margin: 2px;">
-                        </div>
+                    </div>
                 </div>
                 <div class="col-1" style="display: flex;  justify-content: center; align-items: center; height: 100%; cursor: pointer;" *ngIf="dayplan.noplan" >
                     <mat-icon style="color: blue;" *ngIf="routeday.listvplan.length==0" (click) = "setdayplanfromweekplan(routeday.route)">assignment</mat-icon>
@@ -370,7 +353,7 @@
         </div>
 
         <!-- Vehicle in Route -->
-        <div class="row"  style="height: 2px; width: 100%; background-color: lightgray;"></div>
+        <hr>
         <div class="row" style="max-height: 20vh; width:100vw;" *ngIf="false">
             <!-- header -->
             <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center;  width:100%;  margin: 0; background-color: lightyellow;">

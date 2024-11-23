@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { variable, getCalendarPeriod } from '../variable';
+
 import * as va from '../variable';
 
 @NgModule({
@@ -517,7 +520,11 @@ export class RouteplanModel {
   routeid: number = 0;
   vid:number=0; // รถใช้สำหรับ plantype 2,3
   vname:string ="";
-  vlince:string ="";
+  vlicent:string ="";
+  driverid:number=0; // รถใช้สำหรับ plantype 2,3
+  drivername:string ="";
+  driverimage:string ="";
+  driverphone:string ="";
   routeday:number=0; // รถใช้สำหรับ plantype 1,2
   plandate:Date= new Date(2000,1,1,0,0,0,0); // รถใช้สำหรับ plantype 1,2,3 ()
   routecode: string = "";
@@ -548,7 +555,7 @@ export class RouteplanModel {
     if(jsondata){
       this.vid = jsondata.vid;
       this.vname = jsondata.vname;
-      this.vlince = jsondata.vlince;
+      this.vlicent = jsondata.vlicent;
       this.routeid = jsondata.routeid;
       this.routeday = jsondata.routeday;
       this.routecode = jsondata.routecode;
@@ -570,6 +577,10 @@ export class RouteplanModel {
       this.otname = jsondata.otname?jsondata.otname:"ปกติ";
       this.issend = jsondata.issend?jsondata.issend:0;
       this.issendname = jsondata.issendname?jsondata.issendname:"รับพนักงาน";
+      this.driverid = jsondata.driverid?jsondata.driverid:0;
+      this.drivername = jsondata.drivername?jsondata.drivername:"";
+      this.driverphone = jsondata.driverphone?jsondata.driverphone:"";
+      this.driverimage = jsondata.driverimage?jsondata.driverimage:"";
       this.plandate = new Date(jsondata.plandate);   
       this.starttime = new Date(this.plandate);
       var st = new Date(jsondata.starttime)
@@ -648,7 +659,7 @@ export class RoutedayplanModel{
   public plandate: Date = new Date("2000-01-01 00:00:00");
   route: RouteModel =new RouteModel();
   listplan : RouteplanModel[] = [];
-  listvplan : Vehicleplan[] = [];
+  listvplan : VehicleplanModel[] = [];
   constructor(activedate:Date,route: RouteModel ){
     this.route =route;
     this.plankey = va.DateToString(activedate,'yyyyMMdd');  
@@ -668,7 +679,7 @@ export class CalendarplanModel {
   textdate : string = "วันอาทิตย์";
   listdata : Calendardata[] = [];
   listplan : RouteplanModel[] = [];
-  listvplan : Vehicleplan[] = [];
+  listvplan : VehicleplanModel[] = [];
   colorday : string = "";
   isselect: boolean= false;
   ismaseter: boolean= false;
@@ -690,6 +701,48 @@ export class CalendarplanModel {
     }
   }
   
+}
+export class VehicleplanModel {
+  vid : number = 0;
+  vname : string ="";
+  vlicent : string ="";
+  driverid: number = 0;
+  drivername: string = "";
+  driverimage: string = "";
+  driverphone: string = "";
+  plandate: Date = new Date;
+  listdata : Calendardata[] = [];
+  isselect: boolean= false;
+  ismaseter: boolean= false;
+  routeday: number=0;
+  constructor();
+  constructor(jsondata:any,period:number);
+  constructor(jsondata:any,period:number,cdate:Date);
+  constructor(jsondata?:any,period?:number,cdate?:Date) { 
+    if(jsondata){
+      this.vid = jsondata.vid;
+      this.vname = jsondata.vname;
+      this.vlicent = jsondata.vlicent;
+      this.driverid= jsondata.driverid;
+      this.drivername= jsondata.drivername;
+      this.driverimage= jsondata.driverimage;
+      this.driverphone= jsondata.driverphone; 
+      this.plandate= new Date(jsondata.plandate)
+      if(cdate){this.plandate= new Date(jsondata.plandate)}
+    }
+    if(period){  this.setperiod(period,this.plandate)  }
+  }
+  setperiod(period:number,cdate:Date){
+    var totaldata = Math.floor(1440/period);
+    var tdate=new Date(cdate);
+    for(var i =0; i< totaldata;i++){
+      // console.log(i+ "tdate ",tdate);
+      var temp = new Calendardata(i,tdate,period);
+      this.listdata.push(temp);
+      tdate.setMinutes(tdate.getMinutes()+period) ;
+    }
+  }
+
 }
 export class VehicleModel {
   vid: number = 0;
@@ -1175,32 +1228,7 @@ export class VehicleRoutedata {
     this.distance = jsondata.distance;
   }
 }
-export class Vehicleplan {
-  vid : number = 0;
-  vname : string ="";
-  vlince : string ="";
-  listdata : Calendardata[] = [];
-  isselect: boolean= false;
-  ismaseter: boolean= false;
-  routeday: number=0;
 
-  constructor(vid:number,vname:string,vlince:string, period:number,cdate: Date) { 
-    this.vid = vid;
-    this.vname = vname;
-    this.vlince =  vlince;
-    this.listdata = [];
-    var totaldata = Math.floor(1440/period);
-    var tdate=new Date(cdate);
-
-    for(var i =0; i< totaldata;i++){
-      // console.log(i+ "tdate ",tdate);
-      var temp = new Calendardata(i,tdate,period);
-      this.listdata.push(temp);
-      tdate.setMinutes(tdate.getMinutes()+period) ;
-    }
-  }
-
-}
 export class DPinroutedata {
   constructor() { }
   routeid: number = 0;

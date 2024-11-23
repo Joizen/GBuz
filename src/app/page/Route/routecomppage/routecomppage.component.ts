@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import { DialogpageComponent,DialogConfig} from '../../../material/dialogpage/dialogpage.component';
 import { RouteModel,CompanyModel,DPinroutedata,VehicleRoutedata,
-  CalendarplanModel,RouteplanModel,Vehicleplan,Calendarslot,VehicleModel,
+  CalendarplanModel,RouteplanModel,VehicleplanModel,Calendarslot,VehicleModel,
   Calendardata,CalendardayplanModel,RoutedayplanModel} from '../../../models/datamodule.module';
 import * as L from 'leaflet';
 
@@ -38,7 +38,6 @@ export class RoutecomppageComponent implements OnInit {
   public dayplan: CalendardayplanModel = new CalendardayplanModel(this.va.calendarperiod);
   
   public activecalendar: CalendarplanModel | undefined;
-  public copyslot: Vehicleplan | undefined;
   public selectedvehicle: VehicleModel = new VehicleModel();
   public activeslot: Calendarslot = new Calendarslot();
   public activeplan :RouteplanModel|undefined;
@@ -50,7 +49,7 @@ export class RoutecomppageComponent implements OnInit {
   
   async refreshpage(){
     this.maindata = await this.getData();
-    console.log("Routecomppage.refreshdata : ",this.show.viewtype)
+    // console.log("Routecomppage.refreshdata : ",this.show.viewtype)
     await this.showroutetab(this.show.viewtype);
   }
 
@@ -358,7 +357,7 @@ export class RoutecomppageComponent implements OnInit {
       var plan: RoutedayplanModel = new RoutedayplanModel(this.dayplan.plandate,route);
       this.dayplan.activeroute.push(plan);
     });
-    // console.log("setdayplan this.dayplan.activeroute : ",this.dayplan.activeroute);
+    console.log("setdayplan this.dayplan : ",this.dayplan);
     // await this.setactivedayplan(new Date());
   }
 
@@ -381,14 +380,14 @@ export class RoutecomppageComponent implements OnInit {
           if(listnewrouteplan.length>0){
             listnewrouteplan.forEach(plan  => {
               this.dayplan.listplan.push(plan);
-              var vehicle:Vehicleplan|undefined;
+              var vehicle:VehicleplanModel|undefined;
                 //หาว่าเคยสร้างข้อมูลรถไว้หรือยัง ถ้าสร้างแล้วไม่ต้องทำอะไร 
                 if(newplan.listvplan.length>0){ 
                   vehicle = newplan.listvplan.find(x=>x.vid==plan.vid);
                 }
               //ถ้ายังไม่มีข้อมูลให้สร้างรถ และนำข้อมูลทุกแผนของรถคันนี้มาใส่ข้อมูล แต่ถ้า
               if(!vehicle){
-                vehicle = new Vehicleplan(plan.vid,plan.vname,plan.vlince,this.va.calendarperiod ,plan.plandate );
+                vehicle = new VehicleplanModel(plan,this.va.calendarperiod );
                 // นำข้อมูลทุกแผนของรถคันนี้มาใส่ข้อมูล listdata
                 var lisvehicleplan = listnewplan.filter(x=>x.vid==vehicle?.vid);
                 if(lisvehicleplan.length>0){
@@ -404,10 +403,10 @@ export class RoutecomppageComponent implements OnInit {
                     }
                   });
                 }else{
-                  console.log("lisvehicleplan.length:",lisvehicleplan.length)
+                  // console.log("lisvehicleplan.length:",lisvehicleplan.length)
                 }
                 newplan.listvplan.push(vehicle);
-                console.log("setactivedayplan newplan.listvplan :",newplan);
+                // console.log("setactivedayplan newplan.listvplan :",newplan);
                 // console.log("vehicle:",vehicle)  
               }
             });
@@ -524,12 +523,12 @@ export class RoutecomppageComponent implements OnInit {
   clearacttiveplan(){
     this.dayplan.listrouteplan = this.dayplan.listrouteplan.filter(x => x.plankey !== this.dayplan.plankey);
   }
-  opendayplan(item : Calendardata, vehicle:Vehicleplan,routeid:number,modal:any ){
-    console.log("opendayplan item:",item)
+  opendayplan(item : Calendardata, vehicle:VehicleplanModel,routeid:number,modal:any ){
+    // console.log("opendayplan item:",item)
     item.routeid = routeid;
     var selectroute = this.maindata.find(x=>x.id==item.routeid);
     if(selectroute){this.activedata=selectroute;} 
-    console.log("opendayplan this.activedata :",this.activedata);
+    // console.log("opendayplan this.activedata :",this.activedata);
     if(item.plancode==""){ 
       this.CreateDayPlan(item,vehicle,modal);
     }else{
@@ -547,7 +546,7 @@ export class RoutecomppageComponent implements OnInit {
 
   }
 
-  CreateDayPlan(item : Calendardata, vehicle:Vehicleplan,modal:any ){
+  CreateDayPlan(item : Calendardata, vehicle:VehicleplanModel,modal:any ){
     try{
       this.activeplan=undefined;
       this.activeslot.setdata(item);
@@ -555,7 +554,11 @@ export class RoutecomppageComponent implements OnInit {
       this.activeslot.dayname = this.va.DateToString("d MMM yyyy",this.dayplan.plandate) ;
       this.selectedvehicle.vid = vehicle.vid;
       this.selectedvehicle.vname = vehicle.vname;
-      this.selectedvehicle.vlicent = vehicle.vlince;
+      this.selectedvehicle.vlicent = vehicle.vlicent;
+      this.selectedvehicle.driverid = vehicle.driverid;
+      this.selectedvehicle.drivername = vehicle.drivername;
+      this.selectedvehicle.driverphone = vehicle.driverphone;
+      this.selectedvehicle.driverimage = vehicle.driverimage;
       var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
@@ -574,14 +577,14 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  EditDayPlan(item : Calendardata,vehicle:Vehicleplan,modal:any ){
+  EditDayPlan(item : Calendardata,vehicle:VehicleplanModel,modal:any ){
     try{
       this.activeslot.setdata(item);
       this.activeslot.plantype = 3;
       this.activeslot.dayname = this.va.DateToString("d MMM yyyy",this.dayplan.plandate) ;
       this.selectedvehicle.vid = vehicle.vid;
       this.selectedvehicle.vname = vehicle.vname;
-      this.selectedvehicle.vlicent = vehicle.vlince;
+      this.selectedvehicle.vlicent = vehicle.vlicent;
       var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
@@ -667,7 +670,7 @@ export class RoutecomppageComponent implements OnInit {
         if (wplan) {
           var vehicle = wplan.listvplan.find((x) => x.vid == plan.vid);
           if (!vehicle) {
-            vehicle = new Vehicleplan(plan.vid,plan.vname,plan.vlince,this.va.calendarperiod,wplan.cdate );
+            vehicle = new VehicleplanModel(plan,this.va.calendarperiod,wplan.cdate );
             vehicle.routeday = wplan.id;
             wplan.listvplan.push(vehicle);
           }
@@ -726,7 +729,7 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   async selectvehicletalkback(event: any) {
-    console.log('event',event);
+    // console.log('event',event);
     this.activeslot = event.slot;
     this.selectedvehicle = event.vehicle;
     this.activeplan = undefined;
@@ -735,7 +738,7 @@ export class RoutecomppageComponent implements OnInit {
 
    // #region  ========= Add & Edit Weekly plan ==============================
 
-  OpenWeekplan(item : Calendardata, wplan: CalendarplanModel,vehicle:Vehicleplan,modal:any ){
+  OpenWeekplan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     if(item.plancode==""){
       this.CreateWeekPlan(item,wplan,vehicle,modal);
     }else{
@@ -751,14 +754,14 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  EditWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:Vehicleplan,modal:any ){
+  EditWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     try{
       this.activeslot.setdata(item);
       this.activeslot.plantype = 2;
       this.activeslot.dayname = wplan.textdate;
       this.selectedvehicle.vid = vehicle.vid;
       this.selectedvehicle.vname = vehicle.vname;
-      this.selectedvehicle.vlicent = vehicle.vlince;
+      this.selectedvehicle.vlicent = vehicle.vlicent;
       var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
@@ -799,15 +802,22 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  CreateWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:Vehicleplan,modal:any ){
+  CreateWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     try{
+      console.log("CreateWeekPlan item : ",item);
+      console.log("CreateWeekPlan wplan : ",wplan);
+      console.log("CreateWeekPlan vehicle : ",vehicle);
       this.activeplan=undefined;
       this.activeslot.setdata(item);
       this.activeslot.plantype = 2;
       this.activeslot.dayname = wplan.textdate;
       this.selectedvehicle.vid = vehicle.vid;
       this.selectedvehicle.vname = vehicle.vname;
-      this.selectedvehicle.vlicent = vehicle.vlince;
+      this.selectedvehicle.vlicent = vehicle.vlicent;
+      this.selectedvehicle.driverid = vehicle.driverid;
+      this.selectedvehicle.drivername = vehicle.drivername;
+      this.selectedvehicle.driverphone = vehicle.driverphone;
+      this.selectedvehicle.driverimage = vehicle.driverimage;
       var startpoint = this.GetStartplan( item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
@@ -835,7 +845,7 @@ export class RoutecomppageComponent implements OnInit {
   // #region  ========= update data and find plan slot ==============================
 
   async routeplantalkback(routeplan: RouteplanModel) {
-    console.log("routeplantalkback event : ",event);
+    // console.log("routeplantalkback event : ",event);
     if(routeplan.plantype==3){
       // ปรับข้อมูลแผนงานรายวันใหม่
       this.dayplan.listrouteplan = this.dayplan.listrouteplan.filter(x => x.plankey !== this.dayplan.plankey);
@@ -848,8 +858,7 @@ export class RoutecomppageComponent implements OnInit {
     }
   }
 
-  GetStartplan(id:number, plancode: string,vehicle:Vehicleplan){
-    // console.log("GetStartplan this.activeplan ",this.activeplan);
+  GetStartplan(id:number, plancode: string,vehicle:VehicleplanModel){
     var result = {startid:id, starttime: vehicle.listdata[id].sdate}
     for(var i=id; i>=0;i--){
       var slot = vehicle.listdata[i];
@@ -864,7 +873,7 @@ export class RoutecomppageComponent implements OnInit {
     return result;
   }
 
-  GetEndplan( id:number, plancode: string,vehicle:Vehicleplan){
+  GetEndplan( id:number, plancode: string,vehicle:VehicleplanModel){
     var result = {endid:id, endtime: vehicle.listdata[id].edate}
     for(var i=id; i<vehicle.listdata.length;i++){
       var slot = vehicle.listdata[i];

@@ -151,4 +151,19 @@ body {
   white-space: nowrap;
 }
 
+.custom-merge-button {
+  border: 2px solid #3f51b5; /* Change color to your preference */
+  border-radius: 8px; /* Optional for rounded edges */
+  padding: 8px 16px; /* Adjust padding as needed */
+  display: flex; /* Align icons properly */
+  align-items: center;
+  gap: 0px; /* Space between icons */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a shadow */
+  transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.custom-merge-button:hover {
+  border-color: #303f9f; /* Change border color on hover */
+}
+
 @import "~leaflet/dist/leaflet.css"

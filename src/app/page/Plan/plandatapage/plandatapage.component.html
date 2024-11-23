@@ -4,7 +4,7 @@
        style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
     
     <div class="col-1" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
-      <img class="profileimg me-4" [src]="vehicle.driverimage==''? va.icon.nologo : vehicle.driverimage">
+      <img class="company-logo" [src]="company.complogo==''? va.icon.nologo : company.complogo">
     </div>
 
     <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
@@ -128,13 +128,47 @@
   </div>
   <hr style="width:100%; padding: 0; margin: 0;"/>
 
-  <div style="width:100%; padding: 20px;" [style.background-color]="onperiod?'#c2fbbe':'#faa6a6'" >
-    <div class="row" matTooltip="รับ-ส่ง | กะงาน | OT">
-      <div class="col-1" style=" align-items: center;">
+  <div style="width:100%; padding: 20px; gap:10px;" [style.background-color]="onperiod?'#c2fbbe':'#faa6a6'" >
+ 
+    <div class="row" matTooltip="พนักงานขับรถ">
+      <div class="col-3" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
         <mat-icon>directions_bus</mat-icon>
+        <span>{{activeplan.vlicent}}</span>
+      </div>
+      <div class="col-1" style="display: flex;  align-items: center; gap:8px; justify-content: start;">
+        <button mat-raised-button  class="custom-merge-button" *ngIf="planslot.plantype==3 && editplan"
+          style="background-color: lightskyblue;color: blue; " (click)="editvehicle(selectvehiclemodal,true)" >
+          <mat-icon>edit</mat-icon>
+          <mat-icon>directions_bus</mat-icon>
+        </button>
+      </div>
+      <div class="col-4" style=" align-items: center;">
+        <mat-icon>airline_seat_recline_normal</mat-icon>
+        <span>{{activeplan.drivername}}</span>
+      </div>
+      <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
+        <span>{{activeplan.driverphone}}</span>
       </div>
 
-      <div class="col-4" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
+      <div class="col-1" style="display: flex;  align-items: center; gap:8px; justify-content: start;">
+        <button mat-raised-button  class="custom-merge-button" *ngIf="planslot.plantype==3&&editplan"
+          style="background-color: lightskyblue;color: blue; " (click)="editvehicle(selectvehiclemodal,false)">
+          <mat-icon>edit</mat-icon>
+          <mat-icon>airline_seat_recline_normal</mat-icon>
+        </button>
+      </div>
+    </div>
+    <hr />
+
+    <div class="row" matTooltip="รับ-ส่ง | กะงาน | OT">
+      <div class="col-1" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
+        <!-- <mat-icon>directions_run</mat-icon> -->
+      </div>
+      <div class="col-2" style="display: flex;  align-items: center; gap:8px; justify-content: start;">        
+      </div>
+
+
+      <div class="col-3" style="display: flex;  align-items: center; gap: 10px; justify-content: start;">
         <mat-icon>directions_run</mat-icon>
         <span *ngIf="editplan && activeplan.issend==0">ส่งเข้าบริษัท </span>
         <span *ngIf="editplan && activeplan.issend==1">รับกลับบ้าน </span>
@@ -146,7 +180,7 @@
         </select>
       </div>
 
-      <div class="col-4" style="display: flex; align-items: center; gap: 10px; justify-content: start; ">
+      <div class="col-3" style="display: flex; align-items: center; gap: 10px; justify-content: start; ">
         <mat-icon>schedule</mat-icon> 
         <span *ngIf="editplan">{{activeplan.shiftname}}</span>
         <label for="routeselect" *ngIf="!editplan"> กะงาน : </label>
@@ -312,3 +346,49 @@
   </div>
 
 </div>
+
+<ng-template #selectvehiclemodal let-modal style="height: 60vh; overflow: hidden;">
+  <div style="display: flex;justify-content: space-between;align-items: center; margin: 10px; padding: 10px;">
+    <h3 class="modal-title">เลือกข้อมูล {{show.vehicle?'รถ : ':'พนักงานขับรถ : '}}</h3>
+    <div style="display: flex; align-items: center; justify-content: flex-start; height: 100%;">
+      <h3>{{show.vehicle?selectvehicle?.vlicent:selectvehicle?.fullname}}</h3>
+    </div>
+    <button type="button" class="close" (click)="modal.close()">&times;</button>
+  </div>
+
+  <div class="modal-body custom-modal-body">
+    <div class="input-group" >
+      <mat-icon>search</mat-icon>
+      <input  type="text" class="form-control" (keyup)="filtervehicle()" [(ngModel)]="show.keyword" 
+        placeholder="Search" aria-label="Search" aria-describedby="button-addon">
+    </div>
+    <hr>
+    <div class="table-container">
+      <div class="row table-header">
+        <div class="col-1">image</div>
+        <div class="col-3" *ngIf="show.vehicle">licent</div>
+        <div class="col-2">driver</div>
+        <div class="col-2">phone</div>
+        <div class="col-2" *ngIf="show.vehicle">typename</div>
+      </div>
+    </div>
+    <div class="table-data" style="height: 50vh; "  >
+      <div *ngFor="let vehicle of showunplanvehicle"  class="row table-row" 
+          [class.selected]="vehicle.vid === selectvehicle?.vid" (click)="selectvehicle = vehicle">
+        <div class="col-2">
+            <img class="profileimg" [src]="vehicle.driverimage === '' ?va.icon.user:vehicle.driverimage">
+        </div>
+        <div class="col-3" *ngIf="show.vehicle">{{ vehicle.vlicent }}</div>
+        <div class="col-2">{{ vehicle.fullname }}</div>
+        <div class="col-2">{{ va.setphoneformat(vehicle.driverphone)}}</div>
+        <div class="col-2" *ngIf="show.vehicle">{{ vehicle.typename}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer" style="display: flex; justify-content: space-between; margin: 20px;">
+    <button class="btn btn-secondary" (click)="modal.close()">Close</button>
+    <button class="btn btn-primary"(click)="confirmSelection()">Select</button>
+  </div>
+
+</ng-template>
