@@ -48,7 +48,7 @@ export class LoginpageComponent implements OnInit {
       var  wsname = "checklogin";
       var param ={login:this.login.user,pwd:this.login.encpwd};
       var jsondata = await this.va.wsdata(wsname,param,"");
-      console.log("onLogin jsondata : ", jsondata);
+      // console.log("onLogin jsondata : ", jsondata);
       if(jsondata.code=="000"){
         this.showSanckbar("Login success",2);
         if(jsondata.data.token!=undefined){

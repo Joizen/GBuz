@@ -347,7 +347,7 @@ export class PlandatapageComponent implements OnInit {
         }else{this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง1");}
       }
     }catch(ex){
-      console.log("OkCancelMessage error ",ex);
+      console.log("deleteplan error ",ex);
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง2");
     }
   }
@@ -379,7 +379,7 @@ export class PlandatapageComponent implements OnInit {
       }
     }catch(ex){
       // console.log("saveupdateplan Error : ",ex)
-      this.showSanckbar("save or updateplan error" + ex,2);
+      this.showSanckbar("update vehicle in plan error" + ex,2);
     }
     return false;
   }
@@ -437,7 +437,7 @@ export class PlandatapageComponent implements OnInit {
             this.activeplan.drivername =this.selectvehicle.fullname;
             this.activeplan.driverphone =this.selectvehicle.driverphone;
           }
-          console.log("this.selectmodal :", this.selectmodal);
+          // console.log("this.selectmodal :", this.selectmodal);
           if (this.selectmodal) { 
             this.selectmodal.close(); 
             this.selectmodal = null;

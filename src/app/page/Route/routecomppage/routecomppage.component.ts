@@ -180,7 +180,7 @@ export class RoutecomppageComponent implements OnInit {
   }
 
   Showrouteconfig(route: RouteModel, modal: any) {
-    console.log('Showroutedropoint route', route);
+    // console.log('Showroutedropoint route', route);
     this.activedata = route;
     // this.modalService.open(modal, { fullscreen: true });
     this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
@@ -357,7 +357,7 @@ export class RoutecomppageComponent implements OnInit {
       var plan: RoutedayplanModel = new RoutedayplanModel(this.dayplan.plandate,route);
       this.dayplan.activeroute.push(plan);
     });
-    console.log("setdayplan this.dayplan : ",this.dayplan);
+    // console.log("setdayplan this.dayplan : ",this.dayplan);
     // await this.setactivedayplan(new Date());
   }
 
@@ -365,8 +365,8 @@ export class RoutecomppageComponent implements OnInit {
     this.dayplan.setactivedate(activedate);
 
     var listactiveroute = this.dayplan.listrouteplan.filter(x=>x.plankey==this.dayplan.plankey);
-    console.log("setactivedayplan this.dayplan :",this.dayplan)
-    console.log("setactivedayplan listactiveroute :",listactiveroute)
+    // console.log("setactivedayplan this.dayplan :",this.dayplan)
+    // console.log("setactivedayplan listactiveroute :",listactiveroute)
     if(listactiveroute&&listactiveroute.length>0){
       // ใส่ค่าที่หาได้จาก listactiveroute ใน activeroute
       this.dayplan.activeroute=listactiveroute;
@@ -466,7 +466,7 @@ export class RoutecomppageComponent implements OnInit {
         }else{this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")}
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("setdayplanfromweekplan error ",ex)
       this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
@@ -482,7 +482,7 @@ export class RoutecomppageComponent implements OnInit {
         return true;
       }
     }catch(ex){
-      console.log("saveupdateplan Error : ",ex)
+      console.log("saveweektoplan Error : ",ex)
       this.showSanckbar("create plan from week  error" + ex,2);
     }
     return false;
@@ -499,7 +499,7 @@ export class RoutecomppageComponent implements OnInit {
         }else{this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")}
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("deldayplan error ",ex)
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
@@ -515,7 +515,7 @@ export class RoutecomppageComponent implements OnInit {
         return true;
       }
     }catch(ex){
-      console.log("saveupdateplan Error : ",ex)
+      console.log("deletedayplan Error : ",ex)
       this.showSanckbar("delete plan from week  error" + ex,2);
     }
     return false;
@@ -804,9 +804,9 @@ export class RoutecomppageComponent implements OnInit {
 
   CreateWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     try{
-      console.log("CreateWeekPlan item : ",item);
-      console.log("CreateWeekPlan wplan : ",wplan);
-      console.log("CreateWeekPlan vehicle : ",vehicle);
+      // console.log("CreateWeekPlan item : ",item);
+      // console.log("CreateWeekPlan wplan : ",wplan);
+      // console.log("CreateWeekPlan vehicle : ",vehicle);
       this.activeplan=undefined;
       this.activeslot.setdata(item);
       this.activeslot.plantype = 2;

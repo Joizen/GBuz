@@ -38,8 +38,8 @@ export class CompanypageComponent implements OnInit {
 
   onTabChange(event: MatTabChangeEvent) {
     try{
-      console.log("onTabChange ");
-      console.log("onTabChange event",event);
+      // console.log("onTabChange ");
+      // console.log("onTabChange event",event);
 
       if (event.tab.textLabel === 'Route') {
         this.routecomppage.refreshpage();

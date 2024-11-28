@@ -30,6 +30,8 @@ export class MaindashboardpageComponent implements OnInit {
   private cmarkers: L.Marker| undefined;
 
   public mqttClient: any;
+  public lastplantime: Date = this.va.defultdate;
+
   
   async ngOnInit() {
     var userprofile= await this.va.getprofile();
@@ -38,6 +40,7 @@ export class MaindashboardpageComponent implements OnInit {
     this.mqttClient = await this.connectMqtt();
     this.subscribeMqtt(this.mqttClient, 'gbdupdate');
     this.subscribeMqtt(this.mqttClient, 'gbusvupdate');
+    this.subscribeMqtt(this.mqttClient, 'gbdplanupdate');
     await this.setdashboarddata();    
   }
 
@@ -76,9 +79,10 @@ export class MaindashboardpageComponent implements OnInit {
   async setdashboarddata(){    
     this.listcompany = await this.getlistcompany();
     if(this.listcompany.length>0){
+      var lasttime = new Date(this.lastplantime);
       this.listdo = await this.getlistdriverplan();    
       if(this.listdo.length>0){
-        this.listactivity = await this.getactivityplan();
+        this.listactivity = await this.getactivityplan(lasttime);
         await this.setdashboardcompany()
         await this.plotvehecle();
         this.show.Spinner=false;
@@ -91,7 +95,7 @@ export class MaindashboardpageComponent implements OnInit {
       var wsname = 'getdata';
       var params = { tbname: 'company'};
       var jsondata = await this.va.getwsdata(wsname, params);
-      console.log("getlistcompany jsondata :",jsondata);
+      // console.log("getlistcompany jsondata :",jsondata);
       if (jsondata.code == '000' && jsondata.data.length>0){
         jsondata.data.forEach((data:any)=>{
           var temp = new DashboardcompanyModel(data);
@@ -99,19 +103,23 @@ export class MaindashboardpageComponent implements OnInit {
         });    
       }
     }catch(ex){console.log("getlistcompany error :",ex)}
-    console.log("getlistcompany result :",result);
+    // console.log("getlistcompany result :",result);
     return result;
   }
   async getlistdriverplan(){
     var result:DashboardplanModel[]=[];
     try{
       var wsname = 'getdata';
-      var params = { tbname: 'driverdashboard'};
+      // var testtime=new Date( this.lastplantime) ;
+      // testtime.setHours(testtime.getHours()-1);
+      // var params = { tbname: 'driverdashboard',lasttime:testtime};
+      var params = { tbname: 'driverdashboard',lasttime:this.lastplantime};
       var jsondata = await this.va.getwsdata(wsname, params);
-      console.log("getactivedriverplan jsondata :",jsondata);
+      // console.log("getactivedriverplan jsondata :",jsondata);
       if (jsondata.code == '000' && jsondata.data.length>0){
         jsondata.data.forEach((data:any)=>{
           var temp = new DashboardplanModel(data);
+          if(temp.modifieddate>this.lastplantime){this.lastplantime=temp.modifieddate;}
           result.push(temp);
         });    
       }
@@ -119,11 +127,11 @@ export class MaindashboardpageComponent implements OnInit {
     // console.log("getactivedriverplan result :",result);
     return result;
   }
-  async getactivityplan(){
+  async getactivityplan(lasttime:Date){
     var result:PlanactivityModel[]=[];
     try{
       var wsname = 'getdata';
-      var params = { tbname: 'activityplan'};
+      var params = { tbname: 'activityplan',lasttime:lasttime};
       var jsondata = await this.va.getwsdata(wsname, params);
       // console.log("getactivedriverplan jsondata :",jsondata);
       if (jsondata.code == '000' && jsondata.data.length>0){
@@ -137,89 +145,111 @@ export class MaindashboardpageComponent implements OnInit {
     // console.log("getactivedriverplan result :",result);
     return result;
   }
-  async setdashboardcompany(){
+  async setdashboardcompany(){ 
     if(this.listdo.length>0){
       this.show.Spinner=true;
       var listvehicle ="";
       this.listdo.forEach(plan => {
-                  // เก็บค่า serialbox สำหรับใช้หาข้อมูลรถจาก GPS Gateway
+        // เก็บค่า serialbox สำหรับใช้หาข้อมูลรถจาก GPS Gateway
         listvehicle += ((listvehicle==""?"'" : ",'") + plan.serialbox +"'")
-        for(var i=5;i<30;i+=5){
-          // ปรับค่า เวลา ใน Activity ให้เท่ากับค่าในแผนงาน
-          var planact = plan.listactivity.find(x=>x.statusid==i);
-          if(planact){
-            if(i==5){
-              // set Wakeup data
-              planact.statustime = plan.wakeuptime;
-              planact.statustaget = plan.wakeuptime;
-              planact.statuswarn= plan.wakeupworntime;
-            }
-            else if(i==10){
-              // set Alcohol data
-              planact.statustime = plan.starttime;
-              planact.statustaget = plan.starttime;
-              planact.statuswarn= plan.wakeupworntime;
-            }
-            else if(i==20){
-              // set Start engine data
-              planact.statustaget = plan.startwarntime;
-              planact.statustime = plan.startwarntime;
-              planact.statuswarn= plan.wakeupworntime;
-            }
-            else if(i==25){
-              // set on the way data
-              planact.statustaget = plan.starttime;
-              planact.statustime = plan.starttime;
-              planact.statuswarn= plan.wakeupworntime;              
-            }
-            else if(i==30){
-              // set Finiish data
-              planact.statustaget = plan.starttime;
-              planact.statustime = plan.starttime;
-              planact.statuswarn= plan.starttime;              
-            }
-            // ปรับค่า เวลา ใน Activity ให้เท่ากับค่าใน Activity ที่หาได้
-            var listact = this.listactivity.find(x=>(x.docode==plan.docode)&&(x.statusid==i));
-            if(listact){
-              planact.statustime = listact.statustime;
-              planact.lat = listact.lat;
-              planact.lng = listact.lng;
-              planact.transtatus =listact.transtatus;
-              if(i==10){planact.statuslevel =listact.statuslevel;}
-              plan.acltime =listact.statustime;
-            }
-            // ปรับค่า last status
-            if(plan.laststatus<i && planact.transtatus !=0){
-              plan.laststatus = i;
-              plan.laststatusname = this.va.getstatusname(i);
-              plan.laststatuscolor  = this.va.getstatuscolor(i);           
-              plan.laststatuswarn  = planact.statuswarn;
-              plan.laststatustaget  = planact.statustaget;
-              plan.laststatustime  = planact.statustime;
-              plan.laststatuslevel  = planact.statuslevel;
-            
-            }
-          }
-        }
+        this.setactivty(plan,this.listactivity);
       });
       // console.log("this.listdo :",this.listdo);
-      this.listcompany.forEach(comp=>{
-        var listdo = this.listdo.filter(x=>x.cid==comp.cid).sort((a, b) => a.laststatus - b.laststatus);
-        // console.log("listdo :" + comp.company,listdo);
-        comp.dolist=listdo;
-        comp.totaldo =listdo.length;
-        comp.totalwake = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==5).length;
-        comp.totalalc = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==10).length;
-        comp.totalstart = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==20).length;
-        comp.totalotw = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==25).length;
-        comp.totalfinish = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==30).length;
-      });
+      await this.setcompanydata();
       await this.setrealtimedata(listvehicle);
-      console.log("this.listcompany :",this.listcompany);
+      // console.log("this.listcompany :",this.listcompany);
       // console.log("this.realtimedata :",realtimedata);
       this.show.Spinner=false;
     }
   }
+  setactivty(plan: DashboardplanModel,listplanact: PlanactivityModel[]){
+    for(var i=5;i<30;i+=5){
+      // ปรับค่า เวลา ใน Activity ให้เท่ากับค่าในแผนงาน
+      var planact = plan.listactivity.find(x=>x.statusid==i);
+      if(planact){
+        if(i==5){
+          // set Wakeup data
+          planact.statustime = plan.wakeuptime;
+          planact.statustaget = plan.wakeuptime;
+          planact.statuswarn= plan.wakeupworntime;
+        }
+        else if(i==10){
+          // set Alcohol data
+          planact.statustime = plan.starttime;
+          planact.statustaget = plan.starttime;
+          planact.statuswarn= plan.wakeupworntime;
+        }
+        else if(i==20){
+          // set Start engine data
+          planact.statustaget = plan.startwarntime;
+          planact.statustime = plan.startwarntime;
+          planact.statuswarn= plan.wakeupworntime;
+        }
+        else if(i==25){
+          // set on the way data
+          planact.statustaget = plan.starttime;
+          planact.statustime = plan.starttime;
+          planact.statuswarn= plan.wakeupworntime;              
+        }
+        else if(i==30){
+          // set Finiish data
+          planact.statustaget = plan.starttime;
+          planact.statustime = plan.starttime;
+          planact.statuswarn= plan.starttime;              
+        }
+        // ปรับค่า เวลา ใน Activity ให้เท่ากับค่าใน Activity ที่หาได้
+        var listact = listplanact.find(x=>(x.docode==plan.docode)&&(x.statusid==i));
+        if(listact){
+          planact.statustime = listact.statustime;
+          planact.lat = listact.lat;
+          planact.lng = listact.lng;
+          planact.transtatus =listact.transtatus;
+          if(i==5){plan.wakeupact =listact.statustime;}
+          else if(i==10){
+            plan.acltime =listact.statustime;
+            planact.statuslevel =listact.statuslevel;
+          }
+          else if(i==20){plan.startwarnact =listact.statustime;}
+          else if(i==25){plan.startact =listact.statustime;}
+          else if(i==30){plan.finishact =listact.statustime;}
+        }
+        // ปรับค่า last status
+        if(plan.laststatus<i && planact.transtatus !=0){
+          plan.laststatus = i;
+          plan.laststatusname = this.va.getstatusname(i);
+          plan.laststatuscolor  = this.va.getstatuscolor(i);           
+          plan.laststatuswarn  = planact.statuswarn;
+          plan.laststatustaget  = planact.statustaget;
+          plan.laststatustime  = planact.statustime;
+          plan.laststatuslevel  = planact.statuslevel;
+        
+        }
+      }
+    }
+
+  }
+  setcompanydata(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.listcompany.forEach(comp=>{
+              comp.dolist=[];
+              var listdo = this.listdo.filter(x=>x.cid==comp.cid).sort((a, b) => a.laststatus - b.laststatus);
+              // console.log("listdo :" + comp.company,listdo);
+              comp.dolist=listdo;
+              comp.totaldo =listdo.length;
+              comp.totalwake = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==5).length;
+              comp.totalalc = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==10).length;
+              comp.totalstart = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==20).length;
+              comp.totalotw = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==25).length;
+              comp.totalfinish = this.listactivity.filter(x=>x.cid ==comp.cid&& x.statusid==30).length;
+        });
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  
   async setrealtimedata(listvehicle:string) {
     // var result:VehicleDashboard[] = []
     try{
@@ -227,7 +257,7 @@ export class MaindashboardpageComponent implements OnInit {
       var params = { tbname: 'vehiclerealtime', listserial: listvehicle };
       var jsondata = await this.va.getwsdata(wsname, params);
       if (jsondata.code == '000') {
-        console.log("setrealtimedata jsondata : ",jsondata.data);
+        // console.log("setrealtimedata jsondata : ",jsondata.data);
         if (jsondata.data.length > 0) {          
           jsondata.data.forEach((item: any) => {
             var plan = this.listdo.find(x=>x.serialbox==item.serialbox);
@@ -260,6 +290,67 @@ export class MaindashboardpageComponent implements OnInit {
   }
 
   //#endregion =========== Set Dash board Data =========================
+  //===================================================================
+
+  //===================================================================
+  // #region  =========== Refresh Dash board Data =====================
+
+  async refreshdo(){
+    // this.listcompany = await this.getlistcompany();
+    // this.show.Spinner=true;
+    try{
+      if(this.listcompany.length>0){
+        var lasttime = new Date(this.lastplantime);
+        var listnewplan = await this.getlistdriverplan();       
+        // console.log("refreshdo newdo :",listnewplan);
+        if(listnewplan.length>0){
+          // ใส่ Activity ลงใน planใหม่
+          var listact =  await this.getactivityplan(lasttime);
+          listnewplan.forEach(plan => {
+            this.setactivty(plan,listact);
+            // หารถเก่าใส plan ใหม่ลงไป
+            var idx = this.listdo.findIndex(x=>x.vid==plan.vid);
+            // var oldplan = this.listdo.find(x=>x.vid==plan.vid);
+            // console.log("plan1 :",plan);
+            // console.log("oldplan :",oldplan);
+            // console.log("idx :",idx);
+            if(idx>=0){
+              // update GPS data to new plan
+              var oldplan = this.listdo[idx];
+              plan.vlat = oldplan.vlat;
+              plan.vlng = oldplan.vlng;
+              plan.lastlat = oldplan.lastlat
+              plan.lastlng = oldplan.lastlng;
+              plan.vstatus = oldplan.vstatus;
+              plan.vstatuscorlor = oldplan.vstatuscorlor;
+              plan.vstatusname = oldplan.vstatusname;
+              plan.vlocation = oldplan.vlocation;
+              plan.vlocationcode = oldplan.vlocationcode;
+              plan.vspeed = oldplan.vspeed;
+              plan.vheader = oldplan.vheader;
+              plan.vio = oldplan.vio;
+              plan.gpstime = oldplan.gpstime;
+              // oldplan = plan;
+              // console.log("idx :",idx);
+              this.listdo.splice(idx,1);
+              this.listdo.push(plan);
+              // console.log("plan2 :",plan);
+              // console.log("this.listdo :",this.listdo);
+            }
+          });
+          // Update Company ใหม่
+          await this.setcompanydata();
+          // console.log("refreshdo this.listcompany : ", this.listcompany)
+          // this.show.Spinner=false;
+        }
+      } else{
+        await this.setdashboarddata();    
+      }
+      }catch{}
+    // this.show.Spinner=false;
+  }
+
+  // #endregion  =========== Refresh Dash board Data ==================
   //===================================================================
 
   //===================================================================
@@ -451,14 +542,16 @@ export class MaindashboardpageComponent implements OnInit {
     try{
       this.activeplan=plan;
       this.activeplan.complogo = comp.complogo;
-      console.log("plan :" ,plan);
+      // console.log("plan :" ,plan);
       this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
       // this.modalService.open(modal, { fullscreen: true });
 
     }catch(ex){console.log("showdiverwork error :",ex);}
   }
   async plandetailtalkback(plan: DashboardplanModel) {
+    // console.log("plandetailtalkback plan",plan);
     this.activeplan=plan;
+
     var comp = this.listcompany.find(x=>x.cid==plan.cid)
     if(comp){
       var listdo = this.listdo.filter(x=>x.cid==comp?.cid).sort((a, b) => a.laststatus - b.laststatus);
@@ -496,14 +589,23 @@ export class MaindashboardpageComponent implements OnInit {
   }
   async decodemqtt(topic: string, message: string) {
     const msg = message.toString();
-    var data = JSON.parse(msg);
-    if (topic === 'gbdupdate') {
-      console.log('decodemqtt gbdupdate data: ', data);
-      this.updateactivitybymqtt(data);
-    } else if (topic === 'gbusvupdate') {
-      // console.log('decodemqtt gbusvupdate data: ', data);
-      this.updatevehiclebymqtt(data);
+    try{
+      var data = JSON.parse(msg);
+      if (topic === 'gbdupdate') {
+        // console.log('decodemqtt gbdupdate data: ', data);
+        this.updateactivitybymqtt(data);
+      } else if (topic === 'gbusvupdate') {
+        // console.log('decodemqtt gbusvupdate data: ', data);
+        this.updatevehiclebymqtt(data);
+      }else if (topic === 'gbdplanupdate') {
+        // console.log('decodemqtt gbusvupdate data: ', data);
+        this.updateplanbymqtt(data);
+      }  
+    }catch(ex){
+      console.log("decodemqtt error ",ex)
+      console.log("decodemqtt msg ", msg)
     }
+
   }
   updateactivitybymqtt(data:any){
     // หาว่าเป็นแผนของบริษัทไหน
@@ -554,7 +656,8 @@ export class MaindashboardpageComponent implements OnInit {
           }
         });
       } else {
-        console.log('MQTT client is not connected.');
+        this.showSanckbar('MQTT client is not connected.');
+        // console.log('MQTT client is not connected.');
       }
 
       // mqttclient.on('message', (topic, message) => {
@@ -591,34 +694,48 @@ export class MaindashboardpageComponent implements OnInit {
               vehicle.vstatus = data.value;
               vehicle.vstatuscorlor = this.va.getvcolor(data.value);
               vehicle.vstatusname =  this.va.getvstatusname(data.value);
-              var gap =this.va.getdistance(vehicle.lastlat,vehicle.lastlng,vehicle.vlat,vehicle.vlng);
-              console.log("gap :",gap);
-              if(gap>5000){
-                // หาตำแหน่งใหม่
-                var location = await this.va.getadmin( data.lat, data.lng);
-                // console.log("old location : ", vehicle.vlocation);
-                // console.log("new location : ",location.adminname);
-                if(location){
-                  vehicle.vlocation = data.adminname;
-                  vehicle.vlocationcode = location.admincode;
+              if(data.admincode){
+                vehicle.vlocationcode =data.admincode
+                if(data.adminname){vehicle.vlocation =data.adminname}
+                vehicle.lastlat=data.lat;
+                vehicle.lastlng=data.lat;
+              }
+              else{
+                var gap =this.va.getdistance(vehicle.lastlat,vehicle.lastlng,vehicle.vlat,vehicle.vlng);
+                // console.log("gap :",gap);
+                if(gap>5000){
+                  // หาตำแหน่งใหม่
+                  var location = await this.va.getadmin( data.lat, data.lng);
+                  if(location){
+                    vehicle.vlocation = data.adminname;
+                    vehicle.vlocationcode = location.admincode;
+                    vehicle.lastlat=data.lat;
+                    vehicle.lastlng=data.lat;
+                  }
                 }
               }
               this.updateMarkerPosition(vehicle);
           }else{
-            console.log("vehicle not found : ",data.imei);
+            // console.log("vehicle not found : ",data.imei);
             this.showSanckbar("vehicle update location not found : ",data.imei)
           }
         }else{
-          console.log("com not found : ",data.imei);
+          // console.log("com not found : ",data.imei);
           this.showSanckbar("vehicle update location not found : ",data.imei)
         } 
       }else{
-        console.log("plan not found : ",data.imei);
+        // console.log("plan not found : ",data.imei);
         this.showSanckbar("vehicle update location not found : ",data.imei)
       }  
       
     }catch(ex){console.log("updatevehiclebymqtt error : ",ex);}
   }
+
+  updateplanbymqtt(data:any){
+    // console.log("updateplanbymqtt data :",data)
+    this.refreshdo();
+  }
+
 
   // #endregion  =========== MQTT =====================================
   //===================================================================

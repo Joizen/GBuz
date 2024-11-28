@@ -40,7 +40,7 @@ export class VehiclecomppageComponent implements OnInit {
     await this.settablevplan();
   }
   async refreshpage(){
-    console.log("Vehiclecomppage.refreshdata : ",this.show.viewtype)
+    // console.log("Vehiclecomppage.refreshdata : ",this.show.viewtype)
     // await this.showroutetab(this.show.viewtype);
   }
 
@@ -162,7 +162,7 @@ export class VehiclecomppageComponent implements OnInit {
     var wsname = 'getdata';
     var params = { tbname: 'routeweek', vid: vid,compid: this.activecompany.id};
     var jsondata = await this.va.getwsdata(wsname, params);
-    console.log("getWeekData jsondata : ", jsondata);
+    // console.log("getWeekData jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
         var temp = new RouteplanModel(data);
@@ -172,7 +172,7 @@ export class VehiclecomppageComponent implements OnInit {
     } else {
       alert("getWeekData No data");
     }
-    console.log("getWeekData result : ", result);
+    // console.log("getWeekData result : ", result);
     return result;
   }
 
@@ -221,8 +221,8 @@ export class VehiclecomppageComponent implements OnInit {
       }
     }
 
-    console.log("OpenWeekplan this.activeplan ",this.activeplan);
-    console.log("OpenWeekplan this.activeslot : ",this.activeslot);
+    // console.log("OpenWeekplan this.activeplan ",this.activeplan);
+    // console.log("OpenWeekplan this.activeslot : ",this.activeslot);
     // this.modalService.open(modal, { fullscreen: true });
 
     if(this.activedata.vid==0){
@@ -303,7 +303,7 @@ export class VehiclecomppageComponent implements OnInit {
       }
     }
     
-    console.log("slotcopyto : ",slotcopyto);
+    // console.log("slotcopyto : ",slotcopyto);
     this.clearcopyweekplan();
     this.ShowVehicleDetail( this.activedata)
   }
@@ -318,7 +318,7 @@ export class VehiclecomppageComponent implements OnInit {
       }
     }catch(ex){
       this.showSanckbar("Copy plan "+ data.torouteday +" Error" + ex,2);
-      console.log("setcopyplan Error : ",ex)
+      // console.log("setcopyplan Error : ",ex)
     }
     return false;
   }
@@ -370,7 +370,7 @@ export class VehiclecomppageComponent implements OnInit {
     this.listfillterplan = this.listplan;
   }
   searchlistplan(){
-    console.log("this.show ",this.show);
+    // console.log("this.show ",this.show);
     if(this.show.vid==0&&this.show.day<7){
       this.listfillterplan = this.listplan.filter(x=>x.routeday==this.show.day);
     }else if(this.show.vid>0&&this.show.day==7){

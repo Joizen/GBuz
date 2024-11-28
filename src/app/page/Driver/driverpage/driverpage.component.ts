@@ -33,7 +33,7 @@ export class DriverpageComponent {
         this.validatePhoneNumber(this.editdata.phone);
         this.craeteqrcode()
       }
-      console.log("this.viewData :",this.editdata);
+      // console.log("this.viewData :",this.editdata);
     }catch(ex){ console.log("ngOnInit Error :",ex);}
   }
 
@@ -85,7 +85,7 @@ export class DriverpageComponent {
     // console.log("formattedValue :",formattedValue);
     this.editdata.phone = formattedValue.replace(/\D/g, '');
     // console.log("this.editdata.phone :",this.editdata.phone); 
-    console.log("this.show.phone  :",this.show.phone ); 
+    // console.log("this.show.phone  :",this.show.phone ); 
 
     if(this.driverdata && !this.show.edit){this.show.edit = (this.driverdata.phone!=this.editdata.phone);}
         // Update the form control with the first 10 digits
@@ -123,7 +123,7 @@ export class DriverpageComponent {
           }
         }
       }catch(ex){
-        console.log("save plan error ",ex)
+        console.log("savedriver error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
   
@@ -144,7 +144,7 @@ export class DriverpageComponent {
           }
         }
       }catch(ex){
-        console.log("save plan error ",ex)
+        console.log("updatedriver error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
   
@@ -165,7 +165,7 @@ export class DriverpageComponent {
         }
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("deletedriver error ",ex)
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
@@ -175,7 +175,7 @@ export class DriverpageComponent {
       var tbname =((status==0)?"newdriver":"driver");
       var wsname = ((status<0)?"deldata":"updatedata");
       if(status<1){this.editdata.transtatus = status;}
-      console.log("saveupdatedriver this.editdata : ",this.editdata);
+      // console.log("saveupdatedriver this.editdata : ",this.editdata);
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,data:this.editdata})
       if(jsondata.code=="000"){       
         if(status<0){this.driverdata=undefined;}
@@ -220,7 +220,7 @@ export class DriverpageComponent {
 
     reader.onload = () => {
       this.base64Image = reader.result as string;
-      console.log(this.base64Image); // You can now send this Base64 string to your backend for storage
+      // console.log(this.base64Image); // You can now send this Base64 string to your backend for storage
     };
 
     reader.onerror = (error) => {
@@ -417,13 +417,13 @@ export class DriverpageComponent {
     try{
       var wsname = "saveimage";
       var param = {tbname:"driverimage",driverid:this.driverdata?.id,image:image};
-      console.log("saveimage ",param)
+      // console.log("saveimage ",param)
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         return true;
       }
     }catch(ex){
-      console.log("saveupdateplan Error : ",ex)
+      console.log("saveimage Error : ",ex)
       this.showSanckbar("save or update  route error" + ex,2);
     }
     return false;

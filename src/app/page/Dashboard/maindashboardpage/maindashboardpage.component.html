@@ -27,6 +27,11 @@
                 <div class="col" style="flex: 0 0 auto; text-align: right; margin-right:20px ;background-color: aquamarine;">
                     <div class="row" >
                         <div class="col" style="display: flex; align-items: center;"
+                            mat-raised-button matTooltip="Refresh dashboard" (click)="refreshdo()" >
+                            <mat-icon style="width: 100%; color: blue;">refresh</mat-icon>
+                        </div>
+                        
+                        <div class="col" style="display: flex; align-items: center;"
                             [style.background-color]="show.type==0?'#FFE5B4':'#00FFFFFF'"
                             mat-raised-button matTooltip="แสดงภาพรวมพนักงานขับรถ" (click)="show.type=0" >
                             <mat-icon style="width: 100%; color: blue;">dashboard</mat-icon>
@@ -393,7 +398,10 @@
                                                             <img [src]="driver.lineimage ==''? va.icon.user : driver.lineimage"
                                                             class="driverimg">
                                                             <span>
-                                                                {{driver.vname}} ({{driver.routename}}) {{driver.laststatus}}
+                                                                {{driver.vname}} ({{driver.routename}})
+                                                            </span>
+                                                            <span style="margin-left: auto; text-align: end;">
+                                                                 {{driver.plandate | date:'d-M'}}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -429,7 +437,7 @@
                                                             {{ va.isNotDefaultDate(driver.startact) ? (driver.startact | date: 'HH:mm') : (driver.starttime | date: 'HH:mm') }}                                                
                                                         </span>
                                                     </div>
-                                                    <div class="col" style="display: flex; align-items: center; gap:5px;" [style.color]="va.isNotDefaultDate(driver.startact)?'blue':'red'">
+                                                    <div class="col" style="display: flex; align-items: center; gap:5px;" [style.color]="va.isNotDefaultDate(driver.finishact)?'blue':'red'">
                                                         <mat-icon style="width:auto;" >flag</mat-icon>
                                                         <span style="display: flex; align-items: center; gap:5px;">
                                                             {{ va.isNotDefaultDate(driver.finishact) ? (driver.finishact | date: 'HH:mm') : (driver.finishtime | date: 'HH:mm') }}                                                </span>

@@ -43,7 +43,7 @@ export class CompanyprofilepageComponent implements OnInit {
   }
   async initMap() {
     try {
-      console.log("this.map : ", this.map);
+      // console.log("this.map : ", this.map);
       this.map = L.map('companymap', {
         center: [13.6140328, 100.6162229], // Latitude and longitude of the center point
         zoom: 13, // Initial zoom level
@@ -62,7 +62,7 @@ export class CompanyprofilepageComponent implements OnInit {
 
 
   onFileSelected(event: Event): void {
-    console.log("onFileSelected event",event)
+    // console.log("onFileSelected event",event)
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
@@ -85,7 +85,7 @@ export class CompanyprofilepageComponent implements OnInit {
     if(this.companyForm){
       if (this.companyForm.valid) {
         const formData = this.companyForm.value;
-        console.log(formData);
+        // console.log(formData);
         // Further processing or saving logic here
       }  
     }
@@ -109,7 +109,7 @@ export class CompanyprofilepageComponent implements OnInit {
       );
       return dialogRef.afterClosed().toPromise();
     }catch(ex){
-      console.log("OkCancelMessage error ",ex)
+      // console.log("OkCancelMessage error ",ex)
       return Promise.reject(ex); // If there's an error, reject the promise
     }
   }

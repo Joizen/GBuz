@@ -27,7 +27,7 @@ export class SearchplanmasterpageComponent implements OnInit{
     this.setData();    
   }
   onSelectedRow(row:any){
-    console.log(row);
+    // console.log(row);
   }
 
   applyFilter(event:any){

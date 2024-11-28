@@ -34,7 +34,7 @@ export class ShiftpageComponent implements OnInit {
       var wsname = 'getdata';
       var params = { tbname: 'dllshift', compid: this.company.id };
       var jsondata = await this.va.getwsdata(wsname, params);
-      console.log("getshiftData jsondata: ",jsondata);
+      // console.log("getshiftData jsondata: ",jsondata);
 
       if (jsondata.code == "000") {      
         jsondata.data.forEach((data: any) => {
@@ -69,7 +69,7 @@ export class ShiftpageComponent implements OnInit {
     this.show.delete=true;
   }
   shifttimechange(type:string){
-    console.log("type : ",type);
+    // console.log("type : ",type);
 
     if(type=="sendtime"){
       const [hours, minutes] = this.show.sendtime.split(':').map(Number); 
@@ -105,7 +105,7 @@ export class ShiftpageComponent implements OnInit {
           }
         }
       }catch(ex){
-        console.log("save plan error ",ex)
+        console.log("saveshift error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
     } 
@@ -124,7 +124,7 @@ export class ShiftpageComponent implements OnInit {
         }
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("deleteshift error ",ex)
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
 

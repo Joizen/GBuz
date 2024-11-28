@@ -26,7 +26,7 @@ export class DriverdetailpageComponent  implements OnInit{
   private vmarker :L.Marker|undefined;
   public locationname = "ไม่มีข้อมูล พิกัด GPS"
   ngOnInit(): void {
-    console.log("activeplan : ",this.activeplan); 
+    // console.log("activeplan : ",this.activeplan); 
     this.initMap()
   }
      //--------------------- Leaflet  Map------------------------
@@ -122,7 +122,7 @@ export class DriverdetailpageComponent  implements OnInit{
     var laststatus = activity.transtatus;
     var lastacttime = activity.statustime;
     try {
-      console.log("changestatus data :", activity);
+      // console.log("changestatus data :", activity);
       var msg = "คุณต้องการส่งข้อมูล " +  activity.statusname + "เข้าสูระบบใช่หรือไม่??" 
       if(value==0){ msg = "คุณต้องการยกเลิกข้อมูล " +  activity.statusname + "ในระบบใช่หรือไม่??" }
       var confirm =await this.OkCancelMessage("ยืนยันการส่งข้อมูล",msg);
@@ -131,6 +131,7 @@ export class DriverdetailpageComponent  implements OnInit{
         activity.statustime = (value==0? this.va.defultdate  : new Date() );
         if(await this.updateactivity(activity)){
           if(await this.updatelastatus()){
+            this.updateplanactivty(activity);
             this.talk.emit(this.activeplan);
             this.modal.close();
           } 
@@ -151,6 +152,46 @@ export class DriverdetailpageComponent  implements OnInit{
       activity.transtatus =laststatus;
       activity.statustime =lastacttime;
     }
+  }
+  updateplanactivty(activity:PlanactivityModel){
+    
+    if(this.activeplan){
+      if(activity.statusid==5){
+        this.activeplan.wakeupact = activity.statustime;
+      }
+      else if(activity.statusid==10){
+        // set Alcohol data
+        this.activeplan.acltime = activity.statustime;
+        this.activeplan.alcvalue = activity.statuslevel;
+      }
+      else if(activity.statusid==20){
+        // set Start engine data
+        this.activeplan.startwarnact= activity.statustime;
+      }
+      else if(activity.statusid==25){
+        // set on the way data
+        this.activeplan.startact  = activity.statustime;
+      }
+      else if(activity.statusid==30){
+        // set Finiish data
+        this.activeplan.finishtime  = activity.statustime;
+      }
+          // หาว่าหาข้อมูล Last Activity
+      const maxstatus =  this.activeplan.listactivity
+      .filter(x => x.transtatus !== 0)
+      .sort((a, b) => b.statusid - a.statusid)[0];
+      if (maxstatus) {
+        this.activeplan.laststatus = maxstatus.statusid;
+        this.activeplan.laststatuslevel = maxstatus.statuslevel;
+        this.activeplan.laststatusname = maxstatus.statusname;
+        this.activeplan.laststatustaget = maxstatus.statustaget;
+        this.activeplan.laststatustime = maxstatus.statustime;
+        this.activeplan.laststatuswarn = maxstatus.statuswarn;
+        this.activeplan.laststatuscolor =this.va.getstatuscolor(this.activeplan.laststatus );
+        // console.log("maxstatus:", maxstatus);
+      }
+    }
+
   }
   async updateactivity(data:PlanactivityModel){
     try{
@@ -175,7 +216,7 @@ export class DriverdetailpageComponent  implements OnInit{
           this.activeplan.laststatustime = maxstatus.statustime;
           this.activeplan.laststatuswarn = maxstatus.statuswarn;
           this.activeplan.laststatuscolor =this.va.getstatuscolor(this.activeplan.laststatus );
-          console.log("maxstatus:", maxstatus);
+          // console.log("maxstatus:", maxstatus);
           return true;
       }
     }

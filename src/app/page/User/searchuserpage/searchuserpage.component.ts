@@ -34,7 +34,7 @@ export class SearchuserpageComponent implements OnInit {
       var wsname = 'getdata';
       var params = { tbname: 'usercustomer',keyword:this.keyword,limit:this.show.limit};
       var jsondata = await this.va.getwsdata(wsname, params);
-      console.log("getData jsondata : ", jsondata);
+      // console.log("getData jsondata : ", jsondata);
       if (jsondata.code == "000") {
         jsondata.data.forEach((data: any) => {
           var temp = new UserModel(data);
@@ -45,7 +45,7 @@ export class SearchuserpageComponent implements OnInit {
         
       }  
     }catch(ex){console.log("getDriver Error :",ex)}
-    console.log("getData result : ", result);
+    // console.log("getData result : ", result);
     return result;
 
   }
@@ -58,14 +58,14 @@ export class SearchuserpageComponent implements OnInit {
 
   showDriver(data: any, modal: any) {
     this.activedriver = data;
-    console.log( "this.activedriver ", this.activedriver  )
+    // console.log( "this.activedriver ", this.activedriver  )
     this.modalService.open(modal, { size: 'lg',backdrop: 'static',keyboard: false }); // 'sm', 'lg', 'xl' available sizes
 
     // this.modalService.open(modal, { fullscreen: true, scrollable: true });
   }
   
   async talkbackdata(data: UserModel) {
-    console.log("talkbackdata data",data)
+    // console.log("talkbackdata data",data)
     if(data){
       this.show.Spinner = true;
       this.keyword=data.firstname

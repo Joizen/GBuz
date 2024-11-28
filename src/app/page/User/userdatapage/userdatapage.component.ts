@@ -140,7 +140,7 @@ export class UserdatapageComponent implements OnInit {
 
     reader.onload = () => {
       this.base64Image = reader.result as string;
-      console.log(this.base64Image); // You can now send this Base64 string to your backend for storage
+      // console.log(this.base64Image); // You can now send this Base64 string to your backend for storage
     };
 
     reader.onerror = (error) => {
@@ -287,7 +287,7 @@ export class UserdatapageComponent implements OnInit {
         // Convert the canvas content to Base64 string
         this.base64Image = canvas.toDataURL(file.type); // file.type will keep the original image format (JPEG, PNG, etc.)
 
-        console.log(this.base64Image); // Base64 string for the resized image
+        // console.log(this.base64Image); // Base64 string for the resized image
       };
       img.src = e.target.result;
     };
@@ -337,13 +337,13 @@ export class UserdatapageComponent implements OnInit {
     try{
       var wsname = "saveimage";
       var param = {tbname:"userimage",empid:this.activeuser?.id,image:image};
-      console.log("saveimage ",param)
+      // console.log("saveimage ",param)
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         return true;
       }
     }catch(ex){
-      console.log("saveupdateplan Error : ",ex)
+      // console.log("saveupdateplan Error : ",ex)
       this.showSanckbar("save or update  route error" + ex,2);
     }
     return false;
@@ -355,7 +355,7 @@ export class UserdatapageComponent implements OnInit {
   // #region  =========== Validate Data ===============================
 
   userdatachange(type:string){
-    console.log("type",type);
+    // console.log("type",type);
     if(this.activeuser){
       if(type=="prefix"){
         if(!this.show.edit){this.show.edit = (this.activeuser.prefix!=this.editdata.prefix);}
@@ -371,17 +371,17 @@ export class UserdatapageComponent implements OnInit {
       this.editdata.empname =this.editdata.prefix+" "+this.editdata.firstname+" "+this.editdata.surename;
     }else{
       if(type==="roleid"){
-        console.log("this.editdata.selectrole",this.editdata.selectrole);
+        // console.log("this.editdata.selectrole",this.editdata.selectrole);
         var role=this.listrole.find(x=>x.id==this.editdata.selectrole);
-        console.log("role",role);
+        // console.log("role",role);
         if(role){this.editdata.rolename=role.display;}    
       }else if(type=="compid"){
         var comp=this.listcomp.find(x=>x.id==this.editdata.selectcomp);
         if(comp){this.editdata.companyname=comp.display;}    
       }
     }
-    console.log("this.editdata ",this.editdata )
-    console.log("this.activeuser ",this.activeuser )
+    // console.log("this.editdata ",this.editdata )
+    // console.log("this.activeuser ",this.activeuser )
     // console.log("this.show.edit ",this.show.edit )
   }
 
@@ -403,7 +403,7 @@ export class UserdatapageComponent implements OnInit {
       // console.log("formattedValue :",formattedValue);
       this.editdata.phone = formattedValue.replace(/\D/g, '');
       // console.log("this.editdata.phone :",this.editdata.phone); 
-      console.log("this.show.phone  :",this.show.phone ); 
+      // console.log("this.show.phone  :",this.show.phone ); 
   
       if(this.activeuser && !this.show.edit){this.show.edit = (this.activeuser.phone!=this.editdata.phone);}
           // Update the form control with the first 10 digits  
@@ -450,7 +450,7 @@ export class UserdatapageComponent implements OnInit {
           }
         }
       }catch(ex){
-        console.log("save plan error ",ex)
+        console.log("saveuser error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
   
@@ -471,7 +471,7 @@ export class UserdatapageComponent implements OnInit {
           }
         }
       }catch(ex){
-        console.log("save plan error ",ex)
+        console.log("updateuser error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
   
@@ -492,7 +492,7 @@ export class UserdatapageComponent implements OnInit {
         }
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("deleteuser error ",ex)
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
@@ -501,7 +501,7 @@ export class UserdatapageComponent implements OnInit {
       var tbname =((status==0)?"newuser":"user");
       var wsname = ((status<0)?"deldata":"updatedata");
       if(status<1){this.editdata.transtatus = status;}
-      console.log("saveupdatedriver this.editdata : ",this.editdata);
+      // console.log("saveupdateuser this.editdata : ",this.editdata);
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,data:this.editdata})
       if(jsondata.code=="000"){       
         if(status<0){this.activeuser=undefined;}
@@ -512,7 +512,7 @@ export class UserdatapageComponent implements OnInit {
         return true;
       }
     }catch(ex){
-      console.log("saveupdatedriver Error : ",ex);
+      console.log("saveupdateuser Error : ",ex);
       this.showSanckbar("save or updatedriver error" + ex,2);
     }
     this.editdata.transtatus =(this.activeuser?this.activeuser.transtatus:0) ;

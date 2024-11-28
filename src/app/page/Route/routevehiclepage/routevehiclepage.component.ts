@@ -27,7 +27,7 @@ export class RoutevehiclepageComponent implements OnInit {
 
   ngOnInit(){
     this.initMap();
-    console.log("activeroute :",this.activeroute)
+    // console.log("activeroute :",this.activeroute)
     this.show.Spinner=false;
   }
 
@@ -35,7 +35,7 @@ export class RoutevehiclepageComponent implements OnInit {
    //--------------------- Leaflet  Map------------------------
    async initMap() {
     try {
-      console.log("this.map : ", this.map);
+      // console.log("this.map : ", this.map);
       this.map = L.map('dpinroutetmap', {
         center: [13.6140328, 100.6162229], // Latitude and longitude of the center point
         zoom: 13, // Initial zoom level

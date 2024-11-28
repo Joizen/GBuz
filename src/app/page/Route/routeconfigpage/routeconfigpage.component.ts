@@ -25,15 +25,15 @@ export class RouteconfigpageComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.activedata){this.editroute = new RouteModel(this.activedata); }
-    console.log("this.editroute ",this.editroute);
-    console.log("this.activedata ",this.activedata);
+    // console.log("this.editroute ",this.editroute);
+    // console.log("this.activedata ",this.activedata);
     this.show.endtime = this.va.DateToString("HH:mm",this.editroute.endtime); 
     // this.editroute.ownerid =this.company.id;
     this.show.Spinner= false;
   }
   activeplanchange(){
     // เปลี่ยนเวลาถึงปลายทาง
-    console.log("selecttime.end : ",this.show.endtime);
+    // console.log("selecttime.end : ",this.show.endtime);
     const [hours, minutes] = this.show.endtime.split(':').map(Number); 
     this.editroute.endtime.setHours(hours, minutes);
 
@@ -55,9 +55,9 @@ export class RouteconfigpageComponent implements OnInit {
 
   }
   routenamechang(){
-    console.log("this.editroute ",this.editroute);
+    // console.log("this.editroute ",this.editroute);
     this.show.save =this.checksave();
-    console.log("this.show.save ",this.show.save);
+    // console.log("this.show.save ",this.show.save);
   }
   checksave(){
     if(this.editroute.routename.trim()==""){return false;}

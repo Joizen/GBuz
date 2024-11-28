@@ -152,9 +152,6 @@ export class DashboardcompanyModel {
   get groupstart() { return this.dolist.filter(item => item.laststatus==20); }
   get groupotw() { return this.dolist.filter(item => item.laststatus==25); }
   get groupfinish() { return this.dolist.filter(item => item.laststatus==30); }
-
-
-
   constructor();
   constructor(jsondata: any);
   constructor(jsondata?: any) { 
@@ -222,7 +219,7 @@ export class DashboardplanModel {
   laststatustaget: Date = new Date("2000-01-01 00:00:00");
   laststatustime: Date = new Date("2000-01-01 00:00:00");
   laststatuslevel: number = 0;
-
+  modifieddate: Date = new Date("2000-01-01 00:00:00");
   vlat: number = 0.0;
   vlng: number = 0.0;
   vstatus: number = 0.0;
@@ -274,6 +271,7 @@ export class DashboardplanModel {
       this.wakeuptime = new Date(jsondata.wakeuptime);
       this.startwarntime= new Date(jsondata.startwarntime);
       this.laststatuswarn=new Date(jsondata.wakeupworntime);
+      this.modifieddate=new Date(jsondata.modifieddate);
     }
     var actwakeup = new  PlanactivityModel(5,this.vid,this.cid,this.driverid,this.docode,this.lineimage);
     this.listactivity.push(actwakeup);
@@ -304,7 +302,6 @@ export class PlanactivityModel {
   icon: string = "";
   transtatus: number = 0;
   constructor();
-  constructor(jsondata: any);
   constructor(statusid: number,vid: number,cid: number,driverid:number,docode: string, lineimage: string);
   constructor(statusid?: number, vid?: number,cid?: number,driverid?: number,docode?: string, lineimage?: string) {
     if(vid){this.vid = vid;}

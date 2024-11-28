@@ -44,7 +44,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
  
   async inputchange(){
     this.show.Spinner = true;
-       console.log('keyword : ', this.keyword);
+      //  console.log('keyword : ', this.keyword);
     this.showvehicle = this.filtervehicle(this.keyword);
     this.show.Spinner = false;
   }
@@ -77,7 +77,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
   }
 
   async searchvehicle() {
-    console.log("showvehicle ",this.showvehicle);
+    // console.log("showvehicle ",this.showvehicle);
     this.show.Spinner = true;
     this.listvehicle = await this.getlistvehicle();
     if (this.listvehicle.length > 0) {
@@ -115,17 +115,17 @@ export class SelectvehicleplanpageComponent implements OnInit {
   }
 
   async showvehicleslot() {
-    console.log('workslot : ',this.workslot);
+    // console.log('workslot : ',this.workslot);
     // if(workslot?.)
     var listwork = await this.getWeekData();
     if(listwork){
-      console.log('listwork : ', listwork);
+      // console.log('listwork : ', listwork);
       this.listslot = [];
       if(listwork.length>0){
         this.listslot = this.setworkslot(listwork)
       }else{
         //ไม่มีงาน
-        console.log('this.workslot : ', this.workslot);
+        // console.log('this.workslot : ', this.workslot);
         this.listslot = this.setemptyworkslot();
       }
     }
@@ -168,7 +168,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
         var lastslot = result[result.length-1];
         lastslot.endid=(Math.floor(1440/this.va.calendarperiod))
-      console.log('result : ', result);
+      // console.log('result : ', result);
         this.show.step = 1;
       
     }catch(ex){ console.log('setworkslot : error : ', ex);}
@@ -186,7 +186,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
         emptyslot.endid=(Math.floor(1440/this.va.calendarperiod))
         result.push(emptyslot);
       }
-      console.log('result : ', result);
+      // console.log('result : ', result);
       this.show.step = 1;
       
     }catch(ex){ console.log('setworkslot : error : ', ex);}
@@ -221,7 +221,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
         routeday: this.workslot?.id,
       };
       var jsondata = await this.va.getwsdata(wsname, params);
-      console.log('getWeekData jsondata : ', jsondata);
+      // console.log('getWeekData jsondata : ', jsondata);
       if (jsondata.code == '000') {
         if(jsondata.data.length>0){
           // มีงานบ้างแล้ว
@@ -238,7 +238,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
         alert('getWeekData No data');
         return undefined;
       }
-      console.log('getWeekData result : ', result);
+      // console.log('getWeekData result : ', result);
       return result;
   
     }catch(ex){
@@ -256,7 +256,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
         plankey: this.workslot?.id,
       };
       var jsondata = await this.va.getwsdata(wsname, params);
-      console.log('getWeekData jsondata : ', jsondata);
+      // console.log('getWeekData jsondata : ', jsondata);
       if (jsondata.code == '000') {
         if(jsondata.data.length>0){
           // มีงานบ้างแล้ว
@@ -273,7 +273,7 @@ export class SelectvehicleplanpageComponent implements OnInit {
         alert('getWeekData No data');
         return undefined;
       }
-      console.log('getWeekData result : ', result);
+      // console.log('getWeekData result : ', result);
       return result;
   
     }catch(ex){
@@ -284,8 +284,8 @@ export class SelectvehicleplanpageComponent implements OnInit {
 
 
   showcreateplan(slot:Calendarslot){
-    console.log('slot',slot);
-    console.log('this.activevihicle',this.activevihicle);
+    // console.log('slot',slot);
+    // console.log('this.activevihicle',this.activevihicle);
 
     if(slot.plancode==""){
       slot.dayname = (this.workslot?this.workslot.textdate:"");

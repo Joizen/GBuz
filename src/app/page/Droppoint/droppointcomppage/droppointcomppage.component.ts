@@ -35,7 +35,7 @@ export class DroppointcomppageComponent implements OnInit, AfterViewInit {
 
   }
   ngAfterViewInit() {
-    console.log(this.map);
+    // console.log(this.map);
     this.initMap();
     // this.startTimer();
   }
@@ -60,7 +60,7 @@ export class DroppointcomppageComponent implements OnInit, AfterViewInit {
   }
 
   openempdata(item: Droppointdata, modal: any) {
-    console.log("opencompanydata comp : ", item);
+    // console.log("opencompanydata comp : ", item);
     this.activedata = item;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     this.modalService.open(modal, { fullscreen: true });

@@ -20,12 +20,12 @@ export class UsercompageComponent implements OnInit {
   public activeuser:  UserModel = new UserModel();
   show = { Spinner: true,viewtype:0 };
   async ngOnInit()  {
-    console.log("ngOnInit : this.va.icon.user ",this.va.icon.user);
+    // console.log("ngOnInit : this.va.icon.user ",this.va.icon.user);
     
     this.maindata = await this.getData();
   }
   async refreshpage(){
-    console.log("Usercomppage.refreshdata : ");
+    // console.log("Usercomppage.refreshdata : ");
     // await this.showroutetab(this.show.viewtype);
   }
 

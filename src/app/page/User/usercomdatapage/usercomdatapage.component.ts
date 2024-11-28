@@ -22,7 +22,7 @@ export class UsercomdatapageComponent implements OnInit {
 
   async ngOnInit() {
     if(this.activeuser.id!=0) {this.listcustomer = await this.getData();} 
-    console.log("this.listcustomer : ",this.listcustomer);
+    // console.log("this.listcustomer : ",this.listcustomer);
     this.show.Spinner=false;
   }
 

@@ -50,7 +50,7 @@ export class RoutepageComponent implements OnInit {
   }
 
   async ShowDroppoint(dp: any) {
-    console.log("ShowDroppoint dp : ", dp);
+    // console.log("ShowDroppoint dp : ", dp);
     if (!this.map) {
       await this.initMap();
     } 
@@ -60,7 +60,7 @@ export class RoutepageComponent implements OnInit {
   //--------------------- Leaflet  Map------------------------
   async initMap() {
     try {
-      console.log("this.map : ", this.map);
+      // console.log("this.map : ", this.map);
       this.map = L.map('routedatatmap', {
         center: [13.6140328, 100.6162229], // Latitude and longitude of the center point
         zoom: 13, // Initial zoom level

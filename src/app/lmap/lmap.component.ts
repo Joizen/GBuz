@@ -44,7 +44,7 @@ export class LmapComponent implements OnInit {
 
   private  getCurenceLocation(){
     if(!navigator.geolocation){
-      console.log("Not support geolocation");
+      // console.log("Not support geolocation");
     }else{
       this.currencePosition = navigator.geolocation.getCurrentPosition((position)=>{
         const coords = position.coords;
@@ -101,7 +101,7 @@ export class LmapComponent implements OnInit {
   }
   private setCurentRoute(LatLng:L.LatLng,):void{
     this.listCurentpoint.push(LatLng);
-    console.log("this.listCurentpoint;",this.listCurentpoint);
+    // console.log("this.listCurentpoint;",this.listCurentpoint);
     // clear route
     if (this.map && this.curentRoute) { this.map.removeLayer(this.curentRoute); }
 
@@ -119,7 +119,7 @@ export class LmapComponent implements OnInit {
         listpoints.push(latLngExpression);
       }
       this.curentRoute = L.polyline(listpoints,{color:'red'}).addTo(this.map);
-      console.log("this.curentRoute : ",this.curentRoute);  
+      // console.log("this.curentRoute : ",this.curentRoute);  
     }
   }
 

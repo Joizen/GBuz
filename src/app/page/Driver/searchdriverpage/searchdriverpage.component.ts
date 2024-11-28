@@ -45,7 +45,7 @@ export class SearchdriverpageComponent implements OnInit {
         
       }  
     }catch(ex){console.log("getDriver Error :",ex)}
-    console.log("getData result : ", result);
+    // console.log("getData result : ", result);
     return result;
 
   }
@@ -64,7 +64,7 @@ export class SearchdriverpageComponent implements OnInit {
   }
   
   async talkbackdata(data: DriverdataModel) {
-    console.log("talkbackdata data",data)
+    // console.log("talkbackdata data",data)
     if(data){
       this.listdriver = [];
       this.listdriver.push(data);      

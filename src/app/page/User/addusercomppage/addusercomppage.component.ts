@@ -23,7 +23,7 @@ export class AddusercomppageComponent implements OnInit {
 
   async ngOnInit() {
     if(this.activecompany.id!=0) {this.listuser = await this.getData();} 
-    console.log("this.listuser : ",this.listuser);
+    // console.log("this.listuser : ",this.listuser);
     this.show.Spinner=false;
   }
 

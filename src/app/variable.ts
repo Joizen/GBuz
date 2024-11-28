@@ -33,7 +33,7 @@ export class variable {
   public showmenu = false;
   public icon = this.seticon();
 
-  public calendarperiod=15;
+  public calendarperiod=5;
   public defultdate = new Date('2000-01-01 00:00:00')
 
   // #region  =========== Encryption=========================
@@ -73,14 +73,14 @@ export class variable {
     try {
       this.removepagekey();
       var result = await this.getwsnouserdata("getpageid", {}, this.ProgramID);
-      console.log("getpageid result :", result);
+      // console.log("getpageid result :", result);
       if (result != undefined) {
         this.setpagekey({ cid: result.cid, apistime: result.apistime });
-        console.log("getpageid result 2 :", result);
+        // console.log("getpageid result 2 :", result);
         return "Get Paget ID Success";
         // console.log("getpageid Pagekey :",this.getpagekey());
       } else {
-        console.log("Start Register error getpageid : undefined");
+        // console.log("Start Register error getpageid : undefined");
         return "Get Paget ID Error : getpageid was undefined";
         // alert("Start Register error");
       }
@@ -127,7 +127,7 @@ export class variable {
     try {
       var wsname= "getdata"
       var result = await this.getwsdata(wsname, {tbname:"adminprofile",isone:true}, );
-      console.log("getprofiledata result : ", result);
+      // console.log("getprofiledata result : ", result);
       if (result.code=="000" && result.data!= null) {
         this.setprofile(result.data);
         return true;
@@ -139,7 +139,7 @@ export class variable {
   }
   
   public setlogin(jsondata: any) { 
-    console.log("setlogin data :",jsondata) 
+    // console.log("setlogin data :",jsondata) 
     localStorage.setItem( (this.ProgramID +"-token"), jsondata.data.token); 
     localStorage.setItem((this.ProgramID +"-uid"), jsondata.member); 
   }

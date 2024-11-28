@@ -43,7 +43,7 @@ export class VehiclepageComponent {
       }
       this.listprovince = await this.getlistprovince();
       this.listvtype = await this.getlistvtype();
-      console.log("this.viewData :",this.editdata);
+      // console.log("this.viewData :",this.editdata);
     }catch(ex){ console.log("ngOnInit Error :",ex);}
   }
 
@@ -107,7 +107,7 @@ export class VehiclepageComponent {
         result.push(temp);
         i++
       });
-      console.log("getlistgps result : ", result);
+      // console.log("getlistgps result : ", result);
 
     } 
     else { this.showSanckbar("get list of GPS Failure");}
@@ -174,7 +174,7 @@ this.showSanckbar("Update driver success");
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,vid:this.editdata.vid,driverid:this.selecteddriver.id});
       if(jsondata.code=="000"){ return true;}
     }catch(ex){
-      console.log("saveupdatevehicle Error : ",ex);
+      console.log("savedriverinvehicle Error : ",ex);
       this.showSanckbar("save or update vehicle error" + ex,2);
     }
     this.editdata.transtatus =(this.vehicledata?this.vehicledata.transtatus:0) ;
@@ -242,7 +242,7 @@ this.showSanckbar("Update driver success");
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,vid:this.editdata.vid,gps:this.selectedgps.ref1});
       if(jsondata.code=="000"){ return true;}
     }catch(ex){
-      console.log("savegps Error : ",ex);
+      console.log("savegpsinvehicle Error : ",ex);
       this.showSanckbar("save or update gps error" + ex,2);
     }
     this.editdata.transtatus =(this.vehicledata?this.vehicledata.transtatus:0) ;
@@ -261,7 +261,7 @@ this.showSanckbar("Update driver success");
   // #region  =========== Validate Data & QR Code =====================
 
   vehicledatachange(type:string){
-    console.log("type : ",type);
+    // console.log("type : ",type);
     if(type=="licent1"){
       if(this.editdata.licent1.length>3){this.editdata.licent1=this.editdata.licent1.substring(0, 3); }
       this.editdata.vlicent =(this.editdata.licent1+"-"+this.editdata.licent2);
@@ -295,7 +295,7 @@ this.showSanckbar("Update driver success");
         if(!this.show.edit){ this.show.edit = (this.vehicledata.vtype!=this.editdata.vtype); }
       }
     }
-    console.log("this.show.edit ",this.show.edit )
+    // console.log("this.show.edit ",this.show.edit )
   }
 
   // #endregion  =========== Validate Data & QR Code ==================
@@ -329,7 +329,7 @@ this.showSanckbar("Update driver success");
           }
         }
       }catch(ex){
-        console.log("save plan error ",ex)
+        console.log("savevehicle error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
   
@@ -350,7 +350,7 @@ this.showSanckbar("Update driver success");
           }
         }
       }catch(ex){
-        console.log("save Vehicle error ",ex)
+        console.log("updatevehicle error ",ex)
         this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
       }
   
@@ -371,7 +371,7 @@ this.showSanckbar("Update driver success");
         }
       }
     }catch(ex){
-      console.log("save plan error ",ex)
+      console.log("deletevehicle error ",ex)
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
@@ -380,7 +380,7 @@ this.showSanckbar("Update driver success");
       var tbname =((status==0)?"newvehicle":"vehicle");
       var wsname = ((status<0)?"deldata":"updatedata");
       if(status<1){this.editdata.transtatus = status;}
-      console.log("saveupdatevehicle this.editdata : ",this.editdata);
+      // console.log("saveupdatevehicle this.editdata : ",this.editdata);
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname,data:this.editdata})
       if(jsondata.code=="000"){       
         if(status<0){this.vehicledata=undefined;}
@@ -424,7 +424,7 @@ this.showSanckbar("Update driver success");
 
     reader.onload = () => {
       this.base64Image = reader.result as string;
-      console.log(this.base64Image); // You can now send this Base64 string to your backend for storage
+      // console.log(this.base64Image); // You can now send this Base64 string to your backend for storage
     };
 
     reader.onerror = (error) => {
@@ -571,7 +571,7 @@ this.showSanckbar("Update driver success");
         // Convert the canvas content to Base64 string
         this.base64Image = canvas.toDataURL(file.type); // file.type will keep the original image format (JPEG, PNG, etc.)
 
-        console.log(this.base64Image); // Base64 string for the resized image
+        // console.log(this.base64Image); // Base64 string for the resized image
       };
       img.src = e.target.result;
     };
@@ -621,14 +621,14 @@ this.showSanckbar("Update driver success");
     try{
       var wsname = "saveimage";
       var param = {tbname:"driverimage",driverid:this.vehicledata?.vid,image:image};
-      console.log("saveimage ",param)
+      // console.log("saveimage ",param)
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         return true;
       }
     }catch(ex){
-      console.log("saveupdateplan Error : ",ex)
-      this.showSanckbar("save or update  route error" + ex,2);
+      console.log("saveimage Error : ",ex)
+      this.showSanckbar("save or update  image error" + ex,2);
     }
     return false;
   }
