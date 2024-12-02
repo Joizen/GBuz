@@ -12,6 +12,7 @@ import { PlandatapageModule } from '../../Plan/plandatapage/plandatapage.module'
 import { registerLocaleData } from '@angular/common';
 import localeTh from '@angular/common/locales/th';
 import { RouteconfigpageModule } from "../routeconfigpage/routeconfigpage.module";
+import { RoutepolygonpageModule } from "../routepolygonpage/routepolygonpage.module";
 
 registerLocaleData(localeTh);
 
@@ -28,7 +29,8 @@ registerLocaleData(localeTh);
     FormsModule,
     SelectvehicleplanpageModule,
     PlandatapageModule,
-    RouteconfigpageModule
+    RouteconfigpageModule,
+    RoutepolygonpageModule
 ],
   exports:[
     RoutecomppageComponent

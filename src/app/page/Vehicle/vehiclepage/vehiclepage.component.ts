@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { QRCodeModule } from 'angularx-qrcode';
-import { DriverdataModel, Selecteddata, VehicleModel } from 'src/app/models/datamodule.module';
+import { DriverdataModel, SelecteddataModel, VehicleModel } from 'src/app/models/datamodule.module';
 import { variable } from '../../../variable';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
@@ -25,13 +25,13 @@ export class VehiclepageComponent {
   show = { Spinner: false, edit: false ,phone:"",editdriver:false,editgps:false,keyword:""};
   public Qrdata: string = "";
   base64Image: string = this.va.icon.user;
-  listprovince:Selecteddata[]=[];
-  listvtype:Selecteddata[]=[];
-  listgps:Selecteddata[]=[];
-  gpsfilter:Selecteddata[]=[];
+  listprovince:SelecteddataModel[]=[];
+  listvtype:SelecteddataModel[]=[];
+  listgps:SelecteddataModel[]=[];
+  gpsfilter:SelecteddataModel[]=[];
   listdriver:DriverdataModel[]=[];
   selecteddriver:DriverdataModel =new DriverdataModel();
-  selectedgps:Selecteddata =new Selecteddata();
+  selectedgps:SelecteddataModel =new SelecteddataModel();
 
   async ngOnInit() {
     try{
@@ -64,14 +64,14 @@ export class VehiclepageComponent {
     return result;
   }
   async getlistvtype() {
-    var result: Selecteddata[] = [];
+    var result: SelecteddataModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'listvtype'};
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log("getlistrole jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Selecteddata(data);
+        var temp = new SelecteddataModel(data);
         result.push(temp);
       });
     } 
@@ -80,13 +80,13 @@ export class VehiclepageComponent {
 
   }
   async getlistprovince() {
-    var result: Selecteddata[] = [];
+    var result: SelecteddataModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'listprovince'};
     var jsondata = await this.va.getwsdata(wsname, params);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Selecteddata(data);
+        var temp = new SelecteddataModel(data);
         result.push(temp);
       });
     } 
@@ -95,7 +95,7 @@ export class VehiclepageComponent {
 
   }
   async getlistgps() {
-    var result: Selecteddata[] = [];
+    var result: SelecteddataModel[] = [];
     var wsname = 'getgpsvehicle';
     var params = { tbname: 'listgps'};
     var jsondata = await this.va.getwsdata(wsname, params);
@@ -103,7 +103,7 @@ export class VehiclepageComponent {
       var i:number =1;
       jsondata.data.forEach((data: any) => {
         var gps={id:i,display:data.vname,ref1:data.serialbox,ref2:data.vlicense,ref3:data.adminname,ref4:(data.lat+','+data.lng)}
-        var temp = new Selecteddata(gps);
+        var temp = new SelecteddataModel(gps);
         result.push(temp);
         i++
       });
@@ -200,7 +200,7 @@ this.showSanckbar("Update driver success");
     this.gpsfilter = this.listgps.filter(x=>x.display.includes(keyword)||x.ref2.includes(keyword)).slice(0, 20);
     if(this.gpsfilter.length>0){this.selectedgps=this.gpsfilter[0];}
   }
-  selecteddata(data:Selecteddata){
+  selecteddata(data:SelecteddataModel){
     this.selectedgps =data;
   }
   async savegps(){

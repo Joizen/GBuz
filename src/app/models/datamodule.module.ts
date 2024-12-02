@@ -14,7 +14,7 @@ import * as va from '../variable';
 
 export class DatamoduleModule { }
 
-export class Selecteddata {
+export class SelecteddataModel {
   id:number = -1;
   display: string = "ไม่ระบุ";
   ref1: string = "";
@@ -518,6 +518,7 @@ export class RouteplanModel {
   vid:number=0; // รถใช้สำหรับ plantype 2,3
   vname:string ="";
   vlicent:string ="";
+  gpsvid:string ="";
   driverid:number=0; // รถใช้สำหรับ plantype 2,3
   drivername:string ="";
   driverimage:string ="";
@@ -578,6 +579,7 @@ export class RouteplanModel {
       this.drivername = jsondata.drivername?jsondata.drivername:"";
       this.driverphone = jsondata.driverphone?jsondata.driverphone:"";
       this.driverimage = jsondata.driverimage?jsondata.driverimage:"";
+      this.gpsvid = jsondata.gpsvid?jsondata.gpsvid:"";      
       this.plandate = new Date(jsondata.plandate);   
       this.starttime = new Date(this.plandate);
       var st = new Date(jsondata.starttime)
@@ -703,6 +705,7 @@ export class VehicleplanModel {
   vid : number = 0;
   vname : string ="";
   vlicent : string ="";
+  gpsvid : string ="";
   driverid: number = 0;
   drivername: string = "";
   driverimage: string = "";
@@ -724,8 +727,10 @@ export class VehicleplanModel {
       this.drivername= jsondata.drivername;
       this.driverimage= jsondata.driverimage;
       this.driverphone= jsondata.driverphone; 
+      this.gpsvid= jsondata.gpsvid?jsondata.gpsvid:""; 
       this.plandate= new Date(jsondata.plandate)
       if(cdate){this.plandate= new Date(jsondata.plandate)}
+      this.gpsvid= jsondata.gpsvid?jsondata.gpsvid:""; 
     }
     if(period){  this.setperiod(period,this.plandate)  }
   }
@@ -745,6 +750,7 @@ export class VehicleModel {
   vid: number = 0;
   vname: string = "";
   vlicent: string = "";
+  gpsvid: string = "";
   qrcode: string = "";
   fullname: string = "";
   driverimage: string = "";
@@ -790,6 +796,8 @@ export class VehicleModel {
       this.drivername = jsondata.drivername?jsondata.drivername:"";
       this.driversurname = jsondata.driversurname?jsondata.driversurname:"";
       this.driverphone = jsondata.driverphone?jsondata.driverphone:"";
+      this.gpsvid= jsondata.gpsvid?jsondata.gpsvid:""; 
+
       if(this.vlicent && this.vlicent.length>0){
         var licent = this.vlicent.split('-');
         if(licent.length>1){this.licent1=licent[0];this.licent2=licent[1];}
@@ -822,7 +830,29 @@ export class ComshiftModel {
    
   };
 }
-
+export class GpslogModel {
+   gpstime:Date = new Date;
+   gpsstatus:number = 0;
+   lat:number = 0;
+   lng:number = 0;
+   speed:number = 0;
+   show:boolean=false;
+   statuscolor:string = "#d6d4d4";
+   ref:number = 0;
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any){
+    if(jsondata){
+      this.gpstime = new Date(jsondata.gpstime);
+      this.gpsstatus = jsondata.gpsstatus;
+      this.lat = jsondata.lat;
+      this.lng = jsondata.lng;
+      this.speed = jsondata.speed;
+      // this.show = (jsondata.gpsstatus==31||jsondata.gpsstatus==33);
+      this.statuscolor = va.getvcolor(this.gpsstatus);
+    }
+  }
+}
 
 //#endregion
 
@@ -1189,6 +1219,7 @@ export class VehicleRoutedata {
   vid: number = 0;
   vname: string = "";
   vlicent: string = "";
+  gpsvid: string = "";
   driverid: number = 0;
   drivername: string = "";
   routeid: number = 0;
@@ -1223,6 +1254,7 @@ export class VehicleRoutedata {
     this.issendname = jsondata.issendname;
     this.period = jsondata.period;
     this.distance = jsondata.distance;
+    this.gpsvid = jsondata.gpsvid;
   }
 }
 

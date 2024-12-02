@@ -1,0 +1,134 @@
+<div class="header">
+    <!-- Header data & close button -->
+    <div class="row px-3 py-0"
+         style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
+      
+      <div class="col-1" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
+        <img class="company-logo" [src]="company.complogo==''? va.icon.nologo : company.complogo">
+      </div>
+  
+      <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
+        <div >
+          <div class="row">
+            <span> {{routedata?.routename}} </span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
+        <div class="row">
+          <div class="icon-inrow">
+            <div class="icon-inrow" (click)="modal.close()" style="cursor:pointer;">
+              <span>ปิด</span>
+              <mat-icon style="width: auto; ">arrow_forward_ios</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+</div>
+
+<!-- Body & spinner -->
+<div class="position-relative" style="height: 100%; width:100%; overflow: hidden;">
+      <!-- spinner -->
+  <div class="container-spiner" *ngIf="show.spinner">
+    <div class="row">
+      Please Watting...
+    </div>
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Body -->
+  <div style="width:100%; padding: 20px;">
+    <div class="row" style="height: 80vh; width:100vw;">
+        <!-- Left Column -->
+
+        <div class="col-3" style="height: 80vh; width:25vw;">
+          <div style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px;">
+            <mat-icon>departure_board</mat-icon>
+            <input type="date" style="width: auto; text-align: right;" [(ngModel)]="show.startdate" (ngModelChange)="selecttimechange()" />
+            <input type="time" style="width: auto; text-align: right;" [(ngModel)]="show.starttime" (ngModelChange)="selecttimechange()" />
+            <span>-</span>
+            <input type="time" style="width: auto; text-align: right;" [(ngModel)]="show.endtime" (ngModelChange)="selecttimechange()" />
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <mat-icon>credit_card</mat-icon>
+              <span>{{selectedvehicle.display}} : {{selectedvehicle.ref1}}</span>
+            </div>
+            <mat-icon style="color: blue;" (click)="searchgpslog()" >search</mat-icon>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px;" *ngIf="listhistory.length>2">
+            <div class="icon-inrow" (click)="setstartpoint(true)"
+            [style.background-color]="(show.setstartpoint&&!show.view) ?'lightgreen':'lightslategrey'">
+              <mat-icon>outlined_flag</mat-icon>
+              <span> Start</span>
+              <span> {{ show.polygonstart | date : "HH:mm" }} </span>
+            </div>
+            <div class="icon-inrow"  (click)="setstartpoint(false)"
+            [style.background-color]="(!show.setstartpoint&&!show.view)?'lightgreen':'lightslategrey'">
+              <mat-icon>flag</mat-icon>
+              <span> End</span>
+              <span> {{ show.polygonend | date : "HH:mm" }} </span>            
+            </div>
+            <div class="icon-inrow" (click)="show.view=!show.view"
+                [style.background-color]="(show.view)?'lightgreen':'lightslategrey'">
+              <mat-icon>visibility</mat-icon>
+            </div>
+            
+          </div>
+
+            <div class="table-container" >
+                <div class="row table-header">
+                  <div class="col-3">Time</div>
+                  <div class="col-1">Status</div>
+                  <div class="col-1">lat</div>
+                  <div class="col-1">lng</div>
+                  <!-- <div class="col-1">speed</div> -->
+                  <div class="col-1">speed</div>
+                </div>
+            </div>
+            <div class="table-data" style="height: 60vh;  background-color: inherit;" >
+                <div *ngFor="let point of listhistory"  class="row table-row" 
+                      [ngStyle]="{ 'background-color': point.statuscolor}" 
+                      [hidden]="!point.show&&point.gpsstatus!=31&&point.gpsstatus!=33"
+                      (click)="setselectpoint(point)">
+                    <div class="col-3">{{ point.gpstime|date:"HH:mm"}}</div>
+                    <div class="col-1">{{ point.gpsstatus}}</div>
+                    <div class="col-1">{{ point.lat}}</div>
+                    <div class="col-1">{{ point.lng}}</div>
+                    <!-- <div class="col-1">{{ point.speed}}</div> -->
+                    <div class="col-1">
+                      <mat-icon (click)="showrunpoint(point)" *ngIf="point.gpsstatus==31||point.gpsstatus==33">
+                        {{ point.show ? 'expand_less' : 'expand_more' }}
+                      </mat-icon>
+                      <span  *ngIf="point.gpsstatus!=31&&point.gpsstatus!=33">{{ point.speed}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Righ Column -->
+        <div  class="col-9" id="map-container" style="height: 80vh; width:75vw; background-color: lightyellow;">
+            <div class="row no-guster" id="routemap" style="height: 100%; width:100%;"></div>
+              <!-- Floating Mat Icon -->
+              <div style="position: absolute; top: 10px; right: 10px; z-index: 1000;">
+                <button mat-icon-button>
+                  <mat-icon [style.color]="show.routeformlog?'blue':'lightslategray'" >linear_scale</mat-icon>
+                </button>
+                <!-- <button mat-icon-button>
+                  <mat-icon [style.color]="show.routeformlog?'lightslategray':'blue'" >edit</mat-icon>
+                </button> -->
+                <button mat-icon-button *ngIf="((!show.saveroute) && (show.deleteroute))" (click)="deleteroute()" >
+                  <mat-icon style="color: red;">delete_forever</mat-icon>
+                </button>
+                <button mat-icon-button  *ngIf="show.saveroute" (click)="saveroute()" >
+                  <mat-icon style="color: green;">save</mat-icon>
+                </button>    
+              </div>
+        </div>
+    </div>
+  </div>
+
+</div>

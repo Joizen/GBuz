@@ -42,6 +42,7 @@ const routes: Routes = [
   { path: 'user', loadChildren: () => import('./page/User/searchuserpage/searchuserpage.module').then(m => m.SearchuserpageModule) },
   { path: 'usercomdata', loadChildren: () => import('./page/User/usercomdatapage/usercomdatapage.module').then(m => m.UsercomdatapageModule) },
   { path: 'comshift', loadChildren: () => import('./page/Company/shiftpage/shiftpage.module').then(m => m.ShiftpageModule) },
+  { path: 'routepolygon', loadChildren: () => import('./page/Route/routepolygonpage/routepolygonpage.module').then(m => m.RoutepolygonpageModule) },
 ];
 
 @NgModule({

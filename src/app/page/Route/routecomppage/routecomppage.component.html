@@ -33,12 +33,18 @@
 
             <div class="col text-center" style="display: flex; align-items: center; justify-content: center;">
                 <h1 *ngIf="show.viewtype==0"> ข้อมูลแผนการเดินรถรายวัน </h1> 
-                <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  </h1> 
-                <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ </h1> 
+                <h1 *ngIf="show.viewtype==1"> ข้อมูลแผนการเดินรถรายสัปดาห์  {{activedata.routename}}  </h1> 
+                <h1 *ngIf="show.viewtype==2"> ข้อมูลเส้นทางการเดินรถ  {{activedata.routename}}   </h1> 
             </div>
 
             <div class="col-auto text-align end" style="display: flex; align-items: center; justify-content: center;gap: 20px; ">
-                <div class="row" style="text-align: right; margin-right: 10px; color: blue;">                       
+                <div class="row" style="text-align: right; margin-right: 10px; color: blue;">   
+                    <div>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center;"*ngIf="show.viewtype==2" (click)="editpolygon(polygonmodal)"
+                    matTooltip="ปรับแต่งเส้นทางรถ">
+                    <mat-icon style="width: 100%;">linear_scale</mat-icon>
+                    </div>                    
                     <div class="col" style="display: flex; align-items: center;"*ngIf="show.viewtype==2" (click)="addnewroute(routeconfigmodal)"
                         matTooltip="เพิ่มแผนให้รถใหม่">
                         <mat-icon style="width: 100%;">add_box</mat-icon>
@@ -302,10 +308,10 @@
 
     <div *ngIf="show.viewtype==2" >
         
-        <div class="row" style="height: 60vh; width:100vw;">
+        <div class="row" style="height: 70vh; width:100vw;">
             <!-- Left Column -->
              
-            <div class="col-6" style="height: 60vh; width:40hw; overflow: hidden;">
+            <div class="col-6" style="height: 65vh; width:40hw; overflow: hidden;">
                 <div class="table-container">
                     <div class="row table-header">
                       <div class="col-3">routename</div>
@@ -316,7 +322,7 @@
                       <div class="col-1">Finisn</div>
                     </div>
                 </div>
-                <div class="table-data"  >
+                <div class="table-data" style="height: 90%;"  >
                     <div *ngFor="let plan of maindata"  class="row table-row"
                         [class.selected]="plan.id == activedata.id" 
                         (click)="Showroute(plan)" (dblclick)="Showrouteconfig(plan,routeconfigmodal)">
@@ -338,7 +344,7 @@
             </div>
 
             <!-- Righ Column -->
-            <div  class="col-6" id="map-container" style="height: 60vh; width:50vw; background-color: lightyellow;">
+            <div  class="col-6" id="map-container" style="height: 65vh; width:50vw; background-color: lightyellow;">
 
                 <div class="data-box-container" >
                         <div class="data-box m-2" *ngFor="let box of activedata.dpinroute">
@@ -353,9 +359,8 @@
         </div>
 
         <!-- Vehicle in Route -->
-        <hr>
-        <div class="row" style="max-height: 20vh; width:100vw;" *ngIf="false">
-            <!-- header -->
+        <!-- <hr> -->
+        <!-- <div class="row" style="max-height: 20vh; width:100vw;" *ngIf="false">
             <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center;  width:100%;  margin: 0; background-color: lightyellow;">
                 <div class="col" style="display: flex; align-items: center; justify-content: start;">
                 <mat-icon> directions_bus </mat-icon>
@@ -370,7 +375,6 @@
                 </div>
             </div>
             <div style="height: 2px; width: 100%; background-color: lightgray;"></div>
-            <!-- body -->
             <div style="height: 100%; width:100%; overflow: scroll;">
                 <div *ngFor="let vehicle of activedata.vinroute">
                 <div class="row" >
@@ -390,7 +394,6 @@
                               <mat-icon> timeline </mat-icon>
                               <span>{{vehicle.issendname}}</span>  
                               <span>{{vehicle.shiftname}}</span>  
-                              <!-- <span *ngIf="vehicle.item!=1">({{vehicle.item}})</span>   -->
                             </div>
                   
                             <div class="icon-inrow" matTooltip="ระยะเวลา (นาที)">
@@ -432,7 +435,7 @@
                 </div>
             </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -458,4 +461,8 @@
 <ng-template #plandetailmodal let-modal>
     <app-plandatapage  [modal]="modal" [vehicle]="selectedvehicle" [company]="activecompany"  
     [planslot]="activeslot" [routedata]="activedata" [editplan]="activeplan" (talk)="routeplantalkback($event)"></app-plandatapage>
+</ng-template>
+
+<ng-template #polygonmodal let-modal>
+    <app-routepolygonpage [modal]="modal" [company]="activecompany" [routedata]="activedata" ></app-routepolygonpage>
 </ng-template>

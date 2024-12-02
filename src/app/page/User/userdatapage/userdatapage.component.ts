@@ -4,7 +4,7 @@ import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
-import { CompanyModel, Selecteddata, UserModel } from 'src/app/models/datamodule.module';
+import { CompanyModel, SelecteddataModel, UserModel } from 'src/app/models/datamodule.module';
 
 @Component({
   selector: 'app-userdatapage',
@@ -19,8 +19,8 @@ export class UserdatapageComponent implements OnInit {
   listcustomer : CompanyModel[]=[];
   editcustomer : CompanyModel=new CompanyModel();
   show =  { Spinner: true ,phone:"",edit:false,delete:false};
-  listrole:Selecteddata[]=[];
-  listcomp:Selecteddata[]=[];
+  listrole:SelecteddataModel[]=[];
+  listcomp:SelecteddataModel[]=[];
   editdata:  UserModel = new UserModel();
   base64Image: string = this.va.icon.user;
 
@@ -76,14 +76,14 @@ export class UserdatapageComponent implements OnInit {
 
   }
   async getlistrole() {
-    var result: Selecteddata[] = [];
+    var result: SelecteddataModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'listrole'};
     var jsondata = await this.va.getwsdata(wsname, params);
     // console.log("getlistrole jsondata : ", jsondata);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Selecteddata(data);
+        var temp = new SelecteddataModel(data);
         result.push(temp);
       });
     } else {
@@ -93,13 +93,13 @@ export class UserdatapageComponent implements OnInit {
 
   }
   async getlistcomp() {
-    var result: Selecteddata[] = [];
+    var result: SelecteddataModel[] = [];
     var wsname = 'getdata';
     var params = { tbname: 'listcomp'};
     var jsondata = await this.va.getwsdata(wsname, params);
     if (jsondata.code == "000") {
       jsondata.data.forEach((data: any) => {
-        var temp = new Selecteddata(data);
+        var temp = new SelecteddataModel(data);
         result.push(temp);
       });
     } else {

@@ -228,6 +228,9 @@ export class variable {
       logo : this.imagepath + "logo.png",
       nologo : this.imagepath + "nologo.png",
       thispoint : this.imagepath + "thispoint.png",
+      company : this.imagepath + "factory.png",
+      stop : this.imagepath + "poistop.png",
+      idle : this.imagepath + "poiidle.png",
     }
   }
   public getactiveicon(id:any){
@@ -498,6 +501,15 @@ export function  getstatusname(id:number):string{
 }
 export function getCalendarPeriod(variableInstance: variable): number {
   return variableInstance.calendarperiod;
+}
+export function getvcolor(id:number){
+  if(id==30){return "#03af15";} //เขียว
+  else if(id==31){return "#fab704";} //เหลือง
+  else if(id==33){return "#fa0404";} //แดง
+  else if(id==41){return "#6803bd";} //ม่วง
+  else if(id==80){return "#949494";} //เทา
+  else if(id==60||id==61||id==62){return "#1830fa";} //เทาอ่อน
+  else{return "#d6d4d4";} //949494
 }
 
 // #endregion

@@ -1,0 +1,21 @@
+.row.table-row {
+    position: relative;
+  }
+  
+  .row.table-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: inherit; /* Use the row's background color */
+    opacity: 0.2; /* Set background opacity */
+    z-index: 0; /* Place it behind the content */
+  }
+  
+  .row.table-row > * {
+    position: relative;
+    z-index: 1; /* Bring content above the background */
+  }
+  

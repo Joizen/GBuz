@@ -29,7 +29,7 @@ export class RoutecomppageComponent implements OnInit {
   show = { Spinner: true, viewtype: 0 };
   public maindata: RouteModel[] = [];
   public activedata: RouteModel = new RouteModel();
-  public activevehicle: VehicleRoutedata = new VehicleRoutedata();
+  // public activevehicle: VehicleRoutedata = new VehicleRoutedata();
   private map: L.Map | undefined;
   private mapIconSize = 30;
   private cmarkers: L.Marker | undefined;
@@ -46,13 +46,11 @@ export class RoutecomppageComponent implements OnInit {
   async ngOnInit() {
     await this.showroutetab(this.show.viewtype);
   }
-  
   async refreshpage(){
     this.maindata = await this.getData();
     // console.log("Routecomppage.refreshdata : ",this.show.viewtype)
     await this.showroutetab(this.show.viewtype);
   }
-
   async showroutetab(id:number){
     this.show.viewtype=id;
     this.show.Spinner = true;
@@ -82,7 +80,6 @@ export class RoutecomppageComponent implements OnInit {
     this.show.Spinner = false;
       
   }
-
   async getData() {
     var result: RouteModel[] = [];
     var wsname = 'getdata';
@@ -99,7 +96,6 @@ export class RoutecomppageComponent implements OnInit {
     }
     return result;
   }
-
   async SetdropointRoute() {
     var result: DPinroutedata[] = [];
     var wsname = 'getdata';
@@ -139,57 +135,28 @@ export class RoutecomppageComponent implements OnInit {
     this.show.Spinner = false;
     return result;
   }
-
-  async SetVehicleRoute() {
-    var result: VehicleRoutedata[] = [];
-    var wsname = 'getdata';
-    var params = { tbname: 'vehicleroutecomp', compid: this.activecompany.id };
-    var jsondata = await this.va.getwsdata(wsname, params);
-    // console.log('getData jsondata : ', jsondata);
-    if (jsondata.code == '000') {
-      jsondata.data.forEach((data: any) => {
-        var temp = new VehicleRoutedata();
-        temp.setdata(data);
-        result.push(temp);
-      });
-      if (this.maindata) {
-        this.maindata.forEach((route) => {
-          var listvehicle = result.filter((x) => x.routeid == route.id);
-          if (listvehicle) {
-            route.vinroute = listvehicle;
-          } else {
-            route.vinroute = [];
-          }
-        });
-      }
-    } else {
-    }
-    this.show.Spinner = false;
-    return result;
-  }
-
   openempdata(item: RouteModel, modal: any) {
     // console.log('opencompanydata comp : ', item);
     this.activedata = item;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     this.modalService.open(modal, { fullscreen: true });
+    
   }
-
   routedetailtalkback(event: any) {
     this.refreshpage();
   }
-
   Showrouteconfig(route: RouteModel, modal: any) {
     // console.log('Showroutedropoint route', route);
     this.activedata = route;
     // this.modalService.open(modal, { fullscreen: true });
-    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+
 
   }
 
-  // #region  ========= Route Map ==============================
-
-  //--------------------- Leaflet  Map------------------------
+  // ==========================================================
+  // #region ========== Route Map =============================
   async initMap() {
     try {
       // console.log('this.map : ', this.map);
@@ -210,7 +177,6 @@ export class RoutecomppageComponent implements OnInit {
     }
     return false;
   }
-
   Showroute(route: RouteModel) {
     // console.log('Showroute route : ', route);
     this.activedata = route;
@@ -220,7 +186,6 @@ export class RoutecomppageComponent implements OnInit {
       this.PlotRoute();
     }
   }
-
   async PlotRoute() {
     var lastpoint: any = [13, 100];
     this.activedata.dpinroute.forEach((item) => {
@@ -234,7 +199,6 @@ export class RoutecomppageComponent implements OnInit {
     }
     return true;
   }
-
   private plotMarker(lat: any, lng: any, header: string) {
     if (this.map) {
       const customIcon = L.divIcon({
@@ -290,7 +254,6 @@ export class RoutecomppageComponent implements OnInit {
     }
     return null;
   }
-
   public async ShowCurrentPosition(lat: any, lng: any) {
     try {
       if (this.map) {
@@ -328,24 +291,25 @@ export class RoutecomppageComponent implements OnInit {
       console.log('ShowCurrentPosition error : ', ex);
     }
   }
-
   addvehicleinroute(modal: any) {
     this.modalService.open(modal, { fullscreen: true });
   }
-
   addnewroute(modal :any){
     this.activedata = new RouteModel();
     this.activedata.ownerid = this.activecompany.id;
-    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     // this.modalService.open(modal, { fullscreen: true });
+    this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+
   }
   routeconfigtalkback(event: any) {
     this.refreshpage();
   }
+  // #endregion ========= Route Map ===========================
+  // ==========================================================
 
 
-  // #endregion
-
+  // ==========================================================
   // #region  ========= Day Plan ==============================
   async setdayplan(){
     this.dayplan = new CalendardayplanModel(this.va.calendarperiod);
@@ -360,7 +324,6 @@ export class RoutecomppageComponent implements OnInit {
     // console.log("setdayplan this.dayplan : ",this.dayplan);
     // await this.setactivedayplan(new Date());
   }
-
   async setactivedayplan(activedate:Date){
     this.dayplan.setactivedate(activedate);
 
@@ -427,14 +390,12 @@ export class RoutecomppageComponent implements OnInit {
     this.dayplan.noplan = this.dayplan.activeroute.find(x=>x.listvplan.length>0) != undefined;
 
   }
-
   async movedayplan(step:number){
     var actday = new Date( this.dayplan.plandate);
     actday.setDate(actday.getDate()+step);
     await this.setactivedayplan(actday);
      
   }
-
   async getPlandayData(plankey: string) {
     var result: RouteplanModel[] = [];
     var wsname = 'getdata';
@@ -545,7 +506,6 @@ export class RoutecomppageComponent implements OnInit {
     }
 
   }
-
   CreateDayPlan(item : Calendardata, vehicle:VehicleplanModel,modal:any ){
     try{
       this.activeplan=undefined;
@@ -559,6 +519,7 @@ export class RoutecomppageComponent implements OnInit {
       this.selectedvehicle.drivername = vehicle.drivername;
       this.selectedvehicle.driverphone = vehicle.driverphone;
       this.selectedvehicle.driverimage = vehicle.driverimage;
+      this.selectedvehicle.gpsvid = vehicle.gpsvid;
       var startpoint = this.GetStartplan(item.id, item.plancode,vehicle);
       if(startpoint){
         this.activeslot.startid = startpoint.startid;
@@ -576,7 +537,6 @@ export class RoutecomppageComponent implements OnInit {
       console.log("CreateDayPlan error : ",ex);
     }
   }
-
   EditDayPlan(item : Calendardata,vehicle:VehicleplanModel,modal:any ){
     try{
       this.activeslot.setdata(item);
@@ -623,21 +583,31 @@ export class RoutecomppageComponent implements OnInit {
       console.log("EditWeekPlan error : ",ex);
     }
   }
-
   addvehicledayplan(route:RouteModel,modal:any,routemodal:any){
     this.activecalendar =  new CalendarplanModel(1440,0,this.dayplan.plandate);
     this.activedata = route;
     this.createroutemodal = routemodal;
-    this.modalService.open(modal, { size: 'lg' });
+    this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
   }
+
+    // #endregion  ========= Polygon ==============================
+  editpolygon(modal:any){
+    console.log("editpolygon this.activedata :",this.activedata);
+    // this.activedata = new RouteModel();
+    // this.activedata.ownerid = this.activecompany.id;
+    this.modalService.open(modal, { fullscreen: true ,backdrop: 'static', keyboard: false, centered: true});
+
+    // this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
+    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+  }
+
  
 
-  // #endregion
+  // #endregion  ========= Day Plan ==============================
+  // ==========================================================
 
-
-  // #region  ========= Weekly Plan ==============================
-
-  // ========= Show plan of Route ==============================
+  // ==========================================================
+  // #region  ========= Weekly Plan ===========================
   async setweekplan() {
     var startweek = new Date(2000, 0, 2);
     var a = startweek.getDay();
@@ -650,13 +620,11 @@ export class RoutecomppageComponent implements OnInit {
       startweek.setDate(startweek.getDate() + 1);
     }
   }
-
   Showroutedropoint(route: RouteModel, modal: any) {
     // console.log('Showroutedropoint route', route);
     this.activedata = route;
     this.modalService.open(modal, { fullscreen: true });
   }
-
   async ShowVehicleDetail(route: RouteModel) {
     this.show.Spinner = true;
     this.activedata = route;
@@ -692,7 +660,6 @@ export class RoutecomppageComponent implements OnInit {
     // console.log('ShowVehicleDetail this.weekplan : ', this.weekplan);
     this.show.Spinner = false;
   }
-
   async getWeekData(routeid: number) {
     var result: RouteplanModel[] = [];
     var wsname = 'getdata';
@@ -711,32 +678,29 @@ export class RoutecomppageComponent implements OnInit {
     // console.log('getWeekData result : ', result);
     return result;
   }
-
   getslotinrange( sdate: Date, edate: Date, startDate: Date, endDate: Date ): boolean {
     // const date = new Date(dateStr); // Convert string to Date
     // return !isNaN(date.getTime()) && date >= startDate && date <= endDate;
     return sdate <= endDate && edate > startDate;
   }
-
   addvehicleweekplan(selectedslot: CalendarplanModel, modal: any, routemodal:any) {
     if (this.activedata.id != 0) {
       this.activecalendar = selectedslot;
       this.createroutemodal = routemodal;
-      this.modalService.open(modal, { size: 'lg' });
+      this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
     } else {
       this.alertMessage('แจ้งเตือน', 'กรุณาเลือกเส้นทาง');
     }
   }
-
   async selectvehicletalkback(event: any) {
     // console.log('event',event);
     this.activeslot = event.slot;
     this.selectedvehicle = event.vehicle;
     this.activeplan = undefined;
-    this.modalService.open(this.createroutemodal, { size: 'lg' });
+    this.modalService.open(this.createroutemodal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
   }
 
-   // #region  ========= Add & Edit Weekly plan ==============================
+  // #region  ========= Add & Edit Weekly plan ==============================
 
   OpenWeekplan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     if(item.plancode==""){
@@ -753,7 +717,6 @@ export class RoutecomppageComponent implements OnInit {
       }
     }
   }
-
   EditWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     try{
       this.activeslot.setdata(item);
@@ -801,7 +764,6 @@ export class RoutecomppageComponent implements OnInit {
       console.log("EditWeekPlan error : ",ex);
     }
   }
-
   CreateWeekPlan(item : Calendardata, wplan: CalendarplanModel,vehicle:VehicleplanModel,modal:any ){
     try{
       // console.log("CreateWeekPlan item : ",item);
@@ -835,14 +797,8 @@ export class RoutecomppageComponent implements OnInit {
       console.log("CreateWeekPlan error : ",ex);
     }
   }
-
-  // #endregion
-
-
-  // #endregion
-
-
-  // #region  ========= update data and find plan slot ==============================
+  // ==========================================================
+  // #region  ========= update data and find plan slot ========
 
   async routeplantalkback(routeplan: RouteplanModel) {
     // console.log("routeplantalkback event : ",event);
@@ -857,7 +813,6 @@ export class RoutecomppageComponent implements OnInit {
 
     }
   }
-
   GetStartplan(id:number, plancode: string,vehicle:VehicleplanModel){
     var result = {startid:id, starttime: vehicle.listdata[id].sdate}
     for(var i=id; i>=0;i--){
@@ -872,7 +827,6 @@ export class RoutecomppageComponent implements OnInit {
     }
     return result;
   }
-
   GetEndplan( id:number, plancode: string,vehicle:VehicleplanModel){
     var result = {endid:id, endtime: vehicle.listdata[id].edate}
     for(var i=id; i<vehicle.listdata.length;i++){
@@ -888,11 +842,17 @@ export class RoutecomppageComponent implements OnInit {
     return result;
   }
 
-  // #endregion
+// #endregion  ========= update data and find plan slot ======================
 
   exportprint(){}
   exportexcel(){}
 
+  //  #endregion  ========= Add & Edit Weekly plan ==============================
+
+  // #endregion  ========= Weekly Plan ===========================
+  // ==========================================================
+
+  // ==========================================================
   // #region ===== Message Dialog ====================
 
   alertMessage(header: string, message: string) {
@@ -924,5 +884,6 @@ export class RoutecomppageComponent implements OnInit {
     });
   }
   // #endregion
+  // ==========================================================
 
 }
