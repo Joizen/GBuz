@@ -122,7 +122,7 @@ export class DriverdetailpageComponent  implements OnInit{
     var laststatus = activity.transtatus;
     var lastacttime = activity.statustime;
     try {
-      // console.log("changestatus data :", activity);
+      console.log("changestatus data :", activity);
       var msg = "คุณต้องการส่งข้อมูล " +  activity.statusname + "เข้าสูระบบใช่หรือไม่??" 
       if(value==0){ msg = "คุณต้องการยกเลิกข้อมูล " +  activity.statusname + "ในระบบใช่หรือไม่??" }
       var confirm =await this.OkCancelMessage("ยืนยันการส่งข้อมูล",msg);
@@ -131,7 +131,8 @@ export class DriverdetailpageComponent  implements OnInit{
         activity.statustime = (value==0? this.va.defultdate  : new Date() );
         if(await this.updateactivity(activity)){
           if(await this.updatelastatus()){
-            this.updateplanactivty(activity);
+          console.log("sucess");
+          this.updateplanactivty(activity);
             this.talk.emit(this.activeplan);
             this.modal.close();
           } 
@@ -141,6 +142,7 @@ export class DriverdetailpageComponent  implements OnInit{
             activity.statustime =lastacttime;
           } 
         }else{
+          console.log("fail");
           this.showSanckbar("ส่งข้อมูล ผิดพลาดโปรดลองอีกครัง")
           activity.transtatus =laststatus;
           activity.statustime =lastacttime;
@@ -198,28 +200,32 @@ export class DriverdetailpageComponent  implements OnInit{
       var wsname = "updatedriverstatus"
       var param={data:data}
       var jsondata = await this.va.getwsdata(wsname, param);
+      console.log('updateactivity : ', jsondata)
       return (jsondata.code == "000");
     }catch(ex){ console.log("updateactivity error :",ex) }
     return false;
 
   }
   async updatelastatus (): Promise<boolean>{
-    if (this.activeplan) {
-      const maxstatus = this.activeplan.listactivity
-          .filter(x => x.transtatus !== 0)
-          .sort((a, b) => b.statusid - a.statusid)[0];
-      if (maxstatus) {
-          this.activeplan.laststatus = maxstatus.statusid;
-          this.activeplan.laststatuslevel = maxstatus.statuslevel;
-          this.activeplan.laststatusname = maxstatus.statusname;
-          this.activeplan.laststatustaget = maxstatus.statustaget;
-          this.activeplan.laststatustime = maxstatus.statustime;
-          this.activeplan.laststatuswarn = maxstatus.statuswarn;
-          this.activeplan.laststatuscolor =this.va.getstatuscolor(this.activeplan.laststatus );
-          // console.log("maxstatus:", maxstatus);
-          return true;
+    try{
+      console.log("activeplan", this.activeplan);
+      if (this.activeplan) {
+        const maxstatus = this.activeplan.listactivity
+            .filter(x => x.transtatus !== 0)
+            .sort((a, b) => b.statusid - a.statusid)[0];
+        if (maxstatus) {
+            this.activeplan.laststatus = maxstatus.statusid;
+            this.activeplan.laststatuslevel = maxstatus.statuslevel;
+            this.activeplan.laststatusname = maxstatus.statusname;
+            this.activeplan.laststatustaget = maxstatus.statustaget;
+            this.activeplan.laststatustime = maxstatus.statustime;
+            this.activeplan.laststatuswarn = maxstatus.statuswarn;
+            this.activeplan.laststatuscolor =this.va.getstatuscolor(this.activeplan.laststatus );
+        }
+        return true;
       }
     }
+    catch(ex){ console.log("updatelaststatus error : ",ex)}
     return false;
   }
 

@@ -49,7 +49,7 @@
                     </div>   
                 </div>
             </div>
-            <div style="max-height: 82vh; width: 100%; overflow-y:auto; overflow-x: hidden;">
+            <div style="max-height: 82vh; width: 100%; overflow-y:hidden; overflow-x: hidden;">
                 <div *ngFor="let comp of listcompany" >
                     <!-- Company Icon -->
                     <div class="row no-gutter" style="display: flex; width:100%; margin: 5px;">
@@ -98,7 +98,7 @@
                         </div>
     
                         <!--Company Details (Driver List)  -->
-                        <div class="row no-gutter " style="display: flex; width:100%; margin: 5px;" *ngIf="comp.showdetail">
+                        <div class="row no-gutter " style="display: flex; width:100%; margin: 5px; " *ngIf="comp.showdetail">
                             
                             <!--============== Show by Driver icon=========== --->
                             <div class="col-12 justify-content-center" *ngIf="show.type==0">
@@ -385,7 +385,7 @@
                             </div>
     
                             <!--============== Show Driver in One Line=========== --->
-                            <div style="max-height: 80vh;  overflow-y:auto;  overflow-x: hidden;">
+                            <div style="max-height: 60vh;  overflow-y:auto;  overflow-x: hidden;">
                                 <div class="col-12 justify-content-center" *ngIf="show.type==2">
                                     <div *ngFor="let driver of comp.dolist">
                                         <div class="row" [style.background-color]="driver.laststatuscolor">
@@ -466,39 +466,6 @@
     
                 </div>
             </div>
-            <!-- Footer -->
-            <div class="container" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin-top: 15px;">
-                <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
-                   <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(0)"></div>
-                   <span>ยังไม่พร้อม</span>
-                </div>
-                <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
-                    <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(5)"></div>
-                    <span>พร้อมเริ่มงาน</span>
-                 </div>
-                 <div class="col" style="display: flex; align-items: center; gap:5px; text-align: left;">
-                    <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(10)"></div>
-                    <span>ตรวจแอลกอฮอลแล้ว</span>
-                 </div>
-                 <!-- <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
-                    <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(15)"></div>
-                     <span>วัดอุณหภูมิแล้ว</span>
-                 </div> -->
-                 <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
-                    <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(20)"></div>
-                    <span>สตาร์ทรถแล้ว</span>
-                 </div>
-                 <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
-                    <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(25)"></div>
-                    <span>เข้าเส้นทางแล้ว</span>
-                 </div>
-                 <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
-                    <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(30)"></div>
-                    <span>ส่งพนักงานหมดแล้ว</span>
-                 </div>
-            </div>
-    
-    
         </div>
         <!-- Move panel -->
         <div class="divider" (mousedown)="startDragging($event)"></div>
@@ -508,6 +475,38 @@
             <div id="map" ></div>
         </div>
     </div>    
+
+    <!-- Footer -->
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; width:100%; margin-top: 15px;">
+        <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+           <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(0)"></div>
+           <span>ยังไม่พร้อม</span>
+        </div>
+        <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+            <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(5)"></div>
+            <span>พร้อมเริ่มงาน</span>
+         </div>
+         <div class="col" style="display: flex; align-items: center; gap:5px; text-align: left;">
+            <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(10)"></div>
+            <span>ตรวจแอลกอฮอลแล้ว</span>
+         </div>
+         <!-- <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+            <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(15)"></div>
+             <span>วัดอุณหภูมิแล้ว</span>
+         </div> -->
+         <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+            <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(20)"></div>
+            <span>สตาร์ทรถแล้ว</span>
+         </div>
+         <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+            <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(25)"></div>
+            <span>เข้าเส้นทางแล้ว</span>
+         </div>
+         <div class="col" style="display: flex; align-items: center; gap:10px; text-align: left;">
+            <div class="divstatuscolor" [style.background-color]="va.getstatuscolor(30)"></div>
+            <span>ส่งพนักงานหมดแล้ว</span>
+         </div>
+    </div>
 </div>
 
 <ng-template #plandetailmodal let-modal>

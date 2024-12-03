@@ -593,6 +593,8 @@ export class RoutecomppageComponent implements OnInit {
     // #endregion  ========= Polygon ==============================
   editpolygon(modal:any){
     console.log("editpolygon this.activedata :",this.activedata);
+    console.log("editpolygon this.activecompany :",this.activecompany);
+
     // this.activedata = new RouteModel();
     // this.activedata.ownerid = this.activecompany.id;
     this.modalService.open(modal, { fullscreen: true ,backdrop: 'static', keyboard: false, centered: true});

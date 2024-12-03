@@ -29,6 +29,7 @@ export class RoutepolygonpageComponent implements OnInit {
   private routepolygondata:L.LatLng[]=[]; // data of polygon for save
   private startmarker: L.Marker|undefined; // start point of routepolygonLayer
   private endmarker: L.Marker|undefined; // end point of routepolygonLayer
+  private curentmarker: L.Marker|undefined; // end point of routepolygonLayer
   private companymarker: L.Marker|undefined;  // company point 
   private mapIconSize = 30;
 
@@ -177,7 +178,7 @@ export class RoutepolygonpageComponent implements OnInit {
     var result: GpslogModel[] = [];
     try{
       var wsname = 'getrealtimedata';
-      var params = { tbname: 'gpslog', gpsvid: "gps06579",starttime:this.show.selectstart,endtime:this.show.selectend};
+      var params = { tbname: 'gpslog', gpsvid: this.selectedvehicle.ref1,starttime:this.show.selectstart,endtime:this.show.selectend};
       var listpoints:L.LatLng[]=[];
       var polylist:[number, number][]=[];
       var jsondata = await this.va.getwsdata(wsname, params);
@@ -206,13 +207,15 @@ export class RoutepolygonpageComponent implements OnInit {
           var showpoint =result.filter(x=>x.gpsstatus==31||x.gpsstatus==33);
           if(showpoint.length>0){
             showpoint.forEach(point=>{
-              if(this.map){
-                var msg = this.va.DateToString("HH:mm",point.gpstime);
-                const marker =L.marker(point).addTo(this.map).bindPopup(msg);
-                marker.on('click', () => {
-                  this.setselectpoint(point);
-                });
-              }            
+              this.sethistorymarker(point);
+              // if(this.map){
+              //   var msg = this.va.DateToString("HH:mm",point.gpstime);
+              //   // const marker =L.marker(point).addTo(this.map).bindPopup(msg);
+              //   const marker =L.marker(point).addTo(this.map);
+              //   marker.on('click', () => {
+              //     this.setselectpoint(point);
+              //   });
+              // }            
             });
           }
           if(firstpoint){this.setmarkerstart(true,firstpoint);}      
@@ -240,9 +243,16 @@ export class RoutepolygonpageComponent implements OnInit {
   }
   public setselectpoint(point:GpslogModel){
     // console.log("setselectpoint point : ",point);
-    if(!this.show.view){this.setmarkerstart(this.show.setstartpoint,point);}
+    
+    if(!this.show.view){
+      this.setmarkerstart(this.show.setstartpoint,point);
+      this.clearcurentmarker();
+    }
+    else{this.setcurentmarker(point)}
   }
   public setstartpoint(event:boolean){
+    this.show.view = false;
+    this.clearcurentmarker();
     this.show.setstartpoint=event;
   }
   public setmarkerstart(startpoint:boolean,point:GpslogModel){
@@ -256,7 +266,7 @@ export class RoutepolygonpageComponent implements OnInit {
           const newSize = this.mapIconSize * (zl / 13); 
           const customIcon = L.divIcon({
             html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
-                    <img src="${this.va.icon.thispoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                    <img src="${this.va.icon.startpoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
                   </div>`,
             className: '', // Remove default styling
             iconSize: [this.mapIconSize, this.mapIconSize], // Adjust size for side-by-side images
@@ -274,7 +284,7 @@ export class RoutepolygonpageComponent implements OnInit {
             this.startmarker?.setIcon(
               L.divIcon({
                 html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
-                  <img src="${this.va.icon.thispoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                  <img src="${this.va.icon.startpoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
                 </div>`,
                 className: '', // Remove default styling
                 iconSize: [newSize, newSize*2], // Adjust size for side-by-side images
@@ -295,7 +305,7 @@ export class RoutepolygonpageComponent implements OnInit {
           const newSize = this.mapIconSize * (zl / 13); 
           const customIcon = L.divIcon({
             html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
-                    <img src="${this.va.icon.thispoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                    <img src="${this.va.icon.finishpoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
                   </div>`,
             className: '', // Remove default styling
             iconSize: [this.mapIconSize, this.mapIconSize], // Adjust size for side-by-side images
@@ -313,7 +323,7 @@ export class RoutepolygonpageComponent implements OnInit {
             this.endmarker?.setIcon(
               L.divIcon({
                 html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
-                  <img src="${this.va.icon.thispoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                  <img src="${this.va.icon.finishpoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
                 </div>`,
                 className: '', // Remove default styling
                 iconSize: [newSize, newSize*2], // Adjust size for side-by-side images
@@ -350,6 +360,62 @@ export class RoutepolygonpageComponent implements OnInit {
     }
 
   }
+  public clearcurentmarker(){
+    if (this.curentmarker) {
+      this.curentmarker.remove(); // Removes the marker from the map
+      this.curentmarker = undefined;   // Optionally set it to null to clear the reference
+    };
+  }
+  public setcurentmarker(point:GpslogModel){
+    if(this.map){
+      var zoom = this.map.getZoom();
+      if (!this.curentmarker){
+        // new  startmarker
+        const zoomLevel = zoom;
+        const zl = zoomLevel?zoomLevel:13;
+        const newSize = this.mapIconSize * (zl / 13); 
+        const customIcon = L.divIcon({
+          html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
+                  <img src="${this.va.icon.thispoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                </div>`,
+          className: '', // Remove default styling
+          iconSize: [this.mapIconSize, this.mapIconSize], // Adjust size for side-by-side images
+          iconAnchor: [newSize, newSize], // Top-left corner will be the anchor (x, y)
+        });    
+        this.curentmarker =L.marker([point.lat, point.lng],{ icon: customIcon }).addTo(this.map);
+        this.curentmarker.bindPopup(this.va.DateToString("HH:mm",point.gpstime));
+        const resizeMarkerIcon = () => {
+          const zoomLevel = this.map?.getZoom();
+          
+          // Calculate new size based on zoom level (adjust the scaling factor as needed)
+          const zl = zoomLevel?zoomLevel:13;
+          const newSize = this.mapIconSize * (zl / 13); // Assuming zoom level 13 as base level
+          // Update the marker icon size
+          this.curentmarker?.setIcon(
+            L.divIcon({
+              html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
+                <img src="${this.va.icon.thispoint}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+              </div>`,
+              className: '', // Remove default styling
+              iconSize: [newSize, newSize*2], // Adjust size for side-by-side images
+            })
+          );
+        };
+      }else{
+        // update startmarker
+        this.curentmarker.setLatLng([point.lat, point.lng]);
+        const popup = this.curentmarker.getPopup();
+        var msg =this.va.DateToString("HH:mm",point.gpstime)
+        if(point.gpsstatus!=31&&point.gpsstatus!=33){msg += (" speed : " + point.speed)}
+        if(popup){ popup.setContent(msg); }
+        else{ this.curentmarker.bindPopup(msg);}
+      }
+      this.map.panTo([point.lat, point.lng]);
+      if (this.curentmarker){this.curentmarker.openPopup();}
+    }
+
+  }
+  
   public setcompanymarker(){
     if(this.map){
       var zoom = this.map.getZoom();
@@ -392,6 +458,45 @@ export class RoutepolygonpageComponent implements OnInit {
       }
       this.map.panTo(new L.LatLng(this.company.lat, this.company.lng));
 
+    }
+  }
+  public sethistorymarker(point : GpslogModel ){
+    if(this.map){
+      var zoom = this.map.getZoom();
+        // new  startmarker
+        const zoomLevel = zoom;
+        const zl = zoomLevel?zoomLevel:13;
+        const newSize = this.mapIconSize * (zl / 26); 
+        // const newSize = this.mapIconSize * (zl / 13); 
+        var iconm = point.gpsstatus==31?this.va.icon.idle: this.va.icon.stop;
+        const customIcon = L.divIcon({
+          html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
+                  <img src="${iconm}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                </div>`,
+          className: '', // Remove default styling
+          iconSize: [this.mapIconSize, this.mapIconSize], // Adjust size for side-by-side images
+          iconAnchor: [newSize, newSize], // Top-left corner will be the anchor (x, y)
+        });    
+        var marker =L.marker([point.lat, point.lng],{ icon: customIcon }).addTo(this.map);
+        const resizeMarkerIcon = () => {
+          const zoomLevel = this.map?.getZoom();
+          
+          // Calculate new size based on zoom level (adjust the scaling factor as needed)
+          const zl = zoomLevel?zoomLevel:13;
+          const newSize = this.mapIconSize * (zl / 13); // Assuming zoom level 13 as base level
+        
+          // Update the marker icon size
+          marker.setIcon(
+            L.divIcon({
+              html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
+                <img src="${iconm}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+              </div>`,
+              className: '', // Remove default styling
+              iconSize: [newSize, newSize*2], // Adjust size for side-by-side images
+            })
+          );
+        };
+        marker.bindPopup(this.va.DateToString("HH:mm",point.gpstime));
     }
   }
   public updatePolygon(): void {

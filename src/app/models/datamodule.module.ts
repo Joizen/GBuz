@@ -144,7 +144,7 @@ export class DashboardcompanyModel {
   totalotw: number = 0;
   totalfinish: number = 0;
   dolist:DashboardplanModel[]=[];
-  showdetail: boolean = true;
+  showdetail: boolean = false;
   showgroup: boolean[] = [true, true, true, true, true];
   get groupunwakeup() { return this.dolist.filter(item => item.laststatus<5); }
   get groupwakeup() { return this.dolist.filter(item => item.laststatus==5); }
