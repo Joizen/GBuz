@@ -231,8 +231,8 @@ export class variable {
       company : this.imagepath + "factory.png",
       stop : this.imagepath + "poistop.png",
       idle : this.imagepath + "poiidle.png",
-      startpoint : this.imagepath + "start_flag.png",
-      finishpoint : this.imagepath + "stop_flag.png",
+      startpoint : this.imagepath + "startpoi.png",
+      finishpoint : this.imagepath + "stoppoi.png",
     }
   }
   public getactiveicon(id:any){
