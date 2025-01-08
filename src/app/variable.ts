@@ -18,8 +18,6 @@ import { LOCALE_ID } from '@angular/core';
 
 export class variable {
   constructor(private http: HttpClient) { }
-
-  
   // public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
   public wsUrl: string = "http://localhost:9080/";
 
@@ -369,8 +367,10 @@ export class variable {
 
   async getadmin(lat:number,lng:number){
     try{
-      var wsname = 'getdata';
-      var params = { tbname: 'adminlocation', lat: lat,lng:lng ,isone:true};
+      // var wsname = 'getdata';      
+      // var params = { tbname: 'adminlocation', lat: lat,lng:lng ,isone:true};
+      var wsname = 'getadmindata';
+      var params = { lat: lat,lng:lng};
       var jsondata = await this.getwsdata(wsname, params);
       if (jsondata.code == '000') { return jsondata.data}
     }

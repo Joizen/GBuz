@@ -112,8 +112,10 @@ export class RoutepolygonpageComponent implements OnInit {
   async getpolygon() {
     var result:L.LatLng[]=[];
     try{
-      var wsname = 'getdata';
-      var params = { tbname: 'routepolygon', routeid: this.routedata?.id  ,isone:true};
+      // var wsname = 'getdata';
+      // var params = { tbname: 'routepolygon', routeid: this.routedata?.id  ,isone:true};
+      var wsname = 'getroutedata';
+      var params = { routeid: this.routedata?.id  ,isone:true};
       var jsondata = await this.va.getwsdata(wsname, params);
       // console.log('getpolygon jsondata : ', jsondata);
       if (jsondata.code == '000') {
@@ -586,8 +588,10 @@ export class RoutepolygonpageComponent implements OnInit {
   }
   async savepolygon(polygon:string){
     try{
-      var wsname = "updatedata";
-      var param={tbname:"routepolygon",routeid:this.routedata?.id,polygon:polygon};
+      // var wsname = "updatedata";
+      // var param={tbname:"routepolygon",routeid:this.routedata?.id,polygon:polygon};
+      var wsname = "updateroutedata";
+      var param={routeid:this.routedata?.id,polygon:polygon};
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         this.showSanckbar("save polygon success",2);
@@ -601,8 +605,10 @@ export class RoutepolygonpageComponent implements OnInit {
   }
   async deletepolygon(){
     try{
-      var wsname = "deldata";
-      var param={tbname:"routepolygon",routeid:this.routedata?.id};
+      // var wsname = "deldata";
+      // var param={tbname:"routepolygon",routeid:this.routedata?.id};
+      var wsname = "deleteroutepolygon";
+      var param={routeid:this.routedata?.id};
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         this.showSanckbar("delete polygon success",2);
