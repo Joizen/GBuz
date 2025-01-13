@@ -357,85 +357,6 @@
                 <div class="row no-guster" id="droppointmap" style="height: 100%; width:100%;"></div>
             </div>
         </div>
-
-        <!-- Vehicle in Route -->
-        <!-- <hr> -->
-        <!-- <div class="row" style="max-height: 20vh; width:100vw;" *ngIf="false">
-            <div class="px-3 py-0" style="display: flex; justify-content: space-between; align-items: center;  width:100%;  margin: 0; background-color: lightyellow;">
-                <div class="col" style="display: flex; align-items: center; justify-content: start;">
-                <mat-icon> directions_bus </mat-icon>
-                <span class="m-2"> ข้อมูลรถประจำเส้นทาง จำนวน {{activedata.vinroute.length}} คัน </span>
-                </div>
-                <div class="col" style="flex: 0 0 auto; text-align: right; margin: 20px;">
-                <div class="row" (click)="addvehicleinroute(vehicleroutemodal)">
-                    <div class="col" style="display: flex; align-items: center; margin-right: 20px;">
-                    <mat-icon style="width: auto; color: blue;">add_box</mat-icon>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div style="height: 2px; width: 100%; background-color: lightgray;"></div>
-            <div style="height: 100%; width:100%; overflow: scroll;">
-                <div *ngFor="let vehicle of activedata.vinroute">
-                <div class="row" >
-                    <div class="col-6">
-                        <div style="display: flex; justify-content: space-between; align-items: start;  width:100%;  margin: 0;">
-                            <div class="icon-inrow" matTooltip="ชื่อรถ">
-                              <mat-icon> directions_bus </mat-icon>
-                              <span>{{vehicle.vname}}</span>
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="จำนวนจุดรับ-ส่งพนักงาน">
-                              <mat-icon>credit_card</mat-icon>
-                              <span>{{vehicle.vlicent}}</span> 
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="ระยะทาง (กม.)">
-                              <mat-icon> timeline </mat-icon>
-                              <span>{{vehicle.issendname}}</span>  
-                              <span>{{vehicle.shiftname}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="ระยะเวลา (นาที)">
-                              <mat-icon>update</mat-icon>
-                              <span>{{vehicle .period}} นาที</span>  
-                              <span>{{ vehicle.distance}} กม.</span>  
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <div style="display: flex; justify-content: space-between; align-items: start;  width:100%;  margin: 0;">
-
-                            <div class="icon-inrow" matTooltip="เริ่มแจ้งพร้อมเริ่มงาน">
-                              <mat-icon>check_circle</mat-icon>
-                              <span>{{ vehicle.wakeupwarn}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เตือนเมื่อไม่แจ้งพร้อมเริ่มงาน">
-                              <mat-icon>cancel</mat-icon>
-                              <span>{{ vehicle.wakeuptime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เตือนเมื่อไม่สตาร์ทรถ">
-                              <mat-icon>power_settings_new</mat-icon>
-                              <span>{{ vehicle.otwtime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เวลาที่ควรถึงจุดแรก">
-                              <mat-icon>departure_board</mat-icon>
-                              <span>{{ vehicle.starttime}}</span>  
-                            </div>
-                  
-                            <div class="icon-inrow" matTooltip="เวลาที่ควรถึงปลายทาง">
-                              <mat-icon>flag</mat-icon>
-                              <span>{{ vehicle.endtime}}</span>  
-                            </div>              
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div> -->
     </div>
 </div>
 
@@ -464,5 +385,6 @@
 </ng-template>
 
 <ng-template #polygonmodal let-modal>
-    <app-routepolygonpage [modal]="modal" [company]="activecompany" [routedata]="activedata" ></app-routepolygonpage>
+    <app-routepolygonpage [modal]="modal" [company]="activecompany" [routedata]="activedata" 
+    (talk)="updateroutetalkback($event)"></app-routepolygonpage>
 </ng-template>

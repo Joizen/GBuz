@@ -7,7 +7,8 @@ import { variable } from '../../../variable';
 import { CompanyModel,RouteModel,GpslogModel, SelecteddataModel,} from '../../../models/datamodule.module'
 import * as L from 'leaflet';
 import 'leaflet-draw';
-import 'leaflet-editable';
+
+// import 'leaflet-editable';
 import * as turf from '@turf/turf';
 
 @Component({
@@ -21,8 +22,10 @@ export class RoutepolygonpageComponent implements OnInit {
   @Input() modal: any;
   @Input() company: CompanyModel = new CompanyModel();
   @Input() routedata : RouteModel | undefined;
+  @Output() talk: EventEmitter<any> = new EventEmitter<any>();
 
   private map: L.Map | undefined;
+  private drawnItems = new L.FeatureGroup();
   private routepolyline!: L.Polyline;  // history route
   private selectpolyline!: L.Polyline; // filter history route for create polygon
   private routepolygonLayer: L.GeoJSON | null = null;  // polygon form selectpolyline
@@ -40,29 +43,16 @@ export class RoutepolygonpageComponent implements OnInit {
   listhistory:GpslogModel[]=[];
   listvehicle:SelecteddataModel[]=[];
   selectedvehicle:SelecteddataModel=new SelecteddataModel();
+  isupdatedata=false;
 
 
   async ngOnInit() {
-    // this.settest();
     console.log("this.routedata ; ",this.routedata );
     this.routepolygondata = await this.getpolygon();
     this.listvehicle = await this.getvehecledll();
     if(this.listvehicle.length>0) {this.selectedvehicle = this.listvehicle[0];}
-    this.initMap();    
+    this.initMap();  
     this.show.spinner = false;
-  }
-  settest(){
-    this.routedata=new RouteModel();
-    this.routedata.id = 117 ;
-    this.routedata.routename = "บ้านเชิด" ;
-    this.company = new CompanyModel();
-    this.company.id  = 7 ;
-    this.company.companyname ="บริษัท สยาม เอ็นดีเค จำกัด";
-    this.company.lat = 13.110069;
-    this.company.lng = 101.00327;
-    this.company.complogo ="data:image/png;base64,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";
-
-    
   }
 
   async getvehecledll() {
@@ -115,20 +105,30 @@ export class RoutepolygonpageComponent implements OnInit {
       // var wsname = 'getdata';
       // var params = { tbname: 'routepolygon', routeid: this.routedata?.id  ,isone:true};
       var wsname = 'getroutedata';
-      var params = { routeid: this.routedata?.id  ,isone:true};
+      var params = { routeid: this.routedata?.id ,type:1 ,isone:true};
       var jsondata = await this.va.getwsdata(wsname, params);
       // console.log('getpolygon jsondata : ', jsondata);
       if (jsondata.code == '000') {
           result= this.data2latlngarray(jsondata.data.polygon)
           if(result.length>4){ this.show.deleteroute=true;}
+          
         // console.log('getpolygon result : ', result);
       } else {
+        // // Remove Draw Control
+        // if(this.map){
+        //   this.map.eachLayer((layer: any) => {
+        //     if (layer instanceof L.Control.Draw) {
+        //       if(this.map){this.map.removeControl(layer);} 
+        //     }
+        //   });
+        // }  
         this.showSanckbar("getPlandayData No data",2);
       }
       // console.log('getPlandayData result : ', result);
     } catch(ex){console.log("getpolygon error : ",ex)}
     return result;
   }
+
   private data2latlngarray(data:string) {
     const coordinates = data
         .replace("POLYGON((", "") // Remove "POLYGON(("
@@ -141,12 +141,35 @@ export class RoutepolygonpageComponent implements OnInit {
 
     return latLngArray;
   }
+
   private createPolygon():void{
     if(this.map){
+      // console.log("this.routepolygondata :",this.routepolygondata);
       const geoJsonData = this.latLngToGeoJSON(this.routepolygondata);
+      // console.log("geoJsonData :",geoJsonData.geometry.coordinates[0]);
       this.routepolygonLayer = L.geoJSON(geoJsonData, {
         style: { color: 'blue',fillColor: "green",fillOpacity: 0.3,  weight: 2, },
-      }).addTo(this.map);
+      });
+      // .addTo(this.map);
+      // console.log("this.routepolygonLayer :",this.routepolygonLayer);
+     
+      if(geoJsonData.geometry.coordinates[0]){
+        var data:L.LatLngExpression[]=[];
+        geoJsonData.geometry.coordinates[0].forEach(point => {
+          data.push([point[1],point[0]]);
+        });
+        console.log("data :",data);
+        var routename = this.routedata?this.routedata.routename:"Unknow";
+        const polygon = L.polygon(data, {
+          color: 'blue',
+          fillColor: 'lightblue',
+          fillOpacity: 0.5
+        }).bindPopup(routename);
+        console.log("polygon :",polygon);
+        this.drawnItems.addLayer(polygon);
+        this.map.addLayer(this.drawnItems)
+        this.initDrawControl();  
+      }
       this.map.fitBounds(this.routepolygonLayer.getBounds());
     }
   }
@@ -166,6 +189,83 @@ export class RoutepolygonpageComponent implements OnInit {
   // #endregion  =========== SET Polygon  ===========================
   //=================================================================
 
+  //==================================================================
+  // #region  =========== Edit Polygon  ==============================
+  private initDrawControl(): void {
+    const drawControl = new L.Control.Draw({
+      draw: {
+        polygon:false,
+        polyline: false,
+        circle: false,
+        rectangle: false,
+        marker: false,
+        circlemarker: false
+      },
+      edit: {
+        // featureGroup: this.drawnItems, // Use the feature group for editing
+        featureGroup: this.drawnItems, // Use the feature group for editing
+        remove: false // Allow removing shapes
+      }
+    });
+    if( this.map){
+      this.map.addControl(drawControl);
+      this.map.on(L.Draw.Event.EDITED, (event: any) => {
+        const layers = event.layers;  // Get the layers that were edited
+        layers.eachLayer((layer: L.Layer) => {
+          if (layer instanceof L.Polygon) {
+            const updatedCoordinates = layer.getLatLngs();  // Get updated coordinates
+            console.log('Updated Polygon Coordinates:', updatedCoordinates);
+            if (Array.isArray(updatedCoordinates[0])) {
+              // this.savePolygon(updatedCoordinates[0]);
+              console.log("save updatedCoordinates",updatedCoordinates);
+              if (updatedCoordinates instanceof Array && updatedCoordinates[0] instanceof Array){
+                var data = this.geoPolyToWkt(updatedCoordinates[0] );
+                this.updateroute(data);
+                console.log("save data",data);
+                }
+            }
+          }
+        });
+      });
+    }
+
+  }
+  
+  public geoPolyToWkt(polygon:any): string {
+      // console.log("polygon",polygon);
+      // : any = [{LatLng:{lat: 13.14595,lng: 100.985208}}]
+      if (polygon.length > 0) {
+        var result = "";
+          polygon.forEach((points:any) => {result +=((result==""?"":",")+ points.lng + " " + points.lat) ;
+        });
+        return `POLYGON((${result}))`;
+      }
+      return "";
+  }
+
+  async updateroute(JsonPolygon:string){
+    if (this.routepolygonLayer) {
+      var msg= "คุณต้องการบันทึกเส้นทางเดินรถนี้ หรือไม่";
+      var confirm =await this.OkCancelMessage("ยืนยันการบันทึก",msg);
+      if(confirm){
+        // const geoJsonData = this.routepolygonLayer.toGeoJSON();
+        // const JsonPolygon = this.geoJsonToWkt(geoJsonData);
+        // console.log("conver polygon wktPolygon :",JsonPolygon);
+        if(await this.savepolygon(JsonPolygon)){
+          this.talk.emit(JsonPolygon);
+          this.modal.close();
+        }
+      }
+
+    }else{
+      this.showSanckbar("No polygon data")
+    }
+  } 
+
+
+
+  // #endregion  =========== Edit Polygon  ===========================
+  //==================================================================
 
 
   //=================================================================
@@ -552,7 +652,8 @@ export class RoutepolygonpageComponent implements OnInit {
       var confirm =await this.OkCancelMessage("ยืนยันการลบ",msg);
       if(confirm){        
         if(await this.deletepolygon()){
-          // this.modal.
+          this.talk.emit("");
+          this.modal.close();
           this.routepolygondata = await this.getpolygon();
         }
       }
@@ -564,13 +665,14 @@ export class RoutepolygonpageComponent implements OnInit {
   async saveroute(){
     if (this.routepolygonLayer) {
       var msg= "คุณต้องการบันทึกเส้นทางเดินรถนี้ หรือไม่";
-      var confirm =await this.OkCancelMessage("ยืนยันการลบ",msg);
+      var confirm =await this.OkCancelMessage("ยืนยันการบันทึก",msg);
       if(confirm){
         const geoJsonData = this.routepolygonLayer.toGeoJSON();
         const JsonPolygon = this.geoJsonToWkt(geoJsonData);
-        console.log("conver polygon wktPolygon :",JsonPolygon);
+        // console.log("conver polygon wktPolygon :",JsonPolygon);
         if(await this.savepolygon(JsonPolygon)){
-          // this.modal.
+          this.talk.emit(JsonPolygon);
+          this.modal.close();
         }
       }
 
@@ -586,12 +688,12 @@ export class RoutepolygonpageComponent implements OnInit {
       .join(', ')}))`;
     return wkt;
   }
+
+
   async savepolygon(polygon:string){
     try{
-      // var wsname = "updatedata";
-      // var param={tbname:"routepolygon",routeid:this.routedata?.id,polygon:polygon};
       var wsname = "updateroutedata";
-      var param={routeid:this.routedata?.id,polygon:polygon};
+      var param={routeid:this.routedata?.id,polygon:polygon,type:1};
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         this.showSanckbar("save polygon success",2);
@@ -605,10 +707,8 @@ export class RoutepolygonpageComponent implements OnInit {
   }
   async deletepolygon(){
     try{
-      // var wsname = "deldata";
-      // var param={tbname:"routepolygon",routeid:this.routedata?.id};
       var wsname = "deleteroutepolygon";
-      var param={routeid:this.routedata?.id};
+      var param={routeid:this.routedata?.id,type:1};
       var jsondata = await this.va.getwsdata(wsname,param)
       if(jsondata.code=="000"){
         this.showSanckbar("delete polygon success",2);

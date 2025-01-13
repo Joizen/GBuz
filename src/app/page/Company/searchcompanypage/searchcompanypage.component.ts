@@ -128,6 +128,12 @@ export class SearchcompanypageComponent implements OnInit {
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     this.modalService.open(modal, { fullscreen: true });
   }
+  opencompanymap(comp: CompanyModel, modal: any) {
+    // console.log("opencompanydata comp : ", comp);
+    this.activecompany = comp;
+    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    this.modalService.open(modal, { fullscreen: true });
+  }
   companytalkback(event: any) {
 
   }

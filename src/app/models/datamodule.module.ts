@@ -417,6 +417,7 @@ export class CompanyModel {
   totalemp: number = 0;
   totaldrop: number = 0;
   compid:number=0;
+  polygon: string = "";
   constructor();
   constructor(jsondata: any);
   constructor(jsondata?: any) { 
@@ -458,6 +459,7 @@ export class RouteModel {
   vinroute: VehicleRoutedata[] = [];
   empinroute: EmployeeModel[]=[];
   transtatus: number = 1;
+  polygon:string = "";
   constructor();
   constructor(data:RouteModel);
   constructor(data?:RouteModel) { 

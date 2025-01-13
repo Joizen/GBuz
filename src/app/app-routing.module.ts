@@ -43,6 +43,7 @@ const routes: Routes = [
   { path: 'usercomdata', loadChildren: () => import('./page/User/usercomdatapage/usercomdatapage.module').then(m => m.UsercomdatapageModule) },
   { path: 'comshift', loadChildren: () => import('./page/Company/shiftpage/shiftpage.module').then(m => m.ShiftpageModule) },
   { path: 'routepolygon', loadChildren: () => import('./page/Route/routepolygonpage/routepolygonpage.module').then(m => m.RoutepolygonpageModule) },
+  { path: 'companymap', loadChildren: () => import('./page/Company/companymappage/companymappage.module').then(m => m.CompanymappageModule) },
 ];
 
 @NgModule({

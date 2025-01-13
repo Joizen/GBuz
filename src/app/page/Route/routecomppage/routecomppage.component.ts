@@ -42,9 +42,12 @@ export class RoutecomppageComponent implements OnInit {
   public activeslot: Calendarslot = new Calendarslot();
   public activeplan :RouteplanModel|undefined;
   public createroutemodal : any;
-
+  private routepolygonLayer: L.GeoJSON | null = null;  // polygon form selectpolyline
+  private companymarker: L.Marker|undefined;  // company point 
+  
   async ngOnInit() {
     await this.showroutetab(this.show.viewtype);
+    console.log("activecompany : ",this.activecompany)
   }
   async refreshpage(){
     this.maindata = await this.getData();
@@ -64,7 +67,7 @@ export class RoutecomppageComponent implements OnInit {
     }else if(id==1){
       if(this.activedata.id==0 && this.maindata.length>0){
         this.setweekplan();
-        this.activedata =this.maindata[0];
+        this.activedata =this.maindata[0];    
       }
       await this.ShowVehicleDetail(this.activedata);
     }else if(id==2){
@@ -170,13 +173,28 @@ export class RoutecomppageComponent implements OnInit {
           }),
         ],
       });
+      this.map.on('click', (e: L.LeafletMouseEvent) => {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+  
+        // Display coordinates in a popup
+        var pointpopup = L.popup()
+          .setLatLng(e.latlng)
+          .setContent(`Latitude: ${lat.toFixed(6)}, Longitude: ${lng.toFixed(6)}`)
+        if(this.map){pointpopup.openOn(this.map);}
+  
+        // Alternatively, log to the console
+        console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+      });
       this.PlotRoute();
+      this.setcompanymarker();
       return true;
     } catch (ex) {
       console.log('initMap error : ', ex);
     }
     return false;
   }
+  
   Showroute(route: RouteModel) {
     // console.log('Showroute route : ', route);
     this.activedata = route;
@@ -185,19 +203,6 @@ export class RoutecomppageComponent implements OnInit {
     } else {
       this.PlotRoute();
     }
-  }
-  async PlotRoute() {
-    var lastpoint: any = [13, 100];
-    this.activedata.dpinroute.forEach((item) => {
-      if (item.lat != 0 && item.lng != 0) {
-        var marker = this.plotMarker(item.lat, item.lng, item.pointname);
-        lastpoint = [item.lat, item.lng];
-      }
-    });
-    if (this.map) {
-      this.map.panTo(lastpoint);
-    }
-    return true;
   }
   private plotMarker(lat: any, lng: any, header: string) {
     if (this.map) {
@@ -254,6 +259,49 @@ export class RoutecomppageComponent implements OnInit {
     }
     return null;
   }
+  public setcompanymarker(){
+    if(this.map){
+      var zoom = this.map.getZoom();
+      if (!this.companymarker){
+        // new  startmarker
+        const zoomLevel = zoom;
+        const zl = zoomLevel?zoomLevel:13;
+        const newSize = this.mapIconSize * (zl / 13); 
+        const customIcon = L.divIcon({
+          html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
+                  <img src="${this.va.icon.company}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+                </div>`,
+          className: '', // Remove default styling
+          iconSize: [this.mapIconSize, this.mapIconSize], // Adjust size for side-by-side images
+          iconAnchor: [newSize, newSize], // Top-left corner will be the anchor (x, y)
+        });    
+        this.companymarker =L.marker([this.activecompany.lat, this.activecompany.lng],{ icon: customIcon }).addTo(this.map);
+        const resizeMarkerIcon = () => {
+          const zoomLevel = this.map?.getZoom();
+          
+          // Calculate new size based on zoom level (adjust the scaling factor as needed)
+          const zl = zoomLevel?zoomLevel:13;
+          const newSize = this.mapIconSize * (zl / 13); // Assuming zoom level 13 as base level
+        
+          // Update the marker icon size
+          this.companymarker?.setIcon(
+            L.divIcon({
+              html:`<div style="position: relative; width:${newSize}px; height:${newSize}px; display: flex;  z-index: 100;">
+                <img src="${this.va.icon.company}" style="position: absolute; top: 0; left: 0; width: ${newSize}px; height: ${newSize}px;" />
+              </div>`,
+              className: '', // Remove default styling
+              iconSize: [newSize, newSize*2], // Adjust size for side-by-side images
+            })
+          );
+        };
+        this.companymarker.bindPopup(this.activecompany.companyname);
+      }else{
+        // update startmarker
+        this.companymarker.setLatLng([this.activecompany.lat, this.activecompany.lng]);
+      }
+      this.map.panTo(new L.LatLng(this.activecompany.lat, this.activecompany.lng));
+    }
+  }
   public async ShowCurrentPosition(lat: any, lng: any) {
     try {
       if (this.map) {
@@ -305,9 +353,88 @@ export class RoutecomppageComponent implements OnInit {
   routeconfigtalkback(event: any) {
     this.refreshpage();
   }
+
   // #endregion ========= Route Map ===========================
   // ==========================================================
 
+  // #region ============ Route Polygon ===========================
+  public updateroutetalkback(polygon:any){
+    if(polygon!=""){
+      // console.log("updateroutetalkback polygon : ",polygon)
+      this.activedata.polygon=polygon;
+      this.PlotRoute();
+    }else{
+      this.activedata.polygon="";
+      if(this.map){ if (this.routepolygonLayer) { this.map.removeLayer(this.routepolygonLayer); }}
+    }
+  }
+  async PlotRoute() {
+    this.show.Spinner = true;
+    // Remove the existing layer if it exists
+    if(this.map){ if (this.routepolygonLayer) { this.map.removeLayer(this.routepolygonLayer); }}
+    if(this.activedata.polygon==""){ this.activedata.polygon= await this.getroutepolygon(); }
+    if(this.activedata.polygon!=""){
+      var polygondata:L.LatLng[]=this.data2latlngarray(this.activedata.polygon)
+      const geoJsonData = this.latLngToGeoJSON(polygondata);
+      this.createPolygon(geoJsonData);
+    }
+    this.show.Spinner = false;
+    return true;
+  }
+
+  async getroutepolygon() {
+    try{
+      var wsname = 'getroutedata';
+      var params = { routeid: this.activedata.id ,type:1 ,isone:true};
+      var jsondata = await this.va.getwsdata(wsname, params);
+      // console.log('getpolygon jsondata : ', jsondata);
+      if (jsondata.code == '000') {
+        return jsondata.data.polygon;
+      } else {
+        this.showSanckbar("getroutepolygon No data",2);
+      }
+      // console.log('getPlandayData result : ', result);
+    } catch(ex){console.log("getpolygon error : ",ex)}
+    return "";
+  }
+  private data2latlngarray(data:string) {
+    const coordinates = data
+        .replace("POLYGON((", "") // Remove "POLYGON(("
+        .replace("))", "")       // Remove "))"
+        .split(",");             // Split into individual coordinate strings
+    const latLngArray = coordinates.map(coord => {
+        const [lng, lat] = coord.trim().split(" ").map(Number); // Split and parse as numbers
+        return L.latLng(lat, lng); // Swap order to L.LatLng(lat, lng)
+    });
+    return latLngArray;
+  }
+  private createPolygon(geoJsonData: GeoJSON.Feature<GeoJSON.Polygon>):void{
+      if(this.map){
+        this.routepolygonLayer = L.geoJSON(geoJsonData, {
+          style: { color: 'blue',fillColor: "green",fillOpacity: 0.3,  weight: 2, },
+        }).addTo(this.map);
+        this.map.fitBounds(this.routepolygonLayer.getBounds());
+      }
+  }
+  private latLngToGeoJSON(latlngs: L.LatLng[]): GeoJSON.Feature<GeoJSON.Polygon> {
+      const coordinates = latlngs.map(latlng => [latlng.lng, latlng.lat]);
+      coordinates.push([latlngs[0].lng, latlngs[0].lat]); // Close the polygon
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [coordinates],
+        },
+        properties: {},
+      };
+  }
+
+  editpolygon(modal:any){
+    this.modalService.open(modal, { fullscreen: true ,backdrop: 'static', keyboard: false, centered: true});
+  }
+
+  // #endregion ========= Route Polygon ===========================
+  // ==============================================================
 
   // ==========================================================
   // #region  ========= Day Plan ==============================
@@ -589,25 +716,9 @@ export class RoutecomppageComponent implements OnInit {
     this.createroutemodal = routemodal;
     this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
   }
-
-    // #endregion  ========= Polygon ==============================
-  editpolygon(modal:any){
-    console.log("editpolygon this.activedata :",this.activedata);
-    console.log("editpolygon this.activecompany :",this.activecompany);
-
-    // this.activedata = new RouteModel();
-    // this.activedata.ownerid = this.activecompany.id;
-    this.modalService.open(modal, { fullscreen: true ,backdrop: 'static', keyboard: false, centered: true});
-
-    // this.modalService.open(modal, {backdrop: 'static',size: 'lg', keyboard: false, centered: true});
-    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
-  }
-
- 
-
   // #endregion  ========= Day Plan ==============================
   // ==========================================================
-
+ 
   // ==========================================================
   // #region  ========= Weekly Plan ===========================
   async setweekplan() {
@@ -889,3 +1000,4 @@ export class RoutecomppageComponent implements OnInit {
   // ==========================================================
 
 }
+
