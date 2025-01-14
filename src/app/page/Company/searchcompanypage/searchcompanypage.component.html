@@ -14,11 +14,11 @@
         <div class="col-auto text-align start" >
             <div class="row" style="text-align: right; margin-right: 10px; color: blue;">
                 <div class="col" style="display: flex; align-items: center;"
-                    matTooltip="แสดงบัตรพนักงาน"  (click)="show.viewtype=0" >
+                    matTooltip="แสดงข้อมูลบริษัท"  (click)="show.viewtype=0" >
                     <mat-icon style="width: 100%; " [style.color]="show.viewtype==0?'blue':'lightgray'">dns</mat-icon>
                 </div>
                 <div class="col" style="display: flex; align-items: center;"
-                    matTooltip="แสดงตารางพนักงาน" (click)="show.viewtype=1">
+                    matTooltip="แสดงตารางข้อมูล" (click)="show.viewtype=1">
                     <mat-icon style="width: 100%; " [style.color]="show.viewtype==1?'blue':'lightgray'" >list</mat-icon>
                 </div>
             </div>
@@ -62,15 +62,21 @@
         <mat-card (dblclick)="opencompanydata(comp,compdetailmodal)" style="cursor: pointer;">
           <mat-card-header class="custom-header">
             <div mat-card-avatar>
-              <img [src]="comp.complogo" class="company-logo">
+              <img [src]="comp.complogo==''?va.icon.nologo:comp.complogo" class="company-logo">
             </div>
             <mat-card-title class="truncate-title">{{ comp.companyname }}</mat-card-title>
-            <div  style=" margin-left: auto;">
-              <img [src]="va.icon.company" alt="icon" class="company-logo" (click)="opencompanymap(comp,compmapmodal)"> >
+            <div  style="margin-left: auto; display: flex; gap: 10px;">
+              <mat-icon style="color: royalblue;" (click)="opencompanymap(comp,compmapmodal)"> edit_location</mat-icon>
+              <mat-icon style="color: royalblue;" (click)="editcompany(comp,compprofilemodal)" > edit</mat-icon>
             </div>
           </mat-card-header>
 
           <mat-card-content>
+            <div class="custom-header" matTooltip="ที่อยู่" >
+              <mat-icon>home</mat-icon>
+              <span class="wrap-text"> {{ comp.address }}</span>
+            </div>
+
             <div class="custom-header" matTooltip="ผู้ติดต่อ" >
               <mat-icon> contacts</mat-icon>
               <span> {{ comp.contract }}</span>
@@ -149,9 +155,9 @@
 </ng-template>
 
 <ng-template #compprofilemodal let-modal>
-  <app-companyprofilepage [modal]="modal"> </app-companyprofilepage>
+  <app-companyprofilepage [modal]="modal" [editcompany]="activecompany" (talk)="companytalkback($event)"> </app-companyprofilepage>
 </ng-template>
 
 <ng-template #compmapmodal let-modal>
-  <app-companymappage [modal]="modal" [editcompany]="activecompany" ></app-companymappage>
+  <app-companymappage [modal]="modal" [editcompany]="activecompany" (talk)="companytalkback($event)"></app-companymappage>
 </ng-template>

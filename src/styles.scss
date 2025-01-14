@@ -166,4 +166,27 @@ body {
   border-color: #303f9f; /* Change border color on hover */
 }
 
+.custom-modal-lg .modal-dialog {
+  max-width: 90%; /* Adjust this percentage as needed */
+  width: 90%; /* Ensures it stretches horizontally */
+}
+
+.custom-modal-lg .modal-content {
+  height: auto; /* Adjust as needed for content */
+}
+.wrap-text {
+  display: inline-block;          /* Make the span behave like an inline element */
+  max-width: 90%;                /* Ensures it takes up available space */
+  white-space: nowrap;            /* Prevent text from wrapping to the next line */
+  overflow: hidden;               /* Hide any overflowed text */
+  text-overflow: ellipsis;        /* Add ellipsis (...) at the end of the text */
+}
+
+@media (max-width: 768px) {
+  .custom-modal-lg .modal-dialog {
+    max-width: 100%;
+    margin: 10px;
+  }
+}
+
 @import "~leaflet/dist/leaflet.css"

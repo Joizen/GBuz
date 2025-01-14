@@ -406,35 +406,40 @@ export class EmployeeModel {
 export class CompanyModel {
   id: number = 0;
   companyname: string = "";
+  companycode: string = "";
+  address: string = "";
   complogo: string = "";
   phone: string = "";
   contract: string = "";
   contractphone: string = "";
-  lat:number=0;
-  lng:number=0;
+  lat:number=13.040146;
+  lng:number=101.1305384;
   totalroute: number = 0;
   totalvehicle: number = 0;
   totalemp: number = 0;
   totaldrop: number = 0;
-  compid:number=0;
   polygon: string = "";
+  transtatus: number = 1;
   constructor();
   constructor(jsondata: any);
   constructor(jsondata?: any) { 
     if(jsondata){
       this.id = jsondata.id;
       this.companyname = jsondata.companyname;
+      this.companycode= jsondata.companycode?jsondata.companycode:"";
+      this.address = jsondata.address?jsondata.address:"";
       this.complogo = jsondata.complogo;
       this.phone = jsondata.phone;
       this.contract = jsondata.contract;
+      this.contractphone= jsondata.contractphone?jsondata.contractphone:"";
       this.totalroute = jsondata.totalroute?jsondata.totalroute:0;
       this.totalvehicle = jsondata.totalvehicle?jsondata.totalvehicle:0;
       this.totalemp = jsondata.totalemp?jsondata.totalemp:0;
       this.totaldrop = jsondata.totaldrop?jsondata.totaldrop:0;
-      this.contractphone= jsondata.contractphone?jsondata.contractphone:"";
       this.lat= jsondata.lat?jsondata.lat:0;
       this.lng= jsondata.lng?jsondata.lng:0;
-      this.compid = jsondata.compid?jsondata.compid:0;
+      this.transtatus= jsondata.transtatus?jsondata.transtatus:1;
+      
     }
   }
 }

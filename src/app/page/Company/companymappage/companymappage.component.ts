@@ -296,7 +296,7 @@ export class CompanymappageComponent implements OnInit {
         }
       }
     }catch(ex){
-      console.log("saveshift error ",ex)
+      console.log("save company error ",ex)
       this.showSanckbar("บันทึกข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }

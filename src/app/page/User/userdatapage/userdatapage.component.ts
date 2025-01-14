@@ -30,7 +30,7 @@ export class UserdatapageComponent implements OnInit {
       this.editdata = new UserModel(this.activeuser) ;
       this.validatePhoneNumber(this.editdata.phone);
       this.listcustomer = await this.getlistcompanyadmin(this.activeuser.id);
-      this.show.delete =(this.listcustomer.filter(x=>x.id==x.compid).length==0)
+      this.show.delete =(this.listcustomer.filter(x=>x.id==x.id).length==0)
     }else{
       this.listcomp =await this.getlistcomp();
       this.listrole =await this.getlistrole();
@@ -42,8 +42,8 @@ export class UserdatapageComponent implements OnInit {
     this.show.Spinner=true;
     this.editcustomer = data;
     if(await this.saveupdateusercompany(1,data.id,this.editdata.id)){
-      this.editcustomer.compid =data.id;
-      this.show.delete =(this.listcustomer.filter(x=>x.id==x.compid).length==0)
+      this.editcustomer.id =data.id;
+      this.show.delete =(this.listcustomer.filter(x=>x.id==x.id).length==0)
     }
     this.show.Spinner=false;
   }
@@ -51,8 +51,8 @@ export class UserdatapageComponent implements OnInit {
     this.show.Spinner=true;
     this.editcustomer = data;
     if(await this.saveupdateusercompany(-3,data.id,this.editdata.id)){
-      this.editcustomer.compid =0;
-      this.show.delete =(this.listcustomer.filter(x=>x.id==x.compid).length==0)
+      this.editcustomer.id =0;
+      this.show.delete =(this.listcustomer.filter(x=>x.id==x.id).length==0)
     }
     this.show.Spinner=false;
   }

@@ -4,14 +4,14 @@
          style="display: flex; justify-content: space-between; align-items: center; width:100%; margin: 0;">
       
       <div class="col-1" style="display: flex; justify-content: center; align-items: center; padding:5px ;" >
-        <img class="profileimg me-4" [src]="(editcompany&&editcompany.complogo!='')? editcompany.complogo: va.icon.nologo">
+        <img style="width: 3vh; height: auto;" [src]="(editcompany&&editcompany.complogo!='')? editcompany.complogo: va.icon.nologo">
       </div>
   
       <div class="col-7" style="display: flex; justify-content: start; align-items: center; padding:5px ;">
         <div >
           <div class="row">
-            <span > {{editcompany?"แก้ข้อมูลลูกค้า":"สร้างข้อมูลลูกค้าใหม่"}} </span>
-            <span *ngIf="editcompany"> {{editcompany.companyname}}
+            <span *ngIf="editcompany.id==0"> สร้างข้อมูลลูกค้าใหม่ </span>
+            <span *ngIf="editcompany.id!=0"> {{editcompany.companyname}}
             </span>
           </div>
         </div>
@@ -20,7 +20,7 @@
       <div class="col-4" style="display: flex;  justify-content:end; align-items:end ;">
         <div class="row">
           <div class="icon-inrow">
-            <div class="icon-inrow" (click)="deletecompany()" *ngIf="editcompany" style="cursor:pointer;">
+            <div class="icon-inrow" (click)="deletecompany()" *ngIf="editcompany.id!=0" style="cursor:pointer;">
               <span>ลบ</span>
               <mat-icon style="width: auto; color: red;">cancel</mat-icon>
             </div>
@@ -49,9 +49,10 @@
   </div>
   <div style="width:100%; padding: 20px;"  >
 
-    <div class="row" >
-        <div class="col-6 d-flex flex-column" style="gap: 10px;">
-          <div class="row">
+    <div class="row"  >
+        <div class="col-4 d-flex flex-column" style="gap: 10px; ">
+          <div class="row" *ngIf="editcompany.id!=0"
+            style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
             <img class="companyimg" (click)="onImageClick()"
                 [src]="activecompany.complogo==''?va.icon.nologo:activecompany.complogo"/>
 
@@ -60,9 +61,27 @@
           </div>
 
           <div class="row">
+            <div class="col-9" style="text-align: right;"><mat-icon matPrefix>assignment</mat-icon></div>
+            <div class="col-3">
+              <input [(ngModel)]="activecompany.companycode" placeholder="Company Code"   
+              pattern="[A-Za-z0-9]*" title="Only letters and numbers allowed"
+              style="width: 100%;text-align: end;padding-right: 10px;" [attr.maxlength]="10">
+            </div>
+          </div>
+
+          <div class="row">
             <div class="col-3" style="text-align: right;"><mat-icon matPrefix>business</mat-icon></div>
             <div class="col-9">
               <input [(ngModel)]="activecompany.companyname" placeholder="Company Name" style="width: 100%;" >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3" style="text-align: right;" (dblclick)="getGoogleAddress()"><mat-icon matPrefix>home</mat-icon></div>
+            <div class="col-9">
+              <!-- <input [(ngModel)]="activecompany.address" type="tel" placeholder="Company Address" style="width: 100%;" > -->
+              <textarea  [(ngModel)]="activecompany.address"  placeholder="Company Address" 
+              style="width: 100%; min-height: 50px; overflow-y: hidden;"  (input)="autoResize($event)"></textarea>
             </div>
           </div>
 
@@ -87,13 +106,27 @@
             </div>
           </div>
 
+          <!-- {{activecompany.lat | number: '1.6-6'}}  ,  {{activecompany.lng | number: '1.6-6'}}  -->
           <div class="row"  >
             <div class="col-3" style="text-align: right;"> <mat-icon matPrefix>place</mat-icon></div>
-            <div class="col-9" >{{activecompany.lat | number: '1.6-6'}}  ,  {{activecompany.lng | number: '1.6-6'}} </div> 
+            <div class="col-9" style="display: flex; gap: 10px;">
+              <input [(ngModel)]="activecompany.lat" placeholder="Latitude" style="flex: 1;"
+              (ngModelChange)="onLocationChange($event)">
+              <input [(ngModel)]="activecompany.lng" placeholder="Longitude" style="flex: 1;"
+              (ngModelChange)="onLocationChange($event)">
+            </div> 
           </div>
 
+          <div class="row align-items-center" style="margin-top: 20px;">
+            <div class="col-3 text-end"></div>
+            <div class="col-9  text-end" style="gap: 20px;">
+              <button class="btn btn-primary" (click)="savecompany()">Save</button>
+            </div>
+          </div>
         </div>
-        <div class="col-6" style="position: relative; height:35vh;">
+
+
+        <div class="col-8" style="position: relative; height:35vh;">
           <div id="companymap" style="height: 100%; width:100%;"></div>
             <mat-icon style="position: absolute; top: 10px; right: 20px; width:30px; height:30px; 
                       font-size: 30px; z-index: 1000; background-color: transparent; 

@@ -119,7 +119,17 @@ export class SearchcompanypageComponent implements OnInit {
 
 
   addcompany(modal: any){
-    this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    this.activecompany = new CompanyModel();
+    this.modalService.open(modal, { size: 'lg', windowClass: 'custom-modal-lg',
+      backdrop: 'static',keyboard: false,centered: true, });
+    // this.modalService.open(modal, { fullscreen: true });
+  }
+  editcompany(comp: CompanyModel,modal: any){
+    this.activecompany = comp;
+    // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
+    this.modalService.open(modal, { size: 'lg', windowClass: 'custom-modal-lg',
+      backdrop: 'static',keyboard: false,centered: true, });
+    // this.modalService.open(modal, { fullscreen: true });
   }
 
   opencompanydata(comp: CompanyModel, modal: any) {
@@ -129,13 +139,20 @@ export class SearchcompanypageComponent implements OnInit {
     this.modalService.open(modal, { fullscreen: true });
   }
   opencompanymap(comp: CompanyModel, modal: any) {
-    // console.log("opencompanydata comp : ", comp);
     this.activecompany = comp;
     // this.modalService.open(modal, { size: 'lg' }); // 'sm', 'lg', 'xl' available sizes
     this.modalService.open(modal, { fullscreen: true });
   }
   companytalkback(event: any) {
-
+    var company :CompanyModel =event;
+    if(company && company.id==0){
+      this.setData();
+    }else{
+      this.activecompany = event;
+      var index = this.companydata.findIndex(x => x.id == this.activecompany.id);
+      this.companydata[index] = this.activecompany;
+    }
+    this.modalService.dismissAll();
   }
   
 

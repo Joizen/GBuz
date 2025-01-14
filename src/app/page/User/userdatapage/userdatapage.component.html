@@ -140,18 +140,18 @@
                 <!-- <hr/> -->
                 <div style="height: 250px; overflow: auto;">
                   <div *ngFor="let comp of listcustomer" >
-                    <div class="icon-inrow" [style.background-color]="(comp.id==comp.compid)?'lightgreen':'lightpink'">
+                    <div class="icon-inrow" [style.background-color]="(comp.id==comp.id)?'lightgreen':'lightpink'">
                       <div class="col-3">
                         <img [src]="comp.complogo" class="company-logo">
                       </div>
                       <div class="col-5" style="display: flex;  justify-content: start;">
-                        <span>{{(comp.id==comp.compid)?'ใช้งานได้':'ใช้งานไม่ได้'}}</span>
+                        <span>{{(comp.id==comp.id)?'ใช้งานได้':'ใช้งานไม่ได้'}}</span>
                       </div>  
                       <div class="col-3" style="display: flex;  justify-content: end;cursor: pointer;"  >
-                          <div (click)="addcompany(comp)"  *ngIf="!(comp.id==comp.compid)">
+                          <div (click)="addcompany(comp)"  *ngIf="!(comp.id==comp.id)">
                             <mat-icon style="color:green;"  > check_circle</mat-icon>
                           </div>
-                          <div (click)="deletecompany(comp)"  *ngIf="(comp.id==comp.compid)">
+                          <div (click)="deletecompany(comp)"  *ngIf="(comp.id==comp.id)">
                             <mat-icon style="color:red;"> delete</mat-icon>
                           </div>
                         </div>

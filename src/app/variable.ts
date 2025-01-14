@@ -25,6 +25,7 @@ export class variable {
   public imagepath = "assets/images/";
   public liffId = "2005033993-ARK31Ewk";
   public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
+  public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
 
   // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
   public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
@@ -414,7 +415,7 @@ export class variable {
      console.log('sendMessage error : ', ex);
    }
    return false;
- }
+  }
   // #endregion
 
 
@@ -461,6 +462,20 @@ export class variable {
     return distance;
   }
 // #endregion
+
+  public async getAddress(lat: number, lng: number):Promise<string>{ 
+    try{
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=th&key=${this.apiKey}`;
+      var response = await  this.http.get<any>(url).toPromise();
+      if(response.results.length>0){
+        console.log("getAddress response : ",response.results[0].formatted_address); 
+        var result= response.results[0].formatted_address;
+        if(result){return result;}
+      }
+    }catch(ex){console.log("getAddress error :", ex);}
+    return "";
+  }
+
 }
  // #region =========== get Function by class =========================
 export function DateToString(date = new Date(),format: string): string {

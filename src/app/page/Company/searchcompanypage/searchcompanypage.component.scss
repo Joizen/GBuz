@@ -1,15 +1,16 @@
 
   
   .card-container {
-    display: flex; /* Flexbox layout for cards in a row */
-    justify-content: space-between; /* Space cards evenly */
-    gap: 16px; /* Optional: adds space between the cards */
+    display: flex;
+    flex-wrap: wrap; /* Allows the cards to wrap */
+    gap: 16px; /* Adds spacing between the cards */
+    justify-content: space-between; /* Adjusts the alignment of cards */
   }
   
   .company-card {
-    flex: 1; /* Ensure cards have equal width */
-    margin: 8px; /* Add margin around each card */
-    max-width: 30%; /* Limit card width to fit 3 cards in one row */
+    flex: 1 1 calc(25% - 16px); /* Makes each card responsive */
+    box-sizing: border-box; /* Ensures padding/margin doesn't affect size */
+    max-width: calc(25% - 16px); /* Optional: Limits the width of each card */
   }
 
   .custom-header {
@@ -45,6 +46,18 @@
     max-width: 100% /* Set a maximum width for truncating */
   }
 
+  @media (max-width: 768px) {
+    .company-card {
+      flex: 1 1 calc(50% - 16px); /* Adjusts layout for smaller screens */
+      max-width: calc(50% - 16px);
+    }
+  }
   
+  @media (max-width: 480px) {
+    .company-card {
+      flex: 1 1 100%; /* Stacks cards on smaller screens */
+      max-width: 100%;
+    }
+  }
   
   

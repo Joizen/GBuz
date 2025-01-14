@@ -1,9 +1,10 @@
 .companyimg {
     padding: 5px;
-    border-radius: 50%;
-    height: 10vh; 
-    width: 10vh; 
+    // border-radius: 50%;
+    height: 5vh; 
+    width: auto; 
     vertical-align: middle;
     cursor: pointer;
+    object-fit: cover;
     // border: 1px solid #cee1f0;
 }
