@@ -18,17 +18,18 @@ import { LOCALE_ID } from '@angular/core';
 
 export class variable {
   constructor(private http: HttpClient) { }
-  // public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
-  public wsUrl: string = "http://localhost:9080/";
 
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
+
   // for test (nayworn)
+  // public wsUrl: string = "http://localhost:9080/";
   // public liffId = "2005033993-ARK31Ewk";
   // public redirectUrl: string = "https://localhost:4200/";
   // public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
 
-  // for NYT Lift login ============
+  // for NYT  ============
+  public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
   public liffId = "2006686857-eG79kBb6";
   public redirectUrl: string = "https://dashboardgbus.gpsasiagps.com/";
   public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
