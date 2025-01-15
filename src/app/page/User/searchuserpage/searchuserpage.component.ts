@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-searchuserpage',
@@ -15,7 +16,7 @@ import * as XLSX from 'xlsx';
 
 export class SearchuserpageComponent implements OnInit {
 
-  constructor(private modalService:NgbModal,public va:variable,private dialog:MatDialog,private snacbar:MatSnackBar) { }
+  constructor(private router: Router,private modalService:NgbModal,public va:variable,private dialog:MatDialog,private snacbar:MatSnackBar) { }
 
   show = { Spinner: true, viewtype: 0 ,limit:10,search:false };
   keyword:string ="";
@@ -23,11 +24,16 @@ export class SearchuserpageComponent implements OnInit {
   public activedriver: UserModel |undefined;
 
   async ngOnInit() {
-    this.listuser = await this.getdata();
-    this.show.Spinner = false;
-
+    if(await this.checktoken()){ 
+      this.listuser = await this.getdata();
+      this.show.Spinner = false;
+    }
   }
-
+  async checktoken(){
+    this.va.token = this.va.gettoken();
+    if(!this.va.token || this.va.token==""){ this.router.navigate(["login"]); return false;} 
+    else{ await this.va.getprofile(); return true;}
+  }
   async getdata() {
     var result: UserModel[] = [];
     try{

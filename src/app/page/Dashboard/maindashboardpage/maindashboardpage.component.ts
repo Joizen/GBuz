@@ -7,6 +7,7 @@ import { variable } from '../../../variable';
 import { DashboardcompanyModel, DashboardplanModel, PlanactivityModel, ProfileModel } from 'src/app/models/datamodule.module';
 import * as L from 'leaflet';
 import mqtt, { MqttClient } from 'mqtt';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-maindashboardpage',
@@ -14,7 +15,7 @@ import mqtt, { MqttClient } from 'mqtt';
   styleUrls: ['./maindashboardpage.component.scss']
 })
 export class MaindashboardpageComponent implements OnInit {
-  constructor( private modalService: NgbModal, public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar) {}
+  constructor( private modalService: NgbModal, public va: variable, private dialog: MatDialog,private router: Router, private snacbar: MatSnackBar) {}
   show = { Refreshpage: false, Spinner: false, Profile: false,  Driverwork: false,type:2  };
 
   public UserProfile:ProfileModel =new ProfileModel();
@@ -34,16 +35,22 @@ export class MaindashboardpageComponent implements OnInit {
 
   
   async ngOnInit() {
-    var userprofile= await this.va.getprofile();
-    if(userprofile){this.UserProfile =userprofile;}
-    this.initMap();
-    this.mqttClient = await this.connectMqtt();
-    this.subscribeMqtt(this.mqttClient, 'gbdupdate');
-    this.subscribeMqtt(this.mqttClient, 'gbusvupdate');
-    this.subscribeMqtt(this.mqttClient, 'gbdplanupdate');
-    await this.setdashboarddata();    
+    if( await this.checktoken()){
+      if(this.va.UserProfile){this.UserProfile =this.va.UserProfile;}
+      // console.log("this.va.UserProfile",this.va.UserProfile)
+      this.initMap();
+      this.mqttClient = await this.connectMqtt();
+      this.subscribeMqtt(this.mqttClient, 'gbdupdate');
+      this.subscribeMqtt(this.mqttClient, 'gbusvupdate');
+      this.subscribeMqtt(this.mqttClient, 'gbdplanupdate');
+      await this.setdashboarddata();    
+    }
   }
-
+  async checktoken(){
+    this.va.token = this.va.gettoken();
+    if(!this.va.token || this.va.token==""){ this.router.navigate(["login"]); return false;} 
+    else{ await this.va.getprofile(); return true;}
+  }
 
   //===================================================================
   // #region  =========== Move Left & right ===========================

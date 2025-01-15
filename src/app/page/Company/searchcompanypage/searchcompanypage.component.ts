@@ -35,16 +35,18 @@ export class SearchcompanypageComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngOnInit(): void {
-    this.checktoken();
+  async ngOnInit(){
+    if(await this.checktoken()){ 
+      // do init process
+    }
   }
-  checktoken(){
-    var token = this.va.gettoken();
-    // console.log("token : ",token);
-    if(!token || token==""){
-      this.router.navigate(["login"]);
-    } 
-   }
+
+  async checktoken(){
+        this.va.token = this.va.gettoken();
+    if(!this.va.token || this.va.token==""){ this.router.navigate(["login"]); return false;} 
+    else{ await this.va.getprofile(); return true;}
+  }
+
 
   ngAfterViewInit() {
     this.setData();

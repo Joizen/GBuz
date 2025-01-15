@@ -34,6 +34,7 @@ export class variable {
   public showmenu = false;
   public icon = this.seticon();
   public token =""; 
+  public UserProfile:ProfileModel|undefined;
   public calendarperiod=5;
   public defultdate = new Date('2000-01-01 00:00:00')
 
@@ -93,22 +94,22 @@ export class variable {
   }
 
   public async getprofile() {
-    var result : ProfileModel| undefined;
+    // var result : ProfileModel| undefined;
     try {
       var keyname: string = this.ProgramID + "-Profile"
       var value = localStorage.getItem(keyname);
-      // console.log("getprofile profile : ", value);
+      console.log("getprofile profile : ", value);
       if (value) {
         var strvalue  = JSON.parse(value);
-        result = new ProfileModel();
-        result.setData(strvalue);
-        return result;
+        this.UserProfile = new ProfileModel();
+        this.UserProfile.setData(strvalue);
+        return  this.UserProfile;
       }
     }
     catch (ex) {
       console.log("getpagekey ex", ex);
     }
-    return result;
+    return undefined;
   }
   
   public async setprofile(profile:any) {
@@ -149,8 +150,6 @@ export class variable {
     var item = localStorage.getItem(this.ProgramID +"-uid");
     return (item) ? item : "";
   }
-
-
 
   public settoken(token: string) { 
     localStorage.setItem((this.ProgramID +"-token"), token); 

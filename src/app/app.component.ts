@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { variable } from './variable';
-import mqtt, { MqttClient } from 'mqtt';
-import { ProfileModel} from './models/datamodule.module';
-
 
 @Component({
   selector: 'app-root',
@@ -13,28 +10,21 @@ import { ProfileModel} from './models/datamodule.module';
 export class AppComponent implements OnInit {
   constructor(public va: variable,private router: Router) {}
   menuopen=false;
-  showmenu=true;
+  // showmenu=true;
   title = 'Smart Control';  
   timeLeft: number = 5;  // Refresh token after timeLeft (300) seconds
   interval: any;
   colck:Date = new Date;
   resetcounter = 60;
 
-  public mqttClient: any;
-  public mqttconfig = this.va.mqttconfig;
-  public UserProfile:ProfileModel|undefined;
-
   async ngOnInit() {
-    this.mqttClient = await this.connectMqtt();
-    this.subscribeMqtt(this.mqttClient, 'gbdashboard');
-    // console.log('subscribeMqtt gbdashboard : ',this.mqttClient);
-    // this.startTimer();
+
  }
 
   openPage(pagename:string){
     this.router.navigate([pagename]);
     this.menuopen=false;
-    this.showmenu= (pagename !="login");    
+    // this.showmenu= (pagename !="login");    
   }
 
   startTimer() {
@@ -42,8 +32,8 @@ export class AppComponent implements OnInit {
       this.interval = setInterval(async () => {
         this.colck = new Date ;
         // console.log("this.UserProfile : ",this.UserProfile);
-        if(!this.UserProfile){
-          this.UserProfile = await this.va.getprofile();
+        if(!this.va.UserProfile){
+          this.va.UserProfile = await this.va.getprofile();
           //  console.log("this.UserProfile 2 : ",this.UserProfile);
         }
         if(this.timeLeft<=0){
@@ -59,7 +49,7 @@ export class AppComponent implements OnInit {
           }
         }
         else{this.timeLeft-=1}
-        this.showmenu= (this.va.gettoken()!="")
+        // this.showmenu= (this.va.gettoken()!="")
       }, 1000);
     }
   }
@@ -80,56 +70,6 @@ export class AppComponent implements OnInit {
     return false;
   }
 
-     //--------------------- MQTT  Lissening------------------------
-
-     async connectMqtt() {
-       try {
-         var mqttclient = await mqtt.connect(this.mqttconfig.url, {
-           clientId: 'client_' + Math.floor(Math.random() * 10000),
-           username: this.mqttconfig.username,
-           password: this.mqttconfig.password,
-         });
-         mqttclient.on('message', (receivedTopic: string, message: any) => {
-            // console.log('New Message> ', message);
-           this.decodemqtt(receivedTopic, message);
-         });
-         return mqttclient;
-       } catch (ex) {
-         console.log('Error ========> ', ex);
-       }
-       return null;
-     }
-     async subscribeMqtt(mqttclient: MqttClient, topic: string) {
-      try {
-        if (mqttclient) {
-            mqttclient.subscribe(topic, { qos: 0 }, (err: any) => {
-            if (err) {
-              console.log('err');
-            } else {
-              // console.log('Subscribed',topic);
-            }
-          });
-        } else {
-          console.log('MQTT client is not connected.');
-        }
-      } catch (ex) {
-        console.log('Error ========> ', ex);
-      }
-     }
-
-     async decodemqtt(topic: string, message: string) {
-      if (topic === 'gbdashboard') {
-        const msg = message.toString();
-        // var data = JSON.parse(msg);
-        // console.log('decodemqtt data: ', msg);
-        var token =this.va.gettoken();
-        // console.log('decodemqtt token: ', token);
-        if(msg==token){
-          this.UserProfile = await this.va.getprofile();
-          this.showmenu=true;
-        }
-      } 
-    }
 
 
 

@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogpageComponent, DialogConfig } from '../../../material/dialogpage/dialogpage.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-searchdriverpage',
@@ -15,7 +16,7 @@ import * as XLSX from 'xlsx';
 
 export class SearchdriverpageComponent implements OnInit {
 
-  constructor(private modalService:NgbModal,public va:variable,private dialog:MatDialog,private snacbar:MatSnackBar) { }
+  constructor(private router: Router,private modalService:NgbModal,public va:variable,private dialog:MatDialog,private snacbar:MatSnackBar) { }
 
   show = { Spinner: true, viewtype: 0 ,limit:10,search:false};
   keyword:string ="";
@@ -23,9 +24,15 @@ export class SearchdriverpageComponent implements OnInit {
   public activedriver: DriverdataModel |undefined;
 
   async ngOnInit() {
-    this.listdriver = await this.getDriver();
-    this.show.Spinner = false;
-
+    if(await this.checktoken()){
+      this.listdriver = await this.getDriver();
+      this.show.Spinner = false;
+    }
+  }
+  async checktoken(){
+    this.va.token = this.va.gettoken();
+    if(!this.va.token || this.va.token==""){ this.router.navigate(["login"]); return false;} 
+    else{ await this.va.getprofile(); return true;}
   }
 
   async getDriver() {

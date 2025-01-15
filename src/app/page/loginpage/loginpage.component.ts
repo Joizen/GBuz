@@ -42,7 +42,8 @@ export class LoginpageComponent implements OnInit {
       // this.router.navigate(["driverdashboard"]);
       this.router.navigate(["maindashboard"]);
       var token =this.va.gettoken();
-      this.va.sendmqtt("gbdashboard",token)
+      console.log("gotomainpage token :",token)
+      // this.va.sendmqtt("gbdashboard",token)
     }else{
       this.alertMessage("get Profile Failed","Please try again");
     }
@@ -60,6 +61,7 @@ export class LoginpageComponent implements OnInit {
         if(jsondata.data.token!=undefined){
           // this.va.settoken(jsondata.data.token);
           this.va.setlogin(jsondata);
+          this.va.settoken(jsondata.data.token);
           return true;
         }
       }
@@ -112,8 +114,8 @@ export class LoginpageComponent implements OnInit {
       if(jsondata.code=="000"){
         this.showSanckbar("Login success",2);
         if(jsondata.data.token!=undefined){
-          // this.va.settoken(jsondata.data.token);
           this.va.setlogin(jsondata);
+          this.va.settoken(jsondata.data.token);
           return true;
         }
       }
