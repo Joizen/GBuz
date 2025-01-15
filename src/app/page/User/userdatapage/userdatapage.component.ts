@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from '../../../variable';
 import { CompanyModel, SelecteddataModel, UserModel } from 'src/app/models/datamodule.module';
+import liff from '@line/liff';
 
 @Component({
   selector: 'app-userdatapage',
@@ -15,6 +16,7 @@ export class UserdatapageComponent implements OnInit {
   constructor( private modalService: NgbModal, public va: variable, private dialog: MatDialog, private snacbar: MatSnackBar ) { }
   @Input() modal: any;
   @Input()  activeuser:  UserModel |undefined;
+  @Input() isprofile=true;
   @Output() talk: EventEmitter<any> = new EventEmitter<any>();
   listcustomer : CompanyModel[]=[];
   editcustomer : CompanyModel=new CompanyModel();
@@ -538,7 +540,7 @@ export class UserdatapageComponent implements OnInit {
   // #endregion  =========== Save Update Delete ==========================
   //===================================================================
 
-
+ 
   //===================================================================
   // #region  =========== Message Dialog ==============================
   alertMessage(header: string, message: string) {

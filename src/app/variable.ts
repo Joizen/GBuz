@@ -24,6 +24,8 @@ export class variable {
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
   public liffId = "2005033993-ARK31Ewk";
+  public redirectUrl: string = "https://localhost:4200/";
+
   public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
   public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
 
@@ -31,7 +33,7 @@ export class variable {
   public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
   public showmenu = false;
   public icon = this.seticon();
-
+  public token =""; 
   public calendarperiod=5;
   public defultdate = new Date('2000-01-01 00:00:00')
 
@@ -150,7 +152,10 @@ export class variable {
 
 
 
-  public settoken(token: string) { localStorage.setItem((this.ProgramID +"-token"), token); }
+  public settoken(token: string) { 
+    localStorage.setItem((this.ProgramID +"-token"), token); 
+    this.token = token;
+  }
 
   public gettoken() {
     var item = localStorage.getItem(this.ProgramID +"-token");
@@ -232,6 +237,9 @@ export class variable {
       idle : this.imagepath + "poiidle.png",
       startpoint : this.imagepath + "startpoi.png",
       finishpoint : this.imagepath + "stoppoi.png",
+      line: this.imagepath + "linelogin.png",
+      gpslogo: this.imagepath + "sym_g.png",
+      gbuslogo: this.imagepath + "sym_logo.png",
     }
   }
   public getactiveicon(id:any){

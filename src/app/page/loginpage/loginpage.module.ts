@@ -4,6 +4,7 @@ import { LoginpageRoutingModule } from './loginpage-routing.module';
 import { LoginpageComponent } from './loginpage.component';
 import { MaterialModule } from '../../material/material.module';
 import { FormsModule } from '@angular/forms';
+import { RegisterpageModule } from '../registerpage/registerpage.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { FormsModule } from '@angular/forms';
     LoginpageRoutingModule,
     MaterialModule,
     FormsModule,
+    RegisterpageModule
   ]
 })
 export class LoginpageModule { }

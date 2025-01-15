@@ -106,9 +106,9 @@
                 <textarea  matInput cdkTextareaAutosize [(ngModel)]="editdata.remark" placeholder="หมายเหตุ" maxlength="250"  
                       (ngModelChange)="userdatachange('remark')" style="width: 90%; resize: none;"></textarea>
               </div>    
-              <div class="icon-inrow"  *ngIf="activeuser">
-                <mat-icon style="width: auto; margin-right: 8px;">face</mat-icon>
-                <span> Line name : {{editdata.linename}} </span>
+              <div class="icon-inrow" style="width: 100%;" *ngIf="activeuser">
+                <mat-icon style="height: 24px; width: auto; margin-right: 8px;">face</mat-icon>
+                <span *ngIf="editdata.linename!=''"> Line name : {{editdata.linename}} </span>
               </div>
               <hr>
               <div style="display: flex; justify-content: center;margin: 16px;">

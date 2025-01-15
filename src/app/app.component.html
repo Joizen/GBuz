@@ -2,7 +2,7 @@
 
     <mat-sidenav mode="over" [(opened)]="menuopen" style="background-color: #1e88e5;">
       <mat-toolbar style="background-color: #1976d2;" >
-        <img class="profileimg" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
+        <img class="profileimgmenu" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
         <div style="display: flex; flex-direction: column; justify-content: center;">
             <div class="empname" style="margin-left: 10px; font-size: medium ;">{{UserProfile?UserProfile.empname:''}} </div>
             <div style="margin-left: 10px; font-size: small;"> {{UserProfile?UserProfile.rolename:''}} </div>
@@ -131,28 +131,28 @@
     </div>
     </mat-sidenav>
 
-    <mat-sidenav-content  style="overflow: hidden;" >
-      <mat-toolbar class="navbar" style="background-color:#1976d2;" *ngIf="showmenu">
-        <div class="d-flex flex-wrap align-items-center">
-          <mat-icon class="navmenu" (click)="menuopen=true" style="color: #b3e5fc;">menu</mat-icon>
-          <img src="../assets/images/sym_g.png" style="height: 35px;">
-          <span style="color: #8fbeed; font-size: medium;">Driver</span>
-          
+    <mat-sidenav-content  style="overflow: hidden;">
+      <mat-toolbar class="navbar" style="background-color:#1976d2;" *ngIf="va.token!=''">
+        <div class="d-flex flex-wrap align-items-center" style="gap:10px;">
+            <mat-icon class="navmenu" (click)="menuopen=true" style="color: #b3e5fc;">menu</mat-icon>
+            <img class="profileimgmenu" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>              
+            <span style="color: #8fbeed; font-size: medium;">{{UserProfile?.empname}}</span>
         </div>
   
-        <div class="d-flex flex-wrap align-items-center">
-            
+        <div class="d-flex flex-wrap align-items-center" style="gap: 10px;" >
+            <img src={{va.icon.gpslogo}} style="height: 35px;">            
             <span class="m-2" *ngIf="resetcounter!=60" style="color: #8fbeed; font-size: medium;">{{resetcounter}}</span>
             <mat-icon *ngIf="timeLeft<=0" class="navmenu" style="color: #b3e5fc;">refresh</mat-icon>
             <span class="m-2" style="color: #8fbeed; font-size: medium;">{{colck | date: 'dd-MM-yyyy HH:mm:ss'}}</span>
 
-          <mat-icon class="navmenu" style="color: #b3e5fc;">info</mat-icon>
-          <span class="navtxt">About</span>
-  
-          <mat-icon class="navmenu" style="color: #b3e5fc;">description</mat-icon>
-          <span class="navtxt">Manual</span>
+            <mat-icon class="navmenu" style="color: #b3e5fc;">info</mat-icon>
+            <span class="navtxt">About</span>
+    
+            <mat-icon class="navmenu" style="color: #b3e5fc;">description</mat-icon>
+            <span class="navtxt">Manual</span>
 
-          <img class="profileimg ml-5" [src]="(UserProfile&&UserProfile.userimage!='')?UserProfile.userimage:va.icon.user"/>        
+
+               
 
 
         </div>

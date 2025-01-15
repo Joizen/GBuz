@@ -221,10 +221,7 @@ export class CompanyprofilepageComponent implements OnInit {
       this.showSanckbar("ลบข้อมูล ผิดพลาดโปรดลองอีกครัง")
     }
   }
-//   closemodal(){
-//     this.talk.emit(this.editcompany);
-//     this.modal.close();
-// }
+
 
    // ===== Message Dialog ====================
 

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RegisterpageRoutingModule } from './registerpage-routing.module';
 import { RegisterpageComponent } from './registerpage.component';
 import { MaterialModule } from '../../material/material.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,10 @@ import { MaterialModule } from '../../material/material.module';
   imports: [
     CommonModule,
     RegisterpageRoutingModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule
+  ],exports:[
+    RegisterpageComponent
   ]
 })
 export class RegisterpageModule { }

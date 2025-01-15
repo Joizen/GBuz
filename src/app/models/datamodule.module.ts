@@ -14,6 +14,24 @@ import * as va from '../variable';
 
 export class DatamoduleModule { }
 
+export class LineModel {
+  userId: string = "";
+  displayName: string = "";
+  pictureUrl: string = "";
+  statusMessage: string = "";
+  Token: string = "";
+  constructor();
+  constructor(jsondata: any);
+  constructor(jsondata?: any){
+    if(jsondata){
+      this.userId = jsondata.userId;
+      this.displayName = jsondata.displayName?jsondata.displayName:"";
+      this.pictureUrl = jsondata.pictureUrl?jsondata.pictureUrl:"";
+      this.statusMessage = jsondata.statusMessage?jsondata.statusMessage:"";
+    }
+  }
+ }
+
 export class SelecteddataModel {
   id:number = -1;
   display: string = "ไม่ระบุ";
