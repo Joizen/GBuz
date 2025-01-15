@@ -23,10 +23,14 @@ export class variable {
 
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
-  public liffId = "2005033993-ARK31Ewk";
-  public redirectUrl: string = "https://localhost:4200/";
+  // for test (nayworn)
+  // public liffId = "2005033993-ARK31Ewk";
+  // public redirectUrl: string = "https://localhost:4200/";
+  // public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
 
-  public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
+  // for NYT Lift login ============
+  public liffId = "2006686857-eG79kBb6";
+  public redirectUrl: string = "https://dashboardgbus.gpsasiagps.com/";
   public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
 
   // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
