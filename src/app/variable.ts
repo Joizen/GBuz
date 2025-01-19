@@ -35,7 +35,8 @@ export class variable {
   // // for NYT  ============
   // public liffId = "2006686857-eG79kBb6";
   public loginurl = "https://drivergbus.gpsasiagps.com/login?";
-  public loginredirec = "https://dashboardgbus.gpsasiagps.com/login?token=";
+  // public loginredirec = "https://dashboardgbus.gpsasiagps.com/login?token=";
+  public loginredirec = "https://dashboardgbus.gpsasiagps.com?token=";
 
   public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
   public liffId = "2006661134-9Yl1Daxy";
