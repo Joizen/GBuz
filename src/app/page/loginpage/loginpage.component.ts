@@ -1,5 +1,5 @@
 import { Component , OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as crypto from 'crypto-js';  // Import crypto-js for MD5 hashing
 import{ variable } from '../../variable'
@@ -7,8 +7,6 @@ import { DialogpageComponent, DialogConfig } from '../../material/dialogpage/dia
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import mqtt, { MqttClient } from 'mqtt';
-import liff from '@line/liff';
-import { LineModel } from 'src/app/models/datamodule.module';
 
 @Component({
   selector: 'app-loginpage',
@@ -16,14 +14,20 @@ import { LineModel } from 'src/app/models/datamodule.module';
   styleUrls: ['./loginpage.component.scss']
 })
 export class LoginpageComponent implements OnInit {
-  constructor(private router: Router,public va:variable,private dialog: MatDialog, private snacbar: MatSnackBar,private modalService: NgbModal) {}
+  constructor(private router: Router,private redirec: ActivatedRoute,public va:variable,private dialog: MatDialog, private snacbar: MatSnackBar,private modalService: NgbModal) {}
   public login = {user:"bwon.t",pwd:"123456",encpwd:""}
   public passwordVisible = false; 
-  public linedata :LineModel = new LineModel(); 
+  public linetoken :string|null=null;
 
   ngOnInit(): void {
-    this.va.removepagekey();
-    this.va.settoken("");
+    this.redirec.queryParamMap.subscribe((params) => { this.linetoken = params.get('token');});
+    if(this.linetoken){
+      console.log("this.linetoken :",this.linetoken);
+      this.Setloginbyline(this.linetoken);   
+    }else{
+      this.va.removepagekey();
+      this.va.settoken("");
+    }
   }
 
   async onLoginClkick(){
@@ -72,39 +76,23 @@ export class LoginpageComponent implements OnInit {
     }catch(ex){console.log("Checklogin Error : ",ex)}
     return false;
   }
-  LogoutLine(){
-    if (liff.isLoggedIn()) {liff.logout(); }
+
+  openloginline(){
+      // this.loginurl = this.sanitizer.bypassSecurityTrustResourceUrl(this.va.loginurl + "redirect=" +this.va.loginredirec);
+      var lineurl = (this.va.loginurl + "redirect=" +this.va.loginredirec);
+      window.location.href =lineurl;
   }
-  async onLoginLine(modal: any){
-    console.log ("liff : ",liff)
-    await liff.init({ liffId: this.va.liffId });
-    if (!liff.isLoggedIn()) { 
-      liff.login({redirectUri: this.va.redirectUrl+'login'}); 
-      // liff.login(); 
-      return 
-    }
-    const profile = await liff.getProfile();
-    if (profile) {
-      console.log ("profile : ",profile)
-      this.linedata= new LineModel(profile);
-      var linetoken = liff.getIDToken();
-      if(linetoken){
-        this.linedata.Token=linetoken;
-        // console.log ("linetoken : ",linetoken)
-        console.log ("this.linedata : ",this.linedata)
-        if(await this.LoginByline(linetoken)){
-          await this.gotomainpage();
-        }else{
-          var confirm =await this.OkCancelMessage("ลงทะเบียนผู้ใช้งาน","ไม่พบข้อมูล...ต้องการลงทะเบียนผู้ใช้งานใหม่หรือไม่");
-          if(confirm){
-            // register line
-            await this.lineregister(modal);
-          }else{this.LogoutLine(); }
-        }
+
+  async Setloginbyline(linetoken:string){
+    try{
+      if(await this.LoginByline(linetoken)){
+        await this.gotomainpage();
+      }else{
+        await this.alertMessage("ลงชื่อเข้าใช้งานผ่านไลน์","ไม่พบข้อมูล...กรุณาลงทะเบียนผู้ใช้งานแล้วลองอีกครัง");
       }
-    }else{ this.LogoutLine();}
-    
+    }catch(ex){console.log(ex);}
   }
+
   async LoginByline(linetoken:string){
     try{
       var  wsname = "loginbyline";
@@ -127,15 +115,6 @@ export class LoginpageComponent implements OnInit {
     return false;
   }
 
-  lineregister(modal: any){
-    // this.modalService.open(modal, { size: 'lg', windowClass: 'custom-modal-lg',
-    // backdrop: 'static',keyboard: false,centered: true, });
-    this.modalService.open(modal, { fullscreen: true });
-  }
-  registerback(event :any){
-    
-    this.LogoutLine();
-  }
 
   // ===== Message Dialog ====================
 

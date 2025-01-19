@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [ 
   { path: '', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
   { path: 'login', loadChildren: () => import('./page/loginpage/loginpage.module').then(m => m.LoginpageModule) },
-  { path: 'register', loadChildren: () => import('./page/registerpage/registerpage.module').then(m => m.RegisterpageModule) },
   { path: 'vehicle', loadChildren: () => import('./page/Vehicle/searchvehiclepage/searchvehiclepage.module').then(m => m.SearchvehiclepageModule) },
   { path: 'vehicledata', loadChildren: () => import('./page/Vehicle/vehiclepage/vehiclepage.module').then(m => m.VehiclepageModule) },
   { path: 'company', loadChildren: () => import('./page/Company/searchcompanypage/searchcompanypage.module').then(m => m.SearchcompanypageModule) },

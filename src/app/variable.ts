@@ -21,18 +21,26 @@ export class variable {
 
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
+  public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
 
   // for test (nayworn)
   // public wsUrl: string = "http://localhost:9080/";
   // public liffId = "2005033993-ARK31Ewk";
   // public redirectUrl: string = "https://localhost:4200/";
   // public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
+  // public loginurl = "http://localhost:4200/login?";
+  // public loginredirec = "http://localhost:65033/login?token=";
+  // public redirectUrl: string = "https://localhost:4200/";
 
-  // for NYT  ============
+  // // for NYT  ============
+  // public liffId = "2006686857-eG79kBb6";
+  public loginurl = "https://drivergbus.gpsasiagps.com/login?";
+  public loginredirec = "https://dashboardgbus.gpsasiagps.com/login?token=";
+
   public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
-  public liffId = "2006686857-eG79kBb6";
+  public liffId = "2006661134-9Yl1Daxy";
   public redirectUrl: string = "https://dashboardgbus.gpsasiagps.com/";
-  public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
+
 
   // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
   public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
