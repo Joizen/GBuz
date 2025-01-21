@@ -60,6 +60,7 @@ export class SearchvehiclepageComponent implements OnInit {
 
   }
   async searchdata(){
+    if(this.keyword==""){return;}
     this.show.Spinner = true;
     this.listvehicle = await this.getvehicle();
     this.show.search = false;

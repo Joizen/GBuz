@@ -57,6 +57,7 @@ export class SearchdriverpageComponent implements OnInit {
 
   }
   async searchdata(){
+    if(this.keyword==""){return;}
     this.show.Spinner = true;
     this.listdriver = await this.getDriver();
     this.show.search = false;

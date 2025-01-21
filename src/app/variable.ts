@@ -38,7 +38,8 @@ export class variable {
   // public loginredirec = "https://dashboardgbus.gpsasiagps.com/login?token=";
   public loginredirec = "https://dashboardgbus.gpsasiagps.com?token=";
 
-  public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
+  public wsUrl: string = "http://localhost:9080/"; 
+  // public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
   public liffId = "2006661134-9Yl1Daxy";
   public redirectUrl: string = "https://dashboardgbus.gpsasiagps.com/";
 

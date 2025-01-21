@@ -56,6 +56,7 @@ export class SearchuserpageComponent implements OnInit {
 
   }
   async searchdata(){
+    if(this.keyword==""){return;}
     this.show.Spinner = true;
     this.listuser = await this.getdata();
     this.show.search = false;

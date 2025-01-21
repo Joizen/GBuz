@@ -11,7 +11,7 @@
 <body style=" z-index: 0; position:static;">
 
   <div class="container">
-    <div class="frame" *ngIf="false">
+    <div class="frame" *ngIf="true">
       <form>
         <mat-form-field class="full-width">
           <mat-label>Login</mat-label>
@@ -28,20 +28,19 @@
           </button>
         </mat-form-field>
   
-        <div class="button-container" *ngIf="false">
+        <div class="button-container">
           <button mat-raised-button color="primary" type="submit" (click)="onLoginClkick()">
             Login
           </button>
         </div>
 
-        <div class="button-container" style="margin-top: 20px;">
-          <!-- <img [src]="va.icon.line" (click)="onLoginLine(registermodal)" class="line-icon" /> -->
+        <div style="margin-top: 20px;" *ngIf="false">
           <img [src]="va.icon.line" (click)="openloginline()" class="line-icon" />
         </div>
+
       </form>
     </div>
-    <div style="margin-top: 20px;">
-      <!-- <img [src]="va.icon.line" (click)="onLoginLine(registermodal)" class="line-icon" /> -->
+    <div style="margin-top: 20px;" *ngIf="false">
       <img [src]="va.icon.line" (click)="openloginline()" class="line-icon" />
     </div>
   </div>
