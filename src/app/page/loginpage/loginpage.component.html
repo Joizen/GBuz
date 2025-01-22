@@ -10,8 +10,8 @@
 
 <body style=" z-index: 0; position:static;">
 
-  <div class="container">
-    <div class="frame" *ngIf="true">
+  <div class="container" (click)="showloginfull()">
+    <div class="frame" *ngIf="login.showfull">
       <form>
         <mat-form-field class="full-width">
           <mat-label>Login</mat-label>
@@ -41,7 +41,7 @@
 
       </form>
     </div>
-    <div style="margin-top: 20px;" *ngIf="false">
+    <div style="margin-top: 20px;" *ngIf="!login.showfull">
       <img [src]="va.icon.line" (click)="openloginline()" class="line-icon" />
     </div>
   </div>

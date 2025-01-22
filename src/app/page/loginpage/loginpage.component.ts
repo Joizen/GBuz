@@ -15,7 +15,7 @@ import mqtt, { MqttClient } from 'mqtt';
 })
 export class LoginpageComponent implements OnInit {
   constructor(private router: Router,private redirec: ActivatedRoute,public va:variable,private dialog: MatDialog, private snacbar: MatSnackBar,private modalService: NgbModal) {}
-  public login = {user:"bwon.t",pwd:"123456",encpwd:""}
+  public login = {user:"",pwd:"",encpwd:"",showfull:false,click:0}
   public passwordVisible = false; 
   public linetoken :string|null=null;
 
@@ -30,7 +30,15 @@ export class LoginpageComponent implements OnInit {
       this.va.settoken("");
     }
   }
-
+  showloginfull(){
+    if(this.login.click<7){
+      this.login.click+=1;
+      this.showSanckbar(this.login.click.toString())
+    }else{
+      this.login.showfull=!this.login.showfull;
+      this.login.click=0;
+    }
+  }
   async onLoginClkick(){
    if(this.login.user.trim()!=""&&this.login.pwd.trim()!=""){
     if(await this.Checklogin()){

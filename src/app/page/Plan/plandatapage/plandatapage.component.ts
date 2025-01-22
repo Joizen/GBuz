@@ -147,7 +147,7 @@ export class PlandatapageComponent implements OnInit {
       // ไม่ต้องเลือก OT
       this.activeplan.ot=0;
       this.activeplan.otname="ปกติ";
-      this.activeplanchange();
+      this.activeplanchange("end");
     }
     else{ // ถ้าส่งกลับบ้าน
       // ปรับเวลาส่งสุดท้ายให้เป็น เวลารับต้นทางตาม OT + period       
@@ -157,35 +157,38 @@ export class PlandatapageComponent implements OnInit {
       else{
         this.selecttime.start = this.va.DateToString("HH:mm",this.selectshift.ottime);
       }
-      this.activeplanchange();
+      this.activeplanchange("start");
     }
-
-   
-
   }
-  activeplanchange(type:string=""){
-    var index = this.activeplan.issend;
 
+  activeplanchange(type:string=""){
     if(type=="end"){
       const [hours, minutes] = this.selecttime.end.split(':').map(Number); 
       this.activeplan.endtime.setHours(hours, minutes);
       if(this.activeplan.endtime<this.activeplan.starttime){
         this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาถึงปลายทางก่อนเริ่มเดินทางได้");
-        this.activeplan.starttime=new Date(this.activeplan.endtime);
+        var temptime = new Date(this.activeplan.endtime);
+        temptime.setMinutes(temptime.getMinutes()-this.activeplan.period);
+        this.activeplan.starttime= new Date(temptime);        
         this.selecttime.start=this.va.DateToString("HH:mm",this.activeplan.starttime);
+      }else{
+        this.activeplan.period = this.va.getperiodinminutes(this.activeplan.endtime,this.activeplan.starttime)
       }
-      this.activeplan.period = this.va.getperiodinminutes(this.activeplan.endtime,this.activeplan.starttime)
+      this.updateactivetime(0,false);
     }
     else if(type=="start"){
       const [hours, minutes] = this.selecttime.start.split(':').map(Number); 
       this.activeplan.starttime.setHours(hours, minutes);
       if(this.activeplan.endtime<this.activeplan.starttime){
         this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาถึงปลายทางก่อนเริ่มเดินทางได้");
-        this.activeplan.endtime=new Date(this.activeplan.starttime);
+        var temptime = new Date(this.activeplan.starttime);
+        temptime.setMinutes(temptime.getMinutes()+this.activeplan.period);
+        this.activeplan.endtime= new Date(temptime);        
         this.selecttime.end=this.va.DateToString("HH:mm",this.activeplan.endtime);
+      }else{
+        this.activeplan.period = this.va.getperiodinminutes(this.activeplan.endtime,this.activeplan.starttime)
       }
-      this.activeplan.period = this.va.getperiodinminutes(this.activeplan.endtime,this.activeplan.starttime)
-
+      this.updateactivetime(0,true);
     }
     else if(type=="startwarn"){
       const [hours, minutes] = this.selecttime.startwarn.split(':').map(Number); 
@@ -194,10 +197,9 @@ export class PlandatapageComponent implements OnInit {
         this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาสตาร์ทหลังเริ่มเดินทางได้");
         this.activeplan.startwarntime=new Date(this.activeplan.starttime);
         this.selecttime.startwarn=this.va.DateToString("HH:mm",this.activeplan.startwarntime);
-
       }
       this.activeplan.startwarn = this.va.getperiodinminutes(this.activeplan.startwarntime,this.activeplan.starttime)
-
+      this.updateactivetime(1,false);
     }
     else if(type=="wakeup"){
       const [hours, minutes] = this.selecttime.wakeup.split(':').map(Number); 
@@ -206,10 +208,9 @@ export class PlandatapageComponent implements OnInit {
         this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาเช็คอินหลังเริ่มเดินทางได้");
         this.activeplan.wakeuptime=new Date(this.activeplan.starttime);
         this.selecttime.wakeup=this.va.DateToString("HH:mm",this.activeplan.wakeuptime);
-
       }
       this.activeplan.wakeup = this.va.getperiodinminutes(this.activeplan.wakeuptime,this.activeplan.starttime)
-
+      this.updateactivetime(1,false);
     }
     else if(type=="wakeupwarn"){
       const [hours, minutes] = this.selecttime.wakeupwarn.split(':').map(Number); 
@@ -220,51 +221,52 @@ export class PlandatapageComponent implements OnInit {
         this.selecttime.wakeupwarn=this.va.DateToString("HH:mm",this.activeplan.wakeupwarntime);
       }
       this.activeplan.wakeupwarn = this.va.getperiodinminutes(this.activeplan.wakeupwarntime,this.activeplan.starttime)
+      this.updateactivetime(1,false);
+    }
+  }
+
+  updateactivetime(index:number,isstart:boolean){
+    if(index==0){
+      if(isstart){
+        // ถ้าเวลาปลายต้นทางเปลี่ยน ให้ปรับเวลาปลายทาง  เพิ่มตาม period
+        var endtime = new Date(this.activeplan.starttime);
+        endtime.setMinutes(endtime.getMinutes()+this.activeplan.period);
+        this.activeplan.endtime= new Date(endtime);        
+        this.selecttime.end=this.va.DateToString("HH:mm",this.activeplan.endtime);
+      }
+      else{
+        // ถ้าเวลาปลายทางเปลี่ยน ให้ปรับเวลาต้นทาง  ลดลงตาม period
+        var starttime = new Date(this.activeplan.endtime);
+        starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
+        this.activeplan.starttime= new Date(starttime);        
+        this.selecttime.start=this.va.DateToString("HH:mm",this.activeplan.starttime);
+      }
     }
 
-    // // console.log("selecttime.index : ",index);
-    // if(index==0){
-    //   // เปลี่ยนเวลาถึงปลายทาง
-    //   // console.log("selecttime.end : ",this.selecttime.end);
-    //   const [hours, minutes] = this.selecttime.end.split(':').map(Number); 
-    //   this.activeplan.endtime.setHours(hours, minutes);
+    var starttime = new Date(this.activeplan.starttime);
+    var temptime = new Date(starttime);
+    temptime.setMinutes(temptime.getMinutes()-this.activeplan.startwarn);
+    this.activeplan.startwarntime = new Date(temptime);
+    this.selecttime.startwarn=this.va.DateToString("HH:mm",this.activeplan.startwarntime);
 
-    //   var starttime = new Date(this.activeplan.endtime);
-    //   starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
-    //   this.activeplan.starttime= new Date(starttime);
-
-    // }else if(index==1){
-    //   // เปลี่ยนเวลาเริ่มต้นทาง
-    //   // console.log("selecttime.start : ",this.selecttime.start);
-    //   const [hours, minutes] = this.selecttime.start.split(':').map(Number); 
-    //   this.activeplan.starttime.setHours(hours, minutes);
-
-    //   var endtime = new Date(this.activeplan.starttime);
-    //   endtime.setMinutes(endtime.getMinutes()+this.activeplan.period);
-    //   this.activeplan.endtime= new Date(endtime);
-    // }
+    temptime = new Date(starttime);
+    temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeup);
+    this.activeplan.wakeuptime = new Date(temptime);
+    this.selecttime.wakeup=this.va.DateToString("HH:mm",this.activeplan.wakeuptime);
 
 
-    // var starttime = new Date(this.activeplan.starttime);
-    // // starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
-    // // this.activeplan.starttime= new Date(starttime);
+    temptime = new Date(starttime);
+    temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeupwarn);
+    this.activeplan.wakeupwarntime = new Date(temptime);
+    this.selecttime.wakeupwarn=this.va.DateToString("HH:mm",this.activeplan.wakeupwarntime);
 
-    // var temptime = new Date(starttime);
-    // temptime.setMinutes(temptime.getMinutes()-this.activeplan.startwarn);
-    // this.activeplan.startwarntime = new Date(temptime);
-
-    // temptime = new Date(starttime);
-    // temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeup);
-    // this.activeplan.wakeuptime = new Date(temptime);
-
-    // temptime = new Date(starttime);
-    // temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeupwarn);
-    // this.activeplan.wakeupwarntime = new Date(temptime);
-    // console.log("this.activeplan  : ----- ", this.activeplan);
+    console.log("this.activeplan  : ----- ", this.activeplan);
     this.onperiod = this.checkperiod();
 
     this.setplancode();
+
   }
+
   routechange(){
     // console.log("Selectedroute selectrout : ", this.selectrout);    
     this.activeplan.setdatabyroute(this.selectrout);
@@ -384,7 +386,8 @@ export class PlandatapageComponent implements OnInit {
     try{
       var tbname =["route","","routeweek","driverplan"];
       var wsname = "updatedata";
-      var jsondata = await this.va.getwsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:this.activeplan})
+      var data = new  RouteplanModel(this.activeplan);
+      var jsondata = await this.va.getwsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:data})
       if(jsondata.code=="000"){
         this.showSanckbar("save or updateplan success",2);
         return true;
