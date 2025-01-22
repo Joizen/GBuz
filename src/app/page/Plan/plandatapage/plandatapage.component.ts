@@ -25,7 +25,7 @@ export class PlandatapageComponent implements OnInit {
   routelist: RouteModel[] = [];
   selectrout : RouteModel = new RouteModel();
   selectshift : ComshiftModel = new ComshiftModel();
-  selecttime={start:"00:00", end : "00:00"} ; 
+  selecttime={start:"00:00", end : "00:00",startwarn:"00:00",wakeup:"00:00",wakeupwarn:"00:00"} ; 
   activeplan : RouteplanModel =new RouteplanModel();
   selectmodal:any;
   unplanvehicle:VehicleModel[]=[];
@@ -60,7 +60,9 @@ export class PlandatapageComponent implements OnInit {
         this.selectrout.endtime = this.activeplan.endtime;
         this.selecttime.end = this.va.DateToString("HH:mm",this.activeplan.endtime);
         this.selecttime.start = this.va.DateToString("HH:mm",this.activeplan.starttime);
-        
+        this.selecttime.startwarn = this.va.DateToString("HH:mm",this.activeplan.startwarntime);
+        this.selecttime.wakeup = this.va.DateToString("HH:mm",this.activeplan.wakeuptime);
+        this.selecttime.wakeupwarn = this.va.DateToString("HH:mm",this.activeplan.wakeupwarntime);
       }else{
         this.listshift = await this.getshiftData();
         await this.createnewplan();
@@ -161,46 +163,103 @@ export class PlandatapageComponent implements OnInit {
    
 
   }
-  activeplanchange(){
+  activeplanchange(type:string=""){
     var index = this.activeplan.issend;
-    // console.log("selecttime.index : ",index);
-    if(index==0){
-      // เปลี่ยนเวลาถึงปลายทาง
-      // console.log("selecttime.end : ",this.selecttime.end);
+
+    if(type=="end"){
       const [hours, minutes] = this.selecttime.end.split(':').map(Number); 
       this.activeplan.endtime.setHours(hours, minutes);
-
-      var starttime = new Date(this.activeplan.endtime);
-      starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
-      this.activeplan.starttime= new Date(starttime);
-
-    }else if(index==1){
-      // เปลี่ยนเวลาเริ่มต้นทาง
-      // console.log("selecttime.start : ",this.selecttime.start);
+      if(this.activeplan.endtime<this.activeplan.starttime){
+        this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาถึงปลายทางก่อนเริ่มเดินทางได้");
+        this.activeplan.starttime=new Date(this.activeplan.endtime);
+        this.selecttime.start=this.va.DateToString("HH:mm",this.activeplan.starttime);
+      }
+      this.activeplan.period = this.va.getperiodinminutes(this.activeplan.endtime,this.activeplan.starttime)
+    }
+    else if(type=="start"){
       const [hours, minutes] = this.selecttime.start.split(':').map(Number); 
       this.activeplan.starttime.setHours(hours, minutes);
+      if(this.activeplan.endtime<this.activeplan.starttime){
+        this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาถึงปลายทางก่อนเริ่มเดินทางได้");
+        this.activeplan.endtime=new Date(this.activeplan.starttime);
+        this.selecttime.end=this.va.DateToString("HH:mm",this.activeplan.endtime);
+      }
+      this.activeplan.period = this.va.getperiodinminutes(this.activeplan.endtime,this.activeplan.starttime)
 
-      var endtime = new Date(this.activeplan.starttime);
-      endtime.setMinutes(endtime.getMinutes()+this.activeplan.period);
-      this.activeplan.endtime= new Date(endtime);
+    }
+    else if(type=="startwarn"){
+      const [hours, minutes] = this.selecttime.startwarn.split(':').map(Number); 
+      this.activeplan.startwarntime.setHours(hours, minutes);
+      if(this.activeplan.startwarntime>this.activeplan.starttime){
+        this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาสตาร์ทหลังเริ่มเดินทางได้");
+        this.activeplan.startwarntime=new Date(this.activeplan.starttime);
+        this.selecttime.startwarn=this.va.DateToString("HH:mm",this.activeplan.startwarntime);
+
+      }
+      this.activeplan.startwarn = this.va.getperiodinminutes(this.activeplan.startwarntime,this.activeplan.starttime)
+
+    }
+    else if(type=="wakeup"){
+      const [hours, minutes] = this.selecttime.wakeup.split(':').map(Number); 
+      this.activeplan.wakeuptime.setHours(hours, minutes);
+      if(this.activeplan.wakeuptime>this.activeplan.starttime){
+        this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาเช็คอินหลังเริ่มเดินทางได้");
+        this.activeplan.wakeuptime=new Date(this.activeplan.starttime);
+        this.selecttime.wakeup=this.va.DateToString("HH:mm",this.activeplan.wakeuptime);
+
+      }
+      this.activeplan.wakeup = this.va.getperiodinminutes(this.activeplan.wakeuptime,this.activeplan.starttime)
+
+    }
+    else if(type=="wakeupwarn"){
+      const [hours, minutes] = this.selecttime.wakeupwarn.split(':').map(Number); 
+      this.activeplan.wakeupwarntime.setHours(hours, minutes);
+      if(this.activeplan.wakeupwarntime>this.activeplan.starttime){
+        this.alertMessage("แจ้งเตือน","ไม่สามารถกำหนดเวลาปลุกหลังเริ่มเดินทางได้");
+        this.activeplan.wakeupwarntime=new Date(this.activeplan.starttime);
+        this.selecttime.wakeupwarn=this.va.DateToString("HH:mm",this.activeplan.wakeupwarntime);
+      }
+      this.activeplan.wakeupwarn = this.va.getperiodinminutes(this.activeplan.wakeupwarntime,this.activeplan.starttime)
     }
 
+    // // console.log("selecttime.index : ",index);
+    // if(index==0){
+    //   // เปลี่ยนเวลาถึงปลายทาง
+    //   // console.log("selecttime.end : ",this.selecttime.end);
+    //   const [hours, minutes] = this.selecttime.end.split(':').map(Number); 
+    //   this.activeplan.endtime.setHours(hours, minutes);
 
-    var starttime = new Date(this.activeplan.starttime);
-    // starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
-    // this.activeplan.starttime= new Date(starttime);
+    //   var starttime = new Date(this.activeplan.endtime);
+    //   starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
+    //   this.activeplan.starttime= new Date(starttime);
 
-    var temptime = new Date(starttime);
-    temptime.setMinutes(temptime.getMinutes()-this.activeplan.startwarn);
-    this.activeplan.startwarntime = new Date(temptime);
+    // }else if(index==1){
+    //   // เปลี่ยนเวลาเริ่มต้นทาง
+    //   // console.log("selecttime.start : ",this.selecttime.start);
+    //   const [hours, minutes] = this.selecttime.start.split(':').map(Number); 
+    //   this.activeplan.starttime.setHours(hours, minutes);
 
-    temptime = new Date(starttime);
-    temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeup);
-    this.activeplan.wakeuptime = new Date(temptime);
+    //   var endtime = new Date(this.activeplan.starttime);
+    //   endtime.setMinutes(endtime.getMinutes()+this.activeplan.period);
+    //   this.activeplan.endtime= new Date(endtime);
+    // }
 
-    temptime = new Date(starttime);
-    temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeupwarn);
-    this.activeplan.wakeupwarntime = new Date(temptime);
+
+    // var starttime = new Date(this.activeplan.starttime);
+    // // starttime.setMinutes(starttime.getMinutes()-this.activeplan.period);
+    // // this.activeplan.starttime= new Date(starttime);
+
+    // var temptime = new Date(starttime);
+    // temptime.setMinutes(temptime.getMinutes()-this.activeplan.startwarn);
+    // this.activeplan.startwarntime = new Date(temptime);
+
+    // temptime = new Date(starttime);
+    // temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeup);
+    // this.activeplan.wakeuptime = new Date(temptime);
+
+    // temptime = new Date(starttime);
+    // temptime.setMinutes(temptime.getMinutes()-this.activeplan.wakeupwarn);
+    // this.activeplan.wakeupwarntime = new Date(temptime);
     // console.log("this.activeplan  : ----- ", this.activeplan);
     this.onperiod = this.checkperiod();
 

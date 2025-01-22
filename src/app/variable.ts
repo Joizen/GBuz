@@ -21,30 +21,17 @@ export class variable {
 
   public ProgramID = "EB26F64F4A40DC734C85AF89EADA1D10";
   public imagepath = "assets/images/";
-  public apiKey= 'AIzaSyDZxxvrCs06VVnV5WGVhN_nx_F97i8XXR8'
 
   // for test (nayworn)
   // public wsUrl: string = "http://localhost:9080/";
-  // public liffId = "2005033993-ARK31Ewk";
-  // public redirectUrl: string = "https://localhost:4200/";
-  // public linemMemurl = "https://line.me/R/ti/p/@491tyduv";
-  // public loginurl = "http://localhost:4200/login?";
-  // public loginredirec = "http://localhost:65033/login?token=";
-  // public redirectUrl: string = "https://localhost:4200/";
+  // public loginurl = "https://drivergbus.gpsasiagps.com/login?";
+  // public loginredirec = "http://localhost:4200/login?token=";
 
   // // for NYT  ============
-  // public liffId = "2006686857-eG79kBb6";
+  public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
   public loginurl = "https://drivergbus.gpsasiagps.com/login?";
-  // public loginredirec = "https://dashboardgbus.gpsasiagps.com/login?token=";
   public loginredirec = "https://dashboardgbus.gpsasiagps.com?token=";
 
-  public wsUrl: string = "http://localhost:9080/"; 
-  // public wsUrl: string = "https://dashboardgbus.gpsasiagps.com/"; 
-  public liffId = "2006661134-9Yl1Daxy";
-  public redirectUrl: string = "https://dashboardgbus.gpsasiagps.com/";
-
-
-  // public mqttconfig = { url: 'wss://gbus.gpsasiagps.com:7902', username: "", password: "" }
   public mqttconfig = { url: 'ws://35.240.240.96:9001', username: "", password: "" }
   public showmenu = false;
   public icon = this.seticon();
@@ -403,22 +390,7 @@ export class variable {
 
   //#endregion
   
-  // #region =========== Line Profile =========================
-  async getlineprofile() {
-    try {
-      await liff.init({ liffId: this.liffId });
-      if (!liff.isLoggedIn()) {
-        liff.login();
-      }
-      else {
-        return await liff.getProfile();
-      }
-    } catch (ex) {
-      console.log("Get Line Profile Error :", ex)
-    }
-    return null;
-  }
-  // #endregion
+
   
   // #region  =========== MQTT =========================
  //--------------------- MQTT  Lissening------------------------
@@ -485,18 +457,6 @@ export class variable {
   }
 // #endregion
 
-  public async getAddress(lat: number, lng: number):Promise<string>{ 
-    try{
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=th&key=${this.apiKey}`;
-      var response = await  this.http.get<any>(url).toPromise();
-      if(response.results.length>0){
-        console.log("getAddress response : ",response.results[0].formatted_address); 
-        var result= response.results[0].formatted_address;
-        if(result){return result;}
-      }
-    }catch(ex){console.log("getAddress error :", ex);}
-    return "";
-  }
 
 }
  // #region =========== get Function by class =========================

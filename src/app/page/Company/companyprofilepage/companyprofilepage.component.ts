@@ -122,11 +122,6 @@ export class CompanyprofilepageComponent implements OnInit {
     }
     return 0;
   }
-  async getGoogleAddress() {
-    var address =await this.va.getAddress(this.activecompany.lat, this.activecompany.lng);
-    console.log("getGoogleAddress : ",address);
-    if(address){ this.activecompany.address = address;}
-  }
 
 
   async onFileSelected(event: Event) {

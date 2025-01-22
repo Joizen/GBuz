@@ -221,15 +221,12 @@
       </div>
 
       <div class="col-3" style="display: flex;  align-items: center; justify-content: end;">
-        <label for="routeSelect">เวลาที่ควรถึงปลายทาง</label>
+        <label for="routeSelect">ถึงปลายทางก่อน</label>
       </div>
 
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <span  *ngIf="activeplan.issend==1"> {{activeplan.endtime | date:'HH:mm'}} น.</span>
         <input type="time" style="width: 80%;" [(ngModel)]="selecttime.end"
-        (ngModelChange)="activeplanchange()"   *ngIf="activeplan.issend==0"/>
-        <label>นาที</label>
-
+        (ngModelChange)="activeplanchange('end')"/>
       </div>
       
     </div>
@@ -245,19 +242,15 @@
       </div>
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
-        <input type="number" style="width: 80%;" [(ngModel)]="activeplan.period"
-          (ngModelChange)="activeplanchange()" />
-        <label>นาที</label>
+        <span>{{activeplan.period}} นาที</span> 
       </div>
 
       <div class="col-3" style="display: flex;  align-items: center; justify-content: end;">
-        <span>เวลาที่ควรถึงจุดแรก</span>
+        <span>ถึงจุดแรกก่อน</span>
       </div>
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <span *ngIf="activeplan.issend==0"> {{activeplan.starttime | date:'HH:mm'}} น.</span>
         <input type="time" style="width: 80%;" [(ngModel)]="selecttime.start"
-        (ngModelChange)="activeplanchange()"   *ngIf="activeplan.issend==1"/>
-        <label>นาที</label>
+        (ngModelChange)="activeplanchange('start')"/>
       </div>
     </div>
     <hr />
@@ -272,16 +265,15 @@
       </div>
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
-        <input type="number" style="width: 80%;" [(ngModel)]="activeplan.startwarn"
-          (ngModelChange)="activeplanchange()" />
-        <label>นาที</label>
+        <span>{{activeplan.startwarn}} นาที</span> 
       </div>
 
       <div class="col-3" style="display: flex;  align-items: center; justify-content: end;">
-        <span>ควรสตาร์ทรถก่อน</span>
+        <span>สตาร์ทรถก่อน</span>
       </div>
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <span>{{activeplan.startwarntime | date:'HH:mm'}} น.</span>
+        <input type="time" style="width: 80%;" [(ngModel)]="selecttime.startwarn"
+        (ngModelChange)="activeplanchange('startwarn')"/>
       </div>
     </div>
     <hr />
@@ -296,17 +288,16 @@
       </div>
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
-        <input type="number" style="width: 80%;" [(ngModel)]="activeplan.wakeup"
-          (ngModelChange)="activeplanchange()" />
-        <label>นาที</label>
+        <span>{{activeplan.wakeup}} นาที</span> 
       </div>
 
       <div class="col-3" style="display: flex;  align-items: center; justify-content: end;">
-        <span>แจ้งเริ่มงานก่อน</span>
+        <span>เช็คอินก่อน</span>
       </div>
 
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <span>{{activeplan.wakeuptime | date:'HH:mm'}} น.</span>
+        <input type="time" style="width: 80%;" [(ngModel)]="selecttime.wakeup"
+        (ngModelChange)="activeplanchange('wakeup')"/>
       </div>
     </div>
     <hr />
@@ -321,17 +312,16 @@
       </div>
 
       <div class="col-2" style="display: flex; align-items: center; gap: 10px; justify-content: start;">
-        <input type="number" style="width: 80%;" [(ngModel)]="activeplan.wakeupwarn"
-          (ngModelChange)="activeplanchange()" />
-        <label>นาที</label>
+        <span>{{activeplan.wakeupwarn}} นาที</span> 
       </div>
 
       <div class="col-3" style="display: flex;  align-items: center; justify-content: end;">
-        <span>เริ่มแจ้งเริ่มงานได้ตั้งแต่</span>
+        <span>เวลาปลุกพนักงาน</span>
       </div>
 
       <div class="col-2" style="display: flex;  align-items: center; justify-content: start; gap: 5px ;">
-        <span>{{activeplan.wakeupwarntime | date:'HH:mm'}} น.</span>
+        <input type="time" style="width: 80%;" [(ngModel)]="selecttime.wakeupwarn"
+        (ngModelChange)="activeplanchange('wakeupwarn')"/>
       </div>
     </div>
     <hr />

@@ -31,6 +31,12 @@ body {
   text-align: center;
 }
 
+.line-miniicon {
+  height: 3vh;
+  margin-right: 15px;
+  transition: transform 0.3s ease, filter 0.3s ease; /* Smooth animation */
+}
+
 .line-icon {
   height: 10vh;
   transition: transform 0.3s ease, filter 0.3s ease; /* Smooth animation */

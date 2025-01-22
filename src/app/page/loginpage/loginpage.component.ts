@@ -21,8 +21,9 @@ export class LoginpageComponent implements OnInit {
 
   ngOnInit(): void {
     this.redirec.queryParamMap.subscribe((params) => { this.linetoken = params.get('token');});
+    // console.log("this.linetoken :",this.linetoken);
     if(this.linetoken){
-      console.log("this.linetoken :",this.linetoken);
+      // console.log("this.linetoken :",this.linetoken);
       this.Setloginbyline(this.linetoken);   
     }else{
       this.va.removepagekey();
@@ -79,7 +80,6 @@ export class LoginpageComponent implements OnInit {
   }
 
   openloginline(){
-      // this.loginurl = this.sanitizer.bypassSecurityTrustResourceUrl(this.va.loginurl + "redirect=" +this.va.loginredirec);
       var lineurl = (this.va.loginurl + "redirect=" +this.va.loginredirec);
       window.location.href =lineurl;
   }
