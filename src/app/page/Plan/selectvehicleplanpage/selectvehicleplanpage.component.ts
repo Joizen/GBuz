@@ -135,6 +135,8 @@ export class SelectvehicleplanpageComponent implements OnInit {
     var result : Calendarslot[] = [];
     try{
         var lastendtime = new Date(listwork[0].starttime);
+        lastendtime.setMinutes(lastendtime.getMinutes()-listwork[0].wakeupwarn);
+        // var lastendtime = new Date(listwork[0].starttime);
         var nextday = new Date(
           lastendtime.getFullYear(),lastendtime.getMonth(),lastendtime.getDate(),0,0,0,0);
         var lastendtime = new Date(nextday);
@@ -142,17 +144,28 @@ export class SelectvehicleplanpageComponent implements OnInit {
   
         for (var i = 0; i < listwork.length; i++) {
           var plan = listwork[i];
+          var planstart = new Date(plan.starttime);
+          planstart.setMinutes(planstart.getMinutes()-plan.wakeupwarn);
           //เช็คว่า plan.starttime != lastendtime
-          if (lastendtime != plan.starttime) {
+          if (lastendtime != planstart) {
             //สร้าง slot ว่างตั้งแต่เที่งคือน ถึงเรื่มงานแรก
-            var period = this.va.getperiodinminutes(plan.starttime, lastendtime);
-            var emptyslot = this.getslotplan({starttime: lastendtime,endtime: plan.starttime,period: period,plancode: '',plantype: 2, routename:'ว่าง'});
+            var period = this.va.getperiodinminutes(planstart, lastendtime);
+            var emptyslot = this.getslotplan({starttime: lastendtime,endtime: planstart,period: period,plancode: '',plantype: 2, routename:'ว่าง'});
             result.push(emptyslot);
           }
+          // if (lastendtime != plan.starttime) {
+          //   //สร้าง slot ว่างตั้งแต่เที่งคือน ถึงเรื่มงานแรก
+          //   var period = this.va.getperiodinminutes(plan.starttime, lastendtime);
+          //   var emptyslot = this.getslotplan({starttime: lastendtime,endtime: plan.starttime,period: period,plancode: '',plantype: 2, routename:'ว่าง'});
+          //   result.push(emptyslot);
+          // }
           //สร้าง slot ว่างตั้งแต่ lastendtime ถึง planstarttime
   
           //สร้าง slot ของงานที่มี ตั้งแต่ plan.starttime จนถึง plan.endtime
-          var slot = this.getslotplan(plan);
+          var slotplan:RouteplanModel = new RouteplanModel(plan);
+          slotplan.starttime = planstart;
+          var slot = this.getslotplan(slotplan);
+          // var slot = this.getslotplan(plan);
           result.push(slot);
           //เก็บ plan.endtime ไว้ที่ lastendtime;
           lastendtime = new Date(plan.endtime);

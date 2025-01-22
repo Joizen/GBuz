@@ -387,6 +387,7 @@ export class PlandatapageComponent implements OnInit {
       var tbname =["route","","routeweek","driverplan"];
       var wsname = "updatedata";
       var data = new  RouteplanModel(this.activeplan);
+      data.driverimage="";
       var jsondata = await this.va.getwsdata(wsname,{tbname:tbname[this.activeplan.plantype],data:data})
       if(jsondata.code=="000"){
         this.showSanckbar("save or updateplan success",2);
